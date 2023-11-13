@@ -11,7 +11,7 @@ class SearchMemoriesCell: UITableViewCell {
     
     @IBOutlet weak var userImageView: UIImageView! {
         didSet {
-            userImageView.backgroundColor = .lightGray.withAlphaComponent(0.5)
+            userImageView.backgroundColor = .lightGray.withAlphaComponent(0.1)
             userImageView.layer.cornerRadius = 25
         }
     }

@@ -17,14 +17,10 @@ class SearchViewController: UIViewController {
         tableView.delegate = self
         tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: "SearchHeaderView")
         let headerView = SearchHeaderView(reuseIdentifier: "SearchHeaderView")
-        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 50)
+        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 100)
             tableView.tableHeaderView = headerView
     }
-    
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//    }
+
 }
 
 extension SearchViewController: UITableViewDataSource {
@@ -37,19 +33,7 @@ extension SearchViewController: UITableViewDataSource {
         else { fatalError("Could not create SearchMemoriesCell") }
         return cell
     }
-//-----HEADER
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//
-//       guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "SearchHeaderView") as? SearchHeaderView
-//        else { fatalError("Could not create SearchHeaderView") }
-//        return headerView
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        50
-//    }
-//
-    
+
     
 }
 
