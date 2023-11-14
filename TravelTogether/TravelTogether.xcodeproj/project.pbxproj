@@ -23,6 +23,7 @@
 		52783CD82B0359110067A334 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CD72B0359110067A334 /* ProfileViewController.swift */; };
 		52783CDA2B03612B0067A334 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CD92B03612B0067A334 /* ProfileTableViewCell.swift */; };
 		52783CDC2B036D480067A334 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CDB2B036D480067A334 /* ProfileHeaderView.swift */; };
+		52783CDE2B037B8E0067A334 /* MemoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CDD2B037B8E0067A334 /* MemoryDetailViewController.swift */; };
 		52E70D852B0107F100440D4C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D842B0107F100440D4C /* AppDelegate.swift */; };
 		52E70D872B0107F100440D4C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D862B0107F100440D4C /* SceneDelegate.swift */; };
 		52E70D892B0107F100440D4C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D882B0107F100440D4C /* ViewController.swift */; };
@@ -48,6 +49,7 @@
 		52783CD72B0359110067A334 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		52783CD92B03612B0067A334 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
 		52783CDB2B036D480067A334 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
+		52783CDD2B037B8E0067A334 /* MemoryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryDetailViewController.swift; sourceTree = "<group>"; };
 		52E70D812B0107F100440D4C /* TravelTogether.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelTogether.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52E70D842B0107F100440D4C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52E70D862B0107F100440D4C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -77,6 +79,7 @@
 				52292F062B0216C90083399E /* SearchHeaderView.swift */,
 				52292F082B0273E80083399E /* CustomSegmentedControl.swift */,
 				52783CC22B031B650067A334 /* SpotTableViewCell.swift */,
+				52783CDD2B037B8E0067A334 /* MemoryDetailViewController.swift */,
 			);
 			path = SearchPage;
 			sourceTree = "<group>";
@@ -139,11 +142,11 @@
 		52E70D832B0107F100440D4C /* TravelTogether */ = {
 			isa = PBXGroup;
 			children = (
-				52783CD62B0358F90067A334 /* ProfilePage */,
-				52783CCF2B034F4E0067A334 /* MemoryPage */,
-				52783CC62B033B060067A334 /* PlanPage */,
-				52292F032B0212CC0083399E /* FavoritePage */,
 				52292EFE2B01F3750083399E /* SearchPage */,
+				52292F032B0212CC0083399E /* FavoritePage */,
+				52783CC62B033B060067A334 /* PlanPage */,
+				52783CCF2B034F4E0067A334 /* MemoryPage */,
+				52783CD62B0358F90067A334 /* ProfilePage */,
 				52E70D842B0107F100440D4C /* AppDelegate.swift */,
 				52E70D862B0107F100440D4C /* SceneDelegate.swift */,
 				52E70D882B0107F100440D4C /* ViewController.swift */,
@@ -226,6 +229,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				52783CDE2B037B8E0067A334 /* MemoryDetailViewController.swift in Sources */,
 				52292F072B0216C90083399E /* SearchHeaderView.swift in Sources */,
 				52783CD12B034F6A0067A334 /* MemoryViewController.swift in Sources */,
 				52783CC82B033B260067A334 /* PlanViewController.swift in Sources */,

@@ -22,9 +22,7 @@ class SearchViewController: UIViewController {
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 100)
         headerView.delegate = self
         tableView.tableHeaderView = headerView
-        
     }
-
 }
 
 extension SearchViewController: UITableViewDataSource {
@@ -42,6 +40,9 @@ extension SearchViewController: UITableViewDataSource {
             else { fatalError("Could not create SpotCell") }
             return cell
         }   
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "MemoryDetail", sender: self)
     }
 }
 

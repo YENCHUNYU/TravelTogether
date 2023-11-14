@@ -411,11 +411,43 @@
                     <navigationItem key="navigationItem" title="探索" id="ZT0-Bp-7GV"/>
                     <connections>
                         <outlet property="tableView" destination="90f-qU-w3K" id="WN6-P5-IJZ"/>
+                        <segue destination="e6S-LM-1E9" kind="show" identifier="MemoryDetail" id="dVP-gJ-7a4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s4O-a4-Rwa" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1153.4351145038167" y="1224.6478873239437"/>
+        </scene>
+        <!--Memory Detail View Controller-->
+        <scene sceneID="JVu-ta-bg9">
+            <objects>
+                <viewController id="e6S-LM-1E9" customClass="MemoryDetailViewController" customModule="TravelTogether" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="N5n-zF-q1r">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="xfN-bN-AzU">
+                                <rect key="frame" x="0.0" y="103" width="393" height="666"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="XeP-ks-7zg"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="xfN-bN-AzU" firstAttribute="top" secondItem="XeP-ks-7zg" secondAttribute="top" id="3y1-0J-xiE"/>
+                            <constraint firstItem="XeP-ks-7zg" firstAttribute="bottom" secondItem="xfN-bN-AzU" secondAttribute="bottom" id="TD4-N3-Ras"/>
+                            <constraint firstItem="xfN-bN-AzU" firstAttribute="leading" secondItem="XeP-ks-7zg" secondAttribute="leading" id="qOM-bo-4yA"/>
+                            <constraint firstItem="XeP-ks-7zg" firstAttribute="trailing" secondItem="xfN-bN-AzU" secondAttribute="trailing" id="wPj-86-tFg"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="qc8-hv-Ez7"/>
+                    <connections>
+                        <outlet property="tableView" destination="xfN-bN-AzU" id="HIO-Oc-sx7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gMD-zz-mCa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1731" y="1965"/>
         </scene>
         <!--我的回憶-->
         <scene sceneID="cN8-xe-Dy7">
