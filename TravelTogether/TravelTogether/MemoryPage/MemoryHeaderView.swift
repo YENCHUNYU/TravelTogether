@@ -1,20 +1,20 @@
 //
-//  SearchHeaderView.swift
+//  MemoryHeaderView.swift
 //  TravelTogether
 //
-//  Created by User on 2023/11/13.
+//  Created by User on 2023/11/14.
 //
 
 import UIKit
 
-protocol SearchHeaderViewDelegate:AnyObject {
+protocol MemoryHeaderViewDelegate:AnyObject {
     func change(to index:Int)
 }
 
-class SearchHeaderView: UITableViewHeaderFooterView {
+class MemoryHeaderView: UITableViewHeaderFooterView {
     
     var selectedIndex = 0
-    var delegate: SearchHeaderViewDelegate?
+    var delegate: MemoryHeaderViewDelegate?
     
     override init(reuseIdentifier: String?) {
             super.init(reuseIdentifier: reuseIdentifier)
@@ -31,14 +31,14 @@ class SearchHeaderView: UITableViewHeaderFooterView {
                separator.backgroundColor = UIColor.lightGray
                contentView.addSubview(separator)
             
-            let codeSegmented = CustomSegmentedControl(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50), buttonTitle: ["旅遊回憶","行程","景點"])
+            let codeSegmented = CustomSegmentedControl(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50), buttonTitle: ["已發佈","草稿"])
             codeSegmented.backgroundColor = .clear
             codeSegmented.delegate = self
             contentView.addSubview(codeSegmented)
             
             
             let searchBar = UITextField(frame: CGRect(x: 20, y: codeSegmented.frame.maxY + 10, width: UIScreen.main.bounds.width - 75, height: 40))
-                searchBar.placeholder = "搜尋"
+                searchBar.placeholder = "搜尋行程"
                 searchBar.borderStyle = .roundedRect
                 contentView.addSubview(searchBar)
             
@@ -56,11 +56,9 @@ class SearchHeaderView: UITableViewHeaderFooterView {
         }
 }
 
-extension SearchHeaderView: CustomSegmentedControlDelegate {
+extension MemoryHeaderView: CustomSegmentedControlDelegate {
     func change(to index: Int) {
         selectedIndex = index
         delegate?.change(to: index)
     }
 }
-
-

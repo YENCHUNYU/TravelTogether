@@ -1,25 +1,17 @@
 //
-//  SearchMemories.swift
+//  spotTableViewCell.swift
 //  TravelTogether
 //
-//  Created by User on 2023/11/13.
+//  Created by User on 2023/11/14.
 //
 
 import UIKit
 
-class SearchMemoriesCell: UITableViewCell {
+class SpotCell: UITableViewCell {
     
-    @IBOutlet weak var userImageView: UIImageView! {
-        didSet {
-            userImageView.backgroundColor = .lightGray.withAlphaComponent(0.1)
-            userImageView.layer.cornerRadius = 25
-        }
-    }
-    @IBOutlet weak var userNameLabel: UILabel!
-    @IBOutlet weak var memoryImageView: UIImageView!
+    @IBOutlet weak var spotImageView: UIImageView!
     @IBOutlet weak var thumbsUpButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
-    @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var thumbsUpCountsLabel: UILabel!
     @IBOutlet weak var favoriteCountsLabel: UILabel!
     

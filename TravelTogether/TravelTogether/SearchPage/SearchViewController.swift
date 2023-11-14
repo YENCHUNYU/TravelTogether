@@ -11,6 +11,8 @@ class SearchViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
+    var searchIndex = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
@@ -18,7 +20,9 @@ class SearchViewController: UIViewController {
         tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: "SearchHeaderView")
         let headerView = SearchHeaderView(reuseIdentifier: "SearchHeaderView")
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 100)
-            tableView.tableHeaderView = headerView
+        headerView.delegate = self
+        tableView.tableHeaderView = headerView
+        
     }
 
 }
@@ -29,17 +33,31 @@ extension SearchViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchMemoriesCell", for: indexPath) as? SearchMemoriesCell
-        else { fatalError("Could not create SearchMemoriesCell") }
-        return cell
+        if searchIndex == 0 || searchIndex == 1 {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchMemoriesCell", for: indexPath) as? SearchMemoriesCell
+            else { fatalError("Could not create SearchMemoriesCell") }
+            return cell
+        } else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SpotCell", for: indexPath) as? SpotCell
+            else { fatalError("Could not create SpotCell") }
+            return cell
+        }   
     }
-
-    
 }
 
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        330
+        if searchIndex == 0 || searchIndex == 1 {
+           return 330
+        } else {
+            return 280
+        }
     }
-    
+}
+
+extension SearchViewController: SearchHeaderViewDelegate {
+    func change(to index: Int) {
+        searchIndex = index
+        tableView.reloadData()
+    }
 }

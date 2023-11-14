@@ -20,7 +20,7 @@ class CustomSegmentedControl: UIView {
     var selectorViewColor: UIColor = .red
     var selectorTextColor: UIColor = .red
     
-    weak var delegate:CustomSegmentedControlDelegate?
+    weak var delegate: CustomSegmentedControlDelegate?
     
     public private(set) var selectedIndex : Int = 0
     

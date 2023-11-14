@@ -1,20 +1,20 @@
 //
-//  SearchHeaderView.swift
+//  ProfileHeaderView.swift
 //  TravelTogether
 //
-//  Created by User on 2023/11/13.
+//  Created by User on 2023/11/14.
 //
 
 import UIKit
 
-protocol SearchHeaderViewDelegate:AnyObject {
+protocol ProfileHeaderViewDelegate:AnyObject {
     func change(to index:Int)
 }
 
-class SearchHeaderView: UITableViewHeaderFooterView {
+class ProfileHeaderView: UITableViewHeaderFooterView {
     
     var selectedIndex = 0
-    var delegate: SearchHeaderViewDelegate?
+    var delegate: ProfileHeaderViewDelegate?
     
     override init(reuseIdentifier: String?) {
             super.init(reuseIdentifier: reuseIdentifier)
@@ -27,11 +27,11 @@ class SearchHeaderView: UITableViewHeaderFooterView {
         }
 
         func commonInit() {
-            let separator = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 0.5))
-               separator.backgroundColor = UIColor.lightGray
-               contentView.addSubview(separator)
+//            let separator = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 0.5))
+//               separator.backgroundColor = UIColor.lightGray
+//               contentView.addSubview(separator)
             
-            let codeSegmented = CustomSegmentedControl(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50), buttonTitle: ["旅遊回憶","行程","景點"])
+            let codeSegmented = CustomSegmentedControl(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50), buttonTitle: ["旅遊回憶","行程"])
             codeSegmented.backgroundColor = .clear
             codeSegmented.delegate = self
             contentView.addSubview(codeSegmented)
@@ -56,11 +56,9 @@ class SearchHeaderView: UITableViewHeaderFooterView {
         }
 }
 
-extension SearchHeaderView: CustomSegmentedControlDelegate {
+extension ProfileHeaderView: CustomSegmentedControlDelegate {
     func change(to index: Int) {
         selectedIndex = index
         delegate?.change(to: index)
     }
 }
-
-

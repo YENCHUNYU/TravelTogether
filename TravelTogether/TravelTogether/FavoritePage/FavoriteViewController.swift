@@ -9,6 +9,8 @@ import UIKit
 
 class FavoriteViewController: UIViewController {
 
+    var favoriteIndex = 0
+    
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -18,7 +20,8 @@ class FavoriteViewController: UIViewController {
         tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: "SearchHeaderView")
         let headerView = SearchHeaderView(reuseIdentifier: "SearchHeaderView")
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 100)
-            tableView.tableHeaderView = headerView
+        tableView.tableHeaderView = headerView
+        headerView.delegate = self
     }
 
 
@@ -30,18 +33,31 @@ extension FavoriteViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchMemoriesCell", for: indexPath) as? SearchMemoriesCell
-        else { fatalError("Could not create SearchMemoriesCell") }
-        return cell
+        if favoriteIndex == 0 || favoriteIndex == 1 {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchMemoriesCell", for: indexPath) as? SearchMemoriesCell
+            else { fatalError("Could not create SearchMemoriesCell") }
+            return cell
+        } else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SpotCell", for: indexPath) as? SpotCell
+            else { fatalError("Could not create SpotCell") }
+            return cell
+        }
     }
-    
-    
-    
-    
 }
 
 extension FavoriteViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        330
+        if favoriteIndex == 0 || favoriteIndex == 1 {
+           return 330
+        } else {
+            return 280
+        }
+    }
+}
+
+extension FavoriteViewController: SearchHeaderViewDelegate {
+    func change(to index: Int) {
+        favoriteIndex = index
+        tableView.reloadData()
     }
 }
