@@ -24,12 +24,14 @@
 		52783CDA2B03612B0067A334 /* ProfileTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CD92B03612B0067A334 /* ProfileTableViewCell.swift */; };
 		52783CDC2B036D480067A334 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CDB2B036D480067A334 /* ProfileHeaderView.swift */; };
 		52783CDE2B037B8E0067A334 /* MemoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CDD2B037B8E0067A334 /* MemoryDetailViewController.swift */; };
+		52783CE12B03C76A0067A334 /* MemoryDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CE02B03C76A0067A334 /* MemoryDetailCell.swift */; };
 		52E70D852B0107F100440D4C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D842B0107F100440D4C /* AppDelegate.swift */; };
 		52E70D872B0107F100440D4C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D862B0107F100440D4C /* SceneDelegate.swift */; };
 		52E70D892B0107F100440D4C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D882B0107F100440D4C /* ViewController.swift */; };
 		52E70D8C2B0107F100440D4C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52E70D8A2B0107F100440D4C /* Main.storyboard */; };
 		52E70D8E2B0107F300440D4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52E70D8D2B0107F300440D4C /* Assets.xcassets */; };
 		52E70D912B0107F300440D4C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52E70D8F2B0107F300440D4C /* LaunchScreen.storyboard */; };
+		893338DDC46947964D93D5C1 /* Pods_TravelTogether.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58C376C1498945EA44EA26E8 /* Pods_TravelTogether.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +52,7 @@
 		52783CD92B03612B0067A334 /* ProfileTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableViewCell.swift; sourceTree = "<group>"; };
 		52783CDB2B036D480067A334 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		52783CDD2B037B8E0067A334 /* MemoryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryDetailViewController.swift; sourceTree = "<group>"; };
+		52783CE02B03C76A0067A334 /* MemoryDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryDetailCell.swift; sourceTree = "<group>"; };
 		52E70D812B0107F100440D4C /* TravelTogether.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelTogether.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52E70D842B0107F100440D4C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52E70D862B0107F100440D4C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -58,6 +61,9 @@
 		52E70D8D2B0107F300440D4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		52E70D902B0107F300440D4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		52E70D922B0107F300440D4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		58C376C1498945EA44EA26E8 /* Pods_TravelTogether.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TravelTogether.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E688431002B36072FB9ECE4 /* Pods-TravelTogether.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TravelTogether.debug.xcconfig"; path = "Target Support Files/Pods-TravelTogether/Pods-TravelTogether.debug.xcconfig"; sourceTree = "<group>"; };
+		CC0240B72C27E41ADA6691A3 /* Pods-TravelTogether.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TravelTogether.release.xcconfig"; path = "Target Support Files/Pods-TravelTogether/Pods-TravelTogether.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				893338DDC46947964D93D5C1 /* Pods_TravelTogether.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,7 +86,7 @@
 				52292F062B0216C90083399E /* SearchHeaderView.swift */,
 				52292F082B0273E80083399E /* CustomSegmentedControl.swift */,
 				52783CC22B031B650067A334 /* SpotTableViewCell.swift */,
-				52783CDD2B037B8E0067A334 /* MemoryDetailViewController.swift */,
+				52783CDF2B03C7480067A334 /* MemoryDetailPage */,
 			);
 			path = SearchPage;
 			sourceTree = "<group>";
@@ -123,11 +130,22 @@
 			path = ProfilePage;
 			sourceTree = "<group>";
 		};
+		52783CDF2B03C7480067A334 /* MemoryDetailPage */ = {
+			isa = PBXGroup;
+			children = (
+				52783CDD2B037B8E0067A334 /* MemoryDetailViewController.swift */,
+				52783CE02B03C76A0067A334 /* MemoryDetailCell.swift */,
+			);
+			path = MemoryDetailPage;
+			sourceTree = "<group>";
+		};
 		52E70D782B0107F100440D4C = {
 			isa = PBXGroup;
 			children = (
 				52E70D832B0107F100440D4C /* TravelTogether */,
 				52E70D822B0107F100440D4C /* Products */,
+				EB181B03BD919DE314F87E32 /* Pods */,
+				5C7B41223063ED9C54E5AE4E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -158,6 +176,23 @@
 			path = TravelTogether;
 			sourceTree = "<group>";
 		};
+		5C7B41223063ED9C54E5AE4E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				58C376C1498945EA44EA26E8 /* Pods_TravelTogether.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EB181B03BD919DE314F87E32 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8E688431002B36072FB9ECE4 /* Pods-TravelTogether.debug.xcconfig */,
+				CC0240B72C27E41ADA6691A3 /* Pods-TravelTogether.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -165,9 +200,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 52E70D952B0107F300440D4C /* Build configuration list for PBXNativeTarget "TravelTogether" */;
 			buildPhases = (
+				9914EEF66865584DE2447756 /* [CP] Check Pods Manifest.lock */,
 				52E70D7D2B0107F100440D4C /* Sources */,
 				52E70D7E2B0107F100440D4C /* Frameworks */,
 				52E70D7F2B0107F100440D4C /* Resources */,
+				52783CE32B051DA20067A334 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -224,6 +261,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		52783CE32B051DA20067A334 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
+		};
+		9914EEF66865584DE2447756 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TravelTogether-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		52E70D7D2B0107F100440D4C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -248,6 +327,7 @@
 				52E70D872B0107F100440D4C /* SceneDelegate.swift in Sources */,
 				52783CCE2B0345AC0067A334 /* TogetherPlanCell.swift in Sources */,
 				52783CD52B0354820067A334 /* MemoryHeaderView.swift in Sources */,
+				52783CE12B03C76A0067A334 /* MemoryDetailCell.swift in Sources */,
 				52292F092B0273E80083399E /* CustomSegmentedControl.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,6 +470,7 @@
 		};
 		52E70D962B0107F300440D4C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8E688431002B36072FB9ECE4 /* Pods-TravelTogether.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -402,6 +483,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -417,6 +499,7 @@
 		};
 		52E70D972B0107F300440D4C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CC0240B72C27E41ADA6691A3 /* Pods-TravelTogether.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -429,6 +512,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

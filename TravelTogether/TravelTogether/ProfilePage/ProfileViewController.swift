@@ -9,6 +9,8 @@ import UIKit
 
 class ProfileViewController: UIViewController {
     
+    @IBOutlet weak var separatorView: UIView!
+    
     @IBOutlet weak var userImageView: UIImageView!
     
     @IBOutlet weak var userNameLabel: UILabel!

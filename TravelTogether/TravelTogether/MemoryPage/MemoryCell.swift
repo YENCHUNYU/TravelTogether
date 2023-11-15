@@ -9,8 +9,8 @@ import UIKit
 
 class MemoryCell: UITableViewCell {
     
-    @IBOutlet weak var MemoryImageView: UIImageView!
-    @IBOutlet weak var MemoryNameLabel: UILabel!
-    @IBOutlet weak var MemoryDateLabel: UILabel!
+    @IBOutlet weak var memoryImageView: UIImageView!
+    @IBOutlet weak var memoryNameLabel: UILabel!
+    @IBOutlet weak var memoryDateLabel: UILabel!
     
 }

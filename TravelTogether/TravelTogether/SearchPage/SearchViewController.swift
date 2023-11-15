@@ -42,7 +42,10 @@ extension SearchViewController: UITableViewDataSource {
         }   
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "MemoryDetail", sender: self)
+        if searchIndex == 0 {
+            performSegue(withIdentifier: "MemoryDetail", sender: self)
+        }
+        
     }
 }
 

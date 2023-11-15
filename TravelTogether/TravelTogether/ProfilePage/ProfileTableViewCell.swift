@@ -9,8 +9,7 @@ import UIKit
 
 class ProfileCell: UITableViewCell {
     
-    @IBOutlet weak var ProfileImageView: UIImageView!
-    @IBOutlet weak var ProfileImageNameLabel: UILabel!
-    
-    
+    @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var profileImageNameLabel: UILabel!
+     
 }
