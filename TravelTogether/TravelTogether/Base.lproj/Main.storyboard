@@ -397,42 +397,16 @@
                                             <outlet property="thumbsUpCountsLabel" destination="Qci-bh-ivi" id="RED-ZG-aN0"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MapViewCell" rowHeight="600" id="ego-Oo-W2f" customClass="MapViewCell" customModule="TravelTogether" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="660" width="393" height="600"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ego-Oo-W2f" id="D2M-dk-TML">
-                                            <rect key="frame" x="0.0" y="0.0" width="393" height="600"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iC6-d3-G22" customClass="GMSMapView">
-                                                    <rect key="frame" x="0.0" y="0.0" width="393" height="600"/>
-                                                    <subviews>
-                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_marker.png" translatesAutoresizingMaskIntoConstraints="NO" id="4CF-JP-iGD">
-                                                            <rect key="frame" x="181.66666666666666" y="275" width="30" height="50"/>
-                                                            <color key="tintColor" systemColor="tintColor"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="30" id="BAZ-UQ-YzO"/>
-                                                                <constraint firstAttribute="height" constant="50" id="YWG-B5-JzG"/>
-                                                            </constraints>
-                                                        </imageView>
-                                                    </subviews>
-                                                    <color key="backgroundColor" systemColor="systemGray5Color"/>
-                                                    <constraints>
-                                                        <constraint firstItem="4CF-JP-iGD" firstAttribute="centerX" secondItem="iC6-d3-G22" secondAttribute="centerX" id="GgY-Hw-sUB"/>
-                                                        <constraint firstItem="4CF-JP-iGD" firstAttribute="centerY" secondItem="iC6-d3-G22" secondAttribute="centerY" id="wTf-uP-VUD"/>
-                                                    </constraints>
-                                                </view>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="iC6-d3-G22" secondAttribute="trailing" id="3GJ-AR-cLS"/>
-                                                <constraint firstAttribute="bottom" secondItem="iC6-d3-G22" secondAttribute="bottom" id="Qdw-HP-h9w"/>
-                                                <constraint firstItem="iC6-d3-G22" firstAttribute="top" secondItem="D2M-dk-TML" secondAttribute="top" id="kD7-i3-ydR"/>
-                                                <constraint firstItem="iC6-d3-G22" firstAttribute="leading" secondItem="D2M-dk-TML" secondAttribute="leading" id="lWp-OH-bXS"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cq4-of-zhk">
+                                <rect key="frame" x="302" y="734" width="75" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="Button"/>
+                                <connections>
+                                    <action selector="buttonTapped:" destination="eac-h6-hsR" eventType="touchUpInside" id="5zm-Je-fni"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="dR2-tA-oUs"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -440,13 +414,17 @@
                             <constraint firstItem="90f-qU-w3K" firstAttribute="top" secondItem="dR2-tA-oUs" secondAttribute="top" id="7TK-AH-e7o"/>
                             <constraint firstItem="dR2-tA-oUs" firstAttribute="bottom" secondItem="90f-qU-w3K" secondAttribute="bottom" id="K2N-c1-eI5"/>
                             <constraint firstItem="dR2-tA-oUs" firstAttribute="trailing" secondItem="90f-qU-w3K" secondAttribute="trailing" id="VKH-SY-9m4"/>
+                            <constraint firstItem="dR2-tA-oUs" firstAttribute="bottom" secondItem="Cq4-of-zhk" secondAttribute="bottom" id="dFf-VT-C4B"/>
                             <constraint firstItem="90f-qU-w3K" firstAttribute="leading" secondItem="dR2-tA-oUs" secondAttribute="leading" id="khe-uG-6aD"/>
+                            <constraint firstItem="dR2-tA-oUs" firstAttribute="trailing" secondItem="Cq4-of-zhk" secondAttribute="trailing" constant="16" id="l8V-MU-yXY"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="探索" id="ZT0-Bp-7GV"/>
                     <connections>
+                        <outlet property="button" destination="Cq4-of-zhk" id="8vg-9D-KqF"/>
                         <outlet property="tableView" destination="90f-qU-w3K" id="WN6-P5-IJZ"/>
                         <segue destination="e6S-LM-1E9" kind="show" identifier="MemoryDetail" id="dVP-gJ-7a4"/>
+                        <segue destination="reE-pd-wnM" kind="show" identifier="goToMap" id="YPG-wh-Qv6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s4O-a4-Rwa" sceneMemberID="firstResponder"/>
@@ -525,6 +503,49 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gMD-zz-mCa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1731" y="1965"/>
+        </scene>
+        <!--Map View Controller-->
+        <scene sceneID="BOm-zt-4go">
+            <objects>
+                <viewController id="reE-pd-wnM" customClass="MapViewController" customModule="TravelTogether" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="uYc-fe-Kvf">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dlu-FS-Uz4" customClass="GMSMapView">
+                                <rect key="frame" x="0.0" y="103" width="393" height="666"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color"/>
+                            </view>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mappin.and.ellipse" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="aiU-0y-Xar">
+                                <rect key="frame" x="181.66666666666666" y="411" width="30" height="50"/>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="4Jl-el-rFF"/>
+                                    <constraint firstAttribute="width" constant="30" id="Zmb-ug-6Jc"/>
+                                    <constraint firstAttribute="height" constant="50" id="glX-j1-HxK"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="AAP-ye-jIw"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="dlu-FS-Uz4" firstAttribute="top" secondItem="AAP-ye-jIw" secondAttribute="top" id="5zk-Fv-P97"/>
+                            <constraint firstItem="AAP-ye-jIw" firstAttribute="trailing" secondItem="dlu-FS-Uz4" secondAttribute="trailing" id="7K7-aQ-aQX"/>
+                            <constraint firstItem="dlu-FS-Uz4" firstAttribute="leading" secondItem="AAP-ye-jIw" secondAttribute="leading" id="XDi-tp-7Tl"/>
+                            <constraint firstItem="AAP-ye-jIw" firstAttribute="bottom" secondItem="dlu-FS-Uz4" secondAttribute="bottom" id="Z0o-w3-KUD"/>
+                            <constraint firstItem="aiU-0y-Xar" firstAttribute="centerY" secondItem="dlu-FS-Uz4" secondAttribute="centerY" id="mKq-QM-xdu"/>
+                            <constraint firstItem="aiU-0y-Xar" firstAttribute="centerX" secondItem="dlu-FS-Uz4" secondAttribute="centerX" id="smf-xr-QFY"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="ojQ-SD-5cc"/>
+                    <connections>
+                        <outlet property="mapView" destination="dlu-FS-Uz4" id="qZG-3N-c5b"/>
+                        <outlet property="pinImageView" destination="aiU-0y-Xar" id="Tg8-t2-nZC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FzH-th-Ibi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-979" y="1965"/>
         </scene>
         <!--我的回憶-->
         <scene sceneID="cN8-xe-Dy7">
@@ -1008,7 +1029,6 @@
     <resources>
         <image name="Image_Placeholder" width="375" height="375"/>
         <image name="backpack" catalog="system" width="100" height="128"/>
-        <image name="default_marker.png" width="26" height="41"/>
         <image name="hand.thumbsup" catalog="system" width="123" height="128"/>
         <image name="heart" catalog="system" width="128" height="107"/>
         <image name="magnifyingglass" catalog="system" width="128" height="117"/>
@@ -1031,9 +1051,6 @@
         </systemColor>
         <systemColor name="systemGray5Color">
             <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

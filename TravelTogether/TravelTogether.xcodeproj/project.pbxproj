@@ -26,6 +26,7 @@
 		52783CDE2B037B8E0067A334 /* MemoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CDD2B037B8E0067A334 /* MemoryDetailViewController.swift */; };
 		52783CE12B03C76A0067A334 /* MemoryDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CE02B03C76A0067A334 /* MemoryDetailCell.swift */; };
 		52783CE52B05B8E50067A334 /* MapViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CE42B05B8E50067A334 /* MapViewCell.swift */; };
+		52783CE82B05C4DA0067A334 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CE72B05C4DA0067A334 /* MapViewController.swift */; };
 		52E70D852B0107F100440D4C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D842B0107F100440D4C /* AppDelegate.swift */; };
 		52E70D872B0107F100440D4C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D862B0107F100440D4C /* SceneDelegate.swift */; };
 		52E70D892B0107F100440D4C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D882B0107F100440D4C /* ViewController.swift */; };
@@ -55,6 +56,7 @@
 		52783CDD2B037B8E0067A334 /* MemoryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryDetailViewController.swift; sourceTree = "<group>"; };
 		52783CE02B03C76A0067A334 /* MemoryDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryDetailCell.swift; sourceTree = "<group>"; };
 		52783CE42B05B8E50067A334 /* MapViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewCell.swift; sourceTree = "<group>"; };
+		52783CE72B05C4DA0067A334 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		52E70D812B0107F100440D4C /* TravelTogether.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelTogether.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52E70D842B0107F100440D4C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52E70D862B0107F100440D4C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 		52292EFE2B01F3750083399E /* SearchPage */ = {
 			isa = PBXGroup;
 			children = (
+				52783CE62B05C4AE0067A334 /* GoogleMapsViewController */,
 				52292EFF2B01F3930083399E /* SearchViewController.swift */,
 				52292F012B01F8E30083399E /* SearchMemoriesTableVIewCell.swift */,
 				52292F062B0216C90083399E /* SearchHeaderView.swift */,
@@ -140,6 +143,14 @@
 				52783CE02B03C76A0067A334 /* MemoryDetailCell.swift */,
 			);
 			path = MemoryDetailPage;
+			sourceTree = "<group>";
+		};
+		52783CE62B05C4AE0067A334 /* GoogleMapsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				52783CE72B05C4DA0067A334 /* MapViewController.swift */,
+			);
+			path = GoogleMapsViewController;
 			sourceTree = "<group>";
 		};
 		52E70D782B0107F100440D4C = {
@@ -338,6 +349,7 @@
 				52783CD32B0350AC0067A334 /* MemoryCell.swift in Sources */,
 				52783CC32B031B650067A334 /* SpotTableViewCell.swift in Sources */,
 				52E70D892B0107F100440D4C /* ViewController.swift in Sources */,
+				52783CE82B05C4DA0067A334 /* MapViewController.swift in Sources */,
 				52783CD82B0359110067A334 /* ProfileViewController.swift in Sources */,
 				52292F022B01F8E30083399E /* SearchMemoriesTableVIewCell.swift in Sources */,
 				52783CDC2B036D480067A334 /* ProfileHeaderView.swift in Sources */,
@@ -500,6 +512,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TravelTogether/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "By accessing your location, this app can find good places to eat for you.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -529,6 +542,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TravelTogether/Info.plist;
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "By accessing your location, this app can find good places to eat for you.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

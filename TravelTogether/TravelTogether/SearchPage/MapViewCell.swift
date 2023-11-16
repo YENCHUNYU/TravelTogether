@@ -6,7 +6,10 @@
 //
 
 import UIKit
+import GoogleMaps
 
 class MapViewCell: UITableViewCell {
     
+    @IBOutlet weak var mapView: GMSMapView!
+    @IBOutlet weak var pinImageView: UIImageView!
 }

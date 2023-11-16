@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import GoogleMaps
 
 class SearchViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
+    
+    @IBOutlet weak var button: UIButton!
     
     var searchIndex = 0
     
@@ -23,6 +26,11 @@ class SearchViewController: UIViewController {
         headerView.delegate = self
         tableView.tableHeaderView = headerView
     }
+    
+    @IBAction func buttonTapped(_ sender: Any) {
+        performSegue(withIdentifier: "goToMap", sender: sender)
+    }
+    
 }
 
 extension SearchViewController: UITableViewDataSource {
@@ -54,7 +62,7 @@ extension SearchViewController: UITableViewDelegate {
         if searchIndex == 0 || searchIndex == 1 {
            return 330
         } else {
-            return 572
+            return 572 
         }
     }
 }
@@ -65,3 +73,4 @@ extension SearchViewController: SearchHeaderViewDelegate {
         tableView.reloadData()
     }
 }
+
