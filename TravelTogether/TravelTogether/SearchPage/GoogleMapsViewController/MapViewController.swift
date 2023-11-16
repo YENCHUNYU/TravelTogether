@@ -12,11 +12,11 @@ class MapViewController: UIViewController {
  
     @IBOutlet weak var mapView: GMSMapView!
     
-    @IBOutlet weak var pinImageView: UIImageView!
-    
     let locationManager = CLLocationManager()
     
-    var searchedTypes = ["bakery", "bar", "cafe", "grocery_or_supermarket", "restaurant"]
+    let searchVC = UISearchController(searchResultsController: MapsListViewController())
+    
+
 }
 
 // MARK: - Lifecycle
@@ -24,7 +24,6 @@ extension MapViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-        // 1
         locationManager.delegate = self
 
         // 2
@@ -39,18 +38,23 @@ extension MapViewController {
           // 5
           locationManager.requestWhenInUseAuthorization()
         }
+      
+      searchVC.searchResultsUpdater = self
+      navigationItem.searchController = searchVC
+      
   }
-  
-//  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//    guard
-//      let navigationController = segue.destination as? UINavigationController,
-//      let controller = navigationController.topViewController as? TypesTableViewController
-//      else {
-//        return
-//    }
-//    controller.selectedTypes = searchedTypes
-//    controller.delegate = self
-//  }
+    
+    func setUpSearchBar() {
+        let searchBar = UISearchBar(frame: CGRect(x: 20, y: 20, width: UIScreen.main.bounds.width - 40, height: 40))
+            searchBar.placeholder = "搜尋地點"
+            mapView.addSubview(searchBar)
+        searchBar.searchTextField.addTarget(self, action: #selector(searchPlace), for: .touchUpInside)
+    }
+    
+    @objc func searchPlace() {
+        performSegue(withIdentifier: "goToMapsList", sender: self)
+    }
+    
 }
 
 // MARK: - CLLocationManagerDelegate
@@ -96,5 +100,26 @@ extension MapViewController: CLLocationManagerDelegate {
   ) {
     print(error)
   }
+}
+
+extension MapViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let query = searchController.searchBar.text,
+              !query.trimmingCharacters(in: .whitespaces).isEmpty else {
+            return
+        }
+        
+        GooglePlacesManager.shared.findPlaces(query: query) { result in
+            switch result {
+            case .success(let places):
+                print(places)
+            case .failure(let error):
+                print(error)
+            }
+            
+        }
+    }
+
+
 }
 

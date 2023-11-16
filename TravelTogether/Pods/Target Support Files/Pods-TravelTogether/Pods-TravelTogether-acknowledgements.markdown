@@ -5,6 +5,10 @@ This application makes use of the following third party libraries:
 
 Copyright 2019 Google
 
+## GooglePlaces
+
+Copyright 2023 Google
+
 ## SwiftLint
 
 The MIT License (MIT)
