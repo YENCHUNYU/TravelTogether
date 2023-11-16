@@ -543,29 +543,14 @@
                     <view key="view" contentMode="scaleToFill" id="6Mo-gv-VHr">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MJi-L5-euQ">
-                                <rect key="frame" x="0.0" y="103" width="393" height="666"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="Opt-CO-ObK"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="MJi-L5-euQ" firstAttribute="leading" secondItem="Opt-CO-ObK" secondAttribute="leading" id="36G-FF-5Rv"/>
-                            <constraint firstItem="Opt-CO-ObK" firstAttribute="bottom" secondItem="MJi-L5-euQ" secondAttribute="bottom" id="X2o-hN-MmF"/>
-                            <constraint firstItem="Opt-CO-ObK" firstAttribute="trailing" secondItem="MJi-L5-euQ" secondAttribute="trailing" id="b5A-AO-BuF"/>
-                            <constraint firstItem="MJi-L5-euQ" firstAttribute="top" secondItem="Opt-CO-ObK" secondAttribute="top" id="bYB-Hf-cxb"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="DXO-me-Mqu"/>
-                    <connections>
-                        <outlet property="listView" destination="MJi-L5-euQ" id="sab-Pw-Vpr"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e1C-O3-TcI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-979" y="2649"/>
+            <point key="canvasLocation" x="-979" y="2677"/>
         </scene>
         <!--我的回憶-->
         <scene sceneID="cN8-xe-Dy7">

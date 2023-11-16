@@ -44,16 +44,16 @@ extension MapViewController {
       
   }
     
-    func setUpSearchBar() {
-        let searchBar = UISearchBar(frame: CGRect(x: 20, y: 20, width: UIScreen.main.bounds.width - 40, height: 40))
-            searchBar.placeholder = "搜尋地點"
-            mapView.addSubview(searchBar)
-        searchBar.searchTextField.addTarget(self, action: #selector(searchPlace), for: .touchUpInside)
-    }
-    
-    @objc func searchPlace() {
-        performSegue(withIdentifier: "goToMapsList", sender: self)
-    }
+//    func setUpSearchBar() {
+//        let searchBar = UISearchBar(frame: CGRect(x: 20, y: 20, width: UIScreen.main.bounds.width - 40, height: 40))
+//            searchBar.placeholder = "搜尋地點"
+//            mapView.addSubview(searchBar)
+//        searchBar.searchTextField.addTarget(self, action: #selector(searchPlace), for: .touchUpInside)
+//    }
+//
+//    @objc func searchPlace() {
+//        performSegue(withIdentifier: "goToMapsList", sender: self)
+//    }
     
 }
 
@@ -105,7 +105,8 @@ extension MapViewController: CLLocationManagerDelegate {
 extension MapViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard let query = searchController.searchBar.text,
-              !query.trimmingCharacters(in: .whitespaces).isEmpty else {
+              !query.trimmingCharacters(in: .whitespaces).isEmpty,
+              let resultsVC = searchController.searchResultsController as? MapsListViewController else {
             return
         }
         
@@ -113,6 +114,10 @@ extension MapViewController: UISearchResultsUpdating {
             switch result {
             case .success(let places):
                 print(places)
+                
+                DispatchQueue.main.async {
+                    resultsVC.update(with: places)
+                }
             case .failure(let error):
                 print(error)
             }

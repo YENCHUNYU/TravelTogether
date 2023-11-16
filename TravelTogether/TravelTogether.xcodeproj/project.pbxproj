@@ -25,7 +25,7 @@
 		52783CDC2B036D480067A334 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CDB2B036D480067A334 /* ProfileHeaderView.swift */; };
 		52783CDE2B037B8E0067A334 /* MemoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CDD2B037B8E0067A334 /* MemoryDetailViewController.swift */; };
 		52783CE12B03C76A0067A334 /* MemoryDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CE02B03C76A0067A334 /* MemoryDetailCell.swift */; };
-		52783CE52B05B8E50067A334 /* MapViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CE42B05B8E50067A334 /* MapViewCell.swift */; };
+		52783CE52B05B8E50067A334 /* MapListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CE42B05B8E50067A334 /* MapListCell.swift */; };
 		52783CE82B05C4DA0067A334 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CE72B05C4DA0067A334 /* MapViewController.swift */; };
 		52783CEA2B05DA6F0067A334 /* PlaceMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CE92B05DA6F0067A334 /* PlaceMarker.swift */; };
 		52783CEC2B05DB620067A334 /* GooglePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CEB2B05DB620067A334 /* GooglePlace.swift */; };
@@ -60,7 +60,7 @@
 		52783CDB2B036D480067A334 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		52783CDD2B037B8E0067A334 /* MemoryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryDetailViewController.swift; sourceTree = "<group>"; };
 		52783CE02B03C76A0067A334 /* MemoryDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryDetailCell.swift; sourceTree = "<group>"; };
-		52783CE42B05B8E50067A334 /* MapViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewCell.swift; sourceTree = "<group>"; };
+		52783CE42B05B8E50067A334 /* MapListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapListCell.swift; sourceTree = "<group>"; };
 		52783CE72B05C4DA0067A334 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		52783CE92B05DA6F0067A334 /* PlaceMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceMarker.swift; sourceTree = "<group>"; };
 		52783CEB2B05DB620067A334 /* GooglePlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlace.swift; sourceTree = "<group>"; };
@@ -102,7 +102,6 @@
 				52292F062B0216C90083399E /* SearchHeaderView.swift */,
 				52292F082B0273E80083399E /* CustomSegmentedControl.swift */,
 				52783CC22B031B650067A334 /* SpotTableViewCell.swift */,
-				52783CE42B05B8E50067A334 /* MapViewCell.swift */,
 				52783CDF2B03C7480067A334 /* MemoryDetailPage */,
 			);
 			path = SearchPage;
@@ -162,6 +161,7 @@
 				52783CE72B05C4DA0067A334 /* MapViewController.swift */,
 				52783CE92B05DA6F0067A334 /* PlaceMarker.swift */,
 				52783CF02B05EB380067A334 /* MapsListViewController.swift */,
+				52783CE42B05B8E50067A334 /* MapListCell.swift */,
 				52783CF22B0603BD0067A334 /* GooglePlacesManager.swift */,
 			);
 			path = GoogleMapsViewController;
@@ -390,7 +390,7 @@
 				52783CF32B0603BD0067A334 /* GooglePlacesManager.swift in Sources */,
 				52783CE12B03C76A0067A334 /* MemoryDetailCell.swift in Sources */,
 				52292F092B0273E80083399E /* CustomSegmentedControl.swift in Sources */,
-				52783CE52B05B8E50067A334 /* MapViewCell.swift in Sources */,
+				52783CE52B05B8E50067A334 /* MapListCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

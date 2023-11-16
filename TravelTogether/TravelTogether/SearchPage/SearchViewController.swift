@@ -44,8 +44,8 @@ extension SearchViewController: UITableViewDataSource {
             else { fatalError("Could not create SearchMemoriesCell") }
             return cell
         } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MapViewCell", for: indexPath) as? MapViewCell
-            else { fatalError("Could not create MapViewCell") }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MapListCell", for: indexPath) as? MapListCell
+            else { fatalError("Could not create MapListCell") }
             return cell
         }   
     }
