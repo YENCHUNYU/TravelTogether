@@ -7,6 +7,7 @@
 
 import UIKit
 import GoogleMaps
+import CoreLocation
 
 class MapViewController: UIViewController {
  
@@ -110,6 +111,8 @@ extension MapViewController: UISearchResultsUpdating {
             return
         }
         
+        resultsVC.delegate = self
+        
         GooglePlacesManager.shared.findPlaces(query: query) { result in
             switch result {
             case .success(let places):
@@ -124,7 +127,12 @@ extension MapViewController: UISearchResultsUpdating {
             
         }
     }
-
-
 }
 
+extension MapViewController: MapListViewControllerDelegate {
+    func didTapPlace(with coordinates: CLLocationCoordinate2D) {
+        
+    }
+    
+    
+}
