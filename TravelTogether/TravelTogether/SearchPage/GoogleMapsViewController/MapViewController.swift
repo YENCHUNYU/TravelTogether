@@ -8,6 +8,7 @@
 import UIKit
 import GoogleMaps
 import CoreLocation
+import GooglePlaces
 
 class MapViewController: UIViewController {
  
@@ -16,69 +17,44 @@ class MapViewController: UIViewController {
     let locationManager = CLLocationManager()
     
     let searchVC = UISearchController(searchResultsController: MapsListViewController())
-    
-
 }
 
 // MARK: - Lifecycle
 extension MapViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
-
         locationManager.delegate = self
 
-        // 2
         if CLLocationManager.locationServicesEnabled() {
-          // 3
           locationManager.requestLocation()
-
-          // 4
           mapView.isMyLocationEnabled = true
           mapView.settings.myLocationButton = true
         } else {
-          // 5
           locationManager.requestWhenInUseAuthorization()
         }
-      
       searchVC.searchResultsUpdater = self
       navigationItem.searchController = searchVC
-      
   }
-    
-//    func setUpSearchBar() {
-//        let searchBar = UISearchBar(frame: CGRect(x: 20, y: 20, width: UIScreen.main.bounds.width - 40, height: 40))
-//            searchBar.placeholder = "搜尋地點"
-//            mapView.addSubview(searchBar)
-//        searchBar.searchTextField.addTarget(self, action: #selector(searchPlace), for: .touchUpInside)
-//    }
-//
-//    @objc func searchPlace() {
-//        performSegue(withIdentifier: "goToMapsList", sender: self)
-//    }
-    
 }
 
 // MARK: - CLLocationManagerDelegate
-//1
 extension MapViewController: CLLocationManagerDelegate {
-  // 2
+
   func locationManager(
     _ manager: CLLocationManager,
     didChangeAuthorization status: CLAuthorizationStatus
   ) {
-    // 3
+
     guard status == .authorizedWhenInUse else {
       return
     }
-    // 4
+
     locationManager.requestLocation()
 
-    //5
     mapView.isMyLocationEnabled = true
     mapView.settings.myLocationButton = true
   }
 
-  // 6
   func locationManager(
     _ manager: CLLocationManager,
     didUpdateLocations locations: [CLLocation]) {
@@ -86,7 +62,6 @@ extension MapViewController: CLLocationManagerDelegate {
       return
     }
 
-    // 7
     mapView.camera = GMSCameraPosition(
       target: location.coordinate,
       zoom: 15,
@@ -94,7 +69,6 @@ extension MapViewController: CLLocationManagerDelegate {
       viewingAngle: 0)
   }
 
-  // 8
   func locationManager(
     _ manager: CLLocationManager,
     didFailWithError error: Error
@@ -131,8 +105,19 @@ extension MapViewController: UISearchResultsUpdating {
 
 extension MapViewController: MapListViewControllerDelegate {
     func didTapPlace(with coordinates: CLLocationCoordinate2D) {
-        
+        //  remove keyboard
+        searchVC.searchBar.resignFirstResponder()
+        // remove
+        mapView.clear()
+        //add
+
+        let marker = GMSMarker()
+               marker.position = coordinates
+//               marker.title = "Your Marker Title"
+//               marker.snippet = "Your Marker Snippet"
+               marker.map = mapView
+
+               let camera = GMSCameraPosition.camera(withTarget: coordinates, zoom: 15.0)
+               mapView.animate(to: camera)
     }
-    
-    
 }

@@ -20,15 +20,11 @@ class GooglePlacesManager {
         case failedToFind
         case failedToGetCoordinates
     }
-    
-//    public func setUp() {
-//        GMSPlacesClient.provideAPIKey("AIzaSyB_yT1p20Y-EsVCmomSsdCVgXF1v2yKxZI")
-//    }
-    
+
     public func findPlaces(
         query: String,
         completion: @escaping(Result<[Place], Error>) -> Void
-    ){
+    ) {
         let filter = GMSAutocompleteFilter()
         filter.type = .geocode
         client.findAutocompletePredictions(
@@ -67,9 +63,7 @@ class GooglePlacesManager {
                 longitude: googlePlace.coordinate.longitude)
             completion(.success(coordinate))
         }
-        
-        }
-    
+    }
 }
 
 struct Place {

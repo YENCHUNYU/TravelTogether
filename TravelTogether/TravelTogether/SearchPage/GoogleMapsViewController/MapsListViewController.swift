@@ -22,9 +22,7 @@ class MapsListViewController: UIViewController {
         table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         return table
     }()
-
-    
-    
+ 
     private var places: [Place] = []
     
     override func viewDidLoad() {
@@ -54,11 +52,6 @@ extension MapsListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MapListCell", for: indexPath) as? MapListCell
-//        else { fatalError("Could not create MapListCell") }
-//        cell.placeLabel.text = places[indexPath.row].name
-//        return cell
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = places[indexPath.row].name
         return cell
@@ -86,10 +79,4 @@ extension MapsListViewController: UITableViewDataSource {
 }
 
 extension MapsListViewController: UITableViewDelegate {
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//
-//           return 330
-//
-//
-//    }
 }

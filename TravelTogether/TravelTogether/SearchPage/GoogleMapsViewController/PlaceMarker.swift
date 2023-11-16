@@ -9,10 +9,9 @@ import UIKit
 import GoogleMaps
 
 class PlaceMarker: GMSMarker {
-    // 1
+
     let place: GooglePlace
 
-    // 2
     init(place: GooglePlace, availableTypes: [String]) {
       self.place = place
       super.init()
