@@ -25,6 +25,7 @@
 		52783CDC2B036D480067A334 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CDB2B036D480067A334 /* ProfileHeaderView.swift */; };
 		52783CDE2B037B8E0067A334 /* MemoryDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CDD2B037B8E0067A334 /* MemoryDetailViewController.swift */; };
 		52783CE12B03C76A0067A334 /* MemoryDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CE02B03C76A0067A334 /* MemoryDetailCell.swift */; };
+		52783CE52B05B8E50067A334 /* MapViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CE42B05B8E50067A334 /* MapViewCell.swift */; };
 		52E70D852B0107F100440D4C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D842B0107F100440D4C /* AppDelegate.swift */; };
 		52E70D872B0107F100440D4C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D862B0107F100440D4C /* SceneDelegate.swift */; };
 		52E70D892B0107F100440D4C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D882B0107F100440D4C /* ViewController.swift */; };
@@ -53,6 +54,7 @@
 		52783CDB2B036D480067A334 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		52783CDD2B037B8E0067A334 /* MemoryDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryDetailViewController.swift; sourceTree = "<group>"; };
 		52783CE02B03C76A0067A334 /* MemoryDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryDetailCell.swift; sourceTree = "<group>"; };
+		52783CE42B05B8E50067A334 /* MapViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewCell.swift; sourceTree = "<group>"; };
 		52E70D812B0107F100440D4C /* TravelTogether.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelTogether.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52E70D842B0107F100440D4C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52E70D862B0107F100440D4C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				52292F062B0216C90083399E /* SearchHeaderView.swift */,
 				52292F082B0273E80083399E /* CustomSegmentedControl.swift */,
 				52783CC22B031B650067A334 /* SpotTableViewCell.swift */,
+				52783CE42B05B8E50067A334 /* MapViewCell.swift */,
 				52783CDF2B03C7480067A334 /* MemoryDetailPage */,
 			);
 			path = SearchPage;
@@ -205,6 +208,7 @@
 				52E70D7E2B0107F100440D4C /* Frameworks */,
 				52E70D7F2B0107F100440D4C /* Resources */,
 				52783CE32B051DA20067A334 /* ShellScript */,
+				E9580ACA3E78BD96F92389E2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -301,6 +305,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		E9580ACA3E78BD96F92389E2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TravelTogether/Pods-TravelTogether-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TravelTogether/Pods-TravelTogether-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TravelTogether/Pods-TravelTogether-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -329,6 +350,7 @@
 				52783CD52B0354820067A334 /* MemoryHeaderView.swift in Sources */,
 				52783CE12B03C76A0067A334 /* MemoryDetailCell.swift in Sources */,
 				52292F092B0273E80083399E /* CustomSegmentedControl.swift in Sources */,
+				52783CE52B05B8E50067A334 /* MapViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

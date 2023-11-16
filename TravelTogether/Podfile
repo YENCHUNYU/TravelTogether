@@ -7,5 +7,7 @@ target 'TravelTogether' do
 
   # Pods for TravelTogether
   pod 'SwiftLint'
+  pod 'GoogleMaps', '~> 3.7.0'
+
 
 end

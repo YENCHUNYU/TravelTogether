@@ -15,54 +15,118 @@
 			dependencies = (
 			);
 			name = SwiftLint;
-			productName = SwiftLint;
+		};
+		E5B4BBC6DD552AC8943C7E22772FC1D3 /* GoogleMaps */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 46921981F609C5BA3CB72EC4EA41299D /* Build configuration list for PBXAggregateTarget "GoogleMaps" */;
+			buildPhases = (
+			);
+			dependencies = (
+			);
+			name = GoogleMaps;
 		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		0A858E554225CB49120EE52E59112A12 /* Pods-TravelTogether-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E43C1D89DB1BD2099DEB74AF829C3A8 /* Pods-TravelTogether-dummy.m */; };
-		1E822497F8D57BBE950827756944A7DD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
-		F3351CBDD9A824EFC9FF6A48E1FFAC15 /* Pods-TravelTogether-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 4C1A86852EB1E9BBAA8C0A66C4148A20 /* Pods-TravelTogether-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		61FDA714288E86F8F601C9B6303B43EF /* Pods-TravelTogether-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E576DF7C4CCC8F9BD82F9B50D09D706 /* Pods-TravelTogether-dummy.m */; };
+		E9512C93E11F7DD0CEB29D570F546917 /* Pods-TravelTogether-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 0102082D1045FFE2B8E73ECBDBB3285A /* Pods-TravelTogether-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F65BB8FA70BBD502BB799FBA50BA5944 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		5951C310EA1BA86613D25F7CD2AFF551 /* PBXContainerItemProxy */ = {
+		2E912C44B9039AB4994B0AC6869C9F75 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 52B60EC2A583F24ACBB69C113F5488B9;
 			remoteInfo = SwiftLint;
 		};
+		67CACE05DE16627E034F97C263897610 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BFDFE7DC352907FC980B868725387E98 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E5B4BBC6DD552AC8943C7E22772FC1D3;
+			remoteInfo = GoogleMaps;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		068B783B7028E5BCFFDF5791E93A1231 /* Pods-TravelTogether.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-TravelTogether.modulemap"; sourceTree = "<group>"; };
-		2066880F3C11675A62AF90AF07706A30 /* Pods-TravelTogether-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-TravelTogether-acknowledgements.plist"; sourceTree = "<group>"; };
-		3EC0124719FE8EF5FDDD72C26F8A2F57 /* SwiftLint.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftLint.debug.xcconfig; sourceTree = "<group>"; };
-		4C1A86852EB1E9BBAA8C0A66C4148A20 /* Pods-TravelTogether-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-TravelTogether-umbrella.h"; sourceTree = "<group>"; };
-		55EFE6AC000D00A7CC8FFA77A3F6A1E3 /* Pods-TravelTogether.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-TravelTogether.release.xcconfig"; sourceTree = "<group>"; };
-		5E43C1D89DB1BD2099DEB74AF829C3A8 /* Pods-TravelTogether-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-TravelTogether-dummy.m"; sourceTree = "<group>"; };
-		69897D74B220934B458AF52E530738FE /* Pods-TravelTogether-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-TravelTogether-acknowledgements.markdown"; sourceTree = "<group>"; };
+		0102082D1045FFE2B8E73ECBDBB3285A /* Pods-TravelTogether-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-TravelTogether-umbrella.h"; sourceTree = "<group>"; };
+		11F05C711B665B570801F12E897B6C82 /* GoogleMaps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GoogleMaps.release.xcconfig; sourceTree = "<group>"; };
+		12CE5D1B6AD5C7144C03B18F07E49047 /* SwiftLint.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftLint.debug.xcconfig; sourceTree = "<group>"; };
+		20AEAA43A626700DCFA845B72F04F0A6 /* GoogleMaps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GoogleMaps.debug.xcconfig; sourceTree = "<group>"; };
+		2F4EAC9472086FB6235C6E4308382E69 /* Pods-TravelTogether-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-TravelTogether-Info.plist"; sourceTree = "<group>"; };
+		3973D4A603CD6A4AE23153BDE76C63C9 /* GoogleMaps.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = GoogleMaps.bundle; path = Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle; sourceTree = "<group>"; };
+		4E576DF7C4CCC8F9BD82F9B50D09D706 /* Pods-TravelTogether-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-TravelTogether-dummy.m"; sourceTree = "<group>"; };
+		556C2D8CC314AC7578F9601543E6E609 /* Pods-TravelTogether.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-TravelTogether.release.xcconfig"; sourceTree = "<group>"; };
 		73010CC983E3809BECEE5348DA1BB8C6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		792BE624FAE9CF92AD7EB4D7B3575613 /* Pods-TravelTogether-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-TravelTogether-Info.plist"; sourceTree = "<group>"; };
-		7EAB1DA481EDDC005A251D3A5E6BE4CD /* SwiftLint.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftLint.release.xcconfig; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		C19330A7EC0FCAFF7C05E3E978B73FE8 /* Pods-TravelTogether.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-TravelTogether.debug.xcconfig"; sourceTree = "<group>"; };
+		7BB75B8C4BC1E223C24971E208957FAB /* Pods-TravelTogether.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-TravelTogether.modulemap"; sourceTree = "<group>"; };
+		9909411B76E2F2AC3E4A17A46312788B /* Pods-TravelTogether-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-TravelTogether-acknowledgements.markdown"; sourceTree = "<group>"; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		AA223728BF38F798712B6BC113D3F2F6 /* Pods-TravelTogether-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-TravelTogether-acknowledgements.plist"; sourceTree = "<group>"; };
+		AF6F6412461CCDD9C255173BD3292B10 /* SwiftLint.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftLint.release.xcconfig; sourceTree = "<group>"; };
+		BBFE05C6314200234064E64BE2422B73 /* GoogleMapsBase.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMapsBase.framework; path = Base/Frameworks/GoogleMapsBase.framework; sourceTree = "<group>"; };
 		C633907454989F893B0DCBE619D67A7A /* Pods-TravelTogether */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = "Pods-TravelTogether"; path = Pods_TravelTogether.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E87D20F74D43943905DC747B28446C39 /* Pods-TravelTogether.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-TravelTogether.debug.xcconfig"; sourceTree = "<group>"; };
+		E99F21D839429DD62A60A057207D3021 /* GoogleMaps.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMaps.framework; path = Maps/Frameworks/GoogleMaps.framework; sourceTree = "<group>"; };
+		ED658D8B5AA13627A5D29B3AEE1E39CD /* GoogleMapsCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMapsCore.framework; path = Maps/Frameworks/GoogleMapsCore.framework; sourceTree = "<group>"; };
+		FC679B89FED0F666E68CF62433495C3A /* Pods-TravelTogether-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-TravelTogether-resources.sh"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		F368E098BDE76FB65428038CCCD681DE /* Frameworks */ = {
+		2B19AE3670E745AB51361B491FB08C59 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E822497F8D57BBE950827756944A7DD /* Foundation.framework in Frameworks */,
+				F65BB8FA70BBD502BB799FBA50BA5944 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		10DAFCA7350F1A742A3A811733ACA583 /* Pods-TravelTogether */ = {
+			isa = PBXGroup;
+			children = (
+				7BB75B8C4BC1E223C24971E208957FAB /* Pods-TravelTogether.modulemap */,
+				9909411B76E2F2AC3E4A17A46312788B /* Pods-TravelTogether-acknowledgements.markdown */,
+				AA223728BF38F798712B6BC113D3F2F6 /* Pods-TravelTogether-acknowledgements.plist */,
+				4E576DF7C4CCC8F9BD82F9B50D09D706 /* Pods-TravelTogether-dummy.m */,
+				2F4EAC9472086FB6235C6E4308382E69 /* Pods-TravelTogether-Info.plist */,
+				FC679B89FED0F666E68CF62433495C3A /* Pods-TravelTogether-resources.sh */,
+				0102082D1045FFE2B8E73ECBDBB3285A /* Pods-TravelTogether-umbrella.h */,
+				E87D20F74D43943905DC747B28446C39 /* Pods-TravelTogether.debug.xcconfig */,
+				556C2D8CC314AC7578F9601543E6E609 /* Pods-TravelTogether.release.xcconfig */,
+			);
+			name = "Pods-TravelTogether";
+			path = "Target Support Files/Pods-TravelTogether";
+			sourceTree = "<group>";
+		};
+		1FE95BA12CB9CA1CD7347E3EA6932CE2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BBFE05C6314200234064E64BE2422B73 /* GoogleMapsBase.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2CAE15CBFBB02B4C504A5D4FD5A0A6C5 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				10DAFCA7350F1A742A3A811733ACA583 /* Pods-TravelTogether */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		4958E5DCCF5482A0ED8A9A51CA5E2988 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E99F21D839429DD62A60A057207D3021 /* GoogleMaps.framework */,
+				ED658D8B5AA13627A5D29B3AEE1E39CD /* GoogleMapsCore.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		578452D2E740E91742655AC8F1636D1F /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -71,46 +135,70 @@
 			name = iOS;
 			sourceTree = "<group>";
 		};
-		7FDA596DBE0337ACDFE55A210D54EF26 /* Support Files */ = {
+		7120117C4A2DC2ABA0220C888473DC40 /* SwiftLint */ = {
 			isa = PBXGroup;
 			children = (
-				3EC0124719FE8EF5FDDD72C26F8A2F57 /* SwiftLint.debug.xcconfig */,
-				7EAB1DA481EDDC005A251D3A5E6BE4CD /* SwiftLint.release.xcconfig */,
+				BF752A1B250093948A052AA9AEFFC1ED /* Support Files */,
+			);
+			name = SwiftLint;
+			path = SwiftLint;
+			sourceTree = "<group>";
+		};
+		9BC890D1A34A52F0E81489A6A4A21581 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A7D72AF67F024BF97A987AC9EA14761B /* GoogleMaps */,
+				7120117C4A2DC2ABA0220C888473DC40 /* SwiftLint */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		A276B74A0463E68F43E1EAEF66F1BA0D /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				20AEAA43A626700DCFA845B72F04F0A6 /* GoogleMaps.debug.xcconfig */,
+				11F05C711B665B570801F12E897B6C82 /* GoogleMaps.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/GoogleMaps";
+			sourceTree = "<group>";
+		};
+		A7D72AF67F024BF97A987AC9EA14761B /* GoogleMaps */ = {
+			isa = PBXGroup;
+			children = (
+				AD7D980D0099F2F3C205E0CBFADCC1DE /* Base */,
+				CBE595A504C6792FC3EB7E888C010777 /* Maps */,
+				A276B74A0463E68F43E1EAEF66F1BA0D /* Support Files */,
+			);
+			name = GoogleMaps;
+			path = GoogleMaps;
+			sourceTree = "<group>";
+		};
+		AD7D980D0099F2F3C205E0CBFADCC1DE /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				1FE95BA12CB9CA1CD7347E3EA6932CE2 /* Frameworks */,
+			);
+			name = Base;
+			sourceTree = "<group>";
+		};
+		BF752A1B250093948A052AA9AEFFC1ED /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				12CE5D1B6AD5C7144C03B18F07E49047 /* SwiftLint.debug.xcconfig */,
+				AF6F6412461CCDD9C255173BD3292B10 /* SwiftLint.release.xcconfig */,
 			);
 			name = "Support Files";
 			path = "../Target Support Files/SwiftLint";
 			sourceTree = "<group>";
 		};
-		8A46B96B79165EC29B4E4979C0A365DF /* Targets Support Files */ = {
+		CBE595A504C6792FC3EB7E888C010777 /* Maps */ = {
 			isa = PBXGroup;
 			children = (
-				A88DEA5498EEC5FC308FAC6865773688 /* Pods-TravelTogether */,
+				4958E5DCCF5482A0ED8A9A51CA5E2988 /* Frameworks */,
+				EA53FAC603B49430E2A99C3C2DD6E8C6 /* Resources */,
 			);
-			name = "Targets Support Files";
-			sourceTree = "<group>";
-		};
-		965877409E01FB3D85D85E90E6B30185 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				D96179D43A67C5D5323B0682D32C133C /* SwiftLint */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
-		A88DEA5498EEC5FC308FAC6865773688 /* Pods-TravelTogether */ = {
-			isa = PBXGroup;
-			children = (
-				068B783B7028E5BCFFDF5791E93A1231 /* Pods-TravelTogether.modulemap */,
-				69897D74B220934B458AF52E530738FE /* Pods-TravelTogether-acknowledgements.markdown */,
-				2066880F3C11675A62AF90AF07706A30 /* Pods-TravelTogether-acknowledgements.plist */,
-				5E43C1D89DB1BD2099DEB74AF829C3A8 /* Pods-TravelTogether-dummy.m */,
-				792BE624FAE9CF92AD7EB4D7B3575613 /* Pods-TravelTogether-Info.plist */,
-				4C1A86852EB1E9BBAA8C0A66C4148A20 /* Pods-TravelTogether-umbrella.h */,
-				C19330A7EC0FCAFF7C05E3E978B73FE8 /* Pods-TravelTogether.debug.xcconfig */,
-				55EFE6AC000D00A7CC8FFA77A3F6A1E3 /* Pods-TravelTogether.release.xcconfig */,
-			);
-			name = "Pods-TravelTogether";
-			path = "Target Support Files/Pods-TravelTogether";
+			name = Maps;
 			sourceTree = "<group>";
 		};
 		CC62026EEEF7D2880A23F7A437984D87 /* Products */ = {
@@ -126,9 +214,9 @@
 			children = (
 				9D940727FF8FB9C785EB98E56350EF41 /* Podfile */,
 				D210D550F4EA176C3123ED886F8F87F5 /* Frameworks */,
-				965877409E01FB3D85D85E90E6B30185 /* Pods */,
+				9BC890D1A34A52F0E81489A6A4A21581 /* Pods */,
 				CC62026EEEF7D2880A23F7A437984D87 /* Products */,
-				8A46B96B79165EC29B4E4979C0A365DF /* Targets Support Files */,
+				2CAE15CBFBB02B4C504A5D4FD5A0A6C5 /* Targets Support Files */,
 			);
 			sourceTree = "<group>";
 		};
@@ -140,22 +228,22 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		D96179D43A67C5D5323B0682D32C133C /* SwiftLint */ = {
+		EA53FAC603B49430E2A99C3C2DD6E8C6 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				7FDA596DBE0337ACDFE55A210D54EF26 /* Support Files */,
+				3973D4A603CD6A4AE23153BDE76C63C9 /* GoogleMaps.bundle */,
 			);
-			path = SwiftLint;
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		44AC3D8EF1A3170FFCF56273538C9941 /* Headers */ = {
+		2277404AD7668D1F914D5232B6F2BAEC /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F3351CBDD9A824EFC9FF6A48E1FFAC15 /* Pods-TravelTogether-umbrella.h in Headers */,
+				E9512C93E11F7DD0CEB29D570F546917 /* Pods-TravelTogether-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,17 +252,18 @@
 /* Begin PBXNativeTarget section */
 		CDDA454EAC36A0754AA7F28966B947FE /* Pods-TravelTogether */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AEBE9FDEF95905464604814E724BA6A2 /* Build configuration list for PBXNativeTarget "Pods-TravelTogether" */;
+			buildConfigurationList = 62863D930C09636F2BA2B67CD8ABA3E7 /* Build configuration list for PBXNativeTarget "Pods-TravelTogether" */;
 			buildPhases = (
-				44AC3D8EF1A3170FFCF56273538C9941 /* Headers */,
-				4C361A6BF25FB2FD3862AC0B6C68F1BB /* Sources */,
-				F368E098BDE76FB65428038CCCD681DE /* Frameworks */,
-				5081E36C68509DE0F6EFBCEB0B3F3598 /* Resources */,
+				2277404AD7668D1F914D5232B6F2BAEC /* Headers */,
+				271D235501344E934A90EA2154C0CDF6 /* Sources */,
+				2B19AE3670E745AB51361B491FB08C59 /* Frameworks */,
+				5F7ACF059ACE437BDABB38A536F23AED /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				F46EA7D1157E35C4D933CD48E4BCCB60 /* PBXTargetDependency */,
+				1F280F3EBCBAE5FC1EF61559396AC184 /* PBXTargetDependency */,
+				609ECA92E0E4FF887FCDC312F7D11E24 /* PBXTargetDependency */,
 			);
 			name = "Pods-TravelTogether";
 			productName = Pods_TravelTogether;
@@ -203,6 +292,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				E5B4BBC6DD552AC8943C7E22772FC1D3 /* GoogleMaps */,
 				CDDA454EAC36A0754AA7F28966B947FE /* Pods-TravelTogether */,
 				52B60EC2A583F24ACBB69C113F5488B9 /* SwiftLint */,
 			);
@@ -210,7 +300,7 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		5081E36C68509DE0F6EFBCEB0B3F3598 /* Resources */ = {
+		5F7ACF059ACE437BDABB38A536F23AED /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -220,29 +310,35 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		4C361A6BF25FB2FD3862AC0B6C68F1BB /* Sources */ = {
+		271D235501344E934A90EA2154C0CDF6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0A858E554225CB49120EE52E59112A12 /* Pods-TravelTogether-dummy.m in Sources */,
+				61FDA714288E86F8F601C9B6303B43EF /* Pods-TravelTogether-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		F46EA7D1157E35C4D933CD48E4BCCB60 /* PBXTargetDependency */ = {
+		1F280F3EBCBAE5FC1EF61559396AC184 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GoogleMaps;
+			target = E5B4BBC6DD552AC8943C7E22772FC1D3 /* GoogleMaps */;
+			targetProxy = 67CACE05DE16627E034F97C263897610 /* PBXContainerItemProxy */;
+		};
+		609ECA92E0E4FF887FCDC312F7D11E24 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = SwiftLint;
 			target = 52B60EC2A583F24ACBB69C113F5488B9 /* SwiftLint */;
-			targetProxy = 5951C310EA1BA86613D25F7CD2AFF551 /* PBXContainerItemProxy */;
+			targetProxy = 2E912C44B9039AB4994B0AC6869C9F75 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		26EA5A9600226D2B7D8D25152A304F3B /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7EAB1DA481EDDC005A251D3A5E6BE4CD /* SwiftLint.release.xcconfig */;
+			baseConfigurationReference = AF6F6412461CCDD9C255173BD3292B10 /* SwiftLint.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -258,7 +354,115 @@
 			};
 			name = Release;
 		};
-		7C3FBC45C4966EFE20583918767EFBE2 /* Debug */ = {
+		2CDC865446EB0F684A120F8DB2FC9AE7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E87D20F74D43943905DC747B28446C39 /* Pods-TravelTogether.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-TravelTogether/Pods-TravelTogether-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-TravelTogether/Pods-TravelTogether.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		6CCBCE52FD46D89565DEB676446DB083 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 20AEAA43A626700DCFA845B72F04F0A6 /* GoogleMaps.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7B52AED984E5F96408001A1A7FFB4B3F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 11F05C711B665B570801F12E897B6C82 /* GoogleMaps.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7BBCF04C9B71538448215392F0449952 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 556C2D8CC314AC7578F9601543E6E609 /* Pods-TravelTogether.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-TravelTogether/Pods-TravelTogether-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-TravelTogether/Pods-TravelTogether.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		90D4D09BCB6A4660E43ACBE9ECB6FE9A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -311,7 +515,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -324,99 +528,7 @@
 			};
 			name = Debug;
 		};
-		95857564A16038053B31D5BB63F0D773 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 55EFE6AC000D00A7CC8FFA77A3F6A1E3 /* Pods-TravelTogether.release.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-TravelTogether/Pods-TravelTogether-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-TravelTogether/Pods-TravelTogether.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		C0B4E894DEF6ECF99D7D9651572B5BF3 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = C19330A7EC0FCAFF7C05E3E978B73FE8 /* Pods-TravelTogether.debug.xcconfig */;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-TravelTogether/Pods-TravelTogether-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-TravelTogether/Pods-TravelTogether.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		E9E1A48A750B946DE9877594C6E735E4 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3EC0124719FE8EF5FDDD72C26F8A2F57 /* SwiftLint.debug.xcconfig */;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		FF0A36149038A192FFD678E1D4A40D3B /* Release */ = {
+		9553C89E183877A5CB2F3C6801BEC129 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -466,7 +578,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -478,14 +590,49 @@
 			};
 			name = Release;
 		};
+		E9E1A48A750B946DE9877594C6E735E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 12CE5D1B6AD5C7144C03B18F07E49047 /* SwiftLint.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		46921981F609C5BA3CB72EC4EA41299D /* Build configuration list for PBXAggregateTarget "GoogleMaps" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6CCBCE52FD46D89565DEB676446DB083 /* Debug */,
+				7B52AED984E5F96408001A1A7FFB4B3F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7C3FBC45C4966EFE20583918767EFBE2 /* Debug */,
-				FF0A36149038A192FFD678E1D4A40D3B /* Release */,
+				90D4D09BCB6A4660E43ACBE9ECB6FE9A /* Debug */,
+				9553C89E183877A5CB2F3C6801BEC129 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		62863D930C09636F2BA2B67CD8ABA3E7 /* Build configuration list for PBXNativeTarget "Pods-TravelTogether" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2CDC865446EB0F684A120F8DB2FC9AE7 /* Debug */,
+				7BBCF04C9B71538448215392F0449952 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -495,15 +642,6 @@
 			buildConfigurations = (
 				E9E1A48A750B946DE9877594C6E735E4 /* Debug */,
 				26EA5A9600226D2B7D8D25152A304F3B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		AEBE9FDEF95905464604814E724BA6A2 /* Build configuration list for PBXNativeTarget "Pods-TravelTogether" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				C0B4E894DEF6ECF99D7D9651572B5BF3 /* Debug */,
-				95857564A16038053B31D5BB63F0D773 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

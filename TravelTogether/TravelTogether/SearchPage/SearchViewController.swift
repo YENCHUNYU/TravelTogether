@@ -36,8 +36,8 @@ extension SearchViewController: UITableViewDataSource {
             else { fatalError("Could not create SearchMemoriesCell") }
             return cell
         } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SpotCell", for: indexPath) as? SpotCell
-            else { fatalError("Could not create SpotCell") }
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MapViewCell", for: indexPath) as? MapViewCell
+            else { fatalError("Could not create MapViewCell") }
             return cell
         }   
     }
@@ -54,7 +54,7 @@ extension SearchViewController: UITableViewDelegate {
         if searchIndex == 0 || searchIndex == 1 {
            return 330
         } else {
-            return 280
+            return 572
         }
     }
 }
