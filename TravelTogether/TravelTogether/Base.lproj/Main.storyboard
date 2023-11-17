@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="GEb-eU-aUT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="7rF-H5-0yw">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -679,7 +679,7 @@
         <!--Create Plan View Controller-->
         <scene sceneID="fOw-59-ooz">
             <objects>
-                <viewController id="yIW-p7-YMv" customClass="CreatePlanViewController" customModule="TravelTogether" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CreatePlanViewController" id="yIW-p7-YMv" customClass="CreatePlanViewController" customModule="TravelTogether" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="X4v-DL-knm">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -695,11 +695,21 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3KS-jL-hn7">
+                                <rect key="frame" x="167.33333333333334" y="207" width="58.666666666666657" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="儲存"/>
+                                <connections>
+                                    <action selector="saveButtonTapped:" destination="yIW-p7-YMv" eventType="touchUpInside" id="bly-AU-UiC"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="tpM-to-JsS"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="3KS-jL-hn7" firstAttribute="top" secondItem="89s-7I-Bb3" secondAttribute="bottom" constant="21" id="0PI-3H-8QO"/>
                             <constraint firstItem="ceH-vj-KVE" firstAttribute="centerX" secondItem="tpM-to-JsS" secondAttribute="centerX" id="6xM-3N-fJ4"/>
+                            <constraint firstItem="3KS-jL-hn7" firstAttribute="centerX" secondItem="tpM-to-JsS" secondAttribute="centerX" id="Oi4-b4-j5z"/>
                             <constraint firstItem="tpM-to-JsS" firstAttribute="trailing" secondItem="89s-7I-Bb3" secondAttribute="trailing" constant="40" id="QIt-mj-LbN"/>
                             <constraint firstItem="ceH-vj-KVE" firstAttribute="top" secondItem="tpM-to-JsS" secondAttribute="top" constant="20" id="TPz-xW-j7Z"/>
                             <constraint firstItem="89s-7I-Bb3" firstAttribute="leading" secondItem="tpM-to-JsS" secondAttribute="leading" constant="40" id="an7-hJ-WbA"/>
@@ -712,6 +722,7 @@
                     <connections>
                         <outlet property="planNameLabel" destination="ceH-vj-KVE" id="sQi-Cy-ZTz"/>
                         <outlet property="planNameTextField" destination="89s-7I-Bb3" id="twR-8L-35B"/>
+                        <outlet property="saveButton" destination="3KS-jL-hn7" id="Dxo-1h-qDz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s01-Dm-gG1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

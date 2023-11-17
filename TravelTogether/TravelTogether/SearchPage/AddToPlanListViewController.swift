@@ -32,8 +32,8 @@ extension AddToPlanListViewController: UITableViewDataSource {
             else { fatalError("Could not create AddToListCell") }
         cell.planTitleLabel.text = plans[indexPath.row]
             return cell
-       
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
             performSegue(withIdentifier: "MemoryDetail", sender: self)
@@ -48,7 +48,23 @@ extension AddToPlanListViewController: UITableViewDataSource {
     }
     
     @objc func createButtonTapped() {
-    performSegue(withIdentifier: "goToCreate", sender: self)
+//    performSegue(withIdentifier: "goToCreate", sender: self)
+        //
+        guard let createPlanViewController = storyboard?.instantiateViewController(withIdentifier: "CreatePlanViewController") as? CreatePlanViewController
+        else {fatalError("Can not instantiate CreatePlanViewController")}
+
+                // Set the closure to receive the planName value
+                createPlanViewController.onSave = { [weak self] planName in
+                    // Use the planName value as needed
+                    self?.handlePlanName(planName)
+                }
+
+                navigationController?.pushViewController(createPlanViewController, animated: true)
+        }
+    
+    func handlePlanName(_ planName: String) {
+        plans.append(planName)
+        tableView.reloadData()
         }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
