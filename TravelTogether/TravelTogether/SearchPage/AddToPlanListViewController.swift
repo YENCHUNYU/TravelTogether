@@ -6,10 +6,11 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class AddToPlanListViewController: UIViewController {
 
-    var plans: [String] = ["台中一日遊"]
+    var plans: [TravelPlan] = []
 
     @IBOutlet weak var tableView: UITableView!
         
@@ -18,7 +19,31 @@ class AddToPlanListViewController: UIViewController {
             tableView.dataSource = self
             tableView.delegate = self
             tableView.register(AddToListFooterView.self, forHeaderFooterViewReuseIdentifier: "AddToListFooterView")
+            
+            fetchTravelPlans { (travelPlans, error) in
+                if let error = error {
+                    print("Error fetching travel plans: \(error)")
+                } else {
+                    // Handle the retrieved travel plans
+                    print("Fetched travel plans: \(travelPlans ?? [])")
+                    self.plans = travelPlans ?? []
+                    self.tableView.reloadData()
+                }
+            }
         }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        fetchTravelPlans { (travelPlans, error) in
+            if let error = error {
+                print("Error fetching travel plans: \(error)")
+            } else {
+                // Handle the retrieved travel plans
+                print("Fetched travel plans: \(travelPlans ?? [])")
+                self.plans = travelPlans ?? []
+                self.tableView.reloadData()
+            }
+        }
+    }
     }
 
 extension AddToPlanListViewController: UITableViewDataSource {
@@ -30,7 +55,7 @@ extension AddToPlanListViewController: UITableViewDataSource {
     
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "AddToListCell", for: indexPath) as? AddToListCell
             else { fatalError("Could not create AddToListCell") }
-        cell.planTitleLabel.text = plans[indexPath.row]
+        cell.planTitleLabel.text = plans[indexPath.row].planName
             return cell
     }
     
@@ -63,7 +88,7 @@ extension AddToPlanListViewController: UITableViewDataSource {
         }
     
     func handlePlanName(_ planName: String) {
-        plans.append(planName)
+      //  plans.append(planName)
         tableView.reloadData()
         }
     
@@ -80,41 +105,42 @@ extension AddToPlanListViewController: UITableViewDelegate {
     }
 }
 
-class AddToListCell: UITableViewCell {
+extension AddToPlanListViewController {
+    // Firebase
     
-    @IBOutlet weak var planTitleLabel: UILabel!
-    @IBOutlet weak var dateLabel: UILabel!
-}
-   
-class AddToListFooterView: UITableViewHeaderFooterView {
-    
-    let createNewPlanButton: UIButton = {
-        let create = UIButton()
-        create.translatesAutoresizingMaskIntoConstraints = false
-        create.setTitle("建立新行程", for: .normal)
-        create.backgroundColor = .lightGray
-//        create.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
-        return create
-    }()
-    
-//    @objc func createButtonTapped() {
-//
-//    }
-    
-    override init(reuseIdentifier: String?) {
-            super.init(reuseIdentifier: reuseIdentifier)
-            commonInit()
-        }
+    func fetchTravelPlans(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
+        let db = Firestore.firestore()
 
-        required init?(coder: NSCoder) {
-            super.init(coder: coder)
-            commonInit()
+        db.collection("TravelPlan").getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+                completion(nil, error)
+            } else {
+                var travelPlans: [TravelPlan] = []
+
+                for document in querySnapshot!.documents {
+                    let data = document.data()
+
+                    // Convert Firestore Timestamp to Date
+                    let startDate = (data["startDate"] as? Timestamp)?.dateValue() ?? Date()
+                    let endDate = (data["endDate"] as? Timestamp)?.dateValue() ?? Date()
+
+                    // Create a TravelPlan object
+                    let travelPlan = TravelPlan(
+                        id: document.documentID,
+                        planName: data["planName"] as? String ?? "",
+                        destination: data["destination"] as? String ?? "",
+                        startDate: startDate,
+                        endDate: endDate
+                        // Add other properties as needed
+                    )
+
+                    travelPlans.append(travelPlan)
+                    
+                }
+
+                completion(travelPlans, nil)
+            }
         }
-    
-    func commonInit() {
-        contentView.addSubview(createNewPlanButton)
-        createNewPlanButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0).isActive = true
-        createNewPlanButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5).isActive = true
     }
-    
 }
