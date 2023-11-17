@@ -10,7 +10,7 @@ import GoogleMaps
 import CoreLocation
 
 protocol MapListViewControllerDelegate: AnyObject {
-    func didTapPlace(with coordinates: CLLocationCoordinate2D )
+    func didTapPlace(with coordinates: CLLocationCoordinate2D, indexPath: IndexPath)
 }
 
 class MapsListViewController: UIViewController {
@@ -19,7 +19,7 @@ class MapsListViewController: UIViewController {
     
     private let tableView: UITableView = {
         let table = UITableView()
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        table.register(MapListCell.self, forCellReuseIdentifier: "MapListCell")
         return table
     }()
  
@@ -52,8 +52,9 @@ extension MapsListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = places[indexPath.row].name
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MapListCell", for: indexPath) as? MapListCell else { fatalError("Could not create MapListCell")}
+        cell.titleLabel.text = places[indexPath.row].name
+        cell.addressLabel.text = places[indexPath.row].address
         return cell
     }
     
@@ -68,7 +69,7 @@ extension MapsListViewController: UITableViewDataSource {
             switch result {
             case .success(let coordinate):
                 DispatchQueue.main.async {
-                    self?.delegate?.didTapPlace(with: coordinate)
+                    self?.delegate?.didTapPlace(with: coordinate, indexPath: indexPath)
                 }
             case .failure(let error):
                 print(error)
@@ -79,4 +80,7 @@ extension MapsListViewController: UITableViewDataSource {
 }
 
 extension MapsListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        60
+    }
 }

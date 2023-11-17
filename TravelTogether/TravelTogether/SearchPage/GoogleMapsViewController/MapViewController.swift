@@ -17,21 +17,24 @@ class MapViewController: UIViewController {
     let locationManager = CLLocationManager()
     
     let searchVC = UISearchController(searchResultsController: MapsListViewController())
+    
+    var placesData: [Place] = []
 }
 
 // MARK: - Lifecycle
 extension MapViewController {
+    
   override func viewDidLoad() {
     super.viewDidLoad()
         locationManager.delegate = self
 
-        if CLLocationManager.locationServicesEnabled() {
-          locationManager.requestLocation()
-          mapView.isMyLocationEnabled = true
-          mapView.settings.myLocationButton = true
-        } else {
+//        if CLLocationManager.locationServicesEnabled() {
+//          locationManager.requestLocation()
+//          mapView.isMyLocationEnabled = true
+//          mapView.settings.myLocationButton = true
+//        } else {
           locationManager.requestWhenInUseAuthorization()
-        }
+//        }
       searchVC.searchResultsUpdater = self
       navigationItem.searchController = searchVC
   }
@@ -91,7 +94,7 @@ extension MapViewController: UISearchResultsUpdating {
             switch result {
             case .success(let places):
                 print(places)
-                
+                self.placesData = places
                 DispatchQueue.main.async {
                     resultsVC.update(with: places)
                 }
@@ -104,12 +107,12 @@ extension MapViewController: UISearchResultsUpdating {
 }
 
 extension MapViewController: MapListViewControllerDelegate {
-    func didTapPlace(with coordinates: CLLocationCoordinate2D) {
+    func didTapPlace(with coordinates: CLLocationCoordinate2D, indexPath: IndexPath) {
         //  remove keyboard
         searchVC.searchBar.resignFirstResponder()
         // remove
         mapView.clear()
-        //add
+        // add
 
         let marker = GMSMarker()
                marker.position = coordinates
@@ -119,5 +122,34 @@ extension MapViewController: MapListViewControllerDelegate {
 
                let camera = GMSCameraPosition.camera(withTarget: coordinates, zoom: 15.0)
                mapView.animate(to: camera)
+//        if let mapInfoViewController = storyboard?.instantiateViewController(withIdentifier: "MapInfoViewController") as? MapInfoViewController {
+//
+//                    present(mapInfoViewController, animated: true, completion: nil)
+//                }
+        if let mapInfoViewController = storyboard?.instantiateViewController(withIdentifier: "MapInfoViewController") as? MapInfoViewController {
+                    // Customize mapInfoViewController as needed
+            mapInfoViewController.modalPresentationStyle = .custom
+                    mapInfoViewController.transitioningDelegate = self
+            mapInfoViewController.places = placesData[indexPath.row]
+            
+                    // Present the MapInfoViewController
+                    present(mapInfoViewController, animated: true, completion: nil)
+                }
+    }
+}
+
+extension MapViewController: UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return MapInfoPresentationController(presentedViewController: presented, presenting: presenting)
+    }
+}
+
+class MapInfoPresentationController: UIPresentationController {
+    override var frameOfPresentedViewInContainerView: CGRect {
+        guard let containerView = containerView else { return CGRect.zero }
+
+        // Set the height to half of the screen
+        let height: CGFloat = containerView.bounds.height / 2.0
+        return CGRect(x: 0, y: containerView.bounds.height - height, width: containerView.bounds.width, height: height)
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import GoogleMaps
 import GooglePlaces
 import CoreLocation
 
@@ -38,8 +39,9 @@ class GooglePlacesManager {
                 }
                 
                 let places: [Place] = results.compactMap({Place(
-                    name: $0.attributedFullText.string,
-                    identifier: $0.placeID)
+                    name: $0.attributedPrimaryText.string,
+                    identifier: $0.placeID,
+                    address: $0.attributedFullText.string)
                 })
                 completion(.success(places))
             }
@@ -64,9 +66,30 @@ class GooglePlacesManager {
             completion(.success(coordinate))
         }
     }
-}
+
+    
+} // class
 
 struct Place {
     let name: String
     let identifier: String
+    let address: String
+    var photoReference: String?
+}
+
+struct ListResponse: Codable {
+    var results: [ItemResults]
+    var status: String
+}
+
+struct ItemResults: Codable {
+    var name: String        //地標名稱
+    var placeId: String    //id （for 抓詳細資料使用）
+    var vicinity: String    //地址
+
+   enum CodingKeys: String, CodingKey {
+        case name
+        case placeId = "place_id"
+        case vicinity
+    }
 }

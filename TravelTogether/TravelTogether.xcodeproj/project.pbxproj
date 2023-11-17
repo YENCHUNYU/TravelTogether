@@ -32,6 +32,9 @@
 		52783CEF2B05DBEE0067A334 /* GoogleDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CEE2B05DBEE0067A334 /* GoogleDataProvider.swift */; };
 		52783CF12B05EB380067A334 /* MapsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CF02B05EB380067A334 /* MapsListViewController.swift */; };
 		52783CF32B0603BD0067A334 /* GooglePlacesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CF22B0603BD0067A334 /* GooglePlacesManager.swift */; };
+		5288CB0E2B0710EA00E089F9 /* MapInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB0D2B0710EA00E089F9 /* MapInfoViewController.swift */; };
+		5288CB102B07615400E089F9 /* AddToPlanListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB0F2B07615400E089F9 /* AddToPlanListViewController.swift */; };
+		5288CB122B076F7A00E089F9 /* CreatePlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB112B076F7A00E089F9 /* CreatePlanViewController.swift */; };
 		52E70D852B0107F100440D4C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D842B0107F100440D4C /* AppDelegate.swift */; };
 		52E70D872B0107F100440D4C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D862B0107F100440D4C /* SceneDelegate.swift */; };
 		52E70D892B0107F100440D4C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D882B0107F100440D4C /* ViewController.swift */; };
@@ -67,6 +70,9 @@
 		52783CEE2B05DBEE0067A334 /* GoogleDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleDataProvider.swift; sourceTree = "<group>"; };
 		52783CF02B05EB380067A334 /* MapsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapsListViewController.swift; sourceTree = "<group>"; };
 		52783CF22B0603BD0067A334 /* GooglePlacesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesManager.swift; sourceTree = "<group>"; };
+		5288CB0D2B0710EA00E089F9 /* MapInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapInfoViewController.swift; sourceTree = "<group>"; };
+		5288CB0F2B07615400E089F9 /* AddToPlanListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToPlanListViewController.swift; sourceTree = "<group>"; };
+		5288CB112B076F7A00E089F9 /* CreatePlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlanViewController.swift; sourceTree = "<group>"; };
 		52E70D812B0107F100440D4C /* TravelTogether.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelTogether.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52E70D842B0107F100440D4C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52E70D862B0107F100440D4C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -103,6 +109,8 @@
 				52292F082B0273E80083399E /* CustomSegmentedControl.swift */,
 				52783CC22B031B650067A334 /* SpotTableViewCell.swift */,
 				52783CDF2B03C7480067A334 /* MemoryDetailPage */,
+				5288CB0F2B07615400E089F9 /* AddToPlanListViewController.swift */,
+				5288CB112B076F7A00E089F9 /* CreatePlanViewController.swift */,
 			);
 			path = SearchPage;
 			sourceTree = "<group>";
@@ -163,6 +171,7 @@
 				52783CF02B05EB380067A334 /* MapsListViewController.swift */,
 				52783CE42B05B8E50067A334 /* MapListCell.swift */,
 				52783CF22B0603BD0067A334 /* GooglePlacesManager.swift */,
+				5288CB0D2B0710EA00E089F9 /* MapInfoViewController.swift */,
 			);
 			path = GoogleMapsViewController;
 			sourceTree = "<group>";
@@ -374,9 +383,12 @@
 				52783CD32B0350AC0067A334 /* MemoryCell.swift in Sources */,
 				52783CC32B031B650067A334 /* SpotTableViewCell.swift in Sources */,
 				52E70D892B0107F100440D4C /* ViewController.swift in Sources */,
+				5288CB0E2B0710EA00E089F9 /* MapInfoViewController.swift in Sources */,
+				5288CB102B07615400E089F9 /* AddToPlanListViewController.swift in Sources */,
 				52783CEC2B05DB620067A334 /* GooglePlace.swift in Sources */,
 				52783CE82B05C4DA0067A334 /* MapViewController.swift in Sources */,
 				52783CD82B0359110067A334 /* ProfileViewController.swift in Sources */,
+				5288CB122B076F7A00E089F9 /* CreatePlanViewController.swift in Sources */,
 				52292F022B01F8E30083399E /* SearchMemoriesTableVIewCell.swift in Sources */,
 				52783CDC2B036D480067A334 /* ProfileHeaderView.swift in Sources */,
 				52783CCA2B033EE20067A334 /* MyPlanCell.swift in Sources */,
