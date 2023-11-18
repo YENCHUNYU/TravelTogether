@@ -40,6 +40,10 @@ extension PlanViewController: UITableViewDataSource {
             return cell
         }
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "goToEdit", sender: self)
+    }
 }
 
 extension PlanViewController: UITableViewDelegate {

@@ -73,8 +73,9 @@ extension AddToPlanListViewController: UITableViewDataSource {
     }
     
     @objc func createButtonTapped() {
-//    performSegue(withIdentifier: "goToCreate", sender: self)
+    performSegue(withIdentifier: "goToCreate", sender: self)
         //
+        print("create tapped")
         guard let createPlanViewController = storyboard?.instantiateViewController(withIdentifier: "CreatePlanViewController") as? CreatePlanViewController
         else {fatalError("Can not instantiate CreatePlanViewController")}
 
