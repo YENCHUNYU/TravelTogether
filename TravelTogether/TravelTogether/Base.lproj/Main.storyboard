@@ -152,20 +152,34 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ipx-DV-tnn">
+                                <rect key="frame" x="232.66666666666666" y="715" width="93.333333333333343" height="35"/>
+                                <color key="backgroundColor" red="0.80000000000000004" green="0.83529411760000005" blue="0.68235294120000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="增加行程"/>
+                                <connections>
+                                    <action selector="addNewPlanButtonTapped:" destination="ZdL-rK-1ws" eventType="touchUpInside" id="F6P-cd-ubJ"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="aSx-P7-BRQ"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="aSx-P7-BRQ" firstAttribute="bottom" secondItem="ipx-DV-tnn" secondAttribute="bottom" constant="19" id="Gx6-Kp-ga4"/>
                             <constraint firstItem="TIt-8Q-ilr" firstAttribute="top" secondItem="aSx-P7-BRQ" secondAttribute="top" id="UZ7-Ag-LIT"/>
                             <constraint firstItem="aSx-P7-BRQ" firstAttribute="trailing" secondItem="TIt-8Q-ilr" secondAttribute="trailing" id="inU-my-cec"/>
                             <constraint firstItem="aSx-P7-BRQ" firstAttribute="bottom" secondItem="TIt-8Q-ilr" secondAttribute="bottom" id="lJ0-eM-eXL"/>
+                            <constraint firstItem="aSx-P7-BRQ" firstAttribute="trailing" secondItem="ipx-DV-tnn" secondAttribute="trailing" constant="67" id="lhl-xe-KfF"/>
                             <constraint firstItem="TIt-8Q-ilr" firstAttribute="leading" secondItem="aSx-P7-BRQ" secondAttribute="leading" id="qVW-Gp-mDD"/>
+                            <constraint firstItem="ipx-DV-tnn" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="aSx-P7-BRQ" secondAttribute="leading" symbolic="YES" id="uNa-LV-ZKl"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="我的行程" id="LGr-R1-s1W"/>
                     <connections>
+                        <outlet property="addNewButton" destination="ipx-DV-tnn" id="pC1-ma-sLC"/>
                         <outlet property="tableView" destination="TIt-8Q-ilr" id="Lg4-EV-9T1"/>
                         <segue destination="4Op-bn-ESO" kind="show" identifier="goToEdit" id="Em5-YZ-0gd"/>
+                        <segue destination="yIW-p7-YMv" kind="show" identifier="goToCreate" id="YW6-3X-aMv"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jp3-0Z-IyH" sceneMemberID="firstResponder"/>
@@ -500,9 +514,10 @@
                                 </prototypes>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cq4-of-zhk">
-                                <rect key="frame" x="302" y="734" width="75" height="35"/>
+                                <rect key="frame" x="283.66666666666669" y="734" width="93.333333333333314" height="35"/>
+                                <color key="backgroundColor" red="0.80000000000000004" green="0.83529411760000005" blue="0.68235294120000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="gray" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="搜尋景點"/>
                                 <connections>
                                     <action selector="buttonTapped:" destination="eac-h6-hsR" eventType="touchUpInside" id="5zm-Je-fni"/>
                                 </connections>
@@ -512,6 +527,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="90f-qU-w3K" firstAttribute="top" secondItem="dR2-tA-oUs" secondAttribute="top" id="7TK-AH-e7o"/>
+                            <constraint firstItem="Cq4-of-zhk" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="dR2-tA-oUs" secondAttribute="leading" symbolic="YES" id="CdT-W3-cg9"/>
                             <constraint firstItem="dR2-tA-oUs" firstAttribute="bottom" secondItem="90f-qU-w3K" secondAttribute="bottom" id="K2N-c1-eI5"/>
                             <constraint firstItem="dR2-tA-oUs" firstAttribute="trailing" secondItem="90f-qU-w3K" secondAttribute="trailing" id="VKH-SY-9m4"/>
                             <constraint firstItem="dR2-tA-oUs" firstAttribute="bottom" secondItem="Cq4-of-zhk" secondAttribute="bottom" id="dFf-VT-C4B"/>
@@ -1312,7 +1328,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="jsr-wJ-nje"/>
+        <segue reference="YW6-3X-aMv"/>
+        <segue reference="YPG-wh-Qv6"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Image_Placeholder" width="375" height="375"/>
