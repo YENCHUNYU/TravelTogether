@@ -16,6 +16,7 @@
 		523243A22B0871710078200C /* EditPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A12B0871710078200C /* EditPlanCell.swift */; };
 		523243A42B0879F30078200C /* EditPlanHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A32B0879F30078200C /* EditPlanHeaderView.swift */; };
 		523243A62B0892930078200C /* EditPlanFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A52B0892930078200C /* EditPlanFooterView.swift */; };
+		523243A82B0A27B90078200C /* SelectDate SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A72B0A27B90078200C /* SelectDate SwiftUI.swift */; };
 		52783CC32B031B650067A334 /* SpotTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC22B031B650067A334 /* SpotTableViewCell.swift */; };
 		52783CC82B033B260067A334 /* PlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC72B033B260067A334 /* PlanViewController.swift */; };
 		52783CCA2B033EE20067A334 /* MyPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC92B033EE20067A334 /* MyPlanCell.swift */; };
@@ -66,6 +67,7 @@
 		523243A12B0871710078200C /* EditPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanCell.swift; sourceTree = "<group>"; };
 		523243A32B0879F30078200C /* EditPlanHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanHeaderView.swift; sourceTree = "<group>"; };
 		523243A52B0892930078200C /* EditPlanFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanFooterView.swift; sourceTree = "<group>"; };
+		523243A72B0A27B90078200C /* SelectDate SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SelectDate SwiftUI.swift"; sourceTree = "<group>"; };
 		52783CC22B031B650067A334 /* SpotTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotTableViewCell.swift; sourceTree = "<group>"; };
 		52783CC72B033B260067A334 /* PlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanViewController.swift; sourceTree = "<group>"; };
 		52783CC92B033EE20067A334 /* MyPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlanCell.swift; sourceTree = "<group>"; };
@@ -137,6 +139,7 @@
 				5288CB282B07B98A00E089F9 /* AddToListCell.swift */,
 				5288CB262B07B95800E089F9 /* AddToListFooterView.swift */,
 				5288CB112B076F7A00E089F9 /* CreatePlanViewController.swift */,
+				523243A72B0A27B90078200C /* SelectDate SwiftUI.swift */,
 			);
 			path = SearchPage;
 			sourceTree = "<group>";
@@ -428,6 +431,7 @@
 				52783CD12B034F6A0067A334 /* MemoryViewController.swift in Sources */,
 				52783CEF2B05DBEE0067A334 /* GoogleDataProvider.swift in Sources */,
 				5288CB252B07B74100E089F9 /* TravelPlan.swift in Sources */,
+				523243A82B0A27B90078200C /* SelectDate SwiftUI.swift in Sources */,
 				52783CEA2B05DA6F0067A334 /* PlaceMarker.swift in Sources */,
 				52783CC82B033B260067A334 /* PlanViewController.swift in Sources */,
 				52783CDA2B03612B0067A334 /* ProfileTableViewCell.swift in Sources */,

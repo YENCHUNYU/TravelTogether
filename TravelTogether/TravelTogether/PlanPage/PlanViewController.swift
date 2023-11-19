@@ -38,20 +38,21 @@ class PlanViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        fetchTravelPlans { (travelPlans, error) in
+            if let error = error {
+                print("Error fetching travel plans: \(error)")
+            } else {
+                // Handle the retrieved travel plans
+                print("Fetched travel plans: \(travelPlans ?? [])")
+                self.plans = travelPlans ?? []
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
     @IBAction func addNewPlanButtonTapped(_ sender: Any) {
-    //    performSegue(withIdentifier: "goToCreate", sender: self)
-            //
-            print("create tapped")
-            guard let createPlanViewController = storyboard?.instantiateViewController(withIdentifier: "CreatePlanViewController") as? CreatePlanViewController
-            else {fatalError("Can not instantiate CreatePlanViewController")}
-
-                    // Set the closure to receive the planName value
-                    createPlanViewController.onSave = { [weak self] planName in
-                        // Use the planName value as needed
-//                        self?.handlePlanName(planName)
-                    }
-
-                    navigationController?.pushViewController(createPlanViewController, animated: true)
+        performSegue(withIdentifier: "goToCreate", sender: self)
     }
     
     
@@ -67,12 +68,34 @@ extension PlanViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlanCell", for: indexPath) as? MyPlanCell
             else { fatalError("Could not create PlanCell") }
             cell.planNameLabel.text = plans[indexPath.row].planName
+            let start = changeDateFormat(date: "\(plans[indexPath.row].startDate)")
+            let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
+            cell.planDateLabel.text = "\(start)-\(end)"
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TogetherPlanCell", for: indexPath) as? TogetherPlanCell
             else { fatalError("Could not create TogetherPlanCell") }
             return cell
         }
+    }
+    
+    func changeDateFormat(date: String) -> String {
+      //  let dateString = "2023-11-16 16:00:00 +0000"
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // Set the locale to handle the date format
+
+        if let date = dateFormatter.date(from: date) {
+            let outputFormatter = DateFormatter()
+            outputFormatter.dateFormat = "yyyy年MM月dd日"
+            let formattedString = outputFormatter.string(from: date)
+            return formattedString
+        } else {
+            print("Failed to convert the date string.")
+            return ""
+        }
+
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

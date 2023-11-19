@@ -153,7 +153,7 @@
                                 </prototypes>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ipx-DV-tnn">
-                                <rect key="frame" x="232.66666666666666" y="715" width="93.333333333333343" height="35"/>
+                                <rect key="frame" x="279.66666666666669" y="715" width="93.333333333333314" height="35"/>
                                 <color key="backgroundColor" red="0.80000000000000004" green="0.83529411760000005" blue="0.68235294120000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="增加行程"/>
@@ -169,7 +169,7 @@
                             <constraint firstItem="TIt-8Q-ilr" firstAttribute="top" secondItem="aSx-P7-BRQ" secondAttribute="top" id="UZ7-Ag-LIT"/>
                             <constraint firstItem="aSx-P7-BRQ" firstAttribute="trailing" secondItem="TIt-8Q-ilr" secondAttribute="trailing" id="inU-my-cec"/>
                             <constraint firstItem="aSx-P7-BRQ" firstAttribute="bottom" secondItem="TIt-8Q-ilr" secondAttribute="bottom" id="lJ0-eM-eXL"/>
-                            <constraint firstItem="aSx-P7-BRQ" firstAttribute="trailing" secondItem="ipx-DV-tnn" secondAttribute="trailing" constant="67" id="lhl-xe-KfF"/>
+                            <constraint firstItem="aSx-P7-BRQ" firstAttribute="trailing" secondItem="ipx-DV-tnn" secondAttribute="trailing" constant="20" id="lhl-xe-KfF"/>
                             <constraint firstItem="TIt-8Q-ilr" firstAttribute="leading" secondItem="aSx-P7-BRQ" secondAttribute="leading" id="qVW-Gp-mDD"/>
                             <constraint firstItem="ipx-DV-tnn" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="aSx-P7-BRQ" secondAttribute="leading" symbolic="YES" id="uNa-LV-ZKl"/>
                         </constraints>
@@ -815,30 +815,66 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3KS-jL-hn7">
-                                <rect key="frame" x="167.33333333333334" y="207" width="58.666666666666657" height="35"/>
+                                <rect key="frame" x="167.33333333333334" y="332" width="58.666666666666657" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="儲存"/>
                                 <connections>
                                     <action selector="saveButtonTapped:" destination="yIW-p7-YMv" eventType="touchUpInside" id="bly-AU-UiC"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="行程日期" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Tt-0G-UOG">
+                                <rect key="frame" x="161.66666666666666" y="196" width="70" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="出發日期" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="93U-TD-hBK">
+                                <rect key="frame" x="89" y="231" width="69.333333333333314" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="最後一天" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vwr-4A-ohv">
+                                <rect key="frame" x="229.00000000000003" y="231" width="69.333333333333343" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Cwr-q2-txB">
+                                <rect key="frame" x="20" y="262" width="353" height="60"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="M7C-rs-Th3"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="tpM-to-JsS"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="3KS-jL-hn7" firstAttribute="top" secondItem="89s-7I-Bb3" secondAttribute="bottom" constant="21" id="0PI-3H-8QO"/>
+                            <constraint firstItem="2Tt-0G-UOG" firstAttribute="top" secondItem="89s-7I-Bb3" secondAttribute="bottom" constant="10" id="3Fx-hg-KXC"/>
                             <constraint firstItem="ceH-vj-KVE" firstAttribute="centerX" secondItem="tpM-to-JsS" secondAttribute="centerX" id="6xM-3N-fJ4"/>
+                            <constraint firstItem="Cwr-q2-txB" firstAttribute="leading" secondItem="tpM-to-JsS" secondAttribute="leading" constant="20" id="A9Q-GJ-866"/>
+                            <constraint firstItem="tpM-to-JsS" firstAttribute="trailing" secondItem="Cwr-q2-txB" secondAttribute="trailing" constant="20" id="Ach-xa-WMf"/>
+                            <constraint firstItem="2Tt-0G-UOG" firstAttribute="centerX" secondItem="tpM-to-JsS" secondAttribute="centerX" id="B0I-Gs-QXA"/>
+                            <constraint firstItem="tpM-to-JsS" firstAttribute="trailing" secondItem="Vwr-4A-ohv" secondAttribute="trailing" constant="94.666666666666686" id="Iyy-UK-eqD"/>
+                            <constraint firstItem="3KS-jL-hn7" firstAttribute="top" secondItem="Cwr-q2-txB" secondAttribute="bottom" constant="10" id="JRc-tv-JQF"/>
+                            <constraint firstItem="93U-TD-hBK" firstAttribute="leading" secondItem="tpM-to-JsS" secondAttribute="leading" constant="89" id="KSC-TA-zVz"/>
                             <constraint firstItem="3KS-jL-hn7" firstAttribute="centerX" secondItem="tpM-to-JsS" secondAttribute="centerX" id="Oi4-b4-j5z"/>
                             <constraint firstItem="tpM-to-JsS" firstAttribute="trailing" secondItem="89s-7I-Bb3" secondAttribute="trailing" constant="40" id="QIt-mj-LbN"/>
+                            <constraint firstItem="Cwr-q2-txB" firstAttribute="top" secondItem="93U-TD-hBK" secondAttribute="bottom" constant="10" id="RRj-2d-bQ8"/>
                             <constraint firstItem="ceH-vj-KVE" firstAttribute="top" secondItem="tpM-to-JsS" secondAttribute="top" constant="20" id="TPz-xW-j7Z"/>
                             <constraint firstItem="89s-7I-Bb3" firstAttribute="leading" secondItem="tpM-to-JsS" secondAttribute="leading" constant="40" id="an7-hJ-WbA"/>
                             <constraint firstItem="tpM-to-JsS" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ceH-vj-KVE" secondAttribute="trailing" constant="20" id="dLK-Jw-PzP"/>
                             <constraint firstItem="ceH-vj-KVE" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="tpM-to-JsS" secondAttribute="leading" constant="20" id="fIk-aE-4li"/>
+                            <constraint firstItem="93U-TD-hBK" firstAttribute="top" secondItem="89s-7I-Bb3" secondAttribute="bottom" constant="45" id="gZo-O6-Q0d"/>
                             <constraint firstItem="89s-7I-Bb3" firstAttribute="top" secondItem="ceH-vj-KVE" secondAttribute="bottom" constant="8" symbolic="YES" id="hu6-FJ-exW"/>
+                            <constraint firstItem="Vwr-4A-ohv" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="93U-TD-hBK" secondAttribute="trailing" symbolic="YES" id="ptj-10-b1F"/>
+                            <constraint firstItem="93U-TD-hBK" firstAttribute="baseline" secondItem="Vwr-4A-ohv" secondAttribute="baseline" id="tQm-Ma-DaH"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="QuP-xC-m6x"/>
                     <connections>
+                        <outlet property="datePickerContrainerView" destination="Cwr-q2-txB" id="Ffc-Mf-L9s"/>
                         <outlet property="planNameLabel" destination="ceH-vj-KVE" id="sQi-Cy-ZTz"/>
                         <outlet property="planNameTextField" destination="89s-7I-Bb3" id="twR-8L-35B"/>
                         <outlet property="saveButton" destination="3KS-jL-hn7" id="Dxo-1h-qDz"/>

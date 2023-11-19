@@ -7,27 +7,39 @@
 
 import UIKit
 import FirebaseFirestore
+import SwiftUI
 
 class CreatePlanViewController: UIViewController {
 
     var planName = ""
-    var onSave: ((String) -> Void)?
+//    var onSave: ((String) -> Void)?
+    var startDate: Date?
+    var endDate: Date?
     
     @IBOutlet weak var planNameLabel: UILabel!
-    
     @IBOutlet weak var planNameTextField: UITextField!
-    
     @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var datePickerContrainerView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        let datePickerView = DatePickerView { [weak self] start, end in
+            self?.startDate = start
+            self?.endDate = end
+        }
+        let hostingController = UIHostingController(rootView: datePickerView)
+        addChild(hostingController)
+        hostingController.view.frame = datePickerContrainerView.bounds
+        datePickerContrainerView.addSubview(hostingController.view)
+        hostingController.didMove(toParent: self)
     }
     
     @IBAction func saveButtonTapped(_ sender: Any) {
         var newTravelPlan = TravelPlan(id: nil, planName: "", destination: "", startDate: Date(), endDate: Date())
+        
         if let planName = planNameTextField.text {
-            onSave?(planName)
-            newTravelPlan = TravelPlan(id: nil, planName: planName, destination: "Destination", startDate: Date(), endDate: Date())
+            newTravelPlan = TravelPlan(id: nil, planName: planName, destination: "Destination", startDate: startDate ?? Date(), endDate: endDate ?? Date())
         }
         
         postTravelPlan(travelPlan: newTravelPlan) { error in
@@ -48,7 +60,7 @@ extension CreatePlanViewController {
         let db = Firestore.firestore()
 
         var ref: DocumentReference? = nil
-        let travelPlanData = travelPlan.dictionary // Assuming TravelPlan has a dictionary property
+        let travelPlanData = travelPlan.dictionary
 
         ref = db.collection("TravelPlan").addDocument(data: travelPlanData) { error in
             if let error = error {

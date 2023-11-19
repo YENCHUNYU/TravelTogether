@@ -80,18 +80,18 @@ extension AddToPlanListViewController: UITableViewDataSource {
         else {fatalError("Can not instantiate CreatePlanViewController")}
 
                 // Set the closure to receive the planName value
-                createPlanViewController.onSave = { [weak self] planName in
-                    // Use the planName value as needed
-                    self?.handlePlanName(planName)
-                }
+//                createPlanViewController.onSave = { [weak self] planName in
+//                    // Use the planName value as needed
+//                    self?.handlePlanName(planName)
+//                }
 
                 navigationController?.pushViewController(createPlanViewController, animated: true)
         }
     
-    func handlePlanName(_ planName: String) {
-      //  plans.append(planName)
-        tableView.reloadData()
-        }
+//    func handlePlanName(_ planName: String) {
+//      //  plans.append(planName)
+//        tableView.reloadData()
+//        }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         40
