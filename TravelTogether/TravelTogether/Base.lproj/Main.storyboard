@@ -283,7 +283,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V7H-c5-N37" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="359.5419847328244" y="1926.7605633802818"/>
+            <point key="canvasLocation" x="106" y="1987"/>
         </scene>
         <!--我的行程-->
         <scene sceneID="rgr-Hc-Hyi">
@@ -701,7 +701,7 @@
                         <outlet property="addToPlanButton" destination="5UB-bc-sea" id="4Vr-9R-Jqw"/>
                         <outlet property="placeImageView" destination="MeX-ex-4sq" id="80A-1P-1Lf"/>
                         <outlet property="placeNameLabel" destination="fMp-YY-uAZ" id="4DA-h2-O0a"/>
-                        <segue destination="GEb-eU-aUT" kind="show" identifier="goToPlanList" id="naa-17-YSx"/>
+                        <segue destination="5Hi-ry-ksQ" kind="show" identifier="goToPlanList" id="naa-17-YSx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mCw-b8-YPb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -793,7 +793,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ot3-pS-OxO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-367" y="3377"/>
+            <point key="canvasLocation" x="559.5419847328244" y="3376.7605633802818"/>
         </scene>
         <!--Create Plan View Controller-->
         <scene sceneID="fOw-59-ooz">
@@ -882,7 +882,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s01-Dm-gG1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="444" y="3377"/>
+            <point key="canvasLocation" x="1689.3129770992366" y="3376.7605633802818"/>
         </scene>
         <!--我的回憶-->
         <scene sceneID="cN8-xe-Dy7">
@@ -1362,10 +1362,29 @@
             </objects>
             <point key="canvasLocation" x="1769" y="1225"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="XbS-w6-nDn">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="5Hi-ry-ksQ" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="PU3-O2-I5r"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="pIn-r2-4Fa">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="GEb-eU-aUT" kind="relationship" relationship="rootViewController" id="NeV-0X-bQl"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jYJ-UZ-NXE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-367.17557251908397" y="3376.7605633802818"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="YW6-3X-aMv"/>
-        <segue reference="YPG-wh-Qv6"/>
+        <segue reference="HNF-ZE-dku"/>
+        <segue reference="jsr-wJ-nje"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Image_Placeholder" width="375" height="375"/>

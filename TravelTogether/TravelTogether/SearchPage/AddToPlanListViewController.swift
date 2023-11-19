@@ -56,7 +56,27 @@ extension AddToPlanListViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "AddToListCell", for: indexPath) as? AddToListCell
             else { fatalError("Could not create AddToListCell") }
         cell.planTitleLabel.text = plans[indexPath.row].planName
+        let start = changeDateFormat(date: "\(plans[indexPath.row].startDate)")
+        let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
+        cell.dateLabel.text = "\(start)-\(end)"
             return cell
+    }
+    
+    func changeDateFormat(date: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // Set the locale to handle the date format
+
+        if let date = dateFormatter.date(from: date) {
+            let outputFormatter = DateFormatter()
+            outputFormatter.dateFormat = "yyyy年MM月dd日"
+            let formattedString = outputFormatter.string(from: date)
+            return formattedString
+        } else {
+            print("Failed to convert the date string.")
+            return ""
+        }
+
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -74,25 +94,8 @@ extension AddToPlanListViewController: UITableViewDataSource {
     
     @objc func createButtonTapped() {
     performSegue(withIdentifier: "goToCreate", sender: self)
-        //
-        print("create tapped")
-        guard let createPlanViewController = storyboard?.instantiateViewController(withIdentifier: "CreatePlanViewController") as? CreatePlanViewController
-        else {fatalError("Can not instantiate CreatePlanViewController")}
-
-                // Set the closure to receive the planName value
-//                createPlanViewController.onSave = { [weak self] planName in
-//                    // Use the planName value as needed
-//                    self?.handlePlanName(planName)
-//                }
-
-                navigationController?.pushViewController(createPlanViewController, animated: true)
         }
-    
-//    func handlePlanName(_ planName: String) {
-//      //  plans.append(planName)
-//        tableView.reloadData()
-//        }
-    
+
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         40
     }
@@ -111,8 +114,9 @@ extension AddToPlanListViewController {
     
     func fetchTravelPlans(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
         let db = Firestore.firestore()
-
-        db.collection("TravelPlan").getDocuments { (querySnapshot, error) in
+        let travelPlansRef = db.collection("TravelPlan")
+        let orderedQuery = travelPlansRef.order(by: "startDate", descending: false)
+        orderedQuery.getDocuments { (querySnapshot, error) in
             if let error = error {
                 print("Error getting documents: \(error)")
                 completion(nil, error)

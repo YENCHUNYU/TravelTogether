@@ -80,8 +80,6 @@ extension PlanViewController: UITableViewDataSource {
     }
     
     func changeDateFormat(date: String) -> String {
-      //  let dateString = "2023-11-16 16:00:00 +0000"
-
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
         dateFormatter.locale = Locale(identifier: "en_US_POSIX") // Set the locale to handle the date format
@@ -99,7 +97,18 @@ extension PlanViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "goToEdit", sender: self)
+        performSegue(withIdentifier: "goToEdit", sender: indexPath)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToEdit", let indexPath = sender as? IndexPath {
+            guard let destinationVC = segue.destination as? EditPlanViewController else { fatalError("Can not create EditPlanViewController") }
+//                   let selectedTravelPlan = plans[indexPath.row]
+//                   destinationVC.travelPlan = selectedTravelPlan
+            let selectedTravelPlanIndex = indexPath.row
+            destinationVC.travelPlanIndex = selectedTravelPlanIndex
+           
+               }
     }
 }
 
@@ -126,7 +135,10 @@ extension PlanViewController {
     func fetchTravelPlans(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
         let db = Firestore.firestore()
 
-        db.collection("TravelPlan").getDocuments { (querySnapshot, error) in
+        let travelPlansRef = db.collection("TravelPlan")
+        let orderedQuery = travelPlansRef.order(by: "startDate", descending: false)
+        orderedQuery.getDocuments { (querySnapshot, error) in
+            
             if let error = error {
                 print("Error getting documents: \(error)")
                 completion(nil, error)
@@ -159,4 +171,3 @@ extension PlanViewController {
         }
     }
 }
-

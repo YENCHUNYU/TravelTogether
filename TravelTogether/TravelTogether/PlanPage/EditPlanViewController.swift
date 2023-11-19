@@ -6,12 +6,17 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class EditPlanViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
     var planIndex = 0
+    var plans: [TravelPlan] = [TravelPlan(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), allSpots: [""])]
+//    var travelPlan = TravelPlan(id: "", planName: "", destination: "", startDate: Date(), endDate: Date())
+    var travelPlanIndex = 0
+    var spotsCounts = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +28,17 @@ class EditPlanViewController: UIViewController {
         headerView.delegate = self
         tableView.tableHeaderView = headerView
         tableView.separatorStyle = .none
+        
+        fetchTravelPlans { (travelPlans, error) in
+            if let error = error {
+                print("Error fetching travel plans: \(error)")
+            } else {
+                // Handle the retrieved travel plans
+                print("Fetched travel plans: \(travelPlans ?? [])")
+                self.plans = travelPlans ?? []
+                self.tableView.reloadData()
+            }
+        }
     }
     
     @IBAction func buttonTapped(_ sender: Any) {
@@ -33,13 +49,18 @@ class EditPlanViewController: UIViewController {
 
 extension EditPlanViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        3
+        let allSpots = plans[travelPlanIndex].allSpots ?? [""]
+                spotsCounts = allSpots.count
+                return spotsCounts
+       // 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "EditPlanCell", for: indexPath) as? EditPlanCell
             else { fatalError("Could not create EditPlanCell") }
+        cell.placeNameLabel.text = plans[travelPlanIndex].allSpots?[indexPath.row]
+     
             return cell
         
     }
@@ -73,5 +94,48 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
     func change(to index: Int) {
         planIndex = index
         tableView.reloadData()
+    }
+}
+
+extension EditPlanViewController {
+    // Firebase
+    
+    func fetchTravelPlans(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
+        let db = Firestore.firestore()
+
+        let travelPlansRef = db.collection("TravelPlan")
+        let orderedQuery = travelPlansRef.order(by: "startDate", descending: false)
+        orderedQuery.getDocuments { (querySnapshot, error) in
+            
+            if let error = error {
+                print("Error getting documents: \(error)")
+                completion(nil, error)
+            } else {
+                var travelPlans: [TravelPlan] = []
+
+                for document in querySnapshot!.documents {
+                    let data = document.data()
+
+                    // Convert Firestore Timestamp to Date
+                    let startDate = (data["startDate"] as? Timestamp)?.dateValue() ?? Date()
+                    let endDate = (data["endDate"] as? Timestamp)?.dateValue() ?? Date()
+
+                    // Create a TravelPlan object
+                    let travelPlan = TravelPlan(
+                        id: document.documentID,
+                        planName: data["planName"] as? String ?? "",
+                        destination: data["destination"] as? String ?? "",
+                        startDate: startDate,
+                        endDate: endDate,
+                        allSpots: data["allSpots"] as? [String] ?? [""]
+                    )
+
+                    travelPlans.append(travelPlan)
+                    
+                }
+
+                completion(travelPlans, nil)
+            }
+        }
     }
 }

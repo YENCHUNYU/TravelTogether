@@ -40,6 +40,7 @@ class CreatePlanViewController: UIViewController {
         
         if let planName = planNameTextField.text {
             newTravelPlan = TravelPlan(id: nil, planName: planName, destination: "Destination", startDate: startDate ?? Date(), endDate: endDate ?? Date())
+//            navigationController?.popViewController(animated: true)
         }
         
         postTravelPlan(travelPlan: newTravelPlan) { error in
