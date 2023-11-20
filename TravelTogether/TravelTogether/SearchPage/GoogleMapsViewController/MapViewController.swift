@@ -27,14 +27,8 @@ extension MapViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
         locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
 
-//        if CLLocationManager.locationServicesEnabled() {
-//          locationManager.requestLocation()
-//          mapView.isMyLocationEnabled = true
-//          mapView.settings.myLocationButton = true
-//        } else {
-          locationManager.requestWhenInUseAuthorization()
-//        }
       searchVC.searchResultsUpdater = self
       navigationItem.searchController = searchVC
   }
@@ -116,24 +110,18 @@ extension MapViewController: MapListViewControllerDelegate {
 
         let marker = GMSMarker()
                marker.position = coordinates
-//               marker.title = "Your Marker Title"
-//               marker.snippet = "Your Marker Snippet"
                marker.map = mapView
 
-               let camera = GMSCameraPosition.camera(withTarget: coordinates, zoom: 15.0)
-               mapView.animate(to: camera)
-//        if let mapInfoViewController = storyboard?.instantiateViewController(withIdentifier: "MapInfoViewController") as? MapInfoViewController {
-//
-//                    present(mapInfoViewController, animated: true, completion: nil)
-//                }
+       let camera = GMSCameraPosition.camera(withTarget: coordinates, zoom: 15.0)
+       mapView.animate(to: camera)
+
         if let mapInfoViewController = storyboard?.instantiateViewController(withIdentifier: "MapInfoViewController") as? MapInfoViewController {
-                    // Customize mapInfoViewController as needed
+
             mapInfoViewController.modalPresentationStyle = .custom
-                    mapInfoViewController.transitioningDelegate = self
+            mapInfoViewController.transitioningDelegate = self
             mapInfoViewController.places = placesData[indexPath.row]
-            
-                    // Present the MapInfoViewController
-                    present(mapInfoViewController, animated: true, completion: nil)
+
+            present(mapInfoViewController, animated: true, completion: nil)
                 }
     }
 }
@@ -148,7 +136,6 @@ class MapInfoPresentationController: UIPresentationController {
     override var frameOfPresentedViewInContainerView: CGRect {
         guard let containerView = containerView else { return CGRect.zero }
 
-        // Set the height to half of the screen
         let height: CGFloat = containerView.bounds.height / 2.0
         return CGRect(x: 0, y: containerView.bounds.height - height, width: containerView.bounds.width, height: height)
     }

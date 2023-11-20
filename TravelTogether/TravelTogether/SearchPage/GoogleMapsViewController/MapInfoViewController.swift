@@ -34,4 +34,16 @@ class MapInfoViewController: UIViewController {
         performSegue(withIdentifier: "goToPlanList", sender: sender)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToPlanList" {
+                guard let navigationController = segue.destination as? UINavigationController,
+                      let destinationVC = navigationController.viewControllers.first as? AddToPlanListViewController else {
+                    fatalError("Cannot access AddToPlanListViewController")
+                }
+
+                let spotName = places.name
+                destinationVC.spotName = spotName
+            }
+    }
+    
 }

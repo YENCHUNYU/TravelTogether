@@ -24,7 +24,7 @@ struct TravelPlan {
             "destination": destination,
             "startDate": Timestamp(date: startDate),
             "endDate": Timestamp(date: endDate),
-            // Add other properties as needed
+            "allSpots": allSpots ?? []
         ]
     }
 }

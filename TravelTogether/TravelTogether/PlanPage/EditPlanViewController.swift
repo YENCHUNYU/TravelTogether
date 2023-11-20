@@ -13,10 +13,9 @@ class EditPlanViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var planIndex = 0
-    var plans: [TravelPlan] = [TravelPlan(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), allSpots: [""])]
-//    var travelPlan = TravelPlan(id: "", planName: "", destination: "", startDate: Date(), endDate: Date())
+    var plans: [TravelPlan] = [TravelPlan(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), allSpots: [])]
     var travelPlanIndex = 0
-    var spotsCounts = 0
+    var spots: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +35,7 @@ class EditPlanViewController: UIViewController {
                 // Handle the retrieved travel plans
                 print("Fetched travel plans: \(travelPlans ?? [])")
                 self.plans = travelPlans ?? []
+                self.spots = self.plans[self.travelPlanIndex].allSpots ?? []
                 self.tableView.reloadData()
             }
         }
@@ -49,10 +49,7 @@ class EditPlanViewController: UIViewController {
 
 extension EditPlanViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let allSpots = plans[travelPlanIndex].allSpots ?? [""]
-                spotsCounts = allSpots.count
-                return spotsCounts
-       // 1
+        spots.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -127,7 +124,7 @@ extension EditPlanViewController {
                         destination: data["destination"] as? String ?? "",
                         startDate: startDate,
                         endDate: endDate,
-                        allSpots: data["allSpots"] as? [String] ?? [""]
+                        allSpots: data["allSpots"] as? [String] ?? []
                     )
 
                     travelPlans.append(travelPlan)

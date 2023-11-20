@@ -11,6 +11,7 @@ import FirebaseFirestore
 class AddToPlanListViewController: UIViewController {
 
     var plans: [TravelPlan] = []
+    var spotName = ""
 
     @IBOutlet weak var tableView: UITableView!
         
@@ -80,8 +81,15 @@ extension AddToPlanListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-            performSegue(withIdentifier: "MemoryDetail", sender: self)
+        
+        appendToTravelPlan(id: self.plans[indexPath.row].id ?? "", newSpots: [spotName]) { error in
+            if let error = error {
+                print("Error posting travel plan: \(error)")
+            } else {
+                print("Travel plan posted successfully!")
+            }
+        }
+        self.dismiss(animated: true)
   
     }
 // FOOTER
@@ -148,4 +156,53 @@ extension AddToPlanListViewController {
             }
         }
     }
+
+    func postTravelPlan(travelPlan: TravelPlan, completion: @escaping (Error?) -> Void) {
+        let db = Firestore.firestore()
+
+        var ref: DocumentReference? = nil
+        let travelPlanData = travelPlan.dictionary
+
+        ref = db.collection("TravelPlan").addDocument(data: travelPlanData) { error in
+            if let error = error {
+                print("Error adding document: \(error)")
+                completion(error)
+            } else {
+                print("Document added with ID: \(ref!.documentID)")
+                completion(nil)
+            }
+        }
+    }
+    
+    func appendToTravelPlan(id: String, newSpots: [String], completion: @escaping (Error?) -> Void) {
+        let db = Firestore.firestore()
+
+        let travelPlanReference = db.collection("TravelPlan").document(id)
+
+        // Fetch the current array from Firestore
+        travelPlanReference.getDocument { (document, error) in
+            if let document = document, document.exists {
+                var currentSpots = document.data()?["allSpots"] as? [String] ?? []
+                
+                // Append new values
+                currentSpots.append(contentsOf: newSpots)
+
+                // Update the document with the new array
+                let data: [String: Any] = ["allSpots": currentSpots]
+                travelPlanReference.setData(data, merge: true) { error in
+                    if let error = error {
+                        print("Error updating document: \(error)")
+                        completion(error)
+                    } else {
+                        print("Document updated successfully")
+                        completion(nil)
+                    }
+                }
+            } else {
+                print("Document does not exist")
+                completion(nil) // You may want to handle this case differently based on your requirements
+            }
+        }
+    }
+
 }

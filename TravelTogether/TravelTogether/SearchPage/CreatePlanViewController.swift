@@ -12,7 +12,6 @@ import SwiftUI
 class CreatePlanViewController: UIViewController {
 
     var planName = ""
-//    var onSave: ((String) -> Void)?
     var startDate: Date?
     var endDate: Date?
     
@@ -39,7 +38,7 @@ class CreatePlanViewController: UIViewController {
         var newTravelPlan = TravelPlan(id: nil, planName: "", destination: "", startDate: Date(), endDate: Date())
         
         if let planName = planNameTextField.text {
-            newTravelPlan = TravelPlan(id: nil, planName: planName, destination: "Destination", startDate: startDate ?? Date(), endDate: endDate ?? Date())
+            newTravelPlan = TravelPlan(id: nil, planName: planName, destination: "Destination", startDate: startDate ?? Date(), endDate: endDate ?? Date(), allSpots: [])
 //            navigationController?.popViewController(animated: true)
         }
         
