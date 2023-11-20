@@ -41,8 +41,18 @@ class EditPlanViewController: UIViewController {
         }
     }
     
-    @IBAction func buttonTapped(_ sender: Any) {
-        performSegue(withIdentifier: "goToMap", sender: sender)
+    override func viewWillAppear(_ animated: Bool) {
+        fetchTravelPlans { (travelPlans, error) in
+            if let error = error {
+                print("Error fetching travel plans: \(error)")
+            } else {
+                // Handle the retrieved travel plans
+                print("Fetched travel plans: \(travelPlans ?? [])")
+                self.plans = travelPlans ?? []
+                self.spots = self.plans[self.travelPlanIndex].allSpots ?? []
+                self.tableView.reloadData()
+            }
+        }
     }
     
 }
@@ -72,9 +82,19 @@ extension EditPlanViewController: UITableViewDataSource {
     }
     
     @objc func createButtonTapped() {
-    performSegue(withIdentifier: "goToSearchSpot", sender: self)
+    performSegue(withIdentifier: "goToMapFromEditPlan", sender: self)
        
         }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToMapFromEditPlan" {
+  
+            if let destinationVC = segue.destination as? MapViewController {
+                destinationVC.isFromSearch = false
+                destinationVC.travelPlanIndex = travelPlanIndex
+            }
+        }
+    }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         40

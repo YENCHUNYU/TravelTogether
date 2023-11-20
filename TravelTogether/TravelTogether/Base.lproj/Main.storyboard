@@ -278,7 +278,7 @@
                     <navigationItem key="navigationItem" id="1bR-NN-wJr"/>
                     <connections>
                         <outlet property="tableView" destination="WOk-wh-8fH" id="muJ-Oa-4px"/>
-                        <segue destination="reE-pd-wnM" kind="show" identifier="goToSearchSpot" id="jsr-wJ-nje"/>
+                        <segue destination="reE-pd-wnM" kind="show" identifier="goToMapFromEditPlan" id="jsr-wJ-nje"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V7H-c5-N37" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -540,7 +540,7 @@
                         <outlet property="button" destination="Cq4-of-zhk" id="8vg-9D-KqF"/>
                         <outlet property="tableView" destination="90f-qU-w3K" id="WN6-P5-IJZ"/>
                         <segue destination="e6S-LM-1E9" kind="show" identifier="MemoryDetail" id="dVP-gJ-7a4"/>
-                        <segue destination="reE-pd-wnM" kind="show" identifier="goToMap" id="YPG-wh-Qv6"/>
+                        <segue destination="reE-pd-wnM" kind="show" identifier="goToMapFromSearch" id="YPG-wh-Qv6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s4O-a4-Rwa" sceneMemberID="firstResponder"/>
@@ -645,7 +645,7 @@
                     <navigationItem key="navigationItem" id="ojQ-SD-5cc"/>
                     <connections>
                         <outlet property="mapView" destination="dlu-FS-Uz4" id="qZG-3N-c5b"/>
-                        <segue destination="Tzb-HB-Rog" kind="show" identifier="goToMapsList" id="hnG-tk-KsU"/>
+                        <segue destination="Tzb-HB-Rog" kind="show" identifier="" id="hnG-tk-KsU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FzH-th-Ibi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -666,40 +666,29 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MeX-ex-4sq">
-                                <rect key="frame" x="20" y="151" width="239" height="179.33333333333337"/>
-                                <color key="backgroundColor" systemColor="systemGray5Color"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="MeX-ex-4sq" secondAttribute="height" multiplier="4:3" id="4LL-bg-1uq"/>
-                                </constraints>
-                            </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5UB-bc-sea">
-                                <rect key="frame" x="279.66666666666669" y="123" width="93.333333333333314" height="35"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y6Y-1M-JQd">
+                                <rect key="frame" x="269" y="113" width="104" height="35"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="加入行程"/>
                                 <connections>
-                                    <action selector="addToPlanButtonTapped:" destination="M2B-0j-91P" eventType="touchUpInside" id="xfh-YR-TgY"/>
+                                    <action selector="addToPlanButtonTapped:" destination="M2B-0j-91P" eventType="touchUpInside" id="22P-Kg-R6Y"/>
                                 </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kMW-9Y-LW5"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="MeX-ex-4sq" firstAttribute="top" secondItem="fMp-YY-uAZ" secondAttribute="bottom" constant="7.6666666666666714" id="3bs-jz-k03"/>
                             <constraint firstItem="fMp-YY-uAZ" firstAttribute="top" secondItem="kMW-9Y-LW5" secondAttribute="top" constant="20" id="BXX-FO-rTc"/>
                             <constraint firstItem="kMW-9Y-LW5" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fMp-YY-uAZ" secondAttribute="trailing" constant="20" id="CnK-Am-MAa"/>
+                            <constraint firstItem="y6Y-1M-JQd" firstAttribute="leading" secondItem="kMW-9Y-LW5" secondAttribute="leading" constant="269" id="ZCx-SF-25x"/>
+                            <constraint firstItem="kMW-9Y-LW5" firstAttribute="trailing" secondItem="y6Y-1M-JQd" secondAttribute="trailing" constant="20" id="cou-bJ-oIJ"/>
                             <constraint firstItem="fMp-YY-uAZ" firstAttribute="leading" secondItem="kMW-9Y-LW5" secondAttribute="leading" constant="20" id="dZe-mw-0lt"/>
-                            <constraint firstItem="5UB-bc-sea" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="MeX-ex-4sq" secondAttribute="trailing" constant="8" symbolic="YES" id="gR9-VB-hbz"/>
-                            <constraint firstItem="kMW-9Y-LW5" firstAttribute="trailing" secondItem="MeX-ex-4sq" secondAttribute="trailing" constant="134" id="kys-lJ-oi7"/>
-                            <constraint firstItem="MeX-ex-4sq" firstAttribute="leading" secondItem="kMW-9Y-LW5" secondAttribute="leading" constant="20" id="sVg-hZ-FJr"/>
-                            <constraint firstItem="5UB-bc-sea" firstAttribute="top" secondItem="kMW-9Y-LW5" secondAttribute="top" constant="20" id="vAc-ia-Usj"/>
-                            <constraint firstItem="kMW-9Y-LW5" firstAttribute="trailing" secondItem="5UB-bc-sea" secondAttribute="trailing" constant="20" id="yvZ-xp-upT"/>
+                            <constraint firstItem="y6Y-1M-JQd" firstAttribute="top" secondItem="kMW-9Y-LW5" secondAttribute="top" constant="10" id="uXP-wM-1cM"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="mcB-04-pWT"/>
                     <connections>
-                        <outlet property="addToPlanButton" destination="5UB-bc-sea" id="4Vr-9R-Jqw"/>
-                        <outlet property="placeImageView" destination="MeX-ex-4sq" id="80A-1P-1Lf"/>
+                        <outlet property="addToPlanButton" destination="y6Y-1M-JQd" id="n5Y-H9-vwc"/>
                         <outlet property="placeNameLabel" destination="fMp-YY-uAZ" id="4DA-h2-O0a"/>
                         <segue destination="5Hi-ry-ksQ" kind="show" identifier="goToPlanList" id="naa-17-YSx"/>
                     </connections>
@@ -1383,7 +1372,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="HNF-ZE-dku"/>
+        <segue reference="YW6-3X-aMv"/>
         <segue reference="jsr-wJ-nje"/>
     </inferredMetricsTieBreakers>
     <resources>

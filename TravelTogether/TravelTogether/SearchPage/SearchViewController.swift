@@ -28,7 +28,16 @@ class SearchViewController: UIViewController {
     }
     
     @IBAction func buttonTapped(_ sender: Any) {
-        performSegue(withIdentifier: "goToMap", sender: sender)
+        performSegue(withIdentifier: "goToMapFromSearch", sender: sender)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToMapFromSearch" {
+  
+            if let destinationVC = segue.destination as? MapViewController {
+                destinationVC.isFromSearch = true
+            }
+        }
     }
     
 }

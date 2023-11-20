@@ -12,6 +12,7 @@ class AddToPlanListViewController: UIViewController {
 
     var plans: [TravelPlan] = []
     var spotName = ""
+    var spotAddress = ""
 
     @IBOutlet weak var tableView: UITableView!
         
@@ -153,23 +154,6 @@ extension AddToPlanListViewController {
                 }
 
                 completion(travelPlans, nil)
-            }
-        }
-    }
-
-    func postTravelPlan(travelPlan: TravelPlan, completion: @escaping (Error?) -> Void) {
-        let db = Firestore.firestore()
-
-        var ref: DocumentReference? = nil
-        let travelPlanData = travelPlan.dictionary
-
-        ref = db.collection("TravelPlan").addDocument(data: travelPlanData) { error in
-            if let error = error {
-                print("Error adding document: \(error)")
-                completion(error)
-            } else {
-                print("Document added with ID: \(ref!.documentID)")
-                completion(nil)
             }
         }
     }

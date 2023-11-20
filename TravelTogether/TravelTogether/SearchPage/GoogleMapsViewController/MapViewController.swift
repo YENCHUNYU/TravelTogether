@@ -19,6 +19,12 @@ class MapViewController: UIViewController {
     let searchVC = UISearchController(searchResultsController: MapsListViewController())
     
     var placesData: [Place] = []
+    
+    var mapInfoViewController: MapInfoViewController?
+    
+    var isFromSearch = true
+    
+    var travelPlanIndex = 0
 }
 
 // MARK: - Lifecycle
@@ -103,29 +109,31 @@ extension MapViewController: UISearchResultsUpdating {
 extension MapViewController: MapListViewControllerDelegate {
     func didTapPlace(with coordinates: CLLocationCoordinate2D, indexPath: IndexPath) {
         //  remove keyboard
-        searchVC.searchBar.resignFirstResponder()
+           searchVC.searchBar.resignFirstResponder()
+     
         // remove
         mapView.clear()
         // add
-
+        
         let marker = GMSMarker()
-               marker.position = coordinates
-               marker.map = mapView
-
-       let camera = GMSCameraPosition.camera(withTarget: coordinates, zoom: 15.0)
-       mapView.animate(to: camera)
-
-        if let mapInfoViewController = storyboard?.instantiateViewController(withIdentifier: "MapInfoViewController") as? MapInfoViewController {
-
-            mapInfoViewController.modalPresentationStyle = .custom
-            mapInfoViewController.transitioningDelegate = self
-            mapInfoViewController.places = placesData[indexPath.row]
-
-            present(mapInfoViewController, animated: true, completion: nil)
-                }
-    }
-}
-
+        marker.position = coordinates
+        marker.map = mapView
+        
+        let camera = GMSCameraPosition.camera(withTarget: coordinates, zoom: 15.0)
+        mapView.animate(to: camera)
+        
+        if mapInfoViewController == nil {
+        mapInfoViewController = storyboard?.instantiateViewController(withIdentifier: "MapInfoViewController") as? MapInfoViewController
+        mapInfoViewController?.places = placesData[indexPath.row]
+        mapInfoViewController?.isFromSearch = isFromSearch
+        mapInfoViewController?.travelPlanIndex = travelPlanIndex
+        addChild(mapInfoViewController!)
+        view.addSubview(mapInfoViewController!.view)
+        mapInfoViewController?.didMove(toParent: self)
+       
+        }
+    }}
+    
 extension MapViewController: UIViewControllerTransitioningDelegate {
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         return MapInfoPresentationController(presentedViewController: presented, presenting: presenting)
