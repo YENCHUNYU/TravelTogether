@@ -17,7 +17,7 @@ class EditPlanViewController: UIViewController {
     var travelPlanIndex = 0
     var planSpots: [String] = []
     var travelPlanId = ""
-    var allSpotsData: [[String: Any]] = []
+    var spotsData: [[String: Any]] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,6 +63,7 @@ class EditPlanViewController: UIViewController {
                 print("Error fetching spots for Day 1: \(error)")
             } else {
                     print("Spots for Day 1: \(spots)")
+                self.spotsData = spots
               //  self.tableView.reloadData()
             }
         }
@@ -86,6 +87,7 @@ class EditPlanViewController: UIViewController {
                 print("Error fetching spots for Day 1: \(error)")
             } else {
                     print("Spots for Day 1: \(spots)")
+                self.spotsData = spots
                 self.tableView.reloadData()
             }
         }
@@ -102,7 +104,7 @@ extension EditPlanViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        allSpotsData.count
+        spotsData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -110,8 +112,8 @@ extension EditPlanViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "EditPlanCell", for: indexPath) as? EditPlanCell
             else { fatalError("Could not create EditPlanCell") }
        // cell.placeNameLabel.text = plans[travelPlanIndex].allSpots?[indexPath.row]
-        let spotData = allSpotsData[indexPath.row]
-print("qqq\(allSpotsData)")
+        let spotData = spotsData[indexPath.row]
+print("qqq\(spotsData)")
                 if let name = spotData["name"] as? String {
                     cell.placeNameLabel.text = name
                 }
@@ -270,7 +272,7 @@ print("allspotsarray\(allSpotsArray)")
         let db = Firestore.firestore()
         let travelPlanReference = db.collection("TravelPlan").document(id)
         let spotsCollectionReference = travelPlanReference.collection("SpotsPerDay").document("Day\(day)").collection("SpotsForADay")
-
+        var allSpotsData: [[String: Any]] = []  // Ensure it's a local variable
         // 查询所有文档
         spotsCollectionReference.getDocuments { (snapshot, error) in
             if let error = error {
@@ -282,11 +284,11 @@ print("allspotsarray\(allSpotsArray)")
             // 遍历文档并提取数据
             for document in snapshot?.documents ?? [] {
                 let data = document.data()
-                self.allSpotsData.append(data)
+                allSpotsData.append(data)
                 
             }
 
-            completion(self.allSpotsData, nil)
+            completion(allSpotsData, nil)
         }
     }
 

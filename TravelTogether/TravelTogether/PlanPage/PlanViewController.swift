@@ -17,7 +17,7 @@ class PlanViewController: UIViewController {
     
     var planIndex = 0
     var plans: [TravelPlan] = []
-    
+    var spotsData: [[String: Any]] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
@@ -37,6 +37,8 @@ class PlanViewController: UIViewController {
                 self.tableView.reloadData()
             }
         }
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,6 +52,8 @@ class PlanViewController: UIViewController {
                 self.tableView.reloadData()
             }
         }
+        
+        
     }
     
     @IBAction func addNewPlanButtonTapped(_ sender: Any) {
@@ -72,6 +76,30 @@ extension PlanViewController: UITableViewDataSource {
             let start = changeDateFormat(date: "\(plans[indexPath.row].startDate)")
             let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
             cell.planDateLabel.text = "\(start)-\(end)"
+            
+            fetchAllSpotsForTravelPlan(id: plans[indexPath.row].id ?? "", day: 1) { spots, error in
+                if let error = error {
+                    print("Error fetching spots for Day 1: \(error)")
+                } else {
+                        print("Spots for Day 1: \(spots)")
+                    self.spotsData = spots
+                  //  self.tableView.reloadData()
+                }
+            }
+            
+//            // swiftlint: disable line_length
+//            let spotData = spotsData[indexPath.row]
+//            if let url = URL(string: spotData["photo"] as? String ?? "") {
+//                downloadPhotoFromFirebaseStorage(url: url) { image in
+//                    if let image = image {
+//                        cell.planImageView.image = image
+//                    } else {
+//                        cell.planImageView.image = UIImage(named: "Image_Placeholder")
+//                    }
+//                }
+//            }
+          
+            
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TogetherPlanCell", for: indexPath) as? TogetherPlanCell
@@ -205,5 +233,31 @@ extension PlanViewController {
             }
         }
     }
+    //抓取景點名和照片
+    func fetchAllSpotsForTravelPlan(id: String, day: Int, completion: @escaping ([[String: Any]], Error?) -> Void) {
+        let db = Firestore.firestore()
+        let travelPlanReference = db.collection("TravelPlan").document(id)
+        let spotsCollectionReference = travelPlanReference.collection("SpotsPerDay").document("Day\(day)").collection("SpotsForADay")
+        var allSpotsData: [[String: Any]] = []  // Ensure it's a local variable
+        // 查询所有文档
+        spotsCollectionReference.getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error fetching spots: \(error)")
+                completion([], error)
+                return
+            }
+
+            // 遍历文档并提取数据
+            for document in snapshot?.documents ?? [] {
+                let data = document.data()
+                allSpotsData.append(data)
+                
+            }
+
+            completion(allSpotsData, nil)
+        }
+    }
+
 
 }
+

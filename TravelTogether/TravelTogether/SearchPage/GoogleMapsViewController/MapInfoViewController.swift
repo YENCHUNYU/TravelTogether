@@ -21,6 +21,7 @@ class MapInfoViewController: UIViewController {
     var plans: [TravelPlan] = []
     var travelPlanIndex = 0
     var spotsPhotoUrl = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         placeNameLabel.text = places.name
@@ -120,6 +121,9 @@ class MapInfoViewController: UIViewController {
 
                 let spotName = places.name
                 destinationVC.spotName = spotName
+            destinationVC.travelPlanIndex = travelPlanIndex
+            destinationVC.places = places
+            destinationVC.spotsPhotoUrl = spotsPhotoUrl
             }
     }
     

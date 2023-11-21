@@ -13,6 +13,9 @@ class AddToPlanListViewController: UIViewController {
     var plans: [TravelPlan] = []
     var spotName = ""
     var spotAddress = ""
+    var places = Place(name: "", identifier: "", address: "")
+    var travelPlanIndex = 0
+    var spotsPhotoUrl = ""
 
     @IBOutlet weak var tableView: UITableView!
         
@@ -83,11 +86,26 @@ extension AddToPlanListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        appendToTravelPlan(id: self.plans[indexPath.row].id ?? "", newSpots: [spotName]) { error in
+//        appendToTravelPlan(id: self.plans[indexPath.row].id ?? "", newSpots: [spotName]) { error in
+//            if let error = error {
+//                print("Error posting travel plan: \(error)")
+//            } else {
+//                print("Travel plan posted successfully!")
+//            }
+//        }
+        
+        addSpotsToTravelPlan(id: self.plans[self.travelPlanIndex].id ?? "", day: 1, spots: self.places.name, spotsPhotos: self.spotsPhotoUrl) { error in
             if let error = error {
                 print("Error posting travel plan: \(error)")
             } else {
-                print("Travel plan posted successfully!")
+                print("Travel plan posted for day successfully!")
+                if let navigationController = self.navigationController {
+                 let viewControllers = navigationController.viewControllers
+                 if viewControllers.count >= 2 {
+                     let targetViewController = viewControllers[viewControllers.count - 2]
+                     navigationController.popToViewController(targetViewController, animated: true)
+                                 }
+                             }
             }
         }
         self.dismiss(animated: true)
@@ -157,7 +175,7 @@ extension AddToPlanListViewController {
             }
         }
     }
-    
+    //先不用
     func appendToTravelPlan(id: String, newSpots: [String], completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
 
@@ -185,6 +203,43 @@ extension AddToPlanListViewController {
             } else {
                 print("Document does not exist")
                 completion(nil) // You may want to handle this case differently based on your requirements
+            }
+        }
+    }
+    
+    func addSpotsToTravelPlan(id: String, day: Int, spots: String, spotsPhotos: String, completion: @escaping (Error?) -> Void) {
+        let db = Firestore.firestore()
+        let travelPlanReference = db.collection("TravelPlan").document(id)
+
+        // 準備 spots 的子集合參考
+        let spotsCollectionReference = travelPlanReference.collection("SpotsPerDay").document("Day\(day)").collection("SpotsForADay")
+
+        // 查詢最大的 spotNumber
+        spotsCollectionReference.order(by: "spotNumber", descending: true).limit(to: 1).getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error getting max spotNumber: \(error)")
+                completion(error)
+                return
+            }
+
+            var nextSpotNumber = 1
+
+            if let documents = snapshot?.documents, !documents.isEmpty,
+                let maxSpotNumber = documents[0].data()["spotNumber"] as? Int {
+                nextSpotNumber = maxSpotNumber + 1
+            }
+
+            // 在子集合中添加一個新文件，包含當天的景點
+            let newSpotReference = spotsCollectionReference.document("spot\(nextSpotNumber)")
+            let data: [String: Any] = ["name": spots, "photo": spotsPhotos, "spotNumber": nextSpotNumber]
+            newSpotReference.setData(data, merge: true) { error in
+                if let error = error {
+                    print("Error adding spots: \(error)")
+                    completion(error)
+                } else {
+                    print("Spots added successfully")
+                    completion(nil)
+                }
             }
         }
     }
