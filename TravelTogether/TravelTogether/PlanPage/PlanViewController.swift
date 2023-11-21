@@ -27,31 +27,115 @@ class PlanViewController: UIViewController {
         headerView.delegate = self
         tableView.tableHeaderView = headerView
         
+//        fetchTravelPlans { (travelPlans, error) in
+//            if let error = error {
+//                print("Error fetching travel plans: \(error)")
+//            } else {
+//                // Handle the retrieved travel plans
+//                print("Fetched travel plans: \(travelPlans ?? [])")
+//                self.plans = travelPlans ?? []
+//                self.tableView.reloadData()
+//            }
+//        }
+//
+//        for plan in plans {
+//            fetchAllSpotsForTravelPlan(id: plan.id ?? "", day: 1) { spots, error in
+//                            if let error = error {
+//                                print("Error fetching spots for Day 1: \(error)")
+//                            } else {
+//                                    print("Spots for Day 1: \(spots)")
+//                                self.spotsData.append(contentsOf: spots)
+//                              //  self.tableView.reloadData()
+//                            }
+//                        }
+//        }
+        
         fetchTravelPlans { (travelPlans, error) in
-            if let error = error {
-                print("Error fetching travel plans: \(error)")
-            } else {
-                // Handle the retrieved travel plans
-                print("Fetched travel plans: \(travelPlans ?? [])")
-                self.plans = travelPlans ?? []
-                self.tableView.reloadData()
-            }
-        }
+               if let error = error {
+                   print("Error fetching travel plans: \(error)")
+               } else {
+                   // Handle the retrieved travel plans
+                   print("Fetched travel plans: \(travelPlans ?? [])")
+                   self.plans = travelPlans ?? []
+
+                   // Use a dispatch group to wait for all fetch operations to finish
+                   let dispatchGroup = DispatchGroup()
+
+                   for plan in self.plans {
+                       dispatchGroup.enter()
+
+                       self.fetchAllSpotsForTravelPlan(id: plan.id ?? "", day: 1) { spots, error in
+                           defer {
+                               dispatchGroup.leave()
+                           }
+
+                           if let error = error {
+                               print("Error fetching spots for Day 1: \(error)")
+                           } else {
+                               print("Spots for Day 1: \(spots)")
+                               self.spotsData.append(contentsOf: spots)
+                           }
+                       }
+                   }
+
+                   // Notify when all fetch operations are complete
+                   dispatchGroup.notify(queue: .main) {
+                       self.tableView.reloadData()
+                   }
+               }
+           }
+       
+        
         
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
+//        fetchTravelPlans { (travelPlans, error) in
+//            if let error = error {
+//                print("Error fetching travel plans: \(error)")
+//            } else {
+//                // Handle the retrieved travel plans
+//                print("Fetched travel plans: \(travelPlans ?? [])")
+//                self.plans = travelPlans ?? []
+//                self.tableView.reloadData()
+//            }
+//        }
+        
         fetchTravelPlans { (travelPlans, error) in
-            if let error = error {
-                print("Error fetching travel plans: \(error)")
-            } else {
-                // Handle the retrieved travel plans
-                print("Fetched travel plans: \(travelPlans ?? [])")
-                self.plans = travelPlans ?? []
-                self.tableView.reloadData()
-            }
-        }
+               if let error = error {
+                   print("Error fetching travel plans: \(error)")
+               } else {
+                   // Handle the retrieved travel plans
+                   print("Fetched travel plans: \(travelPlans ?? [])")
+                   self.plans = travelPlans ?? []
+
+                   // Use a dispatch group to wait for all fetch operations to finish
+                   let dispatchGroup = DispatchGroup()
+
+                   for plan in self.plans {
+                       dispatchGroup.enter()
+
+                       self.fetchAllSpotsForTravelPlan(id: plan.id ?? "", day: 1) { spots, error in
+                           defer {
+                               dispatchGroup.leave()
+                           }
+
+                           if let error = error {
+                               print("Error fetching spots for Day 1: \(error)")
+                           } else {
+                               print("Spots for Day 1: \(spots)")
+                               self.spotsData.append(contentsOf: spots)
+                           }
+                       }
+                   }
+
+                   // Notify when all fetch operations are complete
+                   dispatchGroup.notify(queue: .main) {
+                       self.tableView.reloadData()
+                   }
+               }
+           }
         
         
     }
@@ -77,27 +161,35 @@ extension PlanViewController: UITableViewDataSource {
             let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
             cell.planDateLabel.text = "\(start)-\(end)"
             
-            fetchAllSpotsForTravelPlan(id: plans[indexPath.row].id ?? "", day: 1) { spots, error in
-                if let error = error {
-                    print("Error fetching spots for Day 1: \(error)")
-                } else {
-                        print("Spots for Day 1: \(spots)")
-                    self.spotsData = spots
-                  //  self.tableView.reloadData()
-                }
-            }
-            
-//            // swiftlint: disable line_length
-//            let spotData = spotsData[indexPath.row]
-//            if let url = URL(string: spotData["photo"] as? String ?? "") {
-//                downloadPhotoFromFirebaseStorage(url: url) { image in
-//                    if let image = image {
-//                        cell.planImageView.image = image
-//                    } else {
-//                        cell.planImageView.image = UIImage(named: "Image_Placeholder")
-//                    }
+//            fetchAllSpotsForTravelPlan(id: plans[indexPath.row].id ?? "", day: 1) { spots, error in
+//                if let error = error {
+//                    print("Error fetching spots for Day 1: \(error)")
+//                } else {
+//                        print("Spots for Day 1: \(spots)")
+//                    self.spotsData = spots
+//                  //  self.tableView.reloadData()
 //                }
 //            }
+            
+//            // swiftlint: disable line_length
+            print("spotsData\(spotsData)")
+            if spotsData.isEmpty == false {
+                let spotData = spotsData[0]
+                if let urlString = spotData["photo"] as? String,
+                   let url = URL(string: urlString) {
+                    downloadPhotoFromFirebaseStorage(url: url) { image in
+                        DispatchQueue.main.async {
+                            if let image = image {
+                                print("url\(url)")
+                                cell.planImageView.image = image
+                            } else {
+                                print("url\(url)")
+                                cell.planImageView.image = UIImage(named: "Image_Placeholder")
+                            }
+                        }
+                    }
+                }
+            }
           
             
             return cell
@@ -226,7 +318,9 @@ extension PlanViewController {
                 print("Error downloading photo from Firebase Storage: \(error.localizedDescription)")
                 completion(nil)
             } else if let data = data, let image = UIImage(data: data) {
+              //  self.tableView.reloadData()
                 completion(image)
+                
             } else {
                 print("Failed to create UIImage from data.")
                 completion(nil)

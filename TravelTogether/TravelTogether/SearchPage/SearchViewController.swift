@@ -8,6 +8,7 @@
 import UIKit
 import GoogleMaps
 import FirebaseFirestore
+import FirebaseStorage
 
 class SearchViewController: UIViewController {
 
@@ -19,6 +20,7 @@ class SearchViewController: UIViewController {
     var searchIndex = 0
     var plans: [TravelPlan] = []
     var mockImage = UIImage(named: "Image_Placeholder")
+    var spotsData: [[String: Any]] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +40,41 @@ class SearchViewController: UIViewController {
                 self.plans = travelPlans ?? []
             }
         }
+        
+        fetchTravelPlans { (travelPlans, error) in
+               if let error = error {
+                   print("Error fetching travel plans: \(error)")
+               } else {
+                   // Handle the retrieved travel plans
+                   print("Fetched travel plans: \(travelPlans ?? [])")
+                   self.plans = travelPlans ?? []
+
+                   // Use a dispatch group to wait for all fetch operations to finish
+                   let dispatchGroup = DispatchGroup()
+
+                   for plan in self.plans {
+                       dispatchGroup.enter()
+
+                       self.fetchAllSpotsForTravelPlan(id: plan.id ?? "", day: 1) { spots, error in
+                           defer {
+                               dispatchGroup.leave()
+                           }
+
+                           if let error = error {
+                               print("Error fetching spots for Day 1: \(error)")
+                           } else {
+                               print("Spots for Day 1: \(spots)")
+                               self.spotsData.append(contentsOf: spots)
+                           }
+                       }
+                   }
+
+                   // Notify when all fetch operations are complete
+                   dispatchGroup.notify(queue: .main) {
+                       self.tableView.reloadData()
+                   }
+               }
+           }
     }
     
     @IBAction func buttonTapped(_ sender: Any) {
@@ -82,6 +119,25 @@ extension SearchViewController: UITableViewDataSource {
             cell.userNameLabel.text = "Jenny"
             cell.memoryImageView.image = mockImage
             cell.memoryNameLabel.text = plans[indexPath.row].planName
+            
+            if spotsData.isEmpty == false {
+                let spotData = spotsData[0]
+                if let urlString = spotData["photo"] as? String,
+                   let url = URL(string: urlString) {
+                    downloadPhotoFromFirebaseStorage(url: url) { image in
+                        DispatchQueue.main.async {
+                            if let image = image {
+                                print("url\(url)")
+                                cell.memoryImageView.image = image
+                            } else {
+                                print("url\(url)")
+                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                            }
+                        }
+                    }
+                }
+            }
+            
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SpotCell", for: indexPath) as? SpotCell
@@ -159,6 +215,49 @@ extension SearchViewController {
 
                 completion(travelPlans, nil)
             }
+        }
+    }
+    
+    func downloadPhotoFromFirebaseStorage(url: URL, completion: @escaping (UIImage?) -> Void) {
+        let storageReference = Storage.storage().reference(forURL: url.absoluteString)
+
+        // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
+        storageReference.getData(maxSize: 1 * 1024 * 1024) { data, error in
+            if let error = error {
+                print("Error downloading photo from Firebase Storage: \(error.localizedDescription)")
+                completion(nil)
+            } else if let data = data, let image = UIImage(data: data) {
+              //  self.tableView.reloadData()
+                completion(image)
+                
+            } else {
+                print("Failed to create UIImage from data.")
+                completion(nil)
+            }
+        }
+    }
+    
+    func fetchAllSpotsForTravelPlan(id: String, day: Int, completion: @escaping ([[String: Any]], Error?) -> Void) {
+        let db = Firestore.firestore()
+        let travelPlanReference = db.collection("TravelPlan").document(id)
+        let spotsCollectionReference = travelPlanReference.collection("SpotsPerDay").document("Day\(day)").collection("SpotsForADay")
+        var allSpotsData: [[String: Any]] = []  // Ensure it's a local variable
+        // 查询所有文档
+        spotsCollectionReference.getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error fetching spots: \(error)")
+                completion([], error)
+                return
+            }
+
+            // 遍历文档并提取数据
+            for document in snapshot?.documents ?? [] {
+                let data = document.data()
+                allSpotsData.append(data)
+                
+            }
+
+            completion(allSpotsData, nil)
         }
     }
 }
