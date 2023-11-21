@@ -15,6 +15,7 @@ class SpotCell: UITableViewCell {
     @IBOutlet weak var thumbsUpCountsLabel: UILabel!
     @IBOutlet weak var favoriteCountsLabel: UILabel!
     
+    @IBOutlet weak var spotNameLabel: UILabel!
     var isLiked = false
     var isFavorite = false
     

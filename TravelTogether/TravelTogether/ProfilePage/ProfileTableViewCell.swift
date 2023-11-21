@@ -12,4 +12,5 @@ class ProfileCell: UITableViewCell {
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var profileImageNameLabel: UILabel!
      
+    @IBOutlet weak var labelBackgroundView: UIView!
 }

@@ -29,13 +29,17 @@ class FavoriteViewController: UIViewController {
 
 extension FavoriteViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        3
+        1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if favoriteIndex == 0 || favoriteIndex == 1 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchMemoriesCell", for: indexPath) as? SearchMemoriesCell
             else { fatalError("Could not create SearchMemoriesCell") }
+            if let image = UIImage(named: "台北景點") {
+                cell.memoryImageView.image = image
+            }
+            cell.userNameLabel.text = "Jenny"
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SpotCell", for: indexPath) as? SpotCell

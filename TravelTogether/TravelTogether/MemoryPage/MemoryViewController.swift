@@ -26,13 +26,17 @@ class MemoryViewController: UIViewController {
 
 extension MemoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        3
+        1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if memoryIndex == 0 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MemoryCell", for: indexPath) as? MemoryCell
             else { fatalError("Could not create MemoryCell") }
+            if let image = UIImage(named: "台北景點") {
+                cell.memoryImageView.image = image
+            }
+            cell.memoryNameLabel.text = "台北一日遊"
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MemoryCell", for: indexPath) as? MemoryCell

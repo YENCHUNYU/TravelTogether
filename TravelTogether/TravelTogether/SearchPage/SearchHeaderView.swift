@@ -31,7 +31,7 @@ class SearchHeaderView: UITableViewHeaderFooterView {
                separator.backgroundColor = UIColor.lightGray
                contentView.addSubview(separator)
             
-            let codeSegmented = CustomSegmentedControl(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50), buttonTitle: ["旅遊回憶","行程","景點"])
+            let codeSegmented = CustomSegmentedControl(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50), buttonTitle: ["旅遊回憶","行程","熱門景點"])
             codeSegmented.backgroundColor = .clear
             codeSegmented.delegate = self
             contentView.addSubview(codeSegmented)
@@ -62,5 +62,3 @@ extension SearchHeaderView: CustomSegmentedControlDelegate {
         delegate?.change(to: index)
     }
 }
-
-

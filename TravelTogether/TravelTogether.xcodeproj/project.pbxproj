@@ -155,14 +155,11 @@
 		52783CC62B033B060067A334 /* PlanPage */ = {
 			isa = PBXGroup;
 			children = (
+				52D09AF52B0B5D1300885E8F /* EditPlanPage */,
 				52783CC72B033B260067A334 /* PlanViewController.swift */,
 				52783CC92B033EE20067A334 /* MyPlanCell.swift */,
 				52783CCB2B03409E0067A334 /* PlanHeaderView.swift */,
 				52783CCD2B0345AC0067A334 /* TogetherPlanCell.swift */,
-				5232439F2B0871020078200C /* EditPlanViewController.swift */,
-				523243A12B0871710078200C /* EditPlanCell.swift */,
-				523243A32B0879F30078200C /* EditPlanHeaderView.swift */,
-				523243A52B0892930078200C /* EditPlanFooterView.swift */,
 			);
 			path = PlanPage;
 			sourceTree = "<group>";
@@ -225,6 +222,17 @@
 				5288CB242B07B74100E089F9 /* TravelPlan.swift */,
 			);
 			path = Firestore;
+			sourceTree = "<group>";
+		};
+		52D09AF52B0B5D1300885E8F /* EditPlanPage */ = {
+			isa = PBXGroup;
+			children = (
+				5232439F2B0871020078200C /* EditPlanViewController.swift */,
+				523243A12B0871710078200C /* EditPlanCell.swift */,
+				523243A32B0879F30078200C /* EditPlanHeaderView.swift */,
+				523243A52B0892930078200C /* EditPlanFooterView.swift */,
+			);
+			path = EditPlanPage;
 			sourceTree = "<group>";
 		};
 		52E70D782B0107F100440D4C = {

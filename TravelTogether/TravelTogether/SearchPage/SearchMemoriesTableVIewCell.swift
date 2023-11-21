@@ -22,7 +22,7 @@ class SearchMemoriesCell: UITableViewCell {
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var thumbsUpCountsLabel: UILabel!
     @IBOutlet weak var favoriteCountsLabel: UILabel!
-    
+    @IBOutlet weak var memoryNameLabel: UILabel!
     var isLiked = false
     var isFavorite = false
     

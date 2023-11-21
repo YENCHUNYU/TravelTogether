@@ -15,6 +15,7 @@ struct TravelPlan {
     let startDate: Date
     let endDate: Date
     var allSpots: [String]?
+    var spotsPerDay: [[String]]?
     // Add other properties as needed
 
     // Additional properties for Firestore

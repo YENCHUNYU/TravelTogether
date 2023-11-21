@@ -51,6 +51,21 @@ class MapInfoViewController: UIViewController {
                     print("Error posting travel plan: \(error)")
                 } else {
                     print("Travel plan posted successfully!")
+//                    if let navigationController = self.navigationController {
+//                     let viewControllers = navigationController.viewControllers
+//                     if viewControllers.count >= 2 {
+//                         let targetViewController = viewControllers[viewControllers.count - 2]
+//                         navigationController.popToViewController(targetViewController, animated: true)
+//                                     }
+//                                 }
+                }
+            }
+            
+            addSpotsToTravelPlan(id: self.plans[travelPlanIndex].id ?? "", day: 1, spots: [places.name]) { error in
+                if let error = error {
+                    print("Error posting travel plan: \(error)")
+                } else {
+                    print("Travel plan posted successfully!")
                     if let navigationController = self.navigationController {
                      let viewControllers = navigationController.viewControllers
                      if viewControllers.count >= 2 {
@@ -146,4 +161,31 @@ extension MapInfoViewController {
             }
         }
     }
+    
+    
+    func addSpotsToTravelPlan(id: String, day: Int, spots: [String], completion: @escaping (Error?) -> Void) {
+        let db = Firestore.firestore()
+        let travelPlanReference = db.collection("TravelPlan").document(id)
+
+        // 使用 Batch 寫入，以確保原子性
+        let batch = db.batch()
+
+        // 準備 spots 的子集合參考
+        let spotsCollectionReference = travelPlanReference.collection("SpotsPerDay").document("Day\(day)")
+
+        // 在子集合中添加一個新文件，包含當天的景點
+        batch.setData(["spots": FieldValue.arrayUnion(spots)], forDocument: spotsCollectionReference, merge: true)
+
+        // 提交 Batch 寫入
+        batch.commit { error in
+            if let error = error {
+                print("Error adding spots: \(error)")
+                completion(error)
+            } else {
+                print("Spots added successfully")
+                completion(nil)
+            }
+        }
+    }
+
 }

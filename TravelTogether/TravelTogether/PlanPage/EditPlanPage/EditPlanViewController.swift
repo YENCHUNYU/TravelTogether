@@ -16,6 +16,7 @@ class EditPlanViewController: UIViewController {
     var plans: [TravelPlan] = [TravelPlan(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), allSpots: [])]
     var travelPlanIndex = 0
     var spots: [String] = []
+    var travelPlanId = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +40,33 @@ class EditPlanViewController: UIViewController {
                 self.tableView.reloadData()
             }
         }
+        
+        fetchSpotsForDay(id: travelPlanId, day: 1) { spots, error in
+            if let error = error {
+                print("Error fetching spots for Day 1: \(error)")
+            } else {
+                if let spots = spots {
+                    // 在這裡處理成功獲取到的 spots 數據
+                    print("Spots for Day 1: \(spots)")
+                } else {
+                    print("No spots data for Day 1")
+                }
+            }
+        }
+        
+        fetchAllSpotsForTravelPlan(id: travelPlanId) { spots, error in
+            if let error = error {
+                print("Error fetching spots for Day 1: \(error)")
+            } else {
+                if let spots = spots {
+                    // 在這裡處理成功獲取到的 spots 數據
+                    print("Spots : \(spots)")
+                } else {
+                    print("No spots data ")
+                }
+            }
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,6 +86,13 @@ class EditPlanViewController: UIViewController {
 }
 
 extension EditPlanViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        1
+    }
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+       return "第\(section + 1)天"
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         spots.count
     }
@@ -155,4 +190,69 @@ extension EditPlanViewController {
             }
         }
     }
+    
+    func fetchSpotsForDay(id: String, day: Int, completion: @escaping ([String]?, Error?) -> Void) {
+        let db = Firestore.firestore()
+        let travelPlanReference = db.collection("TravelPlan").document(id)
+
+        // 取得特定天數的子集合參考
+        let spotsCollectionReference = travelPlanReference.collection("SpotsPerDay").document("Day\(day)")
+
+        // 從子集合中取得文件的快照
+        spotsCollectionReference.getDocument { (document, error) in
+            if let error = error {
+                print("Error fetching spots: \(error)")
+                completion(nil, error)
+            } else {
+                // 檢查文件是否存在
+                if let document = document, document.exists {
+                    // 讀取景點數據
+                    let spotsData = document.data()?["spots"] as? [String] ?? []
+                    completion(spotsData, nil)
+                } else {
+                    // 文件不存在
+                    print("Spots document does not exist for Day\(day)")
+                    completion(nil, nil) // 或者你可以使用一個錯誤來指示文件不存在
+                }
+            }
+        }
+    }
+    
+    func fetchAllSpotsForTravelPlan(id: String, completion: @escaping ([[String]]?, Error?) -> Void) {
+        let db = Firestore.firestore()
+        let travelPlanReference = db.collection("TravelPlan").document(id)
+
+        // 取得 spotsPerDay 子集合的參考
+        let spotsPerDayCollectionReference = travelPlanReference.collection("SpotsPerDay")
+
+        // 創建一個空陣列來保存所有天數的景點
+        var allSpotsArray: [[String]] = []
+
+        // 獲取所有文件的快照
+        spotsPerDayCollectionReference.getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error fetching spotsPerDay collection: \(error)")
+                completion(nil, error)
+            } else {
+                // 檢查是否有文件
+                guard let documents = querySnapshot?.documents else {
+                    print("No documents in spotsPerDay collection")
+                    completion(nil, nil)
+                    return
+                }
+
+                // 遍歷每一個文件的快照，提取每一天的景點
+                for document in documents {
+                    let spotsData = document.data()["spots"] as? [String] ?? []
+                    allSpotsArray.append(spotsData)
+                    
+                }
+print("allspotsarray\(allSpotsArray)")
+                // 返回包含所有天數景點的陣列
+                completion(allSpotsArray, nil)
+            }
+        }
+    }
+
+
 }

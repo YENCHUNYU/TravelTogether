@@ -107,6 +107,7 @@ extension PlanViewController: UITableViewDataSource {
 //                   destinationVC.travelPlan = selectedTravelPlan
             let selectedTravelPlanIndex = indexPath.row
             destinationVC.travelPlanIndex = selectedTravelPlanIndex
+            destinationVC.travelPlanId = plans[indexPath.row].id ?? ""
            
                }
     }
