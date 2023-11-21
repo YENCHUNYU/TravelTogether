@@ -196,6 +196,7 @@
 		52783CE62B05C4AE0067A334 /* GoogleMapsViewController */ = {
 			isa = PBXGroup;
 			children = (
+				52783CEE2B05DBEE0067A334 /* GoogleDataProvider.swift */,
 				52783CE72B05C4DA0067A334 /* MapViewController.swift */,
 				52783CE92B05DA6F0067A334 /* PlaceMarker.swift */,
 				52783CF02B05EB380067A334 /* MapsListViewController.swift */,
@@ -209,9 +210,8 @@
 		52783CED2B05DB6F0067A334 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				5288CB232B07B71F00E089F9 /* Firestore */,
 				52783CEB2B05DB620067A334 /* GooglePlace.swift */,
-				52783CEE2B05DBEE0067A334 /* GoogleDataProvider.swift */,
+				5288CB232B07B71F00E089F9 /* Firestore */,
 			);
 			path = Model;
 			sourceTree = "<group>";

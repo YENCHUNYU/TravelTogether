@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import FirebaseStorage
 
 class PlanViewController: UIViewController { 
     
@@ -75,6 +76,22 @@ extension PlanViewController: UITableViewDataSource {
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TogetherPlanCell", for: indexPath) as? TogetherPlanCell
             else { fatalError("Could not create TogetherPlanCell") }
+            
+            // ...
+// swiftlint: disable line_length
+
+let urlString = "https://firebasestorage.googleapis.com:443/v0/b/traveltogether-365af.appspot.com/o/photos%2F8BF1F88C-FC9E-46E5-9936-851A9AEFFDF6.jpg?alt=media&token=1e33c1c5-c527-4512-8ff3-350e0dfc1e9c"
+
+// swiftlint: enable line_length
+            if let url = URL(string: urlString) {
+                downloadPhotoFromFirebaseStorage(url: url) { image in
+                    if let image = image {
+                        cell.planImageView.image = image
+                    } else {
+                        cell.planImageView.image = UIImage(named: "Image_Placeholder")
+                    }
+                }}
+            
             return cell
         }
     }
@@ -171,4 +188,22 @@ extension PlanViewController {
             }
         }
     }
+
+    func downloadPhotoFromFirebaseStorage(url: URL, completion: @escaping (UIImage?) -> Void) {
+        let storageReference = Storage.storage().reference(forURL: url.absoluteString)
+
+        // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
+        storageReference.getData(maxSize: 1 * 1024 * 1024) { data, error in
+            if let error = error {
+                print("Error downloading photo from Firebase Storage: \(error.localizedDescription)")
+                completion(nil)
+            } else if let data = data, let image = UIImage(data: data) {
+                completion(image)
+            } else {
+                print("Failed to create UIImage from data.")
+                completion(nil)
+            }
+        }
+    }
+
 }

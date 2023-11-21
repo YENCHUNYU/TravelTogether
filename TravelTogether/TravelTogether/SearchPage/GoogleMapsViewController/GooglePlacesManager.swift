@@ -20,6 +20,7 @@ class GooglePlacesManager {
     enum PlacesError: Error {
         case failedToFind
         case failedToGetCoordinates
+        case failedToFetchMapPhotos
     }
 
     public func findPlaces(
@@ -66,6 +67,44 @@ class GooglePlacesManager {
             completion(.success(coordinate))
         }
     }
+    
+    func fetchMapPhoto(
+        for placeId: String,
+        completion: @escaping(Result<UIImage, Error>) -> Void
+    ) {
+        
+        // Specify the place data types to return (in this case, just photos).
+        let fields: GMSPlaceField = GMSPlaceField(rawValue: UInt64(UInt(GMSPlaceField.photos.rawValue)))
+
+        client.fetchPlace(fromPlaceID: placeId,
+                                 placeFields: fields,
+                                 sessionToken: nil, callback: {
+          (place: GMSPlace?, error: Error?) in
+          if let error = error {
+            print("An error occurred: \(error.localizedDescription)")
+            return
+          }
+          if let place = place {
+            // Get the metadata for the first photo in the place photo metadata list.
+            let photoMetadata: GMSPlacePhotoMetadata = place.photos![0]
+
+            // Call loadPlacePhoto to display the bitmap and attribution.
+            self.client.loadPlacePhoto(photoMetadata, callback: { (photo, error) -> Void in
+              if let error = error {
+                // TODO: Handle the error.
+                  completion(.failure(PlacesError.failedToFetchMapPhotos))
+                print("Error loading photo metadata: \(error.localizedDescription)")
+                return
+              } else {
+                // Display the first image and its attributions.
+                  completion(.success((photo ?? UIImage(named: "Image_Placeholder")) ?? UIImage()))
+               // self.imageView?.image = photo;
+               // self.lblText?.attributedText = photoMetadata.attributions;
+              }
+            })
+          }
+        })
+    }
 
     
 } // class
@@ -83,9 +122,9 @@ struct ListResponse: Codable {
 }
 
 struct ItemResults: Codable {
-    var name: String        //地標名稱
-    var placeId: String    //id （for 抓詳細資料使用）
-    var vicinity: String    //地址
+    var name: String        // 地標名稱
+    var placeId: String    // id （for 抓詳細資料使用）
+    var vicinity: String    // 地址
 
    enum CodingKeys: String, CodingKey {
         case name

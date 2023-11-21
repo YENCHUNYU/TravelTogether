@@ -15,8 +15,9 @@ class EditPlanViewController: UIViewController {
     var planIndex = 0
     var plans: [TravelPlan] = [TravelPlan(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), allSpots: [])]
     var travelPlanIndex = 0
-    var spots: [String] = []
+    var planSpots: [String] = []
     var travelPlanId = ""
+    var allSpotsData: [[String: Any]] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,56 +29,63 @@ class EditPlanViewController: UIViewController {
         headerView.delegate = self
         tableView.tableHeaderView = headerView
         tableView.separatorStyle = .none
+//ok
+//        fetchTravelPlans { (travelPlans, error) in
+//            if let error = error {
+//                print("Error fetching travel plans: \(error)")
+//            } else {
+//                // Handle the retrieved travel plans
+//                print("Fetched travel plans: \(travelPlans ?? [])")
+//                self.plans = travelPlans ?? []
+//              //  self.spots = self.plans[self.travelPlanIndex].allSpots ?? []
+//                self.tableView.reloadData()
+//            }
+//        }
+//   ok2
+//        fetchSpotsForDay(id: travelPlanId, day: 1) { spots, error in
+//            if let error = error {
+//                print("Error fetching spots for Day 1: \(error)")
+//            } else {
+//                if let spots = spots {
+//                    // 在這裡處理成功獲取到的 spots 數據
+//                    print("Spots for Day 1: \(spots)")
+//                    self.planSpots = spots
+//                } else {
+//                    print("No spots data for Day 1")
+//                }
+//            }
+//        }
+//
+
         
-        fetchTravelPlans { (travelPlans, error) in
-            if let error = error {
-                print("Error fetching travel plans: \(error)")
-            } else {
-                // Handle the retrieved travel plans
-                print("Fetched travel plans: \(travelPlans ?? [])")
-                self.plans = travelPlans ?? []
-                self.spots = self.plans[self.travelPlanIndex].allSpots ?? []
-                self.tableView.reloadData()
-            }
-        }
-        
-        fetchSpotsForDay(id: travelPlanId, day: 1) { spots, error in
+        fetchAllSpotsForTravelPlan(id: travelPlanId, day: 1) { spots, error in
             if let error = error {
                 print("Error fetching spots for Day 1: \(error)")
             } else {
-                if let spots = spots {
-                    // 在這裡處理成功獲取到的 spots 數據
                     print("Spots for Day 1: \(spots)")
-                } else {
-                    print("No spots data for Day 1")
-                }
-            }
-        }
-        
-        fetchAllSpotsForTravelPlan(id: travelPlanId) { spots, error in
-            if let error = error {
-                print("Error fetching spots for Day 1: \(error)")
-            } else {
-                if let spots = spots {
-                    // 在這裡處理成功獲取到的 spots 數據
-                    print("Spots : \(spots)")
-                } else {
-                    print("No spots data ")
-                }
+              //  self.tableView.reloadData()
             }
         }
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        fetchTravelPlans { (travelPlans, error) in
+//        fetchTravelPlans { (travelPlans, error) in
+//            if let error = error {
+//                print("Error fetching travel plans: \(error)")
+//            } else {
+//                // Handle the retrieved travel plans
+//                print("Fetched travel plans: \(travelPlans ?? [])")
+//                self.plans = travelPlans ?? []
+//             //   self.spots = self.plans[self.travelPlanIndex].allSpots ?? []
+//                self.tableView.reloadData()
+//            }
+//        }
+        fetchAllSpotsForTravelPlan(id: travelPlanId, day: 1) { spots, error in
             if let error = error {
-                print("Error fetching travel plans: \(error)")
+                print("Error fetching spots for Day 1: \(error)")
             } else {
-                // Handle the retrieved travel plans
-                print("Fetched travel plans: \(travelPlans ?? [])")
-                self.plans = travelPlans ?? []
-                self.spots = self.plans[self.travelPlanIndex].allSpots ?? []
+                    print("Spots for Day 1: \(spots)")
                 self.tableView.reloadData()
             }
         }
@@ -94,15 +102,19 @@ extension EditPlanViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        spots.count
+        allSpotsData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
        
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "EditPlanCell", for: indexPath) as? EditPlanCell
             else { fatalError("Could not create EditPlanCell") }
-        cell.placeNameLabel.text = plans[travelPlanIndex].allSpots?[indexPath.row]
-     
+       // cell.placeNameLabel.text = plans[travelPlanIndex].allSpots?[indexPath.row]
+        let spotData = allSpotsData[indexPath.row]
+print("qqq\(allSpotsData)")
+                if let name = spotData["name"] as? String {
+                    cell.placeNameLabel.text = name
+                }
             return cell
         
     }
@@ -254,5 +266,28 @@ print("allspotsarray\(allSpotsArray)")
         }
     }
 
+    func fetchAllSpotsForTravelPlan(id: String, day: Int, completion: @escaping ([[String: Any]], Error?) -> Void) {
+        let db = Firestore.firestore()
+        let travelPlanReference = db.collection("TravelPlan").document(id)
+        let spotsCollectionReference = travelPlanReference.collection("SpotsPerDay").document("Day\(day)").collection("SpotsForADay")
+
+        // 查询所有文档
+        spotsCollectionReference.getDocuments { (snapshot, error) in
+            if let error = error {
+                print("Error fetching spots: \(error)")
+                completion([], error)
+                return
+            }
+
+            // 遍历文档并提取数据
+            for document in snapshot?.documents ?? [] {
+                let data = document.data()
+                self.allSpotsData.append(data)
+                
+            }
+
+            completion(self.allSpotsData, nil)
+        }
+    }
 
 }

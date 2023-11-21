@@ -683,25 +683,36 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fMp-YY-uAZ">
-                                <rect key="frame" x="19.999999999999996" y="122.99999999999999" width="41.666666666666657" height="20.333333333333329"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="20" y="123" width="48" height="24"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y6Y-1M-JQd">
                                 <rect key="frame" x="269" y="113" width="104" height="35"/>
+                                <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="加入行程"/>
                                 <connections>
                                     <action selector="addToPlanButtonTapped:" destination="M2B-0j-91P" eventType="touchUpInside" id="22P-Kg-R6Y"/>
                                 </connections>
                             </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Z8q-c8-CKc">
+                                <rect key="frame" x="20" y="162" width="350" height="197"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="350" id="9uV-sz-c8E"/>
+                                    <constraint firstAttribute="width" secondItem="Z8q-c8-CKc" secondAttribute="height" multiplier="16:9" id="zaj-Vx-pgq"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kMW-9Y-LW5"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Z8q-c8-CKc" firstAttribute="top" secondItem="fMp-YY-uAZ" secondAttribute="bottom" constant="15" id="AC4-90-8mN"/>
                             <constraint firstItem="fMp-YY-uAZ" firstAttribute="top" secondItem="kMW-9Y-LW5" secondAttribute="top" constant="20" id="BXX-FO-rTc"/>
                             <constraint firstItem="kMW-9Y-LW5" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fMp-YY-uAZ" secondAttribute="trailing" constant="20" id="CnK-Am-MAa"/>
+                            <constraint firstItem="Z8q-c8-CKc" firstAttribute="leading" secondItem="kMW-9Y-LW5" secondAttribute="leading" constant="20" id="XmD-gm-5Bz"/>
                             <constraint firstItem="y6Y-1M-JQd" firstAttribute="leading" secondItem="kMW-9Y-LW5" secondAttribute="leading" constant="269" id="ZCx-SF-25x"/>
                             <constraint firstItem="kMW-9Y-LW5" firstAttribute="trailing" secondItem="y6Y-1M-JQd" secondAttribute="trailing" constant="20" id="cou-bJ-oIJ"/>
                             <constraint firstItem="fMp-YY-uAZ" firstAttribute="leading" secondItem="kMW-9Y-LW5" secondAttribute="leading" constant="20" id="dZe-mw-0lt"/>
@@ -711,6 +722,7 @@
                     <navigationItem key="navigationItem" id="mcB-04-pWT"/>
                     <connections>
                         <outlet property="addToPlanButton" destination="y6Y-1M-JQd" id="n5Y-H9-vwc"/>
+                        <outlet property="placeImageView" destination="Z8q-c8-CKc" id="TVC-xi-xhu"/>
                         <outlet property="placeNameLabel" destination="fMp-YY-uAZ" id="4DA-h2-O0a"/>
                         <segue destination="5Hi-ry-ksQ" kind="show" identifier="goToPlanList" id="naa-17-YSx"/>
                     </connections>
