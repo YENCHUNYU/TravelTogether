@@ -126,6 +126,21 @@ class MapInfoViewController: UIViewController {
             destinationVC.spotsPhotoUrl = spotsPhotoUrl
             }
     }
+    // 如果再搜尋一次景點就再更新mapinfo
+    func updateContent() {
+        placeNameLabel.text = places.name
+        
+        GooglePlacesManager.shared.fetchMapPhoto(for: places.identifier) { result in
+            switch result {
+            case .success(let photo):
+                print("fetching photo")
+                self.placeImageView.image = photo
+            case .failure(let error):
+                print(error)
+            }
+            
+        }
+    }
     
 }
 

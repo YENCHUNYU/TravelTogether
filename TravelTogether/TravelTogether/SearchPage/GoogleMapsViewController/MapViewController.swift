@@ -104,13 +104,18 @@ extension MapViewController: UISearchResultsUpdating {
             
         }
     }
+    
+    func updateMapInfo(with place: Place) {
+            mapInfoViewController?.places = place
+            mapInfoViewController?.updateContent()
+        }
 }
 
 extension MapViewController: MapListViewControllerDelegate {
     func didTapPlace(with coordinates: CLLocationCoordinate2D, indexPath: IndexPath) {
         //  remove keyboard
-           searchVC.searchBar.resignFirstResponder()
-     
+        searchVC.searchBar.resignFirstResponder()
+        updateMapInfo(with: placesData[indexPath.row])
         // remove
         mapView.clear()
         // add
@@ -130,7 +135,7 @@ extension MapViewController: MapListViewControllerDelegate {
         addChild(mapInfoViewController!)
         view.addSubview(mapInfoViewController!.view)
         mapInfoViewController?.didMove(toParent: self)
-       
+        
         }
     }}
     

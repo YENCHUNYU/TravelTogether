@@ -16,7 +16,7 @@ class PlanViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView! 
     
     var planIndex = 0
-    var plans: [TravelPlan] = []
+    var plans: [TravelPlan2] = []
     var spotsData: [[String: Any]] = []
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,124 +26,28 @@ class PlanViewController: UIViewController {
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 100)
         headerView.delegate = self
         tableView.tableHeaderView = headerView
-        
-//        fetchTravelPlans { (travelPlans, error) in
-//            if let error = error {
-//                print("Error fetching travel plans: \(error)")
-//            } else {
-//                // Handle the retrieved travel plans
-//                print("Fetched travel plans: \(travelPlans ?? [])")
-//                self.plans = travelPlans ?? []
-//                self.tableView.reloadData()
-//            }
-//        }
-//
-//        for plan in plans {
-//            fetchAllSpotsForTravelPlan(id: plan.id ?? "", day: 1) { spots, error in
-//                            if let error = error {
-//                                print("Error fetching spots for Day 1: \(error)")
-//                            } else {
-//                                    print("Spots for Day 1: \(spots)")
-//                                self.spotsData.append(contentsOf: spots)
-//                              //  self.tableView.reloadData()
-//                            }
-//                        }
-//        }
-        
-        fetchTravelPlans { (travelPlans, error) in
-               if let error = error {
-                   print("Error fetching travel plans: \(error)")
-               } else {
-                   // Handle the retrieved travel plans
-                   print("Fetched travel plans: \(travelPlans ?? [])")
-                   self.plans = travelPlans ?? []
-
-                   // Use a dispatch group to wait for all fetch operations to finish
-                   let dispatchGroup = DispatchGroup()
-
-                   for plan in self.plans {
-                       dispatchGroup.enter()
-
-                       self.fetchAllSpotsForTravelPlan(id: plan.id ?? "", day: 1) { spots, error in
-                           defer {
-                               dispatchGroup.leave()
-                           }
-
-                           if let error = error {
-                               print("Error fetching spots for Day 1: \(error)")
-                           } else {
-                               print("Spots for Day 1: \(spots)")
-                               self.spotsData.append(contentsOf: spots)
-                           }
-                       }
-                   }
-
-                   // Notify when all fetch operations are complete
-                   dispatchGroup.notify(queue: .main) {
-                       self.tableView.reloadData()
-                   }
-               }
-           }
        
-        
-        
-        
+        fetchTravelPlans { (travelPlan, error) in
+            if let error = error {
+                print("Error fetching travel plan: \(error)")
+            } else if let travelPlan = travelPlan {
+                print("Fetched travel plan: \(travelPlan)")
+                self.plans = travelPlan
+                self.tableView.reloadData()
+            } else {
+                print("Travel plan not found.")
+            }
+        }
+           
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        fetchTravelPlans { (travelPlans, error) in
-//            if let error = error {
-//                print("Error fetching travel plans: \(error)")
-//            } else {
-//                // Handle the retrieved travel plans
-//                print("Fetched travel plans: \(travelPlans ?? [])")
-//                self.plans = travelPlans ?? []
-//                self.tableView.reloadData()
-//            }
-//        }
-        
-        fetchTravelPlans { (travelPlans, error) in
-               if let error = error {
-                   print("Error fetching travel plans: \(error)")
-               } else {
-                   // Handle the retrieved travel plans
-                   print("Fetched travel plans: \(travelPlans ?? [])")
-                   self.plans = travelPlans ?? []
 
-                   // Use a dispatch group to wait for all fetch operations to finish
-                   let dispatchGroup = DispatchGroup()
-
-                   for plan in self.plans {
-                       dispatchGroup.enter()
-
-                       self.fetchAllSpotsForTravelPlan(id: plan.id ?? "", day: 1) { spots, error in
-                           defer {
-                               dispatchGroup.leave()
-                           }
-
-                           if let error = error {
-                               print("Error fetching spots for Day 1: \(error)")
-                           } else {
-                               print("Spots for Day 1: \(spots)")
-                               self.spotsData.append(contentsOf: spots)
-                           }
-                       }
-                   }
-
-                   // Notify when all fetch operations are complete
-                   dispatchGroup.notify(queue: .main) {
-                       self.tableView.reloadData()
-                   }
-               }
-           }
-        
-        
     }
     
     @IBAction func addNewPlanButtonTapped(_ sender: Any) {
         performSegue(withIdentifier: "goToCreate", sender: self)
     }
-    
     
 }
 
@@ -160,18 +64,7 @@ extension PlanViewController: UITableViewDataSource {
             let start = changeDateFormat(date: "\(plans[indexPath.row].startDate)")
             let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
             cell.planDateLabel.text = "\(start)-\(end)"
-            
-//            fetchAllSpotsForTravelPlan(id: plans[indexPath.row].id ?? "", day: 1) { spots, error in
-//                if let error = error {
-//                    print("Error fetching spots for Day 1: \(error)")
-//                } else {
-//                        print("Spots for Day 1: \(spots)")
-//                    self.spotsData = spots
-//                  //  self.tableView.reloadData()
-//                }
-//            }
-            
-//            // swiftlint: disable line_length
+
             print("spotsData\(spotsData)")
             if spotsData.isEmpty == false {
                 let spotData = spotsData[0]
@@ -190,8 +83,7 @@ extension PlanViewController: UITableViewDataSource {
                     }
                 }
             }
-          
-            
+    
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TogetherPlanCell", for: indexPath) as? TogetherPlanCell
@@ -228,8 +120,6 @@ extension PlanViewController: UITableViewDataSource {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToEdit", let indexPath = sender as? IndexPath {
             guard let destinationVC = segue.destination as? EditPlanViewController else { fatalError("Can not create EditPlanViewController") }
-//                   let selectedTravelPlan = plans[indexPath.row]
-//                   destinationVC.travelPlan = selectedTravelPlan
             let selectedTravelPlanIndex = indexPath.row
             destinationVC.travelPlanIndex = selectedTravelPlanIndex
             destinationVC.travelPlanId = plans[indexPath.row].id ?? ""
@@ -257,56 +147,16 @@ extension PlanViewController: PlanHeaderViewDelegate {
 
 extension PlanViewController {
     // Firebase
-    
-    func fetchTravelPlans(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
-        let db = Firestore.firestore()
-
-        let travelPlansRef = db.collection("TravelPlan")
-        let orderedQuery = travelPlansRef.order(by: "startDate", descending: false)
-        orderedQuery.getDocuments { (querySnapshot, error) in
-            
-            if let error = error {
-                print("Error getting documents: \(error)")
-                completion(nil, error)
-            } else {
-                var travelPlans: [TravelPlan] = []
-
-                for document in querySnapshot!.documents {
-                    let data = document.data()
-
-                    // Convert Firestore Timestamp to Date
-                    let startDate = (data["startDate"] as? Timestamp)?.dateValue() ?? Date()
-                    let endDate = (data["endDate"] as? Timestamp)?.dateValue() ?? Date()
-
-                    // Create a TravelPlan object
-                    let travelPlan = TravelPlan(
-                        id: document.documentID,
-                        planName: data["planName"] as? String ?? "",
-                        destination: data["destination"] as? String ?? "",
-                        startDate: startDate,
-                        endDate: endDate
-                        // Add other properties as needed
-                    )
-
-                    travelPlans.append(travelPlan)
-                    
-                }
-
-                completion(travelPlans, nil)
-            }
-        }
-    }
-
     func downloadPhotoFromFirebaseStorage(url: URL, completion: @escaping (UIImage?) -> Void) {
         let storageReference = Storage.storage().reference(forURL: url.absoluteString)
-
+        
         // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
         storageReference.getData(maxSize: 1 * 1024 * 1024) { data, error in
             if let error = error {
                 print("Error downloading photo from Firebase Storage: \(error.localizedDescription)")
                 completion(nil)
             } else if let data = data, let image = UIImage(data: data) {
-              //  self.tableView.reloadData()
+                //  self.tableView.reloadData()
                 completion(image)
                 
             } else {
@@ -315,31 +165,76 @@ extension PlanViewController {
             }
         }
     }
-    //抓取景點名和照片
-    func fetchAllSpotsForTravelPlan(id: String, day: Int, completion: @escaping ([[String: Any]], Error?) -> Void) {
+    
+    
+    func fetchTravelPlans(completion: @escaping ([TravelPlan2]?, Error?) -> Void) {
         let db = Firestore.firestore()
-        let travelPlanReference = db.collection("TravelPlan").document(id)
-        let spotsCollectionReference = travelPlanReference.collection("SpotsPerDay").document("Day\(day)").collection("SpotsForADay")
-        var allSpotsData: [[String: Any]] = []  // Ensure it's a local variable
-        // 查询所有文档
-        spotsCollectionReference.getDocuments { (snapshot, error) in
+        
+        let travelPlansRef = db.collection("TravelPlan")
+        let orderedQuery = travelPlansRef.order(by: "startDate", descending: false)
+        orderedQuery.getDocuments { (querySnapshot, error) in
+            
             if let error = error {
-                print("Error fetching spots: \(error)")
-                completion([], error)
-                return
-            }
-
-            // 遍历文档并提取数据
-            for document in snapshot?.documents ?? [] {
-                let data = document.data()
-                allSpotsData.append(data)
+                print("Error getting documents: \(error)")
+                completion(nil, error)
+            } else {
+                var travelPlans: [TravelPlan2] = []
                 
+                for document in querySnapshot!.documents {
+                    let data = document.data()
+                    
+                    // Convert Firestore Timestamp to Date
+                    let startDate = (data["startDate"] as? Timestamp)?.dateValue() ?? Date()
+                    let endDate = (data["endDate"] as? Timestamp)?.dateValue() ?? Date()
+                    
+                    // Retrieve the "days" array
+                    guard let daysArray = data["days"] as? [[String: Any]] else {
+                        continue // Skip this document if "days" is not an array
+                    }
+                    
+                    // Convert each day data to a TravelDay object
+                    var travelDays: [TravelDay] = []
+                    for dayData in daysArray {
+                        let dayDate = (dayData["date"] as? Timestamp)?.dateValue() ?? Date()
+                        
+                        // Retrieve the "locations" array for each day
+                        guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
+                            continue // Skip this day if "locations" is not an array
+                        }
+                        
+                        // Convert each location data to a Location object
+                        var locations: [Location] = []
+                        for locationData in locationsArray {
+                            let location = Location(
+                                name: locationData["name"] as? String ?? "",
+                                photo: locationData["photo"] as? String ?? "",
+                                address: locationData["address"] as? String ?? ""
+                            )
+                            locations.append(location)
+                        }
+                        
+                        // Create a TravelDay object
+                        let travelDay = TravelDay(date: dayDate, locations: locations)
+                        travelDays.append(travelDay)
+                    }
+                    
+                    // Create a TravelPlan object
+                    let travelPlan = TravelPlan2(
+                        id: document.documentID,
+                        planName: data["planName"] as? String ?? "",
+                        destination: data["destination"] as? String ?? "",
+                        startDate: startDate,
+                        endDate: endDate,
+                        days: travelDays
+                    )
+                    
+                    travelPlans.append(travelPlan)
+                    
+                }
+                
+                completion(travelPlans, nil)
             }
-
-            completion(allSpotsData, nil)
         }
     }
-
-
+    
 }
-

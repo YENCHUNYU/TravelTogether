@@ -13,7 +13,8 @@ class EditPlanViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var planIndex = 0
-    var plans: [TravelPlan] = [TravelPlan(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), allSpots: [])]
+//    var plans: [TravelPlan] = [TravelPlan(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), allSpots: [])]
+    var plans: [TravelPlan2] = [TravelPlan2(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), days: [])]
     var travelPlanIndex = 0
     var planSpots: [String] = []
     var travelPlanId = ""
@@ -58,13 +59,25 @@ class EditPlanViewController: UIViewController {
 //
 
         
-        fetchAllSpotsForTravelPlan(id: travelPlanId, day: 1) { spots, error in
+//        fetchAllSpotsForTravelPlan(id: travelPlanId, day: 1) { spots, error in
+//            if let error = error {
+//                print("Error fetching spots for Day 1: \(error)")
+//            } else {
+//                    print("Spots for Day 1: \(spots)")
+//                self.spotsData = spots
+//              //  self.tableView.reloadData()
+//            }
+//        }
+        
+        // Example usage
+        fetchTravelPlans() { (travelPlan, error) in
             if let error = error {
-                print("Error fetching spots for Day 1: \(error)")
+                print("Error fetching travel plan: \(error)")
+            } else if let travelPlan = travelPlan {
+                print("Fetched travel plan: \(travelPlan)")
+                self.plans = travelPlan
             } else {
-                    print("Spots for Day 1: \(spots)")
-                self.spotsData = spots
-              //  self.tableView.reloadData()
+                print("Travel plan not found.")
             }
         }
         
@@ -82,15 +95,15 @@ class EditPlanViewController: UIViewController {
 //                self.tableView.reloadData()
 //            }
 //        }
-        fetchAllSpotsForTravelPlan(id: travelPlanId, day: 1) { spots, error in
-            if let error = error {
-                print("Error fetching spots for Day 1: \(error)")
-            } else {
-                    print("Spots for Day 1: \(spots)")
-                self.spotsData = spots
-                self.tableView.reloadData()
-            }
-        }
+//        fetchAllSpotsForTravelPlan(id: travelPlanId, day: 1) { spots, error in
+//            if let error = error {
+//                print("Error fetching spots for Day 1: \(error)")
+//            } else {
+//                    print("Spots for Day 1: \(spots)")
+//                self.spotsData = spots
+//                self.tableView.reloadData()
+//            }
+//        }
     }
     
 }
@@ -111,12 +124,12 @@ extension EditPlanViewController: UITableViewDataSource {
        
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "EditPlanCell", for: indexPath) as? EditPlanCell
             else { fatalError("Could not create EditPlanCell") }
-       // cell.placeNameLabel.text = plans[travelPlanIndex].allSpots?[indexPath.row]
-        let spotData = spotsData[indexPath.row]
-print("qqq\(spotsData)")
-                if let name = spotData["name"] as? String {
-                    cell.placeNameLabel.text = name
-                }
+    
+     //   let spotData = spotsData[indexPath.row]
+        let dayData = plans[indexPath.row].days[0]
+//        if let name = dayData["locations"] as? String {
+//                    cell.placeNameLabel.text = name
+//                }
             return cell
         
     }
@@ -166,18 +179,57 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
 extension EditPlanViewController {
     // Firebase
     
-    func fetchTravelPlans(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
+//    func fetchTravelPlans(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
+//        let db = Firestore.firestore()
+//
+//        let travelPlansRef = db.collection("TravelPlan")
+//        let orderedQuery = travelPlansRef.order(by: "startDate", descending: false)
+//        orderedQuery.getDocuments { (querySnapshot, error) in
+//
+//            if let error = error {
+//                print("Error getting documents: \(error)")
+//                completion(nil, error)
+//            } else {
+//                var travelPlans: [TravelPlan] = []
+//
+//                for document in querySnapshot!.documents {
+//                    let data = document.data()
+//
+//                    // Convert Firestore Timestamp to Date
+//                    let startDate = (data["startDate"] as? Timestamp)?.dateValue() ?? Date()
+//                    let endDate = (data["endDate"] as? Timestamp)?.dateValue() ?? Date()
+//
+//                    // Create a TravelPlan object
+//                    let travelPlan = TravelPlan(
+//                        id: document.documentID,
+//                        planName: data["planName"] as? String ?? "",
+//                        destination: data["destination"] as? String ?? "",
+//                        startDate: startDate,
+//                        endDate: endDate,
+//                        allSpots: data["allSpots"] as? [String] ?? []
+//                    )
+//
+//                    travelPlans.append(travelPlan)
+//
+//                }
+//
+//                completion(travelPlans, nil)
+//            }
+//        }
+//    }
+    
+    func fetchTravelPlans(completion: @escaping ([TravelPlan2]?, Error?) -> Void) {
         let db = Firestore.firestore()
 
         let travelPlansRef = db.collection("TravelPlan")
         let orderedQuery = travelPlansRef.order(by: "startDate", descending: false)
         orderedQuery.getDocuments { (querySnapshot, error) in
-            
+
             if let error = error {
                 print("Error getting documents: \(error)")
                 completion(nil, error)
             } else {
-                var travelPlans: [TravelPlan] = []
+                var travelPlans: [TravelPlan2] = []
 
                 for document in querySnapshot!.documents {
                     let data = document.data()
@@ -186,14 +238,45 @@ extension EditPlanViewController {
                     let startDate = (data["startDate"] as? Timestamp)?.dateValue() ?? Date()
                     let endDate = (data["endDate"] as? Timestamp)?.dateValue() ?? Date()
 
+                    // Retrieve the "days" array
+                    guard let daysArray = data["days"] as? [[String: Any]] else {
+                        continue // Skip this document if "days" is not an array
+                    }
+
+                    // Convert each day data to a TravelDay object
+                    var travelDays: [TravelDay] = []
+                    for dayData in daysArray {
+                        let dayDate = (dayData["date"] as? Timestamp)?.dateValue() ?? Date()
+                        
+                        // Retrieve the "locations" array for each day
+                        guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
+                            continue // Skip this day if "locations" is not an array
+                        }
+
+                        // Convert each location data to a Location object
+                        var locations: [Location] = []
+                        for locationData in locationsArray {
+                            let location = Location(
+                                name: locationData["name"] as? String ?? "",
+                                photo: locationData["photo"] as? String ?? "",
+                                address: locationData["address"] as? String ?? ""
+                            )
+                            locations.append(location)
+                        }
+
+                        // Create a TravelDay object
+                        let travelDay = TravelDay(date: dayDate, locations: locations)
+                        travelDays.append(travelDay)
+                    }
+
                     // Create a TravelPlan object
-                    let travelPlan = TravelPlan(
+                    let travelPlan = TravelPlan2(
                         id: document.documentID,
                         planName: data["planName"] as? String ?? "",
                         destination: data["destination"] as? String ?? "",
                         startDate: startDate,
                         endDate: endDate,
-                        allSpots: data["allSpots"] as? [String] ?? []
+                        days: travelDays
                     )
 
                     travelPlans.append(travelPlan)
@@ -204,6 +287,7 @@ extension EditPlanViewController {
             }
         }
     }
+
     
     func fetchSpotsForDay(id: String, day: Int, completion: @escaping ([String]?, Error?) -> Void) {
         let db = Firestore.firestore()
@@ -292,4 +376,37 @@ print("allspotsarray\(allSpotsArray)")
         }
     }
 
+//
+//    func fetchTravelPlan(documentId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
+//        let db = Firestore.firestore()
+//        let travelPlansRef = db.collection("TravelPlan").document(documentId)
+//
+//        travelPlansRef.getDocument { document, error in
+//            if let error = error {
+//                completion(nil, error)
+//                return
+//            }
+//
+//            do {
+//                if let document = document, document.exists {
+//                    var travelPlan = try document.data(as: TravelPlan.self)
+//
+//                    // Convert Firestore Timestamps to Swift Dates
+//                    travelPlan?.startDate = document["startDate"] as? Timestamp ?? Timestamp().dateValue()
+//                    travelPlan?.endDate = document["endDate"] as? Timestamp ?? Timestamp().dateValue()
+//
+//                    completion(travelPlan, nil)
+//                } else {
+//                    completion(nil, nil) // Document doesn't exist
+//                }
+//            } catch {
+//                completion(nil, error)
+//            }
+//        }
+//    }
+
+
+    
+
+    
 }
