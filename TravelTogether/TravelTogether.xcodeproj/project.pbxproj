@@ -17,6 +17,8 @@
 		523243A42B0879F30078200C /* EditPlanHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A32B0879F30078200C /* EditPlanHeaderView.swift */; };
 		523243A62B0892930078200C /* EditPlanFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A52B0892930078200C /* EditPlanFooterView.swift */; };
 		523243A82B0A27B90078200C /* SelectDate SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A72B0A27B90078200C /* SelectDate SwiftUI.swift */; };
+		5245BA762B0E136E006594CC /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA752B0E136E006594CC /* FirestoreManager.swift */; };
+		5245BA782B0E17FA006594CC /* FirestoreManagerForOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */; };
 		52783CC32B031B650067A334 /* SpotTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC22B031B650067A334 /* SpotTableViewCell.swift */; };
 		52783CC82B033B260067A334 /* PlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC72B033B260067A334 /* PlanViewController.swift */; };
 		52783CCA2B033EE20067A334 /* MyPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC92B033EE20067A334 /* MyPlanCell.swift */; };
@@ -68,6 +70,8 @@
 		523243A32B0879F30078200C /* EditPlanHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanHeaderView.swift; sourceTree = "<group>"; };
 		523243A52B0892930078200C /* EditPlanFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanFooterView.swift; sourceTree = "<group>"; };
 		523243A72B0A27B90078200C /* SelectDate SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SelectDate SwiftUI.swift"; sourceTree = "<group>"; };
+		5245BA752B0E136E006594CC /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
+		5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManagerForOne.swift; sourceTree = "<group>"; };
 		52783CC22B031B650067A334 /* SpotTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotTableViewCell.swift; sourceTree = "<group>"; };
 		52783CC72B033B260067A334 /* PlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanViewController.swift; sourceTree = "<group>"; };
 		52783CC92B033EE20067A334 /* MyPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlanCell.swift; sourceTree = "<group>"; };
@@ -150,6 +154,15 @@
 				52292F042B0212FC0083399E /* FavoriteViewController.swift */,
 			);
 			path = FavoritePage;
+			sourceTree = "<group>";
+		};
+		5245BA742B0E135A006594CC /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				5245BA752B0E136E006594CC /* FirestoreManager.swift */,
+				5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */,
+			);
+			path = Manager;
 			sourceTree = "<group>";
 		};
 		52783CC62B033B060067A334 /* PlanPage */ = {
@@ -256,6 +269,7 @@
 		52E70D832B0107F100440D4C /* TravelTogether */ = {
 			isa = PBXGroup;
 			children = (
+				5245BA742B0E135A006594CC /* Manager */,
 				52292EFE2B01F3750083399E /* SearchPage */,
 				52292F032B0212CC0083399E /* FavoritePage */,
 				52783CC62B033B060067A334 /* PlanPage */,
@@ -453,6 +467,7 @@
 				52783CEC2B05DB620067A334 /* GooglePlace.swift in Sources */,
 				52783CE82B05C4DA0067A334 /* MapViewController.swift in Sources */,
 				52783CD82B0359110067A334 /* ProfileViewController.swift in Sources */,
+				5245BA782B0E17FA006594CC /* FirestoreManagerForOne.swift in Sources */,
 				5288CB292B07B98A00E089F9 /* AddToListCell.swift in Sources */,
 				5288CB122B076F7A00E089F9 /* CreatePlanViewController.swift in Sources */,
 				52292F022B01F8E30083399E /* SearchMemoriesTableVIewCell.swift in Sources */,
@@ -464,6 +479,7 @@
 				52E70D872B0107F100440D4C /* SceneDelegate.swift in Sources */,
 				523243A62B0892930078200C /* EditPlanFooterView.swift in Sources */,
 				52783CF12B05EB380067A334 /* MapsListViewController.swift in Sources */,
+				5245BA762B0E136E006594CC /* FirestoreManager.swift in Sources */,
 				52783CCE2B0345AC0067A334 /* TogetherPlanCell.swift in Sources */,
 				52783CD52B0354820067A334 /* MemoryHeaderView.swift in Sources */,
 				52783CF32B0603BD0067A334 /* GooglePlacesManager.swift in Sources */,

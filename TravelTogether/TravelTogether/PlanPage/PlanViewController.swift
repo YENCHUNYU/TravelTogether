@@ -27,7 +27,9 @@ class PlanViewController: UIViewController {
         headerView.delegate = self
         tableView.tableHeaderView = headerView
        
-        fetchTravelPlans { (travelPlan, error) in
+        let firestoreManager = FirestoreManager()
+        firestoreManager.delegate = self
+        firestoreManager.fetchTravelPlans { (travelPlan, error) in
             if let error = error {
                 print("Error fetching travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -165,76 +167,11 @@ extension PlanViewController {
             }
         }
     }
-    
-    
-    func fetchTravelPlans(completion: @escaping ([TravelPlan2]?, Error?) -> Void) {
-        let db = Firestore.firestore()
-        
-        let travelPlansRef = db.collection("TravelPlan")
-        let orderedQuery = travelPlansRef.order(by: "startDate", descending: false)
-        orderedQuery.getDocuments { (querySnapshot, error) in
-            
-            if let error = error {
-                print("Error getting documents: \(error)")
-                completion(nil, error)
-            } else {
-                var travelPlans: [TravelPlan2] = []
-                
-                for document in querySnapshot!.documents {
-                    let data = document.data()
-                    
-                    // Convert Firestore Timestamp to Date
-                    let startDate = (data["startDate"] as? Timestamp)?.dateValue() ?? Date()
-                    let endDate = (data["endDate"] as? Timestamp)?.dateValue() ?? Date()
-                    
-                    // Retrieve the "days" array
-                    guard let daysArray = data["days"] as? [[String: Any]] else {
-                        continue // Skip this document if "days" is not an array
-                    }
-                    
-                    // Convert each day data to a TravelDay object
-                    var travelDays: [TravelDay] = []
-                    for dayData in daysArray {
-                        let dayDate = (dayData["date"] as? Timestamp)?.dateValue() ?? Date()
-                        
-                        // Retrieve the "locations" array for each day
-                        guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
-                            continue // Skip this day if "locations" is not an array
-                        }
-                        
-                        // Convert each location data to a Location object
-                        var locations: [Location] = []
-                        for locationData in locationsArray {
-                            let location = Location(
-                                name: locationData["name"] as? String ?? "",
-                                photo: locationData["photo"] as? String ?? "",
-                                address: locationData["address"] as? String ?? ""
-                            )
-                            locations.append(location)
-                        }
-                        
-                        // Create a TravelDay object
-                        let travelDay = TravelDay(date: dayDate, locations: locations)
-                        travelDays.append(travelDay)
-                    }
-                    
-                    // Create a TravelPlan object
-                    let travelPlan = TravelPlan2(
-                        id: document.documentID,
-                        planName: data["planName"] as? String ?? "",
-                        destination: data["destination"] as? String ?? "",
-                        startDate: startDate,
-                        endDate: endDate,
-                        days: travelDays
-                    )
-                    
-                    travelPlans.append(travelPlan)
-                    
-                }
-                
-                completion(travelPlans, nil)
-            }
-        }
+}
+
+extension PlanViewController: FirestoreManagerDelegate {
+    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan2]) {
+        plans = firestoreData
     }
     
 }
