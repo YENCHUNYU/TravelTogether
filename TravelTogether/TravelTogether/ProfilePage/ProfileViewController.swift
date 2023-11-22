@@ -32,7 +32,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var profileIndex = 0
-    var plans: [TravelPlan] = []
+    var plans: [TravelPlan2] = []
     var spotsData: [[String: Any]] = []
     
     override func viewDidLoad() {
@@ -48,7 +48,9 @@ class ProfileViewController: UIViewController {
         userNameLabel.text = "Jenny"
         userIntroduction.text = "什麼時候可以出去玩:D"
         
-        fetchTravelPlans { (travelPlans, error) in
+        let firestoreManager = FirestoreManager()
+        firestoreManager.delegate = self
+        firestoreManager.fetchTravelPlans { (travelPlans, error) in
             if let error = error {
                 print("Error fetching travel plans: \(error)")
             } else {
@@ -57,42 +59,6 @@ class ProfileViewController: UIViewController {
                 self.plans = travelPlans ?? []
             }
         }
-        
-        
-        fetchTravelPlans { (travelPlans, error) in
-               if let error = error {
-                   print("Error fetching travel plans: \(error)")
-               } else {
-                   // Handle the retrieved travel plans
-                   print("Fetched travel plans: \(travelPlans ?? [])")
-                   self.plans = travelPlans ?? []
-
-                   // Use a dispatch group to wait for all fetch operations to finish
-                   let dispatchGroup = DispatchGroup()
-
-                   for plan in self.plans {
-                       dispatchGroup.enter()
-
-                       self.fetchAllSpotsForTravelPlan(id: plan.id ?? "", day: 1) { spots, error in
-                           defer {
-                               dispatchGroup.leave()
-                           }
-
-                           if let error = error {
-                               print("Error fetching spots for Day 1: \(error)")
-                           } else {
-                               print("Spots for Day 1: \(spots)")
-                               self.spotsData.append(contentsOf: spots)
-                           }
-                       }
-                   }
-
-                   // Notify when all fetch operations are complete
-                   dispatchGroup.notify(queue: .main) {
-                       self.tableView.reloadData()
-                   }
-               }
-           }
     }
 }
 
@@ -112,15 +78,12 @@ extension ProfileViewController: UITableViewDataSource {
             if let image = UIImage(named: "台北景點") {
                 cell.profileImageView.image = image
             }
-            cell.profileImageNameLabel.text = "台北一日遊"
+            cell.profileImageNameLabel.text = "台北三日遊"
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell
             else { fatalError("Could not create ProfileCell") }
             cell.profileImageNameLabel.text = plans[indexPath.row].planName
-//            if let image = UIImage(named: "Image_Placeholder") {
-//                cell.profileImageView.image = image
-//            }
             
             if spotsData.isEmpty == false {
                 let spotData = spotsData[0]
@@ -162,46 +125,6 @@ extension ProfileViewController: ProfileHeaderViewDelegate {
 }
 
 extension ProfileViewController {
-    // Firebase
-    
-    func fetchTravelPlans(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
-        let db = Firestore.firestore()
-
-        let travelPlansRef = db.collection("TravelPlan")
-        let orderedQuery = travelPlansRef.order(by: "startDate", descending: false)
-        orderedQuery.getDocuments { (querySnapshot, error) in
-            
-            if let error = error {
-                print("Error getting documents: \(error)")
-                completion(nil, error)
-            } else {
-                var travelPlans: [TravelPlan] = []
-
-                for document in querySnapshot!.documents {
-                    let data = document.data()
-
-                    // Convert Firestore Timestamp to Date
-                    let startDate = (data["startDate"] as? Timestamp)?.dateValue() ?? Date()
-                    let endDate = (data["endDate"] as? Timestamp)?.dateValue() ?? Date()
-
-                    // Create a TravelPlan object
-                    let travelPlan = TravelPlan(
-                        id: document.documentID,
-                        planName: data["planName"] as? String ?? "",
-                        destination: data["destination"] as? String ?? "",
-                        startDate: startDate,
-                        endDate: endDate
-                        // Add other properties as needed
-                    )
-
-                    travelPlans.append(travelPlan)
-                    
-                }
-
-                completion(travelPlans, nil)
-            }
-        }
-    }
     
     func downloadPhotoFromFirebaseStorage(url: URL, completion: @escaping (UIImage?) -> Void) {
         let storageReference = Storage.storage().reference(forURL: url.absoluteString)
@@ -221,28 +144,10 @@ extension ProfileViewController {
             }
         }
     }
-    
-    func fetchAllSpotsForTravelPlan(id: String, day: Int, completion: @escaping ([[String: Any]], Error?) -> Void) {
-        let db = Firestore.firestore()
-        let travelPlanReference = db.collection("TravelPlan").document(id)
-        let spotsCollectionReference = travelPlanReference.collection("SpotsPerDay").document("Day\(day)").collection("SpotsForADay")
-        var allSpotsData: [[String: Any]] = []  // Ensure it's a local variable
-        // 查询所有文档
-        spotsCollectionReference.getDocuments { (snapshot, error) in
-            if let error = error {
-                print("Error fetching spots: \(error)")
-                completion([], error)
-                return
-            }
+}
 
-            // 遍历文档并提取数据
-            for document in snapshot?.documents ?? [] {
-                let data = document.data()
-                allSpotsData.append(data)
-                
-            }
-
-            completion(allSpotsData, nil)
-        }
+extension ProfileViewController: FirestoreManagerDelegate {
+    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan2]) {
+        plans = firestoreData
     }
 }

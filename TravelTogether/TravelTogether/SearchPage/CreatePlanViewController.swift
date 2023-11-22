@@ -14,6 +14,7 @@ class CreatePlanViewController: UIViewController {
     var planName = ""
     var startDate: Date?
     var endDate: Date?
+    var newTravelPlan = TravelPlan2(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), days: [])
     
     @IBOutlet weak var planNameLabel: UILabel!
     @IBOutlet weak var planNameTextField: UITextField!
@@ -35,14 +36,14 @@ class CreatePlanViewController: UIViewController {
     }
     
     @IBAction func saveButtonTapped(_ sender: Any) {
-        var newTravelPlan = TravelPlan(id: nil, planName: "", destination: "", startDate: Date(), endDate: Date())
-        
+  
         if let planName = planNameTextField.text {
-            newTravelPlan = TravelPlan(id: nil, planName: planName, destination: "Destination", startDate: startDate ?? Date(), endDate: endDate ?? Date(), allSpots: [])
-//            navigationController?.popViewController(animated: true)
+            newTravelPlan = TravelPlan2(id: "", planName: planName, destination: "Destination", startDate: startDate ?? Date(), endDate: endDate ?? Date(), days: [])
         }
         
-        postTravelPlan(travelPlan: newTravelPlan) { error in
+        let firestoreManagerForPost = FirestoreManagerForPost()
+        firestoreManagerForPost.delegate = self
+        firestoreManagerForPost.postTravelPlan(travelPlan: newTravelPlan) { error in
             if let error = error {
                 print("Error posting travel plan: \(error)")
             } else {
@@ -54,22 +55,7 @@ class CreatePlanViewController: UIViewController {
     
 }
 
-extension CreatePlanViewController {
-    // Firestore
-    func postTravelPlan(travelPlan: TravelPlan, completion: @escaping (Error?) -> Void) {
-        let db = Firestore.firestore()
-
-        var ref: DocumentReference? = nil
-        let travelPlanData = travelPlan.dictionary
-
-        ref = db.collection("TravelPlan").addDocument(data: travelPlanData) { error in
-            if let error = error {
-                print("Error adding document: \(error)")
-                completion(error)
-            } else {
-                print("Document added with ID: \(ref!.documentID)")
-                completion(nil)
-            }
-        }
+extension CreatePlanViewController: FirestoreManagerForePostDelegate {
+    func manager(_ manager: FirestoreManagerForPost, didPost firestoreData: TravelPlan2) {
     }
 }

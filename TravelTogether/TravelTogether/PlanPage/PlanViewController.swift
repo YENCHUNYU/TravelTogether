@@ -44,7 +44,19 @@ class PlanViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-
+        let firestoreManager = FirestoreManager()
+        firestoreManager.delegate = self
+        firestoreManager.fetchTravelPlans { (travelPlan, error) in
+            if let error = error {
+                print("Error fetching travel plan: \(error)")
+            } else if let travelPlan = travelPlan {
+                print("Fetched travel plan: \(travelPlan)")
+                self.plans = travelPlan
+                self.tableView.reloadData()
+            } else {
+                print("Travel plan not found.")
+            }
+        }
     }
     
     @IBAction func addNewPlanButtonTapped(_ sender: Any) {
