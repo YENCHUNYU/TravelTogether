@@ -16,7 +16,7 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var button: UIButton!
     
     var searchIndex = 0
-    var plans: [TravelPlan2] = []
+    var plans: [TravelPlan] = []
     var mockImage = UIImage(named: "Image_Placeholder")
     var spotsData: [[String: Any]] = []
     
@@ -157,7 +157,7 @@ extension SearchViewController: SearchHeaderViewDelegate {
 }
 
 extension SearchViewController: FirestoreManagerDelegate {
-    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan2]) {
+    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan]) {
         plans = firestoreData
     }
 }

@@ -10,7 +10,7 @@ import FirebaseFirestore
 
 class AddToPlanListViewController: UIViewController {
 
-    var plans: [TravelPlan2] = []
+    var plans: [TravelPlan] = []
     var spotName = ""
     var spotAddress = ""
     var places = Place(name: "", identifier: "", address: "")
@@ -151,7 +151,7 @@ extension AddToPlanListViewController: UITableViewDelegate {
 }
 
 extension AddToPlanListViewController: FirestoreManagerDelegate {
-    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan2]) {
+    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan]) {
         plans = firestoreData
     }
 }

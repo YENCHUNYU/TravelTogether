@@ -23,7 +23,7 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var profileIndex = 0
-    var plans: [TravelPlan2] = []
+    var plans: [TravelPlan] = []
     var spotsData: [[String: Any]] = []
     
     override func viewDidLoad() {
@@ -139,7 +139,7 @@ extension ProfileViewController {
 }
 
 extension ProfileViewController: FirestoreManagerDelegate {
-    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan2]) {
+    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan]) {
         plans = firestoreData
     }
 }

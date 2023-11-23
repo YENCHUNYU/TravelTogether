@@ -9,14 +9,14 @@ import UIKit
 import FirebaseFirestore
 
 protocol FirestoreManagerDelegate {
-    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan2])
+    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan])
 }
 
 class FirestoreManager {
     
     var delegate: FirestoreManagerDelegate?
     //抓取所有行程
-    func fetchTravelPlans(completion: @escaping ([TravelPlan2]?, Error?) -> Void) {
+    func fetchTravelPlans(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
         let db = Firestore.firestore()
         
         let travelPlansRef = db.collection("TravelPlan")
@@ -27,7 +27,7 @@ class FirestoreManager {
                 print("Error getting documents: \(error)")
                 completion(nil, error)
             } else {
-                var travelPlans: [TravelPlan2] = []
+                var travelPlans: [TravelPlan] = []
                 
                 for document in querySnapshot!.documents {
                     let data = document.data()
@@ -68,7 +68,7 @@ class FirestoreManager {
                     }
                     
                     // Create a TravelPlan object
-                    let travelPlan = TravelPlan2(
+                    let travelPlan = TravelPlan(
                         id: document.documentID,
                         planName: data["planName"] as? String ?? "",
                         destination: data["destination"] as? String ?? "",

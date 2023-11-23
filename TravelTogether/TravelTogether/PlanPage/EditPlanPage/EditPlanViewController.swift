@@ -13,11 +13,9 @@ class EditPlanViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var planIndex = 0
-    var onePlan: TravelPlan2 = TravelPlan2(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), days: [])
-    var travelPlanIndex = 0
-    var planSpots: [String] = []
+    var onePlan: TravelPlan = TravelPlan(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), days: [])
     var travelPlanId = ""
-    var spotsData: [[String: Any]] = []
+    var dayCounts = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,11 +23,11 @@ class EditPlanViewController: UIViewController {
         tableView.delegate = self
         tableView.register(EditPlanFooterView.self, forHeaderFooterViewReuseIdentifier: "EditPlanFooterView")
         let headerView = EditPlanHeaderView(reuseIdentifier: "EditPlanHeaderView")
-        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 100)
+        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 50)
         headerView.delegate = self
         tableView.tableHeaderView = headerView
         tableView.separatorStyle = .none
-
+        
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
         firestoreManagerForOne.fetchOneTravelPlan(byId: travelPlanId) { (travelPlan, error) in
@@ -65,7 +63,7 @@ class EditPlanViewController: UIViewController {
 
 extension EditPlanViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        1
+        dayCounts
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
        return "第\(section + 1)天"
@@ -73,7 +71,11 @@ extension EditPlanViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if onePlan.days.isEmpty == false {
-           return onePlan.days[0].locations.count
+            if section == 0 {
+                return onePlan.days[0].locations.count
+            } else {
+                return 0
+            }
         } else {
            return 0
         }
@@ -107,7 +109,6 @@ extension EditPlanViewController: UITableViewDataSource {
   
             if let destinationVC = segue.destination as? MapViewController {
                 destinationVC.isFromSearch = false
-              //  destinationVC.travelPlanIndex = travelPlanIndex
                 destinationVC.travelPlanId = travelPlanId
             }
         }
@@ -124,15 +125,26 @@ func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) ->
 }
 }
 
-extension EditPlanViewController: EditPlanHeaderViewDelegate {
-    func change(to index: Int) {
-        planIndex = index
-        tableView.reloadData()
+//extension EditPlanViewController: EditPlanHeaderViewDelegate {
+//    func passButtonCount(number: Int) {
+//        dayCounts = number
+//    }
+//
+//    func change(to index: Int) {
+//        planIndex = index
+//        tableView.reloadData()
+//    }
+//}
+
+extension EditPlanViewController: FirestoreManagerForeOneDelegate {
+    func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan) {
+        onePlan = firestoreData
     }
 }
 
-extension EditPlanViewController: FirestoreManagerForeOneDelegate {
-    func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan2) {
-        onePlan = firestoreData
-    }
+extension EditPlanViewController: EditPlanHeaderViewDelegate {
+    func passDayCouts(number: Int) {
+        dayCounts = number
+            self.tableView.reloadData()
+    }   
 }

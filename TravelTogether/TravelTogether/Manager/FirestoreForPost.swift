@@ -9,13 +9,13 @@ import UIKit
 import FirebaseFirestore
 
 protocol FirestoreManagerForPostDelegate {
-    func manager(_ manager: FirestoreManagerForPost, didPost firestoreData: TravelPlan2)
+    func manager(_ manager: FirestoreManagerForPost, didPost firestoreData: TravelPlan)
 }
 
 class FirestoreManagerForPost {
     var delegate: FirestoreManagerForPostDelegate?
     
-    func postTravelPlan(travelPlan: TravelPlan2, completion: @escaping (Error?) -> Void) {
+    func postTravelPlan(travelPlan: TravelPlan, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
         
         var ref: DocumentReference? = nil

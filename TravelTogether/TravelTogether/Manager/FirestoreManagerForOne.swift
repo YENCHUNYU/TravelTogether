@@ -9,14 +9,14 @@ import UIKit
 import FirebaseFirestore
 
 protocol FirestoreManagerForeOneDelegate {
-    func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan2)
+    func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan)
 }
 
 class FirestoreManagerForOne {
     
     var delegate: FirestoreManagerForeOneDelegate?
     
-    func fetchOneTravelPlan(byId planId: String, completion: @escaping (TravelPlan2?, Error?) -> Void) {
+    func fetchOneTravelPlan(byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
         let db = Firestore.firestore()
         let travelPlanRef = db.collection("TravelPlan").document(planId)
 
@@ -70,7 +70,7 @@ class FirestoreManagerForOne {
                         travelDays.append(travelDay)
                     }
                     // Create a TravelPlan2 object
-                    let travelPlan = TravelPlan2(
+                    let travelPlan = TravelPlan(
                         id: document.documentID,
                         planName: data?["planName"] as? String ?? "",
                         destination: data?["destination"] as? String ?? "",

@@ -16,7 +16,7 @@ class PlanViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView! 
     
     var planIndex = 0
-    var plans: [TravelPlan2] = []
+    var plans: [TravelPlan] = []
     var spotsData: [[String: Any]] = []
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -136,7 +136,7 @@ extension PlanViewController: UITableViewDataSource {
         if segue.identifier == "goToEdit", let indexPath = sender as? IndexPath {
             guard let destinationVC = segue.destination as? EditPlanViewController else { fatalError("Can not create EditPlanViewController") }
             let selectedTravelPlanIndex = indexPath.row
-            destinationVC.travelPlanIndex = selectedTravelPlanIndex
+        //    destinationVC.travelPlanIndex = selectedTravelPlanIndex
             destinationVC.travelPlanId = plans[indexPath.row].id ?? ""
            
                }
@@ -183,7 +183,7 @@ extension PlanViewController {
 }
 
 extension PlanViewController: FirestoreManagerDelegate {
-    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan2]) {
+    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan]) {
         plans = firestoreData
     }
 }

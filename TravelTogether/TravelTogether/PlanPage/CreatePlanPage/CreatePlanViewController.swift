@@ -14,7 +14,7 @@ class CreatePlanViewController: UIViewController {
     var planName = ""
     var startDate: Date?
     var endDate: Date?
-    var newTravelPlan = TravelPlan2(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), days: [])
+    var newTravelPlan = TravelPlan(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), days: [])
     
     @IBOutlet weak var planNameLabel: UILabel!
     @IBOutlet weak var planNameTextField: UITextField!
@@ -38,7 +38,7 @@ class CreatePlanViewController: UIViewController {
     @IBAction func saveButtonTapped(_ sender: Any) {
   
         if let planName = planNameTextField.text {
-            newTravelPlan = TravelPlan2(id: "", planName: planName, destination: "Destination", startDate: startDate ?? Date(), endDate: endDate ?? Date(), days: [])
+            newTravelPlan = TravelPlan(id: "", planName: planName, destination: "Destination", startDate: startDate ?? Date(), endDate: endDate ?? Date(), days: [])
         }
         
         let firestoreManagerForPost = FirestoreManagerForPost()
@@ -56,7 +56,7 @@ class CreatePlanViewController: UIViewController {
 }
 
 extension CreatePlanViewController: FirestoreManagerForPostDelegate {
-    func manager(_ manager: FirestoreManagerForPost, didPost firestoreData: TravelPlan2) {
+    func manager(_ manager: FirestoreManagerForPost, didPost firestoreData: TravelPlan) {
         newTravelPlan = firestoreData
     }
 }
