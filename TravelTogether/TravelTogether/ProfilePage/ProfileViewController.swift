@@ -12,23 +12,14 @@ import FirebaseStorage
 class ProfileViewController: UIViewController {
     
     @IBOutlet weak var separatorView: UIView!
-    
     @IBOutlet weak var userImageView: UIImageView!
-    
     @IBOutlet weak var userNameLabel: UILabel!
-    
     @IBOutlet weak var userIntroduction: UILabel!
-    
     @IBOutlet weak var followButton: UIButton!
-    
     @IBOutlet weak var fanNumberLabel: UILabel!
-    
     @IBOutlet weak var fanLabel: UILabel!
-    
     @IBOutlet weak var followNumberLabel: UILabel!
-    
     @IBOutlet weak var followLabel: UILabel!
-    
     @IBOutlet weak var tableView: UITableView!
     
     var profileIndex = 0
@@ -85,17 +76,18 @@ extension ProfileViewController: UITableViewDataSource {
             else { fatalError("Could not create ProfileCell") }
             cell.profileImageNameLabel.text = plans[indexPath.row].planName
             
-            if spotsData.isEmpty == false {
-                let spotData = spotsData[0]
-                if let urlString = spotData["photo"] as? String,
-                   let url = URL(string: urlString) {
-                    downloadPhotoFromFirebaseStorage(url: url) { image in
+            let daysData = plans[indexPath.row].days
+            if daysData.isEmpty == false {
+                let locationData = daysData[0]
+                let theLocation = locationData.locations
+                let urlString = theLocation[0].photo
+                if let url = URL(string: urlString) {
+                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
+                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
                         DispatchQueue.main.async {
                             if let image = image {
-                                print("url\(url)")
                                 cell.profileImageView.image = image
                             } else {
-                                print("url\(url)")
                                 cell.profileImageView.image = UIImage(named: "Image_Placeholder")
                             }
                         }

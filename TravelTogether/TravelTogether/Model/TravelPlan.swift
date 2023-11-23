@@ -51,12 +51,10 @@ struct TravelPlan2 {
 }
 
 struct TravelDay {
-    var date: Date
     var locations: [Location]
     
     var dictionary: [String: Any] {
         return [
-            "date": date,
             "locations": locations
         ]
     }

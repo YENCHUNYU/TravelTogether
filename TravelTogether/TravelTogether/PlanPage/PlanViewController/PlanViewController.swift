@@ -40,6 +40,8 @@ class PlanViewController: UIViewController {
                 print("Travel plan not found.")
             }
         }
+        
+        
            
     }
     
@@ -79,25 +81,24 @@ extension PlanViewController: UITableViewDataSource {
             let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
             cell.planDateLabel.text = "\(start)-\(end)"
 
-            print("spotsData\(spotsData)")
-            if spotsData.isEmpty == false {
-                let spotData = spotsData[0]
-                if let urlString = spotData["photo"] as? String,
-                   let url = URL(string: urlString) {
-                    downloadPhotoFromFirebaseStorage(url: url) { image in
+            let daysData = plans[indexPath.row].days
+            if daysData.isEmpty == false {
+                let locationData = daysData[0]
+                let theLocation = locationData.locations
+                let urlString = theLocation[0].photo
+                if let url = URL(string: urlString) {
+                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
+                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
                         DispatchQueue.main.async {
                             if let image = image {
-                                print("url\(url)")
                                 cell.planImageView.image = image
                             } else {
-                                print("url\(url)")
                                 cell.planImageView.image = UIImage(named: "Image_Placeholder")
                             }
                         }
                     }
                 }
             }
-    
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TogetherPlanCell", for: indexPath) as? TogetherPlanCell
@@ -161,29 +162,33 @@ extension PlanViewController: PlanHeaderViewDelegate {
 
 extension PlanViewController {
     // Firebase
-    func downloadPhotoFromFirebaseStorage(url: URL, completion: @escaping (UIImage?) -> Void) {
-        let storageReference = Storage.storage().reference(forURL: url.absoluteString)
-        
-        // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
-        storageReference.getData(maxSize: 1 * 1024 * 1024) { data, error in
-            if let error = error {
-                print("Error downloading photo from Firebase Storage: \(error.localizedDescription)")
-                completion(nil)
-            } else if let data = data, let image = UIImage(data: data) {
-                //  self.tableView.reloadData()
-                completion(image)
-                
-            } else {
-                print("Failed to create UIImage from data.")
-                completion(nil)
-            }
-        }
-    }
+//    func downloadPhotoFromFirebaseStorage(url: URL, completion: @escaping (UIImage?) -> Void) {
+//        let storageReference = Storage.storage().reference(forURL: url.absoluteString)
+//
+//        // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
+//        storageReference.getData(maxSize: 1 * 1024 * 1024) { data, error in
+//            if let error = error {
+//                print("Error downloading photo from Firebase Storage: \(error.localizedDescription)")
+//                completion(nil)
+//            } else if let data = data, let image = UIImage(data: data) {
+//                //  self.tableView.reloadData()
+//                completion(image)
+//
+//            } else {
+//                print("Failed to create UIImage from data.")
+//                completion(nil)
+//            }
+//        }
+//    }
 }
 
 extension PlanViewController: FirestoreManagerDelegate {
     func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan2]) {
         plans = firestoreData
     }
-    
+}
+
+extension PlanViewController: FirebaseStorageManagerDownloadPhotosDelegate {
+    func manager(_ manager: FirebaseStorageManagerDownloadPhotos) {
+    }
 }

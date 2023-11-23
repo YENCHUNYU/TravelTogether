@@ -13,18 +13,12 @@ import GooglePlaces
 class MapViewController: UIViewController {
  
     @IBOutlet weak var mapView: GMSMapView!
-    
     let locationManager = CLLocationManager()
-    
     let searchVC = UISearchController(searchResultsController: MapsListViewController())
-    
     var placesData: [Place] = []
-    
     var mapInfoViewController: MapInfoViewController?
-    
     var isFromSearch = true
-    
-    var travelPlanIndex = 0
+    var travelPlanId = ""
 }
 
 // MARK: - Lifecycle
@@ -131,11 +125,10 @@ extension MapViewController: MapListViewControllerDelegate {
         mapInfoViewController = storyboard?.instantiateViewController(withIdentifier: "MapInfoViewController") as? MapInfoViewController
         mapInfoViewController?.places = placesData[indexPath.row]
         mapInfoViewController?.isFromSearch = isFromSearch
-        mapInfoViewController?.travelPlanIndex = travelPlanIndex
         addChild(mapInfoViewController!)
         view.addSubview(mapInfoViewController!.view)
         mapInfoViewController?.didMove(toParent: self)
-        
+        mapInfoViewController?.travelPlanId = travelPlanId
         }
     }}
     

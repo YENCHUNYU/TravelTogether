@@ -44,7 +44,7 @@ class FirestoreManager {
                     // Convert each day data to a TravelDay object
                     var travelDays: [TravelDay] = []
                     for dayData in daysArray {
-                        let dayDate = (dayData["date"] as? Timestamp)?.dateValue() ?? Date()
+                      //  let dayDate = (dayData["date"] as? Timestamp)?.dateValue() ?? Date()
                         
                         // Retrieve the "locations" array for each day
                         guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
@@ -63,7 +63,7 @@ class FirestoreManager {
                         }
                         
                         // Create a TravelDay object
-                        let travelDay = TravelDay(date: dayDate, locations: locations)
+                        let travelDay = TravelDay(locations: locations)
                         travelDays.append(travelDay)
                     }
                     

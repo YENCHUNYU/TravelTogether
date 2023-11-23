@@ -8,12 +8,12 @@
 import UIKit
 import FirebaseFirestore
 
-protocol FirestoreManagerForePostDelegate {
+protocol FirestoreManagerForPostDelegate {
     func manager(_ manager: FirestoreManagerForPost, didPost firestoreData: TravelPlan2)
 }
 
 class FirestoreManagerForPost {
-    var delegate: FirestoreManagerForePostDelegate?
+    var delegate: FirestoreManagerForPostDelegate?
     
     func postTravelPlan(travelPlan: TravelPlan2, completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()

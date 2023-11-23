@@ -55,6 +55,20 @@ class SearchViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        let firestoreManager = FirestoreManager()
+        firestoreManager.delegate = self
+        firestoreManager.fetchTravelPlans{ (travelPlans, error) in
+            if let error = error {
+                print("Error fetching travel plans: \(error)")
+            } else {
+                // Handle the retrieved travel plans
+                print("Fetched travel plans: \(travelPlans ?? [])")
+                self.plans = travelPlans ?? []
+            }
+        }
+    }
+    
 }
 
 extension SearchViewController: UITableViewDataSource {
@@ -85,17 +99,18 @@ extension SearchViewController: UITableViewDataSource {
             cell.memoryImageView.image = mockImage
             cell.memoryNameLabel.text = plans[indexPath.row].planName
             
-            if spotsData.isEmpty == false {
-                let spotData = spotsData[0]
-                if let urlString = spotData["photo"] as? String,
-                   let url = URL(string: urlString) {
-                    downloadPhotoFromFirebaseStorage(url: url) { image in
+            let daysData = plans[indexPath.row].days
+            if daysData.isEmpty == false {
+                let locationData = daysData[0]
+                let theLocation = locationData.locations
+                let urlString = theLocation[0].photo
+                if let url = URL(string: urlString) {
+                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
+                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
                         DispatchQueue.main.async {
                             if let image = image {
-                                print("url\(url)")
                                 cell.memoryImageView.image = image
                             } else {
-                                print("url\(url)")
                                 cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                             }
                         }

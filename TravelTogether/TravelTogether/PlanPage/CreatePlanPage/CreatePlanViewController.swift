@@ -55,7 +55,8 @@ class CreatePlanViewController: UIViewController {
     
 }
 
-extension CreatePlanViewController: FirestoreManagerForePostDelegate {
+extension CreatePlanViewController: FirestoreManagerForPostDelegate {
     func manager(_ manager: FirestoreManagerForPost, didPost firestoreData: TravelPlan2) {
+        newTravelPlan = firestoreData
     }
 }

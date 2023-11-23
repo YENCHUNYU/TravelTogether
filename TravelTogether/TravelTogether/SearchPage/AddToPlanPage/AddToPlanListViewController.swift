@@ -16,6 +16,9 @@ class AddToPlanListViewController: UIViewController {
     var places = Place(name: "", identifier: "", address: "")
     var travelPlanIndex = 0
     var spotsPhotoUrl = ""
+    
+    var location = Location(name: "", photo: "", address: "")
+    var planId = ""
 
     @IBOutlet weak var tableView: UITableView!
         
@@ -36,7 +39,7 @@ class AddToPlanListViewController: UIViewController {
                     self.plans = travelPlans ?? []
                     self.tableView.reloadData()
                 }
-            }
+            }          
         }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -89,7 +92,16 @@ extension AddToPlanListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        planId = plans[indexPath.row].id
+        let firestorePostLocation = FirestoreManagerForPostLocation()
+        firestorePostLocation.delegate = self
+        firestorePostLocation.addLocationToTravelPlan(planId: planId, location: location) { error in
+            if let error = error {
+                print("Error posting location: \(error)")
+            } else {
+                print("Location posted successfully!")
+            }
+        }
 //        appendToTravelPlan(id: self.plans[indexPath.row].id ?? "", newSpots: [spotName]) { error in
 //            if let error = error {
 //                print("Error posting travel plan: \(error)")
@@ -134,14 +146,18 @@ extension AddToPlanListViewController: UITableViewDataSource {
 
 extension AddToPlanListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-     
            return 60
-       
     }
 }
 
 extension AddToPlanListViewController: FirestoreManagerDelegate {
     func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan2]) {
         plans = firestoreData
+    }
+}
+
+extension AddToPlanListViewController: FirestoreManagerForPostLocationDelegate {
+    func manager(_ manager: FirestoreManagerForPostLocation, didPost firestoreData: Location) {
+        location = firestoreData
     }
 }
