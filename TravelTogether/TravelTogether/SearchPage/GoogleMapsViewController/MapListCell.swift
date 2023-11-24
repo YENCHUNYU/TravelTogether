@@ -11,22 +11,22 @@ import GoogleMaps
 class MapListCell: UITableViewCell {
     
     var titleLabel: UILabel = {
-        let tl = UILabel()
-        tl.translatesAutoresizingMaskIntoConstraints = false
-        tl.textAlignment = .left
-        tl.font = UIFont.systemFont(ofSize: 18, weight: .light)
-        tl.heightAnchor.constraint(equalToConstant: 26).isActive = true
-        return tl
+        let title = UILabel()
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.textAlignment = .left
+        title.font = UIFont.systemFont(ofSize: 18, weight: .light)
+        title.heightAnchor.constraint(equalToConstant: 26).isActive = true
+        return title
     }()
     
     var addressLabel: UILabel = {
-        let tl = UILabel()
-        tl.translatesAutoresizingMaskIntoConstraints = false
-        tl.textAlignment = .left
-        tl.font = UIFont.systemFont(ofSize: 14, weight: .light)
-        tl.textColor = .gray
-        tl.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        return tl
+        let address = UILabel()
+        address.translatesAutoresizingMaskIntoConstraints = false
+        address.textAlignment = .left
+        address.font = UIFont.systemFont(ofSize: 14, weight: .light)
+        address.textColor = .gray
+        address.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        return address
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -44,5 +44,4 @@ class MapListCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }

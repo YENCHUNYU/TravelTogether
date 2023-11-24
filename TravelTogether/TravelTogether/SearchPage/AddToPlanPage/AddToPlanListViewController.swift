@@ -11,12 +11,6 @@ import FirebaseFirestore
 class AddToPlanListViewController: UIViewController {
 
     var plans: [TravelPlan] = []
-    var spotName = ""
-    var spotAddress = ""
-    var places = Place(name: "", identifier: "", address: "")
-    var travelPlanIndex = 0
-    var spotsPhotoUrl = ""
-    
     var location = Location(name: "", photo: "", address: "")
     var planId = ""
 
@@ -34,7 +28,6 @@ class AddToPlanListViewController: UIViewController {
                 if let error = error {
                     print("Error fetching travel plans: \(error)")
                 } else {
-                    // Handle the retrieved travel plans
                     print("Fetched travel plans: \(travelPlans ?? [])")
                     self.plans = travelPlans ?? []
                     self.tableView.reloadData()
@@ -49,7 +42,6 @@ class AddToPlanListViewController: UIViewController {
             if let error = error {
                 print("Error fetching travel plans: \(error)")
             } else {
-                // Handle the retrieved travel plans
                 print("Fetched travel plans: \(travelPlans ?? [])")
                 self.plans = travelPlans ?? []
                 self.tableView.reloadData()
@@ -65,7 +57,8 @@ extension AddToPlanListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "AddToListCell", for: indexPath) as? AddToListCell
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "AddToListCell", for: indexPath) as? AddToListCell
             else { fatalError("Could not create AddToListCell") }
         cell.planTitleLabel.text = plans[indexPath.row].planName
         let start = changeDateFormat(date: "\(plans[indexPath.row].startDate)")
@@ -77,8 +70,7 @@ extension AddToPlanListViewController: UITableViewDataSource {
     func changeDateFormat(date: String) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // Set the locale to handle the date format
-
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
         if let date = dateFormatter.date(from: date) {
             let outputFormatter = DateFormatter()
             outputFormatter.dateFormat = "yyyy年MM月dd日"
@@ -102,34 +94,12 @@ extension AddToPlanListViewController: UITableViewDataSource {
                 print("Location posted successfully!")
             }
         }
-//        appendToTravelPlan(id: self.plans[indexPath.row].id ?? "", newSpots: [spotName]) { error in
-//            if let error = error {
-//                print("Error posting travel plan: \(error)")
-//            } else {
-//                print("Travel plan posted successfully!")
-//            }
-//        }
-        
-//        addSpotsToTravelPlan(id: self.plans[self.travelPlanIndex].id ?? "", day: 1, spots: self.places.name, spotsPhotos: self.spotsPhotoUrl) { error in
-//            if let error = error {
-//                print("Error posting travel plan: \(error)")
-//            } else {
-//                print("Travel plan posted for day successfully!")
-//                if let navigationController = self.navigationController {
-//                 let viewControllers = navigationController.viewControllers
-//                 if viewControllers.count >= 2 {
-//                     let targetViewController = viewControllers[viewControllers.count - 2]
-//                     navigationController.popToViewController(targetViewController, animated: true)
-//                                 }
-//                             }
-//            }
-//        }
         self.dismiss(animated: true)
-  
     }
 // FOOTER
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "AddToListFooterView") as? AddToListFooterView
+        guard let view = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: "AddToListFooterView") as? AddToListFooterView
         else { fatalError("Could not create AddToListFooterView") }
         view.createNewPlanButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
         return view

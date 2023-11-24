@@ -38,7 +38,13 @@ class CreatePlanViewController: UIViewController {
     @IBAction func saveButtonTapped(_ sender: Any) {
   
         if let planName = planNameTextField.text {
-            newTravelPlan = TravelPlan(id: "", planName: planName, destination: "Destination", startDate: startDate ?? Date(), endDate: endDate ?? Date(), days: [])
+            newTravelPlan = TravelPlan(
+                id: "",
+                planName: planName,
+                destination: "Destination",
+                startDate: startDate ?? Date(),
+                endDate: endDate ?? Date(),
+                days: [])
         }
         
         let firestoreManagerForPost = FirestoreManagerForPost()

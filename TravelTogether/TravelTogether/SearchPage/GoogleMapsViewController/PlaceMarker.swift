@@ -25,12 +25,11 @@ class PlaceMarker: GMSMarker {
         availableTypes :
         ["bakery", "bar", "cafe", "grocery_or_supermarket", "restaurant"]
 
-      for type in place.types {
-        if possibleTypes.contains(type) {
-          foundType = type
-          break
+        for type in place.types where possibleTypes.contains(type) {
+            foundType = type
+            break
         }
-      }
+
       icon = UIImage(named: foundType+"_pin")
     }
 }

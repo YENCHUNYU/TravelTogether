@@ -40,9 +40,6 @@ class PlanViewController: UIViewController {
                 print("Travel plan not found.")
             }
         }
-        
-        
-           
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -101,7 +98,9 @@ extension PlanViewController: UITableViewDataSource {
             }
             return cell
         } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "TogetherPlanCell", for: indexPath) as? TogetherPlanCell
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "TogetherPlanCell",
+                for: indexPath) as? TogetherPlanCell
             else { fatalError("Could not create TogetherPlanCell") }
             
             if let image = UIImage(named: "日本") {
@@ -134,11 +133,9 @@ extension PlanViewController: UITableViewDataSource {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToEdit", let indexPath = sender as? IndexPath {
-            guard let destinationVC = segue.destination as? EditPlanViewController else { fatalError("Can not create EditPlanViewController") }
-            let selectedTravelPlanIndex = indexPath.row
-        //    destinationVC.travelPlanIndex = selectedTravelPlanIndex
-            destinationVC.travelPlanId = plans[indexPath.row].id ?? ""
-           
+            guard let destinationVC = segue.destination
+                    as? EditPlanViewController else { fatalError("Can not create EditPlanViewController") }
+            destinationVC.travelPlanId = plans[indexPath.row].id 
                }
     }
 }
@@ -160,35 +157,13 @@ extension PlanViewController: PlanHeaderViewDelegate {
     }
 }
 
-extension PlanViewController {
-    // Firebase
-//    func downloadPhotoFromFirebaseStorage(url: URL, completion: @escaping (UIImage?) -> Void) {
-//        let storageReference = Storage.storage().reference(forURL: url.absoluteString)
-//
-//        // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
-//        storageReference.getData(maxSize: 1 * 1024 * 1024) { data, error in
-//            if let error = error {
-//                print("Error downloading photo from Firebase Storage: \(error.localizedDescription)")
-//                completion(nil)
-//            } else if let data = data, let image = UIImage(data: data) {
-//                //  self.tableView.reloadData()
-//                completion(image)
-//
-//            } else {
-//                print("Failed to create UIImage from data.")
-//                completion(nil)
-//            }
-//        }
-//    }
-}
-
 extension PlanViewController: FirestoreManagerDelegate {
     func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan]) {
         plans = firestoreData
     }
 }
 
-extension PlanViewController: FirebaseStorageManagerDownloadPhotosDelegate {
+extension PlanViewController: FirebaseStorageManagerDownloadDelegate {
     func manager(_ manager: FirebaseStorageManagerDownloadPhotos) {
     }
 }

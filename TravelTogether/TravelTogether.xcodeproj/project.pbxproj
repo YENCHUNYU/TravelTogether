@@ -56,7 +56,6 @@
 		52E0F95E2B0F31FD00D23AFE /* FirebaseStorageManagerDownloadPhotos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E0F95D2B0F31FD00D23AFE /* FirebaseStorageManagerDownloadPhotos.swift */; };
 		52E70D852B0107F100440D4C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D842B0107F100440D4C /* AppDelegate.swift */; };
 		52E70D872B0107F100440D4C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D862B0107F100440D4C /* SceneDelegate.swift */; };
-		52E70D892B0107F100440D4C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E70D882B0107F100440D4C /* ViewController.swift */; };
 		52E70D8C2B0107F100440D4C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52E70D8A2B0107F100440D4C /* Main.storyboard */; };
 		52E70D8E2B0107F300440D4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52E70D8D2B0107F300440D4C /* Assets.xcassets */; };
 		52E70D912B0107F300440D4C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52E70D8F2B0107F300440D4C /* LaunchScreen.storyboard */; };
@@ -110,7 +109,6 @@
 		52E70D812B0107F100440D4C /* TravelTogether.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelTogether.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52E70D842B0107F100440D4C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52E70D862B0107F100440D4C /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		52E70D882B0107F100440D4C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		52E70D8B2B0107F100440D4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		52E70D8D2B0107F300440D4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		52E70D902B0107F300440D4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -313,7 +311,6 @@
 				52783CD62B0358F90067A334 /* ProfilePage */,
 				52E70D842B0107F100440D4C /* AppDelegate.swift */,
 				52E70D862B0107F100440D4C /* SceneDelegate.swift */,
-				52E70D882B0107F100440D4C /* ViewController.swift */,
 				52E70D8A2B0107F100440D4C /* Main.storyboard */,
 				52E70D8D2B0107F300440D4C /* Assets.xcassets */,
 				52E70D8F2B0107F300440D4C /* LaunchScreen.storyboard */,
@@ -500,7 +497,6 @@
 				52783CC32B031B650067A334 /* SpotTableViewCell.swift in Sources */,
 				52E0F95E2B0F31FD00D23AFE /* FirebaseStorageManagerDownloadPhotos.swift in Sources */,
 				523243A02B0871020078200C /* EditPlanViewController.swift in Sources */,
-				52E70D892B0107F100440D4C /* ViewController.swift in Sources */,
 				5288CB0E2B0710EA00E089F9 /* MapInfoViewController.swift in Sources */,
 				5288CB102B07615400E089F9 /* AddToPlanListViewController.swift in Sources */,
 				52783CEC2B05DB620067A334 /* GooglePlace.swift in Sources */,

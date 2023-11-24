@@ -41,7 +41,8 @@ class MapInfoViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 10
         view.layer.masksToBounds = true
-        view.frame = CGRect(x: 0, y: (UIScreen.main.bounds.height) - 400, width: UIScreen.main.bounds.width, height: 400 )
+        view.frame = CGRect(x: 0, y: (UIScreen.main.bounds.height) - 400,
+                            width: UIScreen.main.bounds.width, height: 400 )
     }
     
     @IBAction func addToPlanButtonTapped(_ sender: Any) {
@@ -49,7 +50,8 @@ class MapInfoViewController: UIViewController {
             
             let firebaseStorageManager = FirebaseStorageManagerUploadPhotos()
             firebaseStorageManager.delegate = self
-            firebaseStorageManager.uploadPhotoToFirebaseStorage(image: self.placeImageView.image ?? UIImage()) { uploadResult in
+            firebaseStorageManager.uploadPhotoToFirebaseStorage(
+                image: self.placeImageView.image ?? UIImage()) { uploadResult in
                         switch uploadResult {
                         case .success(let downloadURL):
                             print("Upload to Firebase Storage successful. Download URL: \(downloadURL)")
@@ -67,13 +69,17 @@ class MapInfoViewController: UIViewController {
             
             let firebaseStorageManager = FirebaseStorageManagerUploadPhotos()
             firebaseStorageManager.delegate = self
-            firebaseStorageManager.uploadPhotoToFirebaseStorage(image: self.placeImageView.image ?? UIImage()) { uploadResult in
+            firebaseStorageManager.uploadPhotoToFirebaseStorage(
+                image: self.placeImageView.image ?? UIImage()) { uploadResult in
                 switch uploadResult {
                 case .success(let downloadURL):
                     print("Upload to Firebase Storage successful. Download URL: \(downloadURL)")
                     self.spotsPhotoUrl = downloadURL.absoluteString
-                    let theLocation = Location(name: self.places.name, photo: self.spotsPhotoUrl, address: self.places.address)
-                    firestoreManagerPostLocation.addLocationToTravelPlan(planId: self.travelPlanId, location: theLocation) { error in
+                    let theLocation = Location(
+                        name: self.places.name, photo: self.spotsPhotoUrl,
+                        address: self.places.address)
+                    firestoreManagerPostLocation.addLocationToTravelPlan(
+                        planId: self.travelPlanId, location: theLocation) { error in
                         if let error = error {
                             print("Error posting travel plan: \(error)")
                         } else {
@@ -97,7 +103,8 @@ class MapInfoViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToPlanList" {
                 guard let navigationController = segue.destination as? UINavigationController,
-                      let destinationVC = navigationController.viewControllers.first as? AddToPlanListViewController else {
+                      let destinationVC = navigationController.viewControllers.first
+                        as? AddToPlanListViewController else {
                     fatalError("Cannot access AddToPlanListViewController")
                 }
             destinationVC.location = Location(name: places.name, photo: spotsPhotoUrl, address: places.address)
@@ -118,10 +125,9 @@ class MapInfoViewController: UIViewController {
             
         }
     }
-    
 }
 
-extension MapInfoViewController: FirebaseStorageManagerUploadPhotosDelegate {
+extension MapInfoViewController: FirebaseStorageManagerDelegate {
     func manager(_ manager: FirebaseStorageManagerUploadPhotos) {
     }
 }

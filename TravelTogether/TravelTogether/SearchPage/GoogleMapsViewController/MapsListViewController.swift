@@ -52,7 +52,10 @@ extension MapsListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "MapListCell", for: indexPath) as? MapListCell else { fatalError("Could not create MapListCell")}
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "MapListCell",
+            for: indexPath)
+            as? MapListCell else { fatalError("Could not create MapListCell")}
         cell.titleLabel.text = places[indexPath.row].name
         cell.addressLabel.text = places[indexPath.row].address
         return cell

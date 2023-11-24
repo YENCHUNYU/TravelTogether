@@ -41,3 +41,9 @@ extension GooglePlace {
     let lng: CLLocationDegrees
   }
 }
+
+struct Place {
+    let name: String
+    let identifier: String
+    let address: String
+}

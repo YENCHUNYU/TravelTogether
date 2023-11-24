@@ -8,18 +8,18 @@
 import UIKit
 import FirebaseFirestore
 
-protocol FirestoreManagerDelegate {
+protocol FirestoreManagerDelegate: AnyObject {
     func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan])
 }
 
 class FirestoreManager {
     
     var delegate: FirestoreManagerDelegate?
-    //抓取所有行程
+
     func fetchTravelPlans(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
-        let db = Firestore.firestore()
+        let database = Firestore.firestore()
         
-        let travelPlansRef = db.collection("TravelPlan")
+        let travelPlansRef = database.collection("TravelPlan")
         let orderedQuery = travelPlansRef.order(by: "startDate", descending: false)
         orderedQuery.getDocuments { (querySnapshot, error) in
             
@@ -31,27 +31,19 @@ class FirestoreManager {
                 
                 for document in querySnapshot!.documents {
                     let data = document.data()
-                    
-                    // Convert Firestore Timestamp to Date
                     let startDate = (data["startDate"] as? Timestamp)?.dateValue() ?? Date()
                     let endDate = (data["endDate"] as? Timestamp)?.dateValue() ?? Date()
                     
-                    // Retrieve the "days" array
                     guard let daysArray = data["days"] as? [[String: Any]] else {
-                        continue // Skip this document if "days" is not an array
+                        continue
                     }
-                    
-                    // Convert each day data to a TravelDay object
+                   
                     var travelDays: [TravelDay] = []
                     for dayData in daysArray {
-                      //  let dayDate = (dayData["date"] as? Timestamp)?.dateValue() ?? Date()
-                        
-                        // Retrieve the "locations" array for each day
                         guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
-                            continue // Skip this day if "locations" is not an array
+                            continue
                         }
-                        
-                        // Convert each location data to a Location object
+                
                         var locations: [Location] = []
                         for locationData in locationsArray {
                             let location = Location(
@@ -62,12 +54,10 @@ class FirestoreManager {
                             locations.append(location)
                         }
                         
-                        // Create a TravelDay object
                         let travelDay = TravelDay(locations: locations)
                         travelDays.append(travelDay)
                     }
                     
-                    // Create a TravelPlan object
                     let travelPlan = TravelPlan(
                         id: document.documentID,
                         planName: data["planName"] as? String ?? "",

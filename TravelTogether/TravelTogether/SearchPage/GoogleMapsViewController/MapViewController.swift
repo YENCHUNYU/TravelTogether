@@ -47,7 +47,6 @@ extension MapViewController: CLLocationManagerDelegate {
     }
 
     locationManager.requestLocation()
-
     mapView.isMyLocationEnabled = true
     mapView.settings.myLocationButton = true
   }
@@ -122,7 +121,8 @@ extension MapViewController: MapListViewControllerDelegate {
         mapView.animate(to: camera)
         
         if mapInfoViewController == nil {
-        mapInfoViewController = storyboard?.instantiateViewController(withIdentifier: "MapInfoViewController") as? MapInfoViewController
+        mapInfoViewController = storyboard?.instantiateViewController(
+            withIdentifier: "MapInfoViewController") as? MapInfoViewController
         mapInfoViewController?.places = placesData[indexPath.row]
         mapInfoViewController?.isFromSearch = isFromSearch
         addChild(mapInfoViewController!)
@@ -133,7 +133,10 @@ extension MapViewController: MapListViewControllerDelegate {
     }}
     
 extension MapViewController: UIViewControllerTransitioningDelegate {
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+    func presentationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController?,
+        source: UIViewController) -> UIPresentationController? {
         return MapInfoPresentationController(presentedViewController: presented, presenting: presenting)
     }
 }

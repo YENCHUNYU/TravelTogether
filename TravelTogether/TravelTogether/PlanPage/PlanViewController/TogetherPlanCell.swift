@@ -13,13 +13,11 @@ class TogetherPlanCell: UITableViewCell {
     @IBOutlet weak var planeNameLabel: UILabel!
     @IBOutlet weak var planDateLabel: UILabel!
   
-    
     private var userImageViews: [UIImageView] = []
 
         override func awakeFromNib() {
             super.awakeFromNib()
             configure(with: [UIImage(systemName: "person.circle")!, UIImage(systemName: "person.circle.fill")!])
-            // 初始化或设置任何其他属性
         }
 
         func configure(with users: [UIImage]) {
@@ -27,7 +25,7 @@ class TogetherPlanCell: UITableViewCell {
             userImageViews.forEach { $0.removeFromSuperview() }
             userImageViews.removeAll()
 
-            // 创建并添加新的 userImageViews
+            // 新的 userImageViews
             for (index, userImage) in users.enumerated() {
                 let userImageView = UIImageView(image: userImage)
                 userImageView.contentMode = .scaleAspectFill
@@ -38,10 +36,11 @@ class TogetherPlanCell: UITableViewCell {
                 contentView.addSubview(userImageView)
                 userImageViews.append(userImageView)
 
-                // 调整 userImageView 的位置
-                let xOffset = CGFloat(index) * (userImageView.frame.width + 5) // 5 是间距
-                userImageView.frame.origin = CGPoint(x: planImageView.frame.origin.x + xOffset + 10, y: planImageView.frame.maxY + -50)
+                // 調整 userImageView 的位置
+                let xOffset = CGFloat(index) * (userImageView.frame.width + 5) // 5 是間距
+                userImageView.frame.origin = CGPoint(
+                    x: planImageView.frame.origin.x + xOffset + 10,
+                    y: planImageView.frame.maxY + -50)
             }
         }
-    
 }

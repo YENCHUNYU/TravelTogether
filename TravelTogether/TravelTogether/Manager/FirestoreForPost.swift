@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseFirestore
 
-protocol FirestoreManagerForPostDelegate {
+protocol FirestoreManagerForPostDelegate: AnyObject {
     func manager(_ manager: FirestoreManagerForPost, didPost firestoreData: TravelPlan)
 }
 
@@ -16,12 +16,12 @@ class FirestoreManagerForPost {
     var delegate: FirestoreManagerForPostDelegate?
     
     func postTravelPlan(travelPlan: TravelPlan, completion: @escaping (Error?) -> Void) {
-        let db = Firestore.firestore()
+        let database = Firestore.firestore()
         
-        var ref: DocumentReference? = nil
+       var ref: DocumentReference?
         let travelPlanData = travelPlan.dictionary
         
-        ref = db.collection("TravelPlan").addDocument(data: travelPlanData) { error in
+        ref = database.collection("TravelPlan").addDocument(data: travelPlanData) { error in
             if let error = error {
                 print("Error adding document: \(error)")
                 completion(error)

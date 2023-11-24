@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseFirestore
 
-protocol FirestoreManagerForeOneDelegate {
+protocol FirestoreManagerForeOneDelegate: AnyObject {
     func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan)
 }
 
@@ -17,8 +17,8 @@ class FirestoreManagerForOne {
     var delegate: FirestoreManagerForeOneDelegate?
     
     func fetchOneTravelPlan(byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
-        let db = Firestore.firestore()
-        let travelPlanRef = db.collection("TravelPlan").document(planId)
+        let database = Firestore.firestore()
+        let travelPlanRef = database.collection("TravelPlan").document(planId)
 
         travelPlanRef.getDocument { document, error in
             if let error = error {
@@ -27,34 +27,25 @@ class FirestoreManagerForOne {
             } else {
                 do {
                     guard let document = document, document.exists else {
-                        completion(nil, nil) // Document doesn't exist
+                        completion(nil, nil)
                         return
                     }
 
                     let data = document.data()
-
-                    // Convert Firestore Timestamp to Date
                     let startDate = (data?["startDate"] as? Timestamp)?.dateValue() ?? Date()
                     let endDate = (data?["endDate"] as? Timestamp)?.dateValue() ?? Date()
 
-                    // Retrieve the "days" array
                     guard let daysArray = data?["days"] as? [[String: Any]] else {
-                        completion(nil, NSError(domain: "YourAppDomain", code: 1, userInfo: ["message": "Missing 'days' array"]))
                         return
                     }
 
-                    // Convert each day data to a TravelDay object
                     var travelDays: [TravelDay] = []
                     for dayData in daysArray {
-                    //    let dayDate = (dayData["date"] as? Timestamp)?.dateValue() ?? Date()
-
-                        // Retrieve the "locations" array for each day
+                    
                         guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
-                            completion(nil, NSError(domain: "YourAppDomain", code: 2, userInfo: ["message": "Missing 'locations' array"]))
                             return
                         }
 
-                        // Convert each location data to a Location object
                         var locations: [Location] = []
                         for locationData in locationsArray {
                             let location = Location(
@@ -65,11 +56,10 @@ class FirestoreManagerForOne {
                             locations.append(location)
                         }
 
-                        // Create a TravelDay object
                         let travelDay = TravelDay(locations: locations)
                         travelDays.append(travelDay)
                     }
-                    // Create a TravelPlan2 object
+                    
                     let travelPlan = TravelPlan(
                         id: document.documentID,
                         planName: data?["planName"] as? String ?? "",
@@ -80,8 +70,6 @@ class FirestoreManagerForOne {
                     )
                     completion(travelPlan, nil)
                     self.delegate?.manager(self, didGet: travelPlan)
-                } catch {
-                    completion(nil, error)
                 }
             }
         }

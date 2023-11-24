@@ -64,7 +64,8 @@ extension ProfileViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if profileIndex == 0 {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell
             else { fatalError("Could not create ProfileCell") }
             if let image = UIImage(named: "台北景點") {
                 cell.profileImageView.image = image
@@ -72,7 +73,8 @@ extension ProfileViewController: UITableViewDataSource {
             cell.profileImageNameLabel.text = "台北三日遊"
             return cell
         } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell
             else { fatalError("Could not create ProfileCell") }
             cell.profileImageNameLabel.text = plans[indexPath.row].planName
             

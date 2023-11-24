@@ -62,4 +62,3 @@ extension MemoryViewController: MemoryHeaderViewDelegate {
         tableView.reloadData()
     }
 }
-

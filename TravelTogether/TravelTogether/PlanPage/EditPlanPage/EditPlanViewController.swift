@@ -13,7 +13,10 @@ class EditPlanViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var planIndex = 0
-    var onePlan: TravelPlan = TravelPlan(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), days: [])
+    var onePlan: TravelPlan = TravelPlan(
+        id: "", planName: "",
+        destination: "",
+        startDate: Date(), endDate: Date(), days: [])
     var travelPlanId = ""
     var dayCounts = 1
     
@@ -79,21 +82,23 @@ extension EditPlanViewController: UITableViewDataSource {
         } else {
            return 0
         }
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "EditPlanCell", for: indexPath) as? EditPlanCell
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "EditPlanCell",
+                for: indexPath) as? EditPlanCell
             else { fatalError("Could not create EditPlanCell") }
         cell.placeNameLabel.text = onePlan.days[0].locations[indexPath.row].name
             return cell
-        
     }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     }
 // FOOTER
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "EditPlanFooterView") as? EditPlanFooterView
+        guard let view = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: "EditPlanFooterView") as? EditPlanFooterView
         else { fatalError("Could not create EditPlanFooterView") }
         view.createNewPlanButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
         return view
@@ -124,17 +129,6 @@ func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) ->
     80
 }
 }
-
-//extension EditPlanViewController: EditPlanHeaderViewDelegate {
-//    func passButtonCount(number: Int) {
-//        dayCounts = number
-//    }
-//
-//    func change(to index: Int) {
-//        planIndex = index
-//        tableView.reloadData()
-//    }
-//}
 
 extension EditPlanViewController: FirestoreManagerForeOneDelegate {
     func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan) {

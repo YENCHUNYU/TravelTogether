@@ -15,7 +15,5 @@ class EditPlanCell: UITableViewCell {
     @IBOutlet weak var placeNameLabel: UILabel!
     
     @IBOutlet weak var placeAddressLabel: UILabel!
-    
-    
+  
 }
-

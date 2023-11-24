@@ -21,24 +21,24 @@ class GoogleDataProvider {
   func fetchPlaces(
     near coordinate: CLLocationCoordinate2D,
     radius: Double,
-    types:[String],
+    types: [String],
     completion: @escaping PlacesCompletion
-  ) -> Void {
+  ) {
     var urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=\(coordinate)&radius=\(radius)&rankby=prominence&sensor=true&key=\(googleApiKey)"
     let typesString = types.count > 0 ? types.joined(separator: "|") : "food"
     urlString += "&types=\(typesString)"
     urlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? urlString
-    
+
     guard let url = URL(string: urlString) else {
       completion([])
       return
     }
-    
+
     if let task = placesTask, task.taskIdentifier > 0 && task.state == .running {
       task.cancel()
     }
-    
-    placesTask = session.dataTask(with: url) { data, response, _ in
+
+    placesTask = session.dataTask(with: url) { data, _, _ in
       guard let data = data else {
         DispatchQueue.main.async {
           completion([])
@@ -53,11 +53,11 @@ class GoogleDataProvider {
         }
         return
       }
-      
+
       if let errorMessage = placesResponse.errorMessage {
         print(errorMessage)
       }
-      
+
       DispatchQueue.main.async {
         completion(placesResponse.results)
       }
