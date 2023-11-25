@@ -92,7 +92,6 @@ extension EditPlanViewController: UITableViewDataSource {
         guard !onePlan.days.isEmpty, section < onePlan.days.count else {
                return 0
            }
-
            return onePlan.days[section].locations.count
     }
     
