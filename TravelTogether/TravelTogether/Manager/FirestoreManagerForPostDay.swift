@@ -1,22 +1,22 @@
 //
-//  FirestoreForPostLocation.swift
+//  FirestoreManagerForPostDay.swift
 //  TravelTogether
 //
-//  Created by User on 2023/11/23.
+//  Created by User on 2023/11/25.
 //
 
 import UIKit
 import FirebaseFirestore
 
-protocol FirestoreManagerForPostLocationDelegate: AnyObject {
-    func manager(_ manager: FirestoreManagerForPostLocation, didPost firestoreData: Location)
+protocol FirestoreManagerForPostDayDelegate: AnyObject {
+    func manager(_ manager: FirestoreManagerForPostDay)
 }
 
-class FirestoreManagerForPostLocation {
+class FirestoreManagerForPostDay {
     
-    var delegate: FirestoreManagerForPostLocationDelegate?
+    var delegate: FirestoreManagerForPostDayDelegate?
     
-    func addLocationToTravelPlan(planId: String, location: Location, day: Int, completion: @escaping (Error?) -> Void) {
+    func addDayToTravelPlan(planId: String, day: Int, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
         let travelPlanRef = database.collection("TravelPlan").document(planId)
 
@@ -30,13 +30,11 @@ class FirestoreManagerForPostLocation {
             var updatedData: [String: Any] = [:]
             if let existingData = document?.data() {
                 if var daysData = existingData["days"] as? [[String: Any]], !daysData.isEmpty {
-                    if var locations = daysData[day]["locations"] as? [[String: Any]] {
-                        locations.append([
-                            "name": location.name,
-                            "photo": location.photo,
-                            "address": location.address
-                        ])
-                        daysData[day]["locations"] = locations
+                    
+                    daysData.append(["locations": []] as? [String: [Location]] ?? ["locations" : []])
+                    if var locations = daysData.last?["locations"] as? [[String: Any]] {
+                        locations.append([:])
+                        daysData[daysData.count - 1]["locations"] = locations
                         updatedData["days"] = daysData
                     }
                 } else {
@@ -45,9 +43,6 @@ class FirestoreManagerForPostLocation {
                             [
                                 "locations": [
                                     [
-                                        "name": location.name,
-                                        "photo": location.photo,
-                                        "address": location.address
                                     ]
                                 ]
                             ]
@@ -59,7 +54,7 @@ class FirestoreManagerForPostLocation {
                         print("Error setting document: \(error)")
                         completion(error)
                     } else {
-                        self.delegate?.manager(self, didPost: location)
+                        self.delegate?.manager(self)
                         completion(nil)
                     }
                 }

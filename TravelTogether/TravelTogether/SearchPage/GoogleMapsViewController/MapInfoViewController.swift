@@ -20,6 +20,7 @@ class MapInfoViewController: UIViewController {
     var isFromSearch = false
     var spotsPhotoUrl = ""
     var travelPlanId = ""
+    var selectedDay = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,7 +57,6 @@ class MapInfoViewController: UIViewController {
                         case .success(let downloadURL):
                             print("Upload to Firebase Storage successful. Download URL: \(downloadURL)")
                             self.spotsPhotoUrl = downloadURL.absoluteString
-                            // Here, you can save the downloadURL to Firestore or perform other actions.
                         case .failure(let error):
                             print("Error uploading to Firebase Storage: \(error.localizedDescription)")
                         }
@@ -78,8 +78,9 @@ class MapInfoViewController: UIViewController {
                     let theLocation = Location(
                         name: self.places.name, photo: self.spotsPhotoUrl,
                         address: self.places.address)
+                    print("qqqqq\(self.selectedDay)")
                     firestoreManagerPostLocation.addLocationToTravelPlan(
-                        planId: self.travelPlanId, location: theLocation) { error in
+                        planId: self.travelPlanId, location: theLocation, day: self.selectedDay) { error in
                         if let error = error {
                             print("Error posting travel plan: \(error)")
                         } else {

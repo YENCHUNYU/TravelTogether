@@ -8,13 +8,18 @@
 import UIKit
 
 protocol EditPlanHeaderViewDelegate: AnyObject {
-    func passDayCouts(number: Int)
-}
+    func reloadData()
+    }
 
 class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     weak var delegate: EditPlanHeaderViewDelegate?
     var days: [String] = ["第1天", "＋"]
+    var travelPlanId = ""
+    var onePlan: TravelPlan = TravelPlan(
+        id: "", planName: "",
+        destination: "",
+        startDate: Date(), endDate: Date(), days: [])
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -40,13 +45,26 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func addNewDay(at indexPath: IndexPath) {
         let newDay = "第\(days.count)天"
         days.insert(newDay, at: days.count - 1)
-        delegate?.passDayCouts(number: days.count - 1)
         collectionView.reloadData()
         collectionView.scrollToItem(at: IndexPath(item: indexPath.item + 1, section: 0), at: .right, animated: true)
+    }
+    
+    func addNewDayButtonTapped() {
+        let firestoreManager = FirestoreManagerForPostDay()
+        firestoreManager.delegate = self
+        firestoreManager.addDayToTravelPlan(planId: travelPlanId, day: days.count - 1) { error in
+            if let error = error {
+                print("Error posting day: \(error)")
+            } else {
+                print("Day posted successfully!\(self.days.count - 1)")
+                self.delegate?.reloadData()
+            }
+        }
+                
     }
     
     // MARK: - UICollectionViewDataSource
@@ -62,10 +80,12 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
             for: indexPath) as? ButtonCell else {
               fatalError("Failed to create ButtonCell")
           }
-
+        
+        self.delegate?.reloadData()
           cell.configure(with: days[indexPath.item], indexPath: indexPath) {
               if indexPath.item == self.days.count - 1 {
                   self.addNewDay(at: indexPath)
+                  self.addNewDayButtonTapped()
               } else {
               }
           }
@@ -82,14 +102,16 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
     
     // Handle button tap to add a new day
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.item == days.count - 1 {
-            addNewDay(at: indexPath)
-                   collectionView.reloadData()
-                   collectionView.scrollToItem(
-                    at: IndexPath(item: indexPath.item + 1, section: 0),
-                    at: .right, animated: true)
-        } else {
-        }
+    }
+}
+
+extension EditPlanHeaderView: FirestoreManagerForPostDayDelegate {
+    func manager(_ manager: FirestoreManagerForPostDay) {
+    }
+}
+
+extension EditPlanHeaderView: FirestoreManagerForOneDelegate {
+    func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan) {
     }
 }
 

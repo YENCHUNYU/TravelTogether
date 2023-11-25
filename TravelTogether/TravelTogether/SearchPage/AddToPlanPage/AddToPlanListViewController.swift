@@ -87,7 +87,7 @@ extension AddToPlanListViewController: UITableViewDataSource {
         planId = plans[indexPath.row].id
         let firestorePostLocation = FirestoreManagerForPostLocation()
         firestorePostLocation.delegate = self
-        firestorePostLocation.addLocationToTravelPlan(planId: planId, location: location) { error in
+        firestorePostLocation.addLocationToTravelPlan(planId: planId, location: location, day: 0) { error in
             if let error = error {
                 print("Error posting location: \(error)")
             } else {

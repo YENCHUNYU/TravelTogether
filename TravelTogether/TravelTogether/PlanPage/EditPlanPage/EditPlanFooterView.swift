@@ -9,7 +9,7 @@ import UIKit
 
 class EditPlanFooterView: UITableViewHeaderFooterView {
     
-    let createNewPlanButton: UIButton = {
+    let addNewLocationButton: UIButton = {
         let create = UIButton()
         create.translatesAutoresizingMaskIntoConstraints = false
         create.setTitle("新增景點", for: .normal)
@@ -28,9 +28,9 @@ class EditPlanFooterView: UITableViewHeaderFooterView {
         }
     
     func commonInit() {
-        contentView.addSubview(createNewPlanButton)
-        createNewPlanButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0).isActive = true
-        createNewPlanButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5).isActive = true
+        contentView.addSubview(addNewLocationButton)
+        addNewLocationButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0).isActive = true
+        addNewLocationButton.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5).isActive = true
     }
     
 }

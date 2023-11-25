@@ -8,13 +8,13 @@
 import UIKit
 import FirebaseFirestore
 
-protocol FirestoreManagerForeOneDelegate: AnyObject {
+protocol FirestoreManagerForOneDelegate: AnyObject {
     func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan)
 }
 
 class FirestoreManagerForOne {
     
-    var delegate: FirestoreManagerForeOneDelegate?
+    var delegate: FirestoreManagerForOneDelegate?
     
     func fetchOneTravelPlan(byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
         let database = Firestore.firestore()

@@ -19,6 +19,7 @@
 		523243A82B0A27B90078200C /* SelectDate SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A72B0A27B90078200C /* SelectDate SwiftUI.swift */; };
 		5245BA762B0E136E006594CC /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA752B0E136E006594CC /* FirestoreManager.swift */; };
 		5245BA782B0E17FA006594CC /* FirestoreManagerForOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */; };
+		5255286C2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5255286B2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift */; };
 		52783CC32B031B650067A334 /* SpotTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC22B031B650067A334 /* SpotTableViewCell.swift */; };
 		52783CC82B033B260067A334 /* PlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC72B033B260067A334 /* PlanViewController.swift */; };
 		52783CCA2B033EE20067A334 /* MyPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC92B033EE20067A334 /* MyPlanCell.swift */; };
@@ -75,6 +76,7 @@
 		523243A72B0A27B90078200C /* SelectDate SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SelectDate SwiftUI.swift"; sourceTree = "<group>"; };
 		5245BA752B0E136E006594CC /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
 		5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManagerForOne.swift; sourceTree = "<group>"; };
+		5255286B2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManagerForPostDay.swift; sourceTree = "<group>"; };
 		52783CC22B031B650067A334 /* SpotTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotTableViewCell.swift; sourceTree = "<group>"; };
 		52783CC72B033B260067A334 /* PlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanViewController.swift; sourceTree = "<group>"; };
 		52783CC92B033EE20067A334 /* MyPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlanCell.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				52E0F9592B0EE64A00D23AFE /* FirestoreForPostLocation.swift */,
 				52E0F95B2B0F2F3B00D23AFE /* FirebaseStorageUploadPhotos.swift */,
 				52E0F95D2B0F31FD00D23AFE /* FirebaseStorageManagerDownloadPhotos.swift */,
+				5255286B2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -491,6 +494,7 @@
 				523243A82B0A27B90078200C /* SelectDate SwiftUI.swift in Sources */,
 				52783CEA2B05DA6F0067A334 /* PlaceMarker.swift in Sources */,
 				52783CC82B033B260067A334 /* PlanViewController.swift in Sources */,
+				5255286C2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift in Sources */,
 				52783CDA2B03612B0067A334 /* ProfileTableViewCell.swift in Sources */,
 				52783CCC2B03409E0067A334 /* PlanHeaderView.swift in Sources */,
 				52783CD32B0350AC0067A334 /* MemoryCell.swift in Sources */,

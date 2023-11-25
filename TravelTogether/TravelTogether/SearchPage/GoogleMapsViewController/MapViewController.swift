@@ -19,6 +19,7 @@ class MapViewController: UIViewController {
     var mapInfoViewController: MapInfoViewController?
     var isFromSearch = true
     var travelPlanId = ""
+    var selectedSection = 0
 }
 
 // MARK: - Lifecycle
@@ -129,6 +130,8 @@ extension MapViewController: MapListViewControllerDelegate {
         view.addSubview(mapInfoViewController!.view)
         mapInfoViewController?.didMove(toParent: self)
         mapInfoViewController?.travelPlanId = travelPlanId
+            print("wwww\(selectedSection)")
+        mapInfoViewController?.selectedDay = selectedSection
         }
     }}
     
