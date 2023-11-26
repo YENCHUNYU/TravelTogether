@@ -44,7 +44,7 @@ class EditPlanViewController: UIViewController {
                 self.onePlan = travelPlan
                 self.headerView.onePlan = self.onePlan
                 self.headerView.collectionView.reloadData()
-                var counts = self.onePlan.days.count
+                let counts = self.onePlan.days.count
                 let originalCount = self.days.count
                 print("rrrrr\(counts)")
                     if counts > originalCount {
@@ -63,6 +63,7 @@ class EditPlanViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
         firestoreManagerForOne.fetchOneTravelPlan(byId: travelPlanId) { (travelPlan, error) in
@@ -101,12 +102,10 @@ extension EditPlanViewController: UITableViewDataSource {
                 for: indexPath) as? EditPlanCell
             else { fatalError("Could not create EditPlanCell") }
         cell.placeNameLabel.text = onePlan.days[indexPath.section].locations[indexPath.row].name
-            return cell
+        cell.placeAddressLabel.text = onePlan.days[indexPath.section].locations[indexPath.row].address
+        return cell
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-    }
 // FOOTER
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         guard let view = tableView.dequeueReusableHeaderFooterView(
@@ -140,12 +139,50 @@ extension EditPlanViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         40
     }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        // Return true if the row is editable
+        return true
+    }
+
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
 }
 
 extension EditPlanViewController: UITableViewDelegate {
-func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    80
-}
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            80
+    }
+    
+    func tableView(_ tableView: UITableView, 
+                   commit editingStyle: UITableViewCell.EditingStyle,
+                   forRowAt indexPath: IndexPath) {
+            if editingStyle == .delete {
+                
+                // Delete the cell from the data source
+                let deletedLocation = onePlan.days[indexPath.section].locations.remove(at: indexPath.row)
+                // Delete the row from the table view
+               
+                onePlan.days[indexPath.section].locations.remove(at: indexPath.row)
+               
+               
+                // Remove the corresponding information from Firestore
+                let firestoreManagerForOne = FirestoreManagerForOne()
+                firestoreManagerForOne.delegate = self
+                firestoreManagerForOne.deleteLocationFromTravelPlan(
+                    travelPlanId: travelPlanId,
+                    dayIndex: indexPath.section,
+                    location: deletedLocation) { error in
+                    if let error = error {
+                        print("Error deleting location from Firestore: \(error)")
+                    } else {
+                        print("Location deleted successfully from Firestore.")
+                        tableView.deleteRows(at: [indexPath], with: .fade)
+                    }
+                }
+            }
+        }
 }
 
 extension EditPlanViewController: FirestoreManagerForOneDelegate {

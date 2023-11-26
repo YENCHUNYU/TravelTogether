@@ -675,6 +675,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8MJLHJN65R;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TravelTogether/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "By accessing your location, this app can find good places to eat for you.";
@@ -705,6 +706,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8MJLHJN65R;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TravelTogether/Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "By accessing your location, this app can find good places to eat for you.";

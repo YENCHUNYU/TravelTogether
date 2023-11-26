@@ -75,3 +75,57 @@ class FirestoreManagerForOne {
         }
     }
 }
+
+extension FirestoreManagerForOne {
+
+    func deleteLocationFromTravelPlan(travelPlanId: String, dayIndex: Int, location: Location, completion: @escaping (Error?) -> Void) {
+        let database = Firestore.firestore()
+        let travelPlanRef = database.collection("TravelPlan").document(travelPlanId)
+
+        travelPlanRef.getDocument { document, error in
+            if let error = error {
+                print("Error getting document for deletion: \(error)")
+                completion(error)
+            } else {
+                do {
+                    guard var travelPlanData = document?.data() else {
+                        completion(nil)
+                        return
+                    }
+
+                    guard var daysArray = travelPlanData["days"] as? [[String: Any]] else {
+                        completion(nil)
+                        return
+                    }
+
+                    guard var locationsArray = daysArray[dayIndex]["locations"] as? [[String: Any]] else {
+                        completion(nil)
+                        return
+                    }
+
+                    // Find and remove the location from the locations array
+                    locationsArray.removeAll { (locationData) -> Bool in
+                        let name = locationData["name"] as? String ?? ""
+                        return name == location.name
+                    }
+
+                    // Update the locations array in the days array
+                    daysArray[dayIndex]["locations"] = locationsArray
+                    travelPlanData["days"] = daysArray
+
+                    // Update the document in Firestore
+                    travelPlanRef.setData(travelPlanData, merge: true) { error in
+                        if let error = error {
+                            print("Error updating document after deletion: \(error)")
+                            completion(error)
+                        } else {
+                            print("Document updated successfully after deletion.")
+                            completion(nil)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+

@@ -77,3 +77,20 @@ class FirestoreManager {
         }
     }
 }
+
+extension FirestoreManager {
+    func deleteTravelPlan(withID planID: String, completion: @escaping (Error?) -> Void) {
+           let database = Firestore.firestore()
+           let travelPlanRef = database.collection("TravelPlan").document(planID)
+
+           travelPlanRef.delete { error in
+               if let error = error {
+                   print("Error deleting travel plan document: \(error)")
+                   completion(error)
+               } else {
+                   print("Travel plan document deleted successfully.")
+                   completion(nil)
+               }
+           }
+       }
+}

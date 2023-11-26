@@ -138,6 +138,10 @@ extension PlanViewController: UITableViewDataSource {
             destinationVC.travelPlanId = plans[indexPath.row].id 
                }
     }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
 }
 
 extension PlanViewController: UITableViewDelegate {
@@ -146,6 +150,29 @@ extension PlanViewController: UITableViewDelegate {
            return 280
         } else {
             return 280
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            if indexPath.row < plans.count {
+               
+                
+                let firestoreManager = FirestoreManager()
+                firestoreManager.deleteTravelPlan(withID: plans[indexPath.row].id) { error in
+                    if let error = error {
+                        print("Failed to delete travel plan: \(error)")
+                    } else {
+                        print("Travel plan deleted successfully.")
+                        self.plans.remove(at: indexPath.row)
+                        tableView.deleteRows(at: [indexPath], with: .fade)
+                        tableView.deselectRow(at: indexPath, animated: true)
+                    }
+                }
+                
+                   } else {
+                       print("Index out of range. indexPath.row: \(indexPath.row), plans count: \(plans.count)")
+                   }
         }
     }
 }
