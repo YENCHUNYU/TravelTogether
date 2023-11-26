@@ -19,7 +19,15 @@ class FirestoreManagerForPost {
         let database = Firestore.firestore()
         
        var ref: DocumentReference?
-        let travelPlanData = travelPlan.dictionary
+//        var thePlan = travelPlan
+//        if travelPlan.days.isEmpty {
+//           let emptyDay = TravelDay(locations: [])
+//            thePlan.days.append(emptyDay)
+//               }
+               
+               var travelPlanData = travelPlan.dictionary
+        travelPlanData["days"] = [["locations": []]]
+        print("travelPlanData\(travelPlanData)")
         
         ref = database.collection("TravelPlan").addDocument(data: travelPlanData) { error in
             if let error = error {

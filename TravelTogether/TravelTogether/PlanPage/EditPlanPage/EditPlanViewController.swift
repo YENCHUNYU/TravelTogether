@@ -70,7 +70,7 @@ class EditPlanViewController: UIViewController {
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
-                print("Fetched one travel plan: \(travelPlan)")
+//                print("Fetched one travel plan: \(travelPlan)")
                 self.onePlan = travelPlan
                 self.tableView.reloadData()
                 self.headerView.collectionView.reloadData()
@@ -122,7 +122,6 @@ extension EditPlanViewController: UITableViewDataSource {
     @objc func addNewLocationButtonTapped(_ sender: UIButton) {
         selectedSection = sender.tag
         performSegue(withIdentifier: "goToMapFromEditPlan", sender: self)
-        print("eeee\(selectedSection)")
         }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -139,19 +138,19 @@ extension EditPlanViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         40
     }
-    
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return true if the row is editable
-        return true
-    }
 
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+    func tableView(
+        _ tableView: UITableView,
+        editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
     }
+
 }
 
 extension EditPlanViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(
+        _ tableView: UITableView,
+        heightForRowAt indexPath: IndexPath) -> CGFloat {
             80
     }
     
@@ -159,15 +158,9 @@ extension EditPlanViewController: UITableViewDelegate {
                    commit editingStyle: UITableViewCell.EditingStyle,
                    forRowAt indexPath: IndexPath) {
             if editingStyle == .delete {
-                
-                // Delete the cell from the data source
+              
                 let deletedLocation = onePlan.days[indexPath.section].locations.remove(at: indexPath.row)
-                // Delete the row from the table view
-               
-                onePlan.days[indexPath.section].locations.remove(at: indexPath.row)
-               
-               
-                // Remove the corresponding information from Firestore
+                
                 let firestoreManagerForOne = FirestoreManagerForOne()
                 firestoreManagerForOne.delegate = self
                 firestoreManagerForOne.deleteLocationFromTravelPlan(
@@ -178,7 +171,9 @@ extension EditPlanViewController: UITableViewDelegate {
                         print("Error deleting location from Firestore: \(error)")
                     } else {
                         print("Location deleted successfully from Firestore.")
+//                        self.onePlan.days[indexPath.section].locations.remove(at: indexPath.row)
                         tableView.deleteRows(at: [indexPath], with: .fade)
+                      
                     }
                 }
             }
@@ -199,7 +194,7 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
-                print("Fetched one travel plan: \(travelPlan)")
+//                print("Fetched one travel plan: \(travelPlan)")
                 self.onePlan = travelPlan
                 self.tableView.reloadData()
                 self.headerView.onePlan = travelPlan

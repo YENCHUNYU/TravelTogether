@@ -36,7 +36,7 @@ class CreatePlanViewController: UIViewController {
     }
     
     @IBAction func saveButtonTapped(_ sender: Any) {
-  
+    //    let emptyDay = TravelDay(locations: [])
         if let planName = planNameTextField.text {
             newTravelPlan = TravelPlan(
                 id: "",

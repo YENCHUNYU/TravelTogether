@@ -178,8 +178,8 @@
                     <connections>
                         <outlet property="addNewButton" destination="ipx-DV-tnn" id="pC1-ma-sLC"/>
                         <outlet property="tableView" destination="TIt-8Q-ilr" id="Lg4-EV-9T1"/>
-                        <segue destination="4Op-bn-ESO" kind="show" identifier="goToEdit" id="Em5-YZ-0gd"/>
                         <segue destination="yIW-p7-YMv" kind="show" identifier="goToCreate" id="YW6-3X-aMv"/>
+                        <segue destination="4Op-bn-ESO" kind="show" identifier="goToEdit" id="Kmg-F1-8RP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jp3-0Z-IyH" sceneMemberID="firstResponder"/>
@@ -260,10 +260,11 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="connectLineView" destination="4je-WU-bq0" id="Tkk-a4-7Wr"/>
+                                            <outlet property="lineView" destination="qbI-S3-CJw" id="r6s-b6-6m7"/>
                                             <outlet property="pinImageView" destination="saz-7c-M6V" id="RmU-Wk-Vbw"/>
                                             <outlet property="placeAddressLabel" destination="eIV-jy-nel" id="eqg-yO-RqT"/>
                                             <outlet property="placeNameLabel" destination="0i6-dS-F8W" id="AoY-7Y-GiL"/>
+                                            <outlet property="placeStackView" destination="Su9-BQ-ubb" id="eBs-2q-gJK"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -286,7 +287,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V7H-c5-N37" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="106" y="1987"/>
+            <point key="canvasLocation" x="117" y="2047"/>
         </scene>
         <!--我的行程-->
         <scene sceneID="rgr-Hc-Hyi">

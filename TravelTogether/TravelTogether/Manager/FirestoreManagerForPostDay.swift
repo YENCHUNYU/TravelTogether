@@ -31,7 +31,7 @@ class FirestoreManagerForPostDay {
             if let existingData = document?.data() {
                 if var daysData = existingData["days"] as? [[String: Any]], !daysData.isEmpty {
                     
-                    daysData.append(["locations": []] as? [String: [Location]] ?? ["locations" : []])
+                    daysData.append(["locations": []] as? [String: [Location]] ?? ["locations": []])
                     //                    if var locations = daysData.last?["locations"] as? [[String: Any]] {
                     //                        locations.append([:])
                     //                        daysData[daysData.count - 1]["locations"] = locations

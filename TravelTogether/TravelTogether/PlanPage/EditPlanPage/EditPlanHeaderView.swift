@@ -80,8 +80,7 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
             for: indexPath) as? ButtonCell else {
               fatalError("Failed to create ButtonCell")
           }
-        
-        self.delegate?.reloadData()
+
           cell.configure(with: days[indexPath.item], indexPath: indexPath) {
               if indexPath.item == self.days.count - 1 {
                   self.addNewDay(at: indexPath)

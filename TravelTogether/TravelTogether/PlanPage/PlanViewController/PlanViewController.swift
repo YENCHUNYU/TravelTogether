@@ -82,20 +82,23 @@ extension PlanViewController: UITableViewDataSource {
             if daysData.isEmpty == false {
                 let locationData = daysData[0]
                 let theLocation = locationData.locations
-                let urlString = theLocation[0].photo
-                if let url = URL(string: urlString) {
-                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-                        DispatchQueue.main.async {
-                            if let image = image {
-                                cell.planImageView.image = image
-                            } else {
-                                cell.planImageView.image = UIImage(named: "Image_Placeholder")
+                if theLocation.isEmpty == false {
+                    let urlString = theLocation[0].photo
+                    if let url = URL(string: urlString) {
+                        let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
+                        firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
+                            DispatchQueue.main.async {
+                                if let image = image {
+                                    cell.planImageView.image = image
+                                } else {
+                                    cell.planImageView.image = UIImage(named: "Image_Placeholder")
+                                }
                             }
                         }
                     }
                 }
             }
+            
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(
@@ -139,7 +142,9 @@ extension PlanViewController: UITableViewDataSource {
                }
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+    func tableView(
+        _ tableView: UITableView,
+        editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
     }
 }
@@ -153,11 +158,13 @@ extension PlanViewController: UITableViewDelegate {
         }
     }
     
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             if indexPath.row < plans.count {
                
-                
                 let firestoreManager = FirestoreManager()
                 firestoreManager.deleteTravelPlan(withID: plans[indexPath.row].id) { error in
                     if let error = error {
@@ -166,7 +173,6 @@ extension PlanViewController: UITableViewDelegate {
                         print("Travel plan deleted successfully.")
                         self.plans.remove(at: indexPath.row)
                         tableView.deleteRows(at: [indexPath], with: .fade)
-                        tableView.deselectRow(at: indexPath, animated: true)
                     }
                 }
                 
