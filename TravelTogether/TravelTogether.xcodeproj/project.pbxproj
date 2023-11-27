@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5221A5682B141FF60084F7C0 /* EditPlanHeaderForSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5221A5672B141FF60084F7C0 /* EditPlanHeaderForSections.swift */; };
 		52292F002B01F3930083399E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52292EFF2B01F3930083399E /* SearchViewController.swift */; };
 		52292F022B01F8E30083399E /* SearchMemoriesTableVIewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52292F012B01F8E30083399E /* SearchMemoriesTableVIewCell.swift */; };
 		52292F052B0212FC0083399E /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52292F042B0212FC0083399E /* FavoriteViewController.swift */; };
@@ -64,6 +65,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5221A5672B141FF60084F7C0 /* EditPlanHeaderForSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanHeaderForSections.swift; sourceTree = "<group>"; };
 		52292EFF2B01F3930083399E /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		52292F012B01F8E30083399E /* SearchMemoriesTableVIewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMemoriesTableVIewCell.swift; sourceTree = "<group>"; };
 		52292F042B0212FC0083399E /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
@@ -280,6 +282,7 @@
 				523243A12B0871710078200C /* EditPlanCell.swift */,
 				523243A32B0879F30078200C /* EditPlanHeaderView.swift */,
 				523243A52B0892930078200C /* EditPlanFooterView.swift */,
+				5221A5672B141FF60084F7C0 /* EditPlanHeaderForSections.swift */,
 			);
 			path = EditPlanPage;
 			sourceTree = "<group>";
@@ -494,6 +497,7 @@
 				523243A82B0A27B90078200C /* SelectDate SwiftUI.swift in Sources */,
 				52783CEA2B05DA6F0067A334 /* PlaceMarker.swift in Sources */,
 				52783CC82B033B260067A334 /* PlanViewController.swift in Sources */,
+				5221A5682B141FF60084F7C0 /* EditPlanHeaderForSections.swift in Sources */,
 				5255286C2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift in Sources */,
 				52783CDA2B03612B0067A334 /* ProfileTableViewCell.swift in Sources */,
 				52783CCC2B03409E0067A334 /* PlanHeaderView.swift in Sources */,

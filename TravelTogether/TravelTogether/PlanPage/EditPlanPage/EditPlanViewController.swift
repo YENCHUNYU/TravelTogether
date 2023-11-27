@@ -27,6 +27,10 @@ class EditPlanViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(EditPlanFooterView.self, forHeaderFooterViewReuseIdentifier: "EditPlanFooterView")
+        // section header
+        tableView.register(EditPlanHeaderViewForSection.self, forHeaderFooterViewReuseIdentifier: "EditPlanHeaderViewForSection")
+        
+        // tableView header
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 50)
         headerView.delegate = self
         headerView.travelPlanId = travelPlanId
@@ -42,19 +46,16 @@ class EditPlanViewController: UIViewController {
             } else if let travelPlan = travelPlan {
                 print("Fetched one travel plan: \(travelPlan)")
                 self.onePlan = travelPlan
-                self.headerView.onePlan = self.onePlan
-                self.headerView.collectionView.reloadData()
                 let counts = self.onePlan.days.count
                 let originalCount = self.days.count
-                print("rrrrr\(counts)")
-                    if counts > originalCount {
+                    if counts >= originalCount {
                         for _ in originalCount...counts {
-                            let count = self.days.count
-                            self.days.insert("第\(count)天", at: count - 1)
-                            print("days!!!\(self.days)")
+                            let number = self.days.count
+                            self.days.insert("第\(number)天", at: number - 1)
                         }
                     }
                 self.headerView.days = self.days
+                self.headerView.collectionView.reloadData()
             } else {
                 print("One travel plan not found.")
             }
@@ -70,10 +71,9 @@ class EditPlanViewController: UIViewController {
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
-//                print("Fetched one travel plan: \(travelPlan)")
                 self.onePlan = travelPlan
                 self.tableView.reloadData()
-                self.headerView.collectionView.reloadData()
+//               self.headerView.collectionView.reloadData()
             } else {
                 print("One travel plan not found.")
             }
@@ -144,7 +144,44 @@ extension EditPlanViewController: UITableViewDataSource {
         editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
     }
+    
+// HEADER FOR SECTIONS
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        50
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+           guard let headerView = tableView.dequeueReusableHeaderFooterView(
+               withIdentifier: "EditPlanHeaderViewForSection") as? EditPlanHeaderViewForSection else {
+                   return nil
+           }
 
+           headerView.deleteButtonHandler = { [weak self] in
+               self?.deleteSection(at: section)
+           }
+           return headerView
+       }
+
+       func deleteSection(at index: Int) {
+           onePlan.days.remove(at: index)
+           days.remove(at: days.count - 2)
+
+           let firestoreManagerForOne = FirestoreManagerForOne()
+           firestoreManagerForOne.delegate = self
+           firestoreManagerForOne.deleteDayFromTravelPlan(
+            travelPlanId: travelPlanId, dayIndex: index) { error in
+               if let error = error {
+                   print("Error deleting section from Firestore: \(error)")
+               } else {
+                   print("Section deleted successfully from Firestore.")
+                   self.tableView.deleteSections(IndexSet(integer: index), with: .fade)
+                   self.tableView.reloadData()
+                   self.headerView.days = self.days
+                   self.headerView.collectionView.reloadData()
+               }
+           }
+       }
 }
 
 extension EditPlanViewController: UITableViewDelegate {
@@ -158,14 +195,11 @@ extension EditPlanViewController: UITableViewDelegate {
                    commit editingStyle: UITableViewCell.EditingStyle,
                    forRowAt indexPath: IndexPath) {
             if editingStyle == .delete {
-              
                 let deletedLocation = onePlan.days[indexPath.section].locations.remove(at: indexPath.row)
-                
                 let firestoreManagerForOne = FirestoreManagerForOne()
                 firestoreManagerForOne.delegate = self
                 firestoreManagerForOne.deleteLocationFromTravelPlan(
-                    travelPlanId: travelPlanId,
-                    dayIndex: indexPath.section,
+                    travelPlanId: travelPlanId, dayIndex: indexPath.section,
                     location: deletedLocation) { error in
                     if let error = error {
                         print("Error deleting location from Firestore: \(error)")
@@ -187,6 +221,10 @@ extension EditPlanViewController: FirestoreManagerForOneDelegate {
 }
 
 extension EditPlanViewController: EditPlanHeaderViewDelegate {
+    func passDays(daysData: [String]) {
+        self.days = daysData
+    }
+    
     func reloadData() {
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
@@ -197,7 +235,7 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
 //                print("Fetched one travel plan: \(travelPlan)")
                 self.onePlan = travelPlan
                 self.tableView.reloadData()
-                self.headerView.onePlan = travelPlan
+//                self.headerView.onePlan = travelPlan
                 self.headerView.collectionView.reloadData()
             } else {
                 print("One travel plan not found.")

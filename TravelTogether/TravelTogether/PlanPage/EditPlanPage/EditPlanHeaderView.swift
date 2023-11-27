@@ -9,6 +9,7 @@ import UIKit
 
 protocol EditPlanHeaderViewDelegate: AnyObject {
     func reloadData()
+    func passDays(daysData: [String])
     }
 
 class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -16,11 +17,11 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
     weak var delegate: EditPlanHeaderViewDelegate?
     var days: [String] = ["第1天", "＋"]
     var travelPlanId = ""
-    var onePlan: TravelPlan = TravelPlan(
-        id: "", planName: "",
-        destination: "",
-        startDate: Date(), endDate: Date(), days: [])
-    
+//    var onePlan: TravelPlan = TravelPlan(
+//        id: "", planName: "",
+//        destination: "",
+//        startDate: Date(), endDate: Date(), days: [])
+//    
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal // Set scroll direction to horizontal
@@ -51,6 +52,7 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
         days.insert(newDay, at: days.count - 1)
         collectionView.reloadData()
         collectionView.scrollToItem(at: IndexPath(item: indexPath.item + 1, section: 0), at: .right, animated: true)
+        self.delegate?.passDays(daysData: days)
     }
     
     func addNewDayButtonTapped() {
@@ -80,7 +82,7 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
             for: indexPath) as? ButtonCell else {
               fatalError("Failed to create ButtonCell")
           }
-
+        
           cell.configure(with: days[indexPath.item], indexPath: indexPath) {
               if indexPath.item == self.days.count - 1 {
                   self.addNewDay(at: indexPath)
