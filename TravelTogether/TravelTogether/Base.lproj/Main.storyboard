@@ -293,7 +293,7 @@
         <scene sceneID="rgr-Hc-Hyi">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ufp-Yc-2eS" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="我的行程" image="backpack" catalog="system" id="vR6-mn-ytn"/>
+                    <tabBarItem key="tabBarItem" title="我的行程" image="figure.walk" catalog="system" id="vR6-mn-ytn"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="cmK-N4-c94">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
@@ -671,12 +671,12 @@
                     <navigationItem key="navigationItem" id="ojQ-SD-5cc"/>
                     <connections>
                         <outlet property="mapView" destination="dlu-FS-Uz4" id="qZG-3N-c5b"/>
-                        <segue destination="Tzb-HB-Rog" kind="show" identifier="" id="hnG-tk-KsU"/>
+                        <segue destination="Tzb-HB-Rog" kind="show" identifier="goToMapList" id="hnG-tk-KsU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FzH-th-Ibi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-979" y="1965"/>
+            <point key="canvasLocation" x="-979" y="2039"/>
         </scene>
         <!--Map Info View Controller-->
         <scene sceneID="zGB-Re-HNP">
@@ -733,7 +733,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mCw-b8-YPb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1050" y="3378"/>
+            <point key="canvasLocation" x="-1051" y="3471"/>
         </scene>
         <!--Maps List View Controller-->
         <scene sceneID="y87-R2-vUY">
@@ -747,12 +747,12 @@
                     </view>
                     <navigationItem key="navigationItem" id="DXO-me-Mqu"/>
                     <connections>
-                        <segue destination="M2B-0j-91P" kind="show" id="N6n-mq-GCP"/>
+                        <segue destination="M2B-0j-91P" kind="show" identifier="goToMapInfo" id="N6n-mq-GCP"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e1C-O3-TcI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-979" y="2677"/>
+            <point key="canvasLocation" x="-979" y="2753"/>
         </scene>
         <!--Add To Plan List View Controller-->
         <scene sceneID="tm2-dJ-Mrz">
@@ -973,7 +973,7 @@
         <scene sceneID="cN8-xe-Dy7">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rb0-Vf-oxs" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="我的回憶" image="moon.stars.circle" catalog="system" id="cCK-Uu-ZVm"/>
+                    <tabBarItem key="tabBarItem" title="我的回憶" image="books.vertical" catalog="system" id="cCK-Uu-ZVm"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="VZ5-u1-Zt5">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
@@ -1484,12 +1484,12 @@
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Image_Placeholder" width="375" height="375"/>
-        <image name="backpack" catalog="system" width="100" height="128"/>
+        <image name="books.vertical" catalog="system" width="128" height="107"/>
+        <image name="figure.walk" catalog="system" width="95" height="128"/>
         <image name="hand.thumbsup" catalog="system" width="123" height="128"/>
         <image name="heart" catalog="system" width="128" height="107"/>
         <image name="magnifyingglass" catalog="system" width="128" height="117"/>
         <image name="mappin.and.ellipse" catalog="system" width="110" height="128"/>
-        <image name="moon.stars.circle" catalog="system" width="128" height="123"/>
         <image name="person.circle" catalog="system" width="128" height="123"/>
         <image name="person.circle.fill" catalog="system" width="128" height="123"/>
         <image name="person.crop.rectangle" catalog="system" width="128" height="93"/>

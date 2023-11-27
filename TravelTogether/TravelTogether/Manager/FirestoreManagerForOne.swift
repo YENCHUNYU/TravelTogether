@@ -168,6 +168,4 @@ extension FirestoreManagerForOne {
             }
         }
     }
-
 }
-
