@@ -21,6 +21,7 @@
 		523243A42B0879F30078200C /* EditPlanHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A32B0879F30078200C /* EditPlanHeaderView.swift */; };
 		523243A62B0892930078200C /* EditPlanFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A52B0892930078200C /* EditPlanFooterView.swift */; };
 		523243A82B0A27B90078200C /* SelectDate SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A72B0A27B90078200C /* SelectDate SwiftUI.swift */; };
+		524157002B149230005D41F6 /* EditPlanCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524156FF2B149230005D41F6 /* EditPlanCollectionCell.swift */; };
 		5245BA762B0E136E006594CC /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA752B0E136E006594CC /* FirestoreManager.swift */; };
 		5245BA782B0E17FA006594CC /* FirestoreManagerForOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */; };
 		5255286C2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5255286B2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift */; };
@@ -82,6 +83,7 @@
 		523243A32B0879F30078200C /* EditPlanHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanHeaderView.swift; sourceTree = "<group>"; };
 		523243A52B0892930078200C /* EditPlanFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanFooterView.swift; sourceTree = "<group>"; };
 		523243A72B0A27B90078200C /* SelectDate SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SelectDate SwiftUI.swift"; sourceTree = "<group>"; };
+		524156FF2B149230005D41F6 /* EditPlanCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanCollectionCell.swift; sourceTree = "<group>"; };
 		5245BA752B0E136E006594CC /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
 		5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManagerForOne.swift; sourceTree = "<group>"; };
 		5255286B2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManagerForPostDay.swift; sourceTree = "<group>"; };
@@ -290,6 +292,7 @@
 				5232439F2B0871020078200C /* EditPlanViewController.swift */,
 				523243A12B0871710078200C /* EditPlanCell.swift */,
 				523243A32B0879F30078200C /* EditPlanHeaderView.swift */,
+				524156FF2B149230005D41F6 /* EditPlanCollectionCell.swift */,
 				523243A52B0892930078200C /* EditPlanFooterView.swift */,
 				5221A5672B141FF60084F7C0 /* EditPlanHeaderForSections.swift */,
 			);
@@ -497,6 +500,7 @@
 			files = (
 				5288CB272B07B95800E089F9 /* AddToListFooterView.swift in Sources */,
 				52783CDE2B037B8E0067A334 /* MemoryDetailViewController.swift in Sources */,
+				524157002B149230005D41F6 /* EditPlanCollectionCell.swift in Sources */,
 				52292F072B0216C90083399E /* SearchHeaderView.swift in Sources */,
 				52783CD12B034F6A0067A334 /* MemoryViewController.swift in Sources */,
 				52783CEF2B05DBEE0067A334 /* GoogleDataProvider.swift in Sources */,

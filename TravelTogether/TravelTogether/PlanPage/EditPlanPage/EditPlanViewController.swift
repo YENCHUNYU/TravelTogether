@@ -40,7 +40,7 @@ class EditPlanViewController: UIViewController {
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 50)
         headerView.delegate = self
         headerView.travelPlanId = travelPlanId
-
+        
         tableView.tableHeaderView = headerView
         tableView.separatorStyle = .none
         
@@ -65,6 +65,7 @@ class EditPlanViewController: UIViewController {
                         }
                     }
                 self.headerView.days = self.days
+                self.headerView.onePlan = self.onePlan
                 self.headerView.collectionView.reloadData()
             } else {
                 print("One travel plan not found.")
@@ -89,6 +90,7 @@ class EditPlanViewController: UIViewController {
             }
         }
     }
+
 }
 
 extension EditPlanViewController: UITableViewDataSource {
@@ -236,6 +238,30 @@ extension EditPlanViewController: FirestoreManagerForOneDelegate {
 }
 
 extension EditPlanViewController: EditPlanHeaderViewDelegate {
+    func reloadNewData() {
+        let firestoreManagerForOne = FirestoreManagerForOne()
+        firestoreManagerForOne.delegate = self
+        firestoreManagerForOne.fetchOneTravelPlan(byId: travelPlanId) { (travelPlan, error) in
+            if let error = error {
+                print("Error fetching one travel plan: \(error)")
+            } else if let travelPlan = travelPlan {
+                print("Fetched one travel plan: \(travelPlan)")
+                self.onePlan = travelPlan
+                let counts = self.onePlan.days.count
+                self.days = ["+"]
+                for count in 1...counts {
+                    self.days.insert("第\(count)天", at: count - 1)
+                }
+                self.headerView.days = self.days
+//                self.headerView.onePlan = self.onePlan
+//                self.headerView.collectionView.reloadData()
+                self.tableView.reloadData()
+            } else {
+                print("One travel plan not found.")
+            }
+        }
+    }
+    
     func passDays(daysData: [String]) {
         self.days = daysData
     }
@@ -303,7 +329,6 @@ extension EditPlanViewController: UITableViewDropDelegate {
                default:
                    break
                }
-           
            }
        }
 

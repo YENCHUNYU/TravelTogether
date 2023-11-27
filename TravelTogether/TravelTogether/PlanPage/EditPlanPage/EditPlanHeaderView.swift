@@ -10,6 +10,7 @@ import UIKit
 protocol EditPlanHeaderViewDelegate: AnyObject {
     func reloadData()
     func passDays(daysData: [String])
+    func reloadNewData()
     }
 
 class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -17,11 +18,11 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
     weak var delegate: EditPlanHeaderViewDelegate?
     var days: [String] = ["第1天", "＋"]
     var travelPlanId = ""
-//    var onePlan: TravelPlan = TravelPlan(
-//        id: "", planName: "",
-//        destination: "",
-//        startDate: Date(), endDate: Date(), days: [])
-//    
+    var onePlan: TravelPlan = TravelPlan(
+        id: "", planName: "",
+        destination: "",
+        startDate: Date(), endDate: Date(), days: [])
+    
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal // Set scroll direction to horizontal
@@ -34,6 +35,10 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = false // Optionally, hide horizontal scroll indicator
         collectionView.register(ButtonCell.self, forCellWithReuseIdentifier: ButtonCell.reuseIdentifier)
+        
+        collectionView.dragInteractionEnabled = true
+        collectionView.dragDelegate = self
+        collectionView.dropDelegate = self
         return collectionView
     }()
     
@@ -66,7 +71,6 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
                 self.delegate?.reloadData()
             }
         }
-                
     }
     
     // MARK: - UICollectionViewDataSource
@@ -82,7 +86,6 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
             for: indexPath) as? ButtonCell else {
               fatalError("Failed to create ButtonCell")
           }
-        
           cell.configure(with: days[indexPath.item], indexPath: indexPath) {
               if indexPath.item == self.days.count - 1 {
                   self.addNewDay(at: indexPath)
@@ -116,37 +119,73 @@ extension EditPlanHeaderView: FirestoreManagerForOneDelegate {
     }
 }
 
-class ButtonCell: UICollectionViewCell {
-    static let reuseIdentifier = "ButtonCell"
+extension EditPlanHeaderView: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
     
-    private var buttonTapHandler: (() -> Void)?
-    
-    let button: UIButton = {
-        let button = UIButton()
-        button.setTitleColor(.black, for: .normal)
-        return button
-    }()
-    
-    var indexPath: IndexPath?
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        addSubview(button)
-        button.frame = bounds
-        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+    func collectionView(_ collectionView: UICollectionView, 
+                        itemsForBeginning session: UIDragSession,
+                        at indexPath: IndexPath) -> [UIDragItem] {
+        // 在開始拖動時提供拖動的項目
+        let item = self.days[indexPath.item]
+        let itemProvider = NSItemProvider(object: item as NSItemProviderWriting)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        return [dragItem]
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
+        // 返回true表示可以處理拖放
+        return session.localDragSession != nil
     }
     
-    func configure(with title: String, indexPath: IndexPath, tapHandler: @escaping () -> Void) {
-        button.setTitle(title, for: .normal)
-        self.indexPath = indexPath
-        buttonTapHandler = tapHandler
+    func collectionView(_ collectionView: UICollectionView, 
+                        dropSessionDidUpdate session: UIDropSession,
+                        withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        // 在拖放過程中更新，可以返回不同的操作（例如.move）
+        return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
     }
     
-    @objc private func buttonTapped() {
-        buttonTapHandler?()
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        // 實際處理拖放操作
+        if let destinationIndexPath = coordinator.destinationIndexPath {
+ 
+            var updatedIndexPaths = [IndexPath]()
+            collectionView.performBatchUpdates({
+                let item = coordinator.items[0]
+                if let sourceIndexPath = item.sourceIndexPath {
+                    guard sourceIndexPath.row < self.days.count - 1 else {
+                            // sourceIndexPath.row 超出範圍，不執行相應的代碼
+                            return
+                        }
+                    if sourceIndexPath.row != destinationIndexPath.row {
+                        
+                        let movedDay = self.days.remove(at: sourceIndexPath.item)
+                        self.days.insert(movedDay, at: destinationIndexPath.item)
+                        collectionView.moveItem(at: sourceIndexPath, to: destinationIndexPath)
+                        if sourceIndexPath.row <= self.onePlan.days.count - 1 {
+                            let dayData = self.onePlan.days[sourceIndexPath.row]
+                            self.onePlan.days.remove(at: sourceIndexPath.row)
+                            self.onePlan.days.insert(
+                                dayData, at: destinationIndexPath.row)
+                            updatedIndexPaths.append(destinationIndexPath)
+                            print("newDaysArray\(self.onePlan.days)")
+                            let firestoreMangerPostDay = FirestoreManagerForPostDay()
+                            firestoreMangerPostDay.postNewDaysArray(
+                                planId: travelPlanId,
+                                newDaysArray: self.onePlan.days) { error in
+                                if error != nil {
+                                    print("Failed to reorder the days")
+                                } else {
+                                    print("Reorder the days successfully!")
+                                    self.delegate?.reloadNewData()
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+            }, completion: { _ in
+                // 拖放操作動畫完成後，重新載入數據
+                collectionView.reloadData()
+            })
+        }
     }
 }

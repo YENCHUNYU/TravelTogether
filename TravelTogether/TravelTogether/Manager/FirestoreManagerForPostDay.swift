@@ -46,4 +46,128 @@ class FirestoreManagerForPostDay {
             }
         }
     }
+    
+    func postNewDaysArray2(planId: String, newDaysArray: [TravelDay], completion: @escaping (Error?) -> Void) {
+            let database = Firestore.firestore()
+            let travelPlanRef = database.collection("TravelPlan").document(planId)
+            print("newDaysArray!\(newDaysArray)")
+            travelPlanRef.setData(["days": newDaysArray], merge: false) { error in
+                if let error = error {
+                    print("Error setting document with new days array: \(error)")
+                    completion(error)
+                } else {
+                    self.delegate?.manager(self)
+                    completion(nil)
+                }
+            }
+        }
+    
+    func postNewDaysArray(planId: String, newDaysArray: [TravelDay], completion: @escaping (Error?) -> Void) {
+        let database = Firestore.firestore()
+        let travelPlanRef = database.collection("TravelPlan").document(planId)
+        
+//        travelPlanRef.getDocument { (document, error) in
+//            if let error = error {
+//                print("Error getting document: \(error)")
+//                completion(error)
+//                return
+//            }
+//            
+//            var updatedData: [String: Any] = [:]
+////            if let existingData = document?.data() {
+////                if var daysData = existingData["days"] as? [[String: Any]], !daysData.isEmpty {
+//                    
+////                    daysData.append(["locations": []] as? [String: [Location]] ?? ["locations": []])
+////                    updatedData["days"] = newDaysArray
+////            var updatedLocations: [[String: Any]] = []
+//            for location in locations {
+//                let locationData = location.dictionary
+////               updatedLocations.append(locationData)
+//            }
+//            for day in newDaysArray {
+//                let dayData = day.dictionary
+//            }
+//            // Update the locations array in the days array
+//            daysArray[dayIndex]["locations"] = updatedLocations
+//                    travelPlanRef.setData(updatedData, merge: true) { error in
+//                        if let error = error {
+//                            print("Error setting document: \(error)")
+//                            completion(error)
+//                        } else {
+//                            self.delegate?.manager(self)
+//                            completion(nil)
+//                        }
+//                    }
+////                }
+////            }
+//        }
+        
+        travelPlanRef.getDocument { document, error in
+            if let error = error {
+                print("Error getting document for updating locations order: \(error)")
+                completion(error)
+            } else {
+                do {
+                    guard var travelPlanData = document?.data() else {
+                        completion(nil)
+                        return
+                    }
+
+                    guard var daysArray = travelPlanData["days"] as? [[String: Any]] else {
+                        completion(nil)
+                        return
+                    }
+
+//                    guard var locationsArray = daysArray[dayIndex]["locations"] as? [[String: Any]] else {
+//                        completion(nil)
+//                        return
+//                    }
+
+                    // Update the order of locations based on newLocationsOrder
+//                    var updatedLocations: [[String: Any]] = []
+//                    for location in locations {
+//                        let locationData = location.dictionary
+//                        updatedLocations.append(locationData)
+//                    }
+//                   
+                    
+//                    var updatedDays : [[String: Any]] = []
+//                    for day in newDaysArray {
+//                        let dayData = day.dictionary
+//                        updatedDays.append(dayData)
+//                    }
+                    var updatedDays: [[String: Any]] = []
+
+                    for day in newDaysArray {
+                        var dayData = day.dictionary
+                        // 將 TravelDay 中的 locations 轉換為字典形式
+                        let updatedLocations: [[String: Any]] = day.locations.map { $0.dictionary }
+                        dayData["locations"] = updatedLocations
+                        updatedDays.append(dayData)
+                    }
+
+                    // updatedDays 現在包含了每個 TravelDay 的字典形式，其中 locations 已經轉換為字典
+
+                    // Update the locations array in the days array
+//                    for dayData in updatedDays {
+//                        let newDay = dayData["locations"]
+//                        
+//                    }
+//                    updatedDays[dayIndex]["locations"] = updatedLocations
+                    travelPlanData["days"] = updatedDays
+
+                    // Update the document in Firestore
+                    travelPlanRef.setData(travelPlanData, merge: true) { error in
+                        if let error = error {
+                            print("Error updating document after changing locations order: \(error)")
+                            completion(error)
+                        } else {
+                            print("Document updated successfully after changing locations order.")
+                            completion(nil)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
