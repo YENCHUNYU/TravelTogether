@@ -816,11 +816,69 @@
                     <connections>
                         <outlet property="tableView" destination="KzM-3f-P8b" id="rd9-xY-iH1"/>
                         <segue destination="yIW-p7-YMv" kind="show" identifier="goToCreate" id="HNF-ZE-dku"/>
+                        <segue destination="eMH-yr-NrG" kind="show" identifier="goToSelectDate" id="oaO-4q-PeN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ot3-pS-OxO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="559.5419847328244" y="3376.7605633802818"/>
+        </scene>
+        <!--Select Date View Controller-->
+        <scene sceneID="2Dd-kc-rMQ">
+            <objects>
+                <viewController id="eMH-yr-NrG" customClass="SelectDateViewController" customModule="TravelTogether" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="tYR-c9-z8C">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="kOW-kB-MsW">
+                                <rect key="frame" x="0.0" y="103" width="393" height="666"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SelectDateCell" id="5FN-KE-mI2" customClass="SelectDateCell" customModule="TravelTogether" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="393" height="43.666667938232422"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5FN-KE-mI2" id="YnB-Zd-4OK">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="第1天" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xCG-Pu-tqw">
+                                                    <rect key="frame" x="20.000000000000004" y="11.333333333333336" width="42.333333333333343" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="xCG-Pu-tqw" firstAttribute="centerY" secondItem="YnB-Zd-4OK" secondAttribute="centerY" id="VGQ-c1-nYn"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="xCG-Pu-tqw" secondAttribute="trailing" constant="20" id="xeE-y1-xMZ"/>
+                                                <constraint firstItem="xCG-Pu-tqw" firstAttribute="leading" secondItem="YnB-Zd-4OK" secondAttribute="leading" constant="20" id="y1s-V7-ib2"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="dateLabel" destination="xCG-Pu-tqw" id="Vm6-mm-zus"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="UgN-Z4-5e3"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="kOW-kB-MsW" firstAttribute="leading" secondItem="UgN-Z4-5e3" secondAttribute="leading" id="013-4z-BUh"/>
+                            <constraint firstItem="UgN-Z4-5e3" firstAttribute="trailing" secondItem="kOW-kB-MsW" secondAttribute="trailing" id="Lb3-hL-dyd"/>
+                            <constraint firstItem="kOW-kB-MsW" firstAttribute="top" secondItem="UgN-Z4-5e3" secondAttribute="top" id="Wjz-ah-Dpr"/>
+                            <constraint firstItem="UgN-Z4-5e3" firstAttribute="bottom" secondItem="kOW-kB-MsW" secondAttribute="bottom" id="wIB-QW-Hw2"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="c5D-8W-6p7"/>
+                    <connections>
+                        <outlet property="tableView" destination="kOW-kB-MsW" id="A85-pk-vFl"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wEx-Ql-59d" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1546" y="3837"/>
         </scene>
         <!--Create Plan View Controller-->
         <scene sceneID="fOw-59-ooz">
@@ -909,7 +967,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s01-Dm-gG1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1689.3129770992366" y="3376.7605633802818"/>
+            <point key="canvasLocation" x="1546" y="3163"/>
         </scene>
         <!--我的回憶-->
         <scene sceneID="cN8-xe-Dy7">
@@ -1421,7 +1479,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="YW6-3X-aMv"/>
+        <segue reference="HNF-ZE-dku"/>
         <segue reference="jsr-wJ-nje"/>
     </inferredMetricsTieBreakers>
     <resources>

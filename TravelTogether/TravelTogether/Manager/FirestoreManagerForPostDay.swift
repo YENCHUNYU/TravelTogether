@@ -16,7 +16,7 @@ class FirestoreManagerForPostDay {
     
     var delegate: FirestoreManagerForPostDayDelegate?
     
-    func addDayToTravelPlan(planId: String, day: Int, completion: @escaping (Error?) -> Void) {
+    func addDayToTravelPlan(planId: String, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
         let travelPlanRef = database.collection("TravelPlan").document(planId)
         
@@ -32,23 +32,7 @@ class FirestoreManagerForPostDay {
                 if var daysData = existingData["days"] as? [[String: Any]], !daysData.isEmpty {
                     
                     daysData.append(["locations": []] as? [String: [Location]] ?? ["locations": []])
-                    //                    if var locations = daysData.last?["locations"] as? [[String: Any]] {
-                    //                        locations.append([:])
-                    //                        daysData[daysData.count - 1]["locations"] = locations
                     updatedData["days"] = daysData
-                    //                    }
-                    //                } else {
-                    //                    updatedData = [
-                    //                        "days": [
-                    //                            [
-                    //                                "locations": [
-                    //                                    [
-                    //                                    ]
-                    //                                ]
-                    //                            ]
-                    //                        ]
-                    //                    ]
-                    //                }
                     travelPlanRef.setData(updatedData, merge: true) { error in
                         if let error = error {
                             print("Error setting document: \(error)")

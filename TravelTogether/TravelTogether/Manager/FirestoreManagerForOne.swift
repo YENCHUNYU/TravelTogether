@@ -78,7 +78,9 @@ class FirestoreManagerForOne {
 
 extension FirestoreManagerForOne {
 
-    func deleteLocationFromTravelPlan(travelPlanId: String, dayIndex: Int, location: Location, completion: @escaping (Error?) -> Void) {
+    func deleteLocationFromTravelPlan(
+        travelPlanId: String, dayIndex: Int, location: Location,
+        completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
         let travelPlanRef = database.collection("TravelPlan").document(travelPlanId)
 

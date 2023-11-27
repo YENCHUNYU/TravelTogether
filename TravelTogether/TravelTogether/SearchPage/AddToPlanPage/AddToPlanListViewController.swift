@@ -85,17 +85,29 @@ extension AddToPlanListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         planId = plans[indexPath.row].id
-        let firestorePostLocation = FirestoreManagerForPostLocation()
-        firestorePostLocation.delegate = self
-        firestorePostLocation.addLocationToTravelPlan(planId: planId, location: location, day: 0) { error in
-            if let error = error {
-                print("Error posting location: \(error)")
-            } else {
-                print("Location posted successfully!")
+        performSegue(withIdentifier: "goToSelectDate", sender: self)
+            // 以下還要用
+//        let firestorePostLocation = FirestoreManagerForPostLocation()
+//        firestorePostLocation.delegate = self
+//        firestorePostLocation.addLocationToTravelPlan(planId: planId, location: location, day: 0) { error in
+//            if let error = error {
+//                print("Error posting location: \(error)")
+//            } else {
+//                print("Location posted successfully!")
+//            }
+//        }
+//        self.dismiss(animated: true)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToSelectDate" {
+            if let destinationVC = segue.destination as? SelectDateViewController {
+                destinationVC.planId = self.planId
+                destinationVC.location = self.location
             }
         }
-        self.dismiss(animated: true)
     }
+    
 // FOOTER
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         guard let view = tableView.dequeueReusableHeaderFooterView(

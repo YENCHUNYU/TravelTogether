@@ -58,7 +58,7 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
     func addNewDayButtonTapped() {
         let firestoreManager = FirestoreManagerForPostDay()
         firestoreManager.delegate = self
-        firestoreManager.addDayToTravelPlan(planId: travelPlanId, day: days.count - 1) { error in
+        firestoreManager.addDayToTravelPlan(planId: travelPlanId) { error in
             if let error = error {
                 print("Error posting day: \(error)")
             } else {
