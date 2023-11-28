@@ -18,7 +18,7 @@ class FirebaseStorageManagerDownloadPhotos {
     
     func downloadPhotoFromFirebaseStorage(url: URL, completion: @escaping (UIImage?) -> Void) {
         let storageReference = Storage.storage().reference(forURL: url.absoluteString)
-        storageReference.getData(maxSize: 1 * 1024 * 1024) { data, error in
+        storageReference.getData(maxSize: 1 * 1050 * 1050) { data, error in
             if let error = error {
                 print("Error downloading photo from Firebase Storage: \(error.localizedDescription)")
                 completion(nil)

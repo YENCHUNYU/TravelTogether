@@ -94,6 +94,8 @@ extension ProfileViewController: UITableViewDataSource {
                             }
                         }
                     }
+                } else {
+                    cell.profileImageView.image = UIImage(named: "Image_Placeholder")
                 }
             }
             return cell
