@@ -20,10 +20,7 @@ class EditPlanViewController: UIViewController {
         startDate: Date(), endDate: Date(), days: [])
     var travelPlanId = ""
     var dayCounts = 1
-    var selectedSectionForAddLocation = 0
-//    var selectedSectionForChangeOrder = 0
-//    var selectedRow = 0
-//    var selectedRowOfSection = 0
+    var selectedSectionForAddLocation = 0 // 新增景點
     var days: [String] = ["第1天", "＋"]
     let headerView = EditPlanHeaderView(reuseIdentifier: "EditPlanHeaderView")
     
@@ -208,7 +205,9 @@ extension EditPlanViewController: UITableViewDelegate {
                    commit editingStyle: UITableViewCell.EditingStyle,
                    forRowAt indexPath: IndexPath) {
             if editingStyle == .delete {
+               
                 let deletedLocation = onePlan.days[indexPath.section].locations.remove(at: indexPath.row)
+               
                 let firestoreManagerForOne = FirestoreManagerForOne()
                 firestoreManagerForOne.delegate = self
                 firestoreManagerForOne.deleteLocationFromTravelPlan(
@@ -218,9 +217,11 @@ extension EditPlanViewController: UITableViewDelegate {
                         print("Error deleting location from Firestore: \(error)")
                     } else {
                         print("Location deleted successfully from Firestore.")
-//                        self.onePlan.days[indexPath.section].locations.remove(at: indexPath.row)
-                        tableView.deleteRows(at: [indexPath], with: .fade)
-                      
+
+//                        DispatchQueue.main.async {
+//                            tableView.deleteRows(at: [indexPath], with: .fade)
+                        tableView.reloadData()
+//                        }
                     }
                 }
             }
@@ -339,7 +340,8 @@ extension EditPlanViewController: UITableViewDropDelegate {
                                     firestoreMangerPostLocation.updateLocationsOrder(
                                         travelPlanId: self.travelPlanId,
                                         dayIndex: destinationIndexPath.section,
-                                        newLocationsOrder: self.onePlan.days[destinationIndexPath.section].locations) { error in
+                                        newLocationsOrder: self.onePlan.days[
+                                            destinationIndexPath.section].locations) { error in
                                             if error != nil {
                                                 print("Failed to reorder the locations")
                                             } else {
