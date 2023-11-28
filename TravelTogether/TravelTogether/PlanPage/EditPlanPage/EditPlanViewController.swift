@@ -185,7 +185,7 @@ extension EditPlanViewController: UITableViewDataSource {
                    print("Error deleting section from Firestore: \(error)")
                } else {
                    print("Section deleted successfully from Firestore.")
-                   self.tableView.deleteSections(IndexSet(integer: index), with: .fade)
+//                   self.tableView.deleteSections(IndexSet(integer: index), with: .fade)
                    self.tableView.reloadData()
                    self.headerView.days = self.days
                    self.headerView.collectionView.reloadData()

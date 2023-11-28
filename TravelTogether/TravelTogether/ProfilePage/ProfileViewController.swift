@@ -82,22 +82,26 @@ extension ProfileViewController: UITableViewDataSource {
             if daysData.isEmpty == false {
                 let locationData = daysData[0]
                 let theLocation = locationData.locations
-                let urlString = theLocation[0].photo
-                if let url = URL(string: urlString) {
-                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-                        DispatchQueue.main.async {
-                            if let image = image {
-                                cell.profileImageView.image = image
-                            } else {
-                                cell.profileImageView.image = UIImage(named: "Image_Placeholder")
+                if theLocation.isEmpty == false {
+                    let urlString = theLocation[0].photo
+                    if let url = URL(string: urlString) {
+                        let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
+                        firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
+                            DispatchQueue.main.async {
+                                if let image = image {
+                                    cell.profileImageView.image = image
+                                } else {
+                                    cell.profileImageView.image = UIImage(named: "Image_Placeholder")
+                                }
                             }
                         }
+                    } else {
+                        cell.profileImageView.image = UIImage(named: "Image_Placeholder")
                     }
+                    
                 } else {
                     cell.profileImageView.image = UIImage(named: "Image_Placeholder")
-                }
-            }
+                }}
             return cell
         }
     }
