@@ -143,7 +143,8 @@ extension EditPlanHeaderView: UICollectionViewDragDelegate, UICollectionViewDrop
         return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
     }
     
-    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+    func collectionView(_ collectionView: UICollectionView, 
+                        performDropWith coordinator: UICollectionViewDropCoordinator) {
         // 實際處理拖放操作
         if let destinationIndexPath = coordinator.destinationIndexPath {
  
@@ -151,7 +152,8 @@ extension EditPlanHeaderView: UICollectionViewDragDelegate, UICollectionViewDrop
             collectionView.performBatchUpdates({
                 let item = coordinator.items[0]
                 if let sourceIndexPath = item.sourceIndexPath {
-                    guard sourceIndexPath.row < self.days.count - 1 else {
+                    guard sourceIndexPath.row < self.days.count - 1,
+                          destinationIndexPath.row < self.days.count - 1 else {
                             // sourceIndexPath.row 超出範圍，不執行相應的代碼
                             return
                         }
@@ -166,7 +168,7 @@ extension EditPlanHeaderView: UICollectionViewDragDelegate, UICollectionViewDrop
                             self.onePlan.days.insert(
                                 dayData, at: destinationIndexPath.row)
                             updatedIndexPaths.append(destinationIndexPath)
-                            print("newDaysArray\(self.onePlan.days)")
+                           
                             let firestoreMangerPostDay = FirestoreManagerForPostDay()
                             firestoreMangerPostDay.postNewDaysArray(
                                 planId: travelPlanId,
@@ -184,7 +186,11 @@ extension EditPlanHeaderView: UICollectionViewDragDelegate, UICollectionViewDrop
                 }
             }, completion: { _ in
                 // 拖放操作動畫完成後，重新載入數據
-                collectionView.reloadData()
+                DispatchQueue.main.async {
+                   
+                   self.collectionView.reloadData()
+               }
+//                collectionView.reloadData()
             })
         }
     }

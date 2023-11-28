@@ -20,9 +20,10 @@ class EditPlanViewController: UIViewController {
         startDate: Date(), endDate: Date(), days: [])
     var travelPlanId = ""
     var dayCounts = 1
-    var selectedSection = 0
+    var selectedSectionForAddLocation = 0
+//    var selectedSectionForChangeOrder = 0
 //    var selectedRow = 0
-    var selectedRowOfSection = 0
+//    var selectedRowOfSection = 0
     var days: [String] = ["第1天", "＋"]
     let headerView = EditPlanHeaderView(reuseIdentifier: "EditPlanHeaderView")
     
@@ -132,7 +133,7 @@ extension EditPlanViewController: UITableViewDataSource {
     }
   
     @objc func addNewLocationButtonTapped(_ sender: UIButton) {
-        selectedSection = sender.tag
+        selectedSectionForAddLocation = sender.tag
         performSegue(withIdentifier: "goToMapFromEditPlan", sender: self)
         }
     
@@ -142,7 +143,7 @@ extension EditPlanViewController: UITableViewDataSource {
             if let destinationVC = segue.destination as? MapViewController {
                 destinationVC.isFromSearch = false
                 destinationVC.travelPlanId = travelPlanId
-                destinationVC.selectedSection = selectedSection
+                destinationVC.selectedSection = selectedSectionForAddLocation
             }
         }
     }
@@ -194,11 +195,6 @@ extension EditPlanViewController: UITableViewDataSource {
                }
            }
        }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        selectedRow = indexPath.row
-        selectedRowOfSection = indexPath.section
-    }
 }
 
 extension EditPlanViewController: UITableViewDelegate {
@@ -255,6 +251,7 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
                 self.headerView.days = self.days
 //                self.headerView.onePlan = self.onePlan
 //                self.headerView.collectionView.reloadData()
+               
                 self.tableView.reloadData()
             } else {
                 print("One travel plan not found.")
@@ -306,9 +303,9 @@ extension EditPlanViewController: UITableViewDropDelegate {
                switch (coordinator.items.first?.sourceIndexPath, coordinator.destinationIndexPath) {
                case let (sourceIndexPath?, destinationIndexPath?):
                    if sourceIndexPath.row != destinationIndexPath.row {
-                       let locationData = self.onePlan.days[self.selectedSection].locations[sourceIndexPath.row]
-                       self.onePlan.days[self.selectedSection].locations.remove(at: sourceIndexPath.row)
-                       self.onePlan.days[self.selectedSection].locations.insert(
+                       let locationData = self.onePlan.days[sourceIndexPath.section].locations[sourceIndexPath.row]
+                       self.onePlan.days[sourceIndexPath.section].locations.remove(at: sourceIndexPath.row)
+                       self.onePlan.days[sourceIndexPath.section].locations.insert(
                         locationData, at: destinationIndexPath.row)
                        updatedIndexPaths.append(destinationIndexPath)
                        self.tableView.moveRow(at: sourceIndexPath, to: destinationIndexPath)
@@ -316,8 +313,8 @@ extension EditPlanViewController: UITableViewDropDelegate {
                        let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
                        firestoreMangerPostLocation.updateLocationsOrder(
                         travelPlanId: self.travelPlanId, 
-                        dayIndex: self.selectedSection,
-                        newLocationsOrder: self.onePlan.days[self.selectedSection].locations) { error in
+                        dayIndex: sourceIndexPath.section,
+                        newLocationsOrder: self.onePlan.days[sourceIndexPath.section].locations) { error in
                             if error != nil {
                                print("Failed to reorder the locations")
                            } else {
