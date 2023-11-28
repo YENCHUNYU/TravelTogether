@@ -297,42 +297,62 @@ extension EditPlanViewController: UITableViewDropDelegate {
     }
     
     func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
-
-           coordinator.session.loadObjects(ofClass: NSString.self) { _ in
-               var updatedIndexPaths = [IndexPath]()
-               switch (coordinator.items.first?.sourceIndexPath, coordinator.destinationIndexPath) {
-               case let (sourceIndexPath?, destinationIndexPath?):
-                   if sourceIndexPath.row != destinationIndexPath.row {
-                       let locationData = self.onePlan.days[sourceIndexPath.section].locations[sourceIndexPath.row]
-                       self.onePlan.days[sourceIndexPath.section].locations.remove(at: sourceIndexPath.row)
-                       self.onePlan.days[sourceIndexPath.section].locations.insert(
-                        locationData, at: destinationIndexPath.row)
-                       updatedIndexPaths.append(destinationIndexPath)
-                       self.tableView.moveRow(at: sourceIndexPath, to: destinationIndexPath)
-                       
-                       let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
-                       firestoreMangerPostLocation.updateLocationsOrder(
-                        travelPlanId: self.travelPlanId, 
-                        dayIndex: sourceIndexPath.section,
-                        newLocationsOrder: self.onePlan.days[sourceIndexPath.section].locations) { error in
-                            if error != nil {
-                               print("Failed to reorder the locations")
-                           } else {
-                               print("Reorder the locations successfully!")
-                           }
-                           
-                       }
-                   }
-               default:
-                   break
-               }
-           }
-       }
-
+        coordinator.session.loadObjects(ofClass: NSString.self) { _ in
+            var updatedIndexPaths = [IndexPath]()
+            switch (coordinator.items.first?.sourceIndexPath, coordinator.destinationIndexPath) {
+            case let (sourceIndexPath?, destinationIndexPath?):
+                if sourceIndexPath.section == destinationIndexPath.section {
+                    if sourceIndexPath.row != destinationIndexPath.row {
+                        let locationData = self.onePlan.days[sourceIndexPath.section].locations[sourceIndexPath.row]
+                        self.onePlan.days[sourceIndexPath.section].locations.remove(at: sourceIndexPath.row)
+                        self.onePlan.days[sourceIndexPath.section].locations.insert(
+                            locationData, at: destinationIndexPath.row)
+                        updatedIndexPaths.append(destinationIndexPath)
+                        self.tableView.moveRow(at: sourceIndexPath, to: destinationIndexPath)
+                        let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
+                        firestoreMangerPostLocation.updateLocationsOrder(
+                            travelPlanId: self.travelPlanId,
+                            dayIndex: sourceIndexPath.section,
+                            newLocationsOrder: self.onePlan.days[sourceIndexPath.section].locations) { error in
+                                if error != nil {
+                                    print("Failed to reorder the locations")
+                                } else {
+                                    print("Reorder the locations successfully!")} }
+                    }} else {
+                        let locationData = self.onePlan.days[sourceIndexPath.section].locations[sourceIndexPath.row]
+                        self.onePlan.days[sourceIndexPath.section].locations.remove(at: sourceIndexPath.row)
+                        tableView.reloadData()
+                        let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
+                        firestoreMangerPostLocation.updateLocationsOrder(
+                            travelPlanId: self.travelPlanId,
+                            dayIndex: sourceIndexPath.section,
+                            newLocationsOrder: self.onePlan.days[sourceIndexPath.section].locations) { error in
+                                if error != nil {
+                                    print("Failed to reorder the locations")
+                                } else {
+                                    print("Reorder the locations successfully!")
+                                    self.onePlan.days[destinationIndexPath.section].locations.insert(
+                                        locationData, at: destinationIndexPath.row)
+                                    updatedIndexPaths.append(destinationIndexPath)
+                                    self.tableView.reloadData()
+                                    
+                                    firestoreMangerPostLocation.updateLocationsOrder(
+                                        travelPlanId: self.travelPlanId,
+                                        dayIndex: destinationIndexPath.section,
+                                        newLocationsOrder: self.onePlan.days[destinationIndexPath.section].locations) { error in
+                                            if error != nil {
+                                                print("Failed to reorder the locations")
+                                            } else {
+                                                print("Reorder the locations successfully!")
+                                            } }} } }
+            default:
+                break
+            }}}
+        
         func tableView(
             _ tableView: UITableView,
             dropSessionDidUpdate session: UIDropSession,
             withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
-            return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-        }
+                return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+            }
 }
