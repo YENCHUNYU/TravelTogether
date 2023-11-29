@@ -75,23 +75,25 @@ class GooglePlacesManager {
 
         client.fetchPlace(fromPlaceID: placeId,
                                  placeFields: fields,
-                                 sessionToken: nil, callback: { (place: GMSPlace?, error: Error?) in
-          if let error = error {
-            print("An error occurred: \(error.localizedDescription)")
-            return
-          }
-          if let place = place {
-            let photoMetadata: GMSPlacePhotoMetadata = place.photos![0]
-            self.client.loadPlacePhoto(photoMetadata, callback: { (photo, error) in
-              if let error = error {
-                  completion(.failure(PlacesError.failedToFetchMapPhotos))
-                print("Error loading photo metadata: \(error.localizedDescription)")
+                          sessionToken: nil, callback: { (place: GMSPlace?, error: Error?) in
+            if let error = error {
+                print("An error occurred: \(error.localizedDescription)")
                 return
-              } else {
-                  completion(.success((photo ?? UIImage(named: "Image_Placeholder")) ?? UIImage()))
-              }
-            })
-          }
+            }
+            if let place = place {
+                if place.photos?.isEmpty == false {
+                let photoMetadata: GMSPlacePhotoMetadata = place.photos![0]
+                self.client.loadPlacePhoto(photoMetadata, callback: { (photo, error) in
+                    if let error = error {
+                        completion(.failure(PlacesError.failedToFetchMapPhotos))
+                        print("Error loading photo metadata: \(error.localizedDescription)")
+                        return
+                    } else {
+                        completion(.success((photo ?? UIImage(named: "Image_Placeholder")) ?? UIImage()))
+                    }
+                })
+                } 
+        }
         })
     }
 } // class

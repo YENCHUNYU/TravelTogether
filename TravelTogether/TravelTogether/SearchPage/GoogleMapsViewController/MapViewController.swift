@@ -20,6 +20,45 @@ class MapViewController: UIViewController {
     var isFromSearch = true
     var travelPlanId = ""
     var selectedSection = 0
+    var spotsPhotoUrl = ""
+       
+    var mapInfoView: UIView = {
+        let mapInfo = UIView()
+        mapInfo.translatesAutoresizingMaskIntoConstraints = false
+        mapInfo.backgroundColor = .white
+        mapInfo.layer.cornerRadius = 20
+        return mapInfo
+    }()
+    
+    var placeNameLabel: UILabel = {
+        let name = UILabel()
+        name.translatesAutoresizingMaskIntoConstraints = false
+        return name
+    }()
+    
+    var placeImageView: UIImageView = {
+        let image = UIImageView()
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    
+    var addressLabel: UILabel = {
+        let address = UILabel()
+        address.translatesAutoresizingMaskIntoConstraints = false
+        address.numberOfLines = 0
+        address.font = UIFont.systemFont(ofSize: 16, weight: .light)
+        return address
+    }()
+    
+    var addToPlanButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("加入行程", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.addTarget(self, action: #selector(addToPlanButtonTapped), for: .touchUpInside)
+        return button
+    }()
+    
 }
 
 // MARK: - Lifecycle
@@ -32,7 +71,45 @@ extension MapViewController {
 
       searchVC.searchResultsUpdater = self
       navigationItem.searchController = searchVC
+      
+      mapView.addSubview(mapInfoView)
+      mapInfoView.addSubview(placeImageView)
+      mapInfoView.addSubview(addToPlanButton)
+      mapInfoView.addSubview(placeNameLabel)
+      mapInfoView.addSubview(addressLabel)
+      setUpUI()
+      mapInfoView.isHidden = true
+    
   }
+    
+    func setUpUI() {
+        mapInfoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
+        mapInfoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
+        mapInfoView.bottomAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
+        mapInfoView.heightAnchor.constraint(equalToConstant: 170).isActive = true
+        
+        placeImageView.leadingAnchor.constraint(equalTo: mapInfoView.leadingAnchor, constant: 10).isActive = true
+        placeImageView.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        placeImageView.heightAnchor.constraint(equalTo: placeImageView.widthAnchor, multiplier: 3/4).isActive = true
+        placeImageView.topAnchor.constraint(equalTo: mapInfoView.topAnchor, constant: 10).isActive = true
+        
+        addToPlanButton.leadingAnchor.constraint(equalTo: placeImageView.trailingAnchor, constant: 15).isActive = true
+        addToPlanButton.trailingAnchor.constraint(
+            lessThanOrEqualTo: mapInfoView.trailingAnchor, constant: -15).isActive = true
+        addToPlanButton.topAnchor.constraint(equalTo: mapInfoView.topAnchor, constant: 15).isActive = true
+        
+        placeNameLabel.leadingAnchor.constraint(equalTo: placeImageView.trailingAnchor, constant: 15).isActive = true
+        placeNameLabel.trailingAnchor.constraint(
+            lessThanOrEqualTo: mapInfoView.trailingAnchor, constant: -15).isActive = true
+        placeNameLabel.topAnchor.constraint(equalTo: addToPlanButton.bottomAnchor, constant: 10).isActive = true
+        
+        addressLabel.leadingAnchor.constraint(equalTo: placeImageView.trailingAnchor, constant: 15).isActive = true
+        addressLabel.trailingAnchor.constraint(
+            lessThanOrEqualTo: mapInfoView.trailingAnchor, constant: -15).isActive = true
+        addressLabel.topAnchor.constraint(equalTo: placeNameLabel.bottomAnchor, constant: 10).isActive = true
+        
+    }
 }
 
 // MARK: - CLLocationManagerDelegate
@@ -99,17 +176,19 @@ extension MapViewController: UISearchResultsUpdating {
         }
     }
     
-    func updateMapInfo(with place: Place) {
-            mapInfoViewController?.places = place
-            mapInfoViewController?.updateContent()
-        }
+//    func updateMapInfo(with place: Place) {
+//            mapInfoViewController?.places = place
+//            mapInfoViewController?.updateContent()
+//        }
 }
 
 extension MapViewController: MapListViewControllerDelegate {
     func didTapPlace(with coordinates: CLLocationCoordinate2D, indexPath: IndexPath) {
+        mapInfoView.isHidden = false
+        
         //  remove keyboard
         searchVC.searchBar.resignFirstResponder()
-        updateMapInfo(with: placesData[indexPath.row])
+//        updateMapInfo(with: placesData[indexPath.row])
         // remove
         mapView.clear()
         // add
@@ -121,19 +200,34 @@ extension MapViewController: MapListViewControllerDelegate {
         let camera = GMSCameraPosition.camera(withTarget: coordinates, zoom: 15.0)
         mapView.animate(to: camera)
         
-        if mapInfoViewController == nil {
-        mapInfoViewController = storyboard?.instantiateViewController(
-            withIdentifier: "MapInfoViewController") as? MapInfoViewController
-        mapInfoViewController?.places = placesData[indexPath.row]
-        mapInfoViewController?.isFromSearch = isFromSearch
-        addChild(mapInfoViewController!)
-        view.addSubview(mapInfoViewController!.view)
-        mapInfoViewController?.didMove(toParent: self)
-        mapInfoViewController?.travelPlanId = travelPlanId
-            print("wwww\(selectedSection)")
-        mapInfoViewController?.selectedDay = selectedSection
+        //        if mapInfoViewController == nil {
+        //        mapInfoViewController = storyboard?.instantiateViewController(
+        //            withIdentifier: "MapInfoViewController") as? MapInfoViewController
+        //        mapInfoViewController?.places = placesData[indexPath.row]
+        //        mapInfoViewController?.isFromSearch = isFromSearch
+        //        addChild(mapInfoViewController!)
+        //        view.addSubview(mapInfoViewController!.view)
+        //        mapInfoViewController?.didMove(toParent: self)
+        //        mapInfoViewController?.travelPlanId = travelPlanId
+        //
+        //        mapInfoViewController?.selectedDay = selectedSection
+        //        }
+        
+        //        mapInfoView.isHidden = false
+        placeNameLabel.text = placesData[indexPath.row].name
+        addressLabel.text = placesData[indexPath.row].address
+        GooglePlacesManager.shared.fetchMapPhoto(for: placesData[indexPath.row].identifier) { result in
+            switch result {
+            case .success(let photo):
+                print("fetching photo")
+                self.placeImageView.image = photo
+            case .failure(let error):
+                print(error)
+            }
+            
         }
-    }}
+    }
+}
     
 extension MapViewController: UIViewControllerTransitioningDelegate {
     func presentationController(
@@ -150,5 +244,99 @@ class MapInfoPresentationController: UIPresentationController {
 
         let height: CGFloat = containerView.bounds.height / 2.0
         return CGRect(x: 0, y: containerView.bounds.height - height, width: containerView.bounds.width, height: height)
+    }
+}
+
+extension MapViewController {
+    @objc func addToPlanButtonTapped(sender: UIButton) {
+        if isFromSearch {
+            let firebaseStorageManager = FirebaseStorageManagerUploadPhotos()
+            firebaseStorageManager.delegate = self
+            firebaseStorageManager.uploadPhotoToFirebaseStorage(
+                image: self.placeImageView.image ?? UIImage()) { uploadResult in
+                        switch uploadResult {
+                        case .success(let downloadURL):
+                            print("Upload to Firebase Storage successful. Download URL: \(downloadURL)")
+                            self.spotsPhotoUrl = downloadURL.absoluteString
+                        case .failure(let error):
+                            print("Error uploading to Firebase Storage: \(error.localizedDescription)")
+                        }
+                    }
+            performSegue(withIdentifier: "goToPlanList", sender: sender)
+        } else {
+            
+            let firestoreManagerPostLocation = FirestoreManagerForPostLocation()
+            firestoreManagerPostLocation.delegate = self
+            
+            let firebaseStorageManager = FirebaseStorageManagerUploadPhotos()
+            firebaseStorageManager.delegate = self
+            firebaseStorageManager.uploadPhotoToFirebaseStorage(
+                image: self.placeImageView.image ?? UIImage()) { uploadResult in
+                switch uploadResult {
+                case .success(let downloadURL):
+                    print("Upload to Firebase Storage successful. Download URL: \(downloadURL)")
+                    self.spotsPhotoUrl = downloadURL.absoluteString
+                    let theLocation = Location(
+                        name: "\(String(describing: self.placeNameLabel.text ?? "") )", photo: self.spotsPhotoUrl,
+                        address: "\(String(describing: self.addressLabel.text ?? ""))")
+                    firestoreManagerPostLocation.addLocationToTravelPlan(
+                        planId: self.travelPlanId, location: theLocation, day: self.selectedSection) { error in
+                        if let error = error {
+                            print("Error posting travel plan: \(error)")
+                        } else {
+                            print("Travel plan posted for day successfully!")
+                            if let navigationController = self.navigationController {
+                             let viewControllers = navigationController.viewControllers
+                             if viewControllers.count >= 2 {
+                                 let targetViewController = viewControllers[viewControllers.count - 2]
+                                 navigationController.popToViewController(targetViewController, animated: true)
+                                             }
+                                         }
+                        }
+                    }
+                case .failure(let error):
+                    print("Error uploading to Firebase Storage: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToPlanList" {
+                guard let navigationController = segue.destination as? UINavigationController,
+                      let destinationVC = navigationController.viewControllers.first
+                        as? AddToPlanListViewController else {
+                    fatalError("Cannot access AddToPlanListViewController")
+                }
+            destinationVC.location = Location(
+                name: "\(String(describing: self.placeNameLabel.text ?? "") )", photo: self.spotsPhotoUrl,
+                address: "\(String(describing: self.addressLabel.text ?? ""))")
+            }
+    }
+    // 如果再搜尋一次景點就再更新mapinfo
+//    func updateContent() {
+//        placeNameLabel.text = placesData[indexPath.row].name
+//        
+//        GooglePlacesManager.shared.fetchMapPhoto(for: places.identifier) { result in
+//            switch result {
+//            case .success(let photo):
+//                print("fetching photo")
+//                self.placeImageView.image = photo
+//            case .failure(let error):
+//                print(error)
+//            }
+//            
+//        }
+//    }
+}
+
+extension MapViewController: FirebaseStorageManagerDelegate {
+    func manager(_ manager: FirebaseStorageManagerUploadPhotos) {
+    }
+}
+
+extension MapViewController: FirestoreManagerForPostLocationDelegate {
+    func manager(_ manager: FirestoreManagerForPostLocation, didPost firestoreData: Location) {
     }
 }

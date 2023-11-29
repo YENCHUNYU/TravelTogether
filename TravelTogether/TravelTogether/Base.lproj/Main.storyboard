@@ -672,6 +672,7 @@
                     <connections>
                         <outlet property="mapView" destination="dlu-FS-Uz4" id="qZG-3N-c5b"/>
                         <segue destination="Tzb-HB-Rog" kind="show" identifier="goToMapList" id="hnG-tk-KsU"/>
+                        <segue destination="5Hi-ry-ksQ" kind="show" identifier="goToPlanList" id="m6R-AB-Kvs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FzH-th-Ibi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -687,13 +688,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fMp-YY-uAZ">
-                                <rect key="frame" x="20" y="123" width="48" height="24"/>
+                                <rect key="frame" x="20" y="79" width="48" height="24"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y6Y-1M-JQd">
-                                <rect key="frame" x="269" y="113" width="104" height="35"/>
+                                <rect key="frame" x="269" y="69" width="104" height="35"/>
                                 <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
@@ -703,7 +704,7 @@
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Z8q-c8-CKc">
-                                <rect key="frame" x="20" y="162" width="350" height="197"/>
+                                <rect key="frame" x="20" y="118" width="350" height="197"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="350" id="9uV-sz-c8E"/>
                                     <constraint firstAttribute="width" secondItem="Z8q-c8-CKc" secondAttribute="height" multiplier="16:9" id="zaj-Vx-pgq"/>
@@ -728,7 +729,6 @@
                         <outlet property="addToPlanButton" destination="y6Y-1M-JQd" id="n5Y-H9-vwc"/>
                         <outlet property="placeImageView" destination="Z8q-c8-CKc" id="TVC-xi-xhu"/>
                         <outlet property="placeNameLabel" destination="fMp-YY-uAZ" id="4DA-h2-O0a"/>
-                        <segue destination="5Hi-ry-ksQ" kind="show" identifier="goToPlanList" id="naa-17-YSx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mCw-b8-YPb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -746,13 +746,10 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="DXO-me-Mqu"/>
-                    <connections>
-                        <segue destination="M2B-0j-91P" kind="show" identifier="goToMapInfo" id="N6n-mq-GCP"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e1C-O3-TcI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-979" y="2753"/>
+            <point key="canvasLocation" x="-1259" y="2808"/>
         </scene>
         <!--Add To Plan List View Controller-->
         <scene sceneID="tm2-dJ-Mrz">
@@ -1475,7 +1472,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jYJ-UZ-NXE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-367.17557251908397" y="3376.7605633802818"/>
+            <point key="canvasLocation" x="-260" y="3405"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
