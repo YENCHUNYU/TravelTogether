@@ -1,26 +1,25 @@
 //
-//  addToPlanListViewController.swift
+//  SelectPlanPage.swift
 //  TravelTogether
 //
-//  Created by User on 2023/11/17.
+//  Created by User on 2023/11/30.
 //
 
 import UIKit
 import FirebaseFirestore
 
-class AddToPlanListViewController: UIViewController {
+class SelectPlanViewController: UIViewController {
 
     var plans: [TravelPlan] = []
     var location = Location(name: "", photo: "", address: "")
     var planId = ""
 
     @IBOutlet weak var tableView: UITableView!
-        
+    
         override func viewDidLoad() {
             super.viewDidLoad()
             tableView.dataSource = self
             tableView.delegate = self
-            tableView.register(AddToListFooterView.self, forHeaderFooterViewReuseIdentifier: "AddToListFooterView")
            
             let firestoreManager = FirestoreManager()
             firestoreManager.delegate = self
@@ -32,7 +31,7 @@ class AddToPlanListViewController: UIViewController {
                     self.plans = travelPlans ?? []
                     self.tableView.reloadData()
                 }
-            }          
+            }
         }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,7 +49,7 @@ class AddToPlanListViewController: UIViewController {
     }
     }
 
-extension AddToPlanListViewController: UITableViewDataSource {
+extension SelectPlanViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         plans.count
     }
@@ -58,9 +57,9 @@ extension AddToPlanListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     
             guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "AddToListCell", for: indexPath) as? AddToListCell
-            else { fatalError("Could not create AddToListCell") }
-        cell.planTitleLabel.text = plans[indexPath.row].planName
+                withIdentifier: "SelectPlanCell", for: indexPath) as? SelectPlanCell
+            else { fatalError("Could not create SelectPlanCell") }
+        cell.planNameLabel.text = plans[indexPath.row].planName
         let start = changeDateFormat(date: "\(plans[indexPath.row].startDate)")
         let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
         cell.dateLabel.text = "\(start)-\(end)"
@@ -85,7 +84,7 @@ extension AddToPlanListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         planId = plans[indexPath.row].id
-        performSegue(withIdentifier: "goToSelectDate", sender: self)
+        performSegue(withIdentifier: "goToEditMemory", sender: self)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -97,37 +96,24 @@ extension AddToPlanListViewController: UITableViewDataSource {
         }
     }
     
-// FOOTER
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let view = tableView.dequeueReusableHeaderFooterView(
-            withIdentifier: "AddToListFooterView") as? AddToListFooterView
-        else { fatalError("Could not create AddToListFooterView") }
-        view.createNewPlanButton.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
-        return view
-    }
-    
-    @objc func createButtonTapped() {
-    performSegue(withIdentifier: "goToCreate", sender: self)
-        }
-
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        40
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        "選擇行程以製作旅遊回憶"
     }
 }
 
-extension AddToPlanListViewController: UITableViewDelegate {
+extension SelectPlanViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-           return 60
+           return 75
     }
 }
 
-extension AddToPlanListViewController: FirestoreManagerDelegate {
+extension SelectPlanViewController: FirestoreManagerDelegate {
     func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan]) {
         plans = firestoreData
     }
 }
 
-extension AddToPlanListViewController: FirestoreManagerForPostLocationDelegate {
+extension SelectPlanViewController: FirestoreManagerForPostLocationDelegate {
     func manager(_ manager: FirestoreManagerForPostLocation, didPost firestoreData: Location) {
         location = firestoreData
     }

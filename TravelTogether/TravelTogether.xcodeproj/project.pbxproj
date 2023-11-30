@@ -26,6 +26,9 @@
 		5245BA782B0E17FA006594CC /* FirestoreManagerForOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */; };
 		524C30F12B1832FD00C5CEDC /* FirestoreUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F02B1832FD00C5CEDC /* FirestoreUserInfo.swift */; };
 		524C30F32B18336D00C5CEDC /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F22B18336D00C5CEDC /* UserInfo.swift */; };
+		524C30F52B1891D700C5CEDC /* SelectPlanPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F42B1891D700C5CEDC /* SelectPlanPage.swift */; };
+		524C30F72B189F6200C5CEDC /* SelectPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F62B189F6200C5CEDC /* SelectPlanCell.swift */; };
+		524C30F92B18A55600C5CEDC /* EditMemoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F82B18A55600C5CEDC /* EditMemoryViewController.swift */; };
 		5255286C2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5255286B2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift */; };
 		52783CC32B031B650067A334 /* SpotTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC22B031B650067A334 /* SpotTableViewCell.swift */; };
 		52783CC82B033B260067A334 /* PlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC72B033B260067A334 /* PlanViewController.swift */; };
@@ -90,6 +93,9 @@
 		5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManagerForOne.swift; sourceTree = "<group>"; };
 		524C30F02B1832FD00C5CEDC /* FirestoreUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUserInfo.swift; sourceTree = "<group>"; };
 		524C30F22B18336D00C5CEDC /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
+		524C30F42B1891D700C5CEDC /* SelectPlanPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPlanPage.swift; sourceTree = "<group>"; };
+		524C30F62B189F6200C5CEDC /* SelectPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPlanCell.swift; sourceTree = "<group>"; };
+		524C30F82B18A55600C5CEDC /* EditMemoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoryViewController.swift; sourceTree = "<group>"; };
 		5255286B2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManagerForPostDay.swift; sourceTree = "<group>"; };
 		52783CC22B031B650067A334 /* SpotTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotTableViewCell.swift; sourceTree = "<group>"; };
 		52783CC72B033B260067A334 /* PlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanViewController.swift; sourceTree = "<group>"; };
@@ -201,6 +207,9 @@
 				52783CD02B034F6A0067A334 /* MemoryViewController.swift */,
 				52783CD22B0350AC0067A334 /* MemoryCell.swift */,
 				52783CD42B0354820067A334 /* MemoryHeaderView.swift */,
+				524C30F42B1891D700C5CEDC /* SelectPlanPage.swift */,
+				524C30F62B189F6200C5CEDC /* SelectPlanCell.swift */,
+				524C30F82B18A55600C5CEDC /* EditMemoryViewController.swift */,
 			);
 			path = MemoryPage;
 			sourceTree = "<group>";
@@ -505,10 +514,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				5288CB272B07B95800E089F9 /* AddToListFooterView.swift in Sources */,
+				524C30F52B1891D700C5CEDC /* SelectPlanPage.swift in Sources */,
 				52783CDE2B037B8E0067A334 /* MemoryDetailViewController.swift in Sources */,
 				524157002B149230005D41F6 /* EditPlanCollectionCell.swift in Sources */,
 				52292F072B0216C90083399E /* SearchHeaderView.swift in Sources */,
+				524C30F92B18A55600C5CEDC /* EditMemoryViewController.swift in Sources */,
 				52783CD12B034F6A0067A334 /* MemoryViewController.swift in Sources */,
+				524C30F72B189F6200C5CEDC /* SelectPlanCell.swift in Sources */,
 				52783CEF2B05DBEE0067A334 /* GoogleDataProvider.swift in Sources */,
 				52E0F95C2B0F2F3B00D23AFE /* FirebaseStorageUploadPhotos.swift in Sources */,
 				5288CB252B07B74100E089F9 /* TravelPlan.swift in Sources */,

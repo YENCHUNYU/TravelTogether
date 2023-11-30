@@ -9,7 +9,11 @@ import UIKit
 
 class MemoryCell: UITableViewCell {
     
-    @IBOutlet weak var memoryImageView: UIImageView!
+    @IBOutlet weak var memoryImageView: UIImageView! {
+        didSet {
+            memoryImageView.layer.cornerRadius = 20
+        }
+    }
     @IBOutlet weak var memoryNameLabel: UILabel!
     @IBOutlet weak var memoryDateLabel: UILabel!
     

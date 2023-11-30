@@ -1,16 +1,14 @@
 //
-//  EditPlanViewController.swift
+//  EditMemoryViewController.swift
 //  TravelTogether
 //
-//  Created by User on 2023/11/18.
+//  Created by User on 2023/11/30.
 //
 
 import UIKit
 import FirebaseFirestore
-import MobileCoreServices
-import UniformTypeIdentifiers
 
-class EditPlanViewController: UIViewController {
+class EditMemoryViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
 
@@ -18,7 +16,7 @@ class EditPlanViewController: UIViewController {
         id: "", planName: "",
         destination: "",
         startDate: Date(), endDate: Date(), days: [])
-    var travelPlanId = ""
+    var travelPlanId = "1sXW0pQVIAKEdFuLNeHK"
     var dayCounts = 1
     var selectedSectionForAddLocation = 0 // 新增景點
     var days: [String] = ["第1天", "＋"]
@@ -43,8 +41,6 @@ class EditPlanViewController: UIViewController {
         tableView.separatorStyle = .none
         
         tableView.dragInteractionEnabled = true
-        tableView.dragDelegate = self
-        tableView.dropDelegate = self
         
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
@@ -73,15 +69,6 @@ class EditPlanViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let firestoreClearUser = FirestoreManagerForPostLocation()
-        firestoreClearUser.delegate = self
-        firestoreClearUser.clearLocationsUser(travelPlanId: travelPlanId) { error in
-            if error != nil {
-                print("Fail to clear users")
-            } else {
-                print("Clear users successfully!")
-            }
-        }
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
         firestoreManagerForOne.fetchOneTravelPlan(byId: travelPlanId) { (travelPlan, error) in
@@ -98,7 +85,7 @@ class EditPlanViewController: UIViewController {
     }
 }
 
-extension EditPlanViewController: UITableViewDataSource {
+extension EditMemoryViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         onePlan.days.count
     }
@@ -123,10 +110,6 @@ extension EditPlanViewController: UITableViewDataSource {
 
         cell.placeNameLabel.text = location.name
         cell.placeAddressLabel.text = location.address
-        cell.userLabel.layer.cornerRadius = 8
-        cell.userLabel.layer.masksToBounds = true
-        cell.userLabel.isHidden = false
-        cell.userLabel.text = location.user
         return cell
     }
 
@@ -208,43 +191,21 @@ extension EditPlanViewController: UITableViewDataSource {
        }
 }
 
-extension EditPlanViewController: UITableViewDelegate {
+extension EditMemoryViewController: UITableViewDelegate {
     func tableView(
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath) -> CGFloat {
             80
     }
-    
-    func tableView(_ tableView: UITableView, 
-                   commit editingStyle: UITableViewCell.EditingStyle,
-                   forRowAt indexPath: IndexPath) {
-            if editingStyle == .delete {
-               
-                let deletedLocation = onePlan.days[indexPath.section].locations.remove(at: indexPath.row)
-               
-                let firestoreManagerForOne = FirestoreManagerForOne()
-                firestoreManagerForOne.delegate = self
-                firestoreManagerForOne.deleteLocationFromTravelPlan(
-                    travelPlanId: travelPlanId, dayIndex: indexPath.section,
-                    location: deletedLocation) { error in
-                    if let error = error {
-                        print("Error deleting location from Firestore: \(error)")
-                    } else {
-                        print("Location deleted successfully from Firestore.")
-                        tableView.reloadData()
-                    }
-                }
-            }
-        }
 }
 
-extension EditPlanViewController: FirestoreManagerForOneDelegate {
+extension EditMemoryViewController: FirestoreManagerForOneDelegate {
     func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan) {
         onePlan = firestoreData
     }
 }
 
-extension EditPlanViewController: EditPlanHeaderViewDelegate {
+extension EditMemoryViewController: EditPlanHeaderViewDelegate {
     func reloadNewData() {
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
@@ -288,111 +249,5 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
                 print("One travel plan not found.")
             }
         }
-    }
-}
-
-extension EditPlanViewController: UITableViewDragDelegate {
-    func tableView(_ tableView: UITableView, 
-                   itemsForBeginning session: UIDragSession,
-                   at indexPath: IndexPath) -> [UIDragItem] {
-        let itemProvider = NSItemProvider()
-        let dragItem = UIDragItem(itemProvider: itemProvider)
-        return [dragItem]
-    }
-}
-
-extension EditPlanViewController: UITableViewDropDelegate {
-    
-    func canHandle(_ session: UIDropSession) -> Bool {
-        return session.canLoadObjects(ofClass: NSString.self)
-    }
-    
-    func tableView(_ tableView: UITableView, 
-                   performDropWith coordinator: UITableViewDropCoordinator) {
-        coordinator.session.loadObjects(ofClass: NSString.self) { _ in
-            var updatedIndexPaths = [IndexPath]()
-            switch (coordinator.items.first?.sourceIndexPath, coordinator.destinationIndexPath) {
-            case let (sourceIndexPath?, destinationIndexPath?):
-                if sourceIndexPath.section == destinationIndexPath.section {
-                    if sourceIndexPath.row != destinationIndexPath.row {
-                        var locations = self.onePlan.days[sourceIndexPath.section].locations
-                        let firestoreUserManger = FirestoreManagerFetchUser()
-                        firestoreUserManger.delegate = self
-                        firestoreUserManger.fetchUserInfo(id: "456@test.com") { userData, error  in
-                            if let error = error {
-                                print("Failed to fetch userInfo")
-                            } else {
-                                locations[destinationIndexPath.row].user = " \(String(describing: userData?.name ?? ""))已編輯 "
-                                let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
-                                firestoreMangerPostLocation.updateLocationsOrder(
-                                    travelPlanId: self.travelPlanId,
-                                    dayIndex: sourceIndexPath.section,
-                                    newLocationsOrder: locations
-                                ) { error in
-                                        if error != nil {
-                                            print("Failed to reorder the locations")
-                                        } else {
-                                            print("Reorder the locations successfully!")} }
-                            }
-                        }
-                        self.onePlan.days[sourceIndexPath.section].locations.remove(at: sourceIndexPath.row)
-                        self.onePlan.days[sourceIndexPath.section].locations.insert(
-                            locations[sourceIndexPath.row], at: destinationIndexPath.row)
-                        updatedIndexPaths.append(destinationIndexPath)
-                        self.tableView.moveRow(at: sourceIndexPath, to: destinationIndexPath)
-                        self.tableView.reloadData()
-                    }} else {
-                        var locations = self.onePlan.days[sourceIndexPath.section].locations
-                        self.onePlan.days[sourceIndexPath.section].locations.remove(at: sourceIndexPath.row)
-                        tableView.reloadData()
-                        let firestoreUserManger = FirestoreManagerFetchUser()
-                        firestoreUserManger.delegate = self
-                        firestoreUserManger.fetchUserInfo(id: "456@test.com") { userData, error  in
-                            if let error = error {
-                                print("Failed to fetch userInfo")
-                            } else {
-                                locations[destinationIndexPath.row].user = " \(String(describing: userData?.name ?? ""))已編輯 "
-                                let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
-                                firestoreMangerPostLocation.updateLocationsOrder(
-                                    travelPlanId: self.travelPlanId,
-                                    dayIndex: sourceIndexPath.section,
-                                    newLocationsOrder: self.onePlan.days[sourceIndexPath.section].locations) { error in
-                                        if error != nil {
-                                            print("Failed to reorder the locations")
-                                        } else {
-                                            print("Reorder the locations successfully!")
-                                            self.onePlan.days[destinationIndexPath.section].locations.insert(
-                                                locations[destinationIndexPath.row], at: destinationIndexPath.row)
-                                            updatedIndexPaths.append(destinationIndexPath)
-                                            self.tableView.reloadData()
-                                            
-                                            firestoreMangerPostLocation.updateLocationsOrder(
-                                                travelPlanId: self.travelPlanId,
-                                                dayIndex: destinationIndexPath.section,
-                                                newLocationsOrder: locations) { error in
-                                                        if error != nil {
-                                                            print("Failed to reorder the locations")
-                                                        } else {
-                                                            print("Reorder the locations successfully!")
-                                                        } }} } }}}
-            default:
-                break
-            }}}
-        
-        func tableView(
-            _ tableView: UITableView,
-            dropSessionDidUpdate session: UIDropSession,
-            withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
-                return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-            }
-}
-
-extension EditPlanViewController: FirestoreManagerFetchUserDelegate {
-    func manager(_ manager: FirestoreManager, didGet firestoreData: UserInfo) {
-    }
-}
-
-extension EditPlanViewController: FirestoreManagerForPostLocationDelegate {
-    func manager(_ manager: FirestoreManagerForPostLocation, didPost firestoreData: Location) {
     }
 }

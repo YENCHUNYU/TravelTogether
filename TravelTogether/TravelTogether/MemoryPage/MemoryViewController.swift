@@ -11,7 +11,25 @@ class MemoryViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     
+    lazy var addButton: UIButton = {
+        let add = UIButton()
+        add.translatesAutoresizingMaskIntoConstraints = false
+        add.backgroundColor = UIColor(named: "darkGreen")
+        add.layer.cornerRadius = 25
+        add.setTitle("＋", for: .normal)
+        add.setTitleColor(.white, for: .normal)
+        add.titleLabel?.font = UIFont.systemFont(ofSize: 40, weight: .heavy)
+        add.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        add.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        add.addTarget(self, action: #selector(createArticle), for: .touchUpInside)
+        return add
+    }()
     var memoryIndex = 0
+    
+    @objc func createArticle() {
+        performSegue(withIdentifier: "goToSelectPlan", sender: self)
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +39,13 @@ class MemoryViewController: UIViewController {
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 100)
         headerView.delegate = self
         tableView.tableHeaderView = headerView
+        view.addSubview(addButton)
+        setUpButton()
+    }
+    
+    func setUpButton() {
+        addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
+        addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
     }
 }
 

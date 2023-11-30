@@ -16,9 +16,9 @@ class CustomSegmentedControl: UIView {
     private var buttons: [UIButton]!
     private var selectorView: UIView!
     
-    var textColor: UIColor = .black
-    var selectorViewColor: UIColor = .red
-    var selectorTextColor: UIColor = .red
+    var textColor = UIColor(named: "darkGreen")
+    var selectorViewColor = UIColor(named: "darkGreen")
+    var selectorTextColor = UIColor(named: "deepDarkGreen")
     
     weak var delegate: CustomSegmentedControlDelegate?
     

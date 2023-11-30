@@ -29,7 +29,7 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
         layout.minimumLineSpacing = 10 // Adjust spacing between items if needed
 
         let collectionView = UICollectionView(
-            frame: CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width - 20, height: 40),
+            frame: CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width - 20, height: 50),
             collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
