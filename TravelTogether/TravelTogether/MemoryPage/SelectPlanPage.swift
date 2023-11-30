@@ -97,13 +97,13 @@ extension SelectPlanViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        "選擇行程以製作旅遊回憶"
+        "製作旅遊回憶"
     }
 }
 
 extension SelectPlanViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-           return 75
+           return 70
     }
 }
 

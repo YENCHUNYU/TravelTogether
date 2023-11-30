@@ -21,6 +21,8 @@
 		523243A42B0879F30078200C /* EditPlanHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A32B0879F30078200C /* EditPlanHeaderView.swift */; };
 		523243A62B0892930078200C /* EditPlanFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A52B0892930078200C /* EditPlanFooterView.swift */; };
 		523243A82B0A27B90078200C /* SelectDate SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A72B0A27B90078200C /* SelectDate SwiftUI.swift */; };
+		523846ED2B18DC21006D58B0 /* EditMemoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523846EC2B18DC21006D58B0 /* EditMemoryCell.swift */; };
+		523846EF2B18E418006D58B0 /* EditMemoryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523846EE2B18E418006D58B0 /* EditMemoryHeaderView.swift */; };
 		524157002B149230005D41F6 /* EditPlanCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524156FF2B149230005D41F6 /* EditPlanCollectionCell.swift */; };
 		5245BA762B0E136E006594CC /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA752B0E136E006594CC /* FirestoreManager.swift */; };
 		5245BA782B0E17FA006594CC /* FirestoreManagerForOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */; };
@@ -88,6 +90,8 @@
 		523243A32B0879F30078200C /* EditPlanHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanHeaderView.swift; sourceTree = "<group>"; };
 		523243A52B0892930078200C /* EditPlanFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanFooterView.swift; sourceTree = "<group>"; };
 		523243A72B0A27B90078200C /* SelectDate SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SelectDate SwiftUI.swift"; sourceTree = "<group>"; };
+		523846EC2B18DC21006D58B0 /* EditMemoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoryCell.swift; sourceTree = "<group>"; };
+		523846EE2B18E418006D58B0 /* EditMemoryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoryHeaderView.swift; sourceTree = "<group>"; };
 		524156FF2B149230005D41F6 /* EditPlanCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanCollectionCell.swift; sourceTree = "<group>"; };
 		5245BA752B0E136E006594CC /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
 		5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManagerForOne.swift; sourceTree = "<group>"; };
@@ -210,6 +214,8 @@
 				524C30F42B1891D700C5CEDC /* SelectPlanPage.swift */,
 				524C30F62B189F6200C5CEDC /* SelectPlanCell.swift */,
 				524C30F82B18A55600C5CEDC /* EditMemoryViewController.swift */,
+				523846EC2B18DC21006D58B0 /* EditMemoryCell.swift */,
+				523846EE2B18E418006D58B0 /* EditMemoryHeaderView.swift */,
 			);
 			path = MemoryPage;
 			sourceTree = "<group>";
@@ -520,6 +526,7 @@
 				52292F072B0216C90083399E /* SearchHeaderView.swift in Sources */,
 				524C30F92B18A55600C5CEDC /* EditMemoryViewController.swift in Sources */,
 				52783CD12B034F6A0067A334 /* MemoryViewController.swift in Sources */,
+				523846EF2B18E418006D58B0 /* EditMemoryHeaderView.swift in Sources */,
 				524C30F72B189F6200C5CEDC /* SelectPlanCell.swift in Sources */,
 				52783CEF2B05DBEE0067A334 /* GoogleDataProvider.swift in Sources */,
 				52E0F95C2B0F2F3B00D23AFE /* FirebaseStorageUploadPhotos.swift in Sources */,
@@ -543,6 +550,7 @@
 				52783CEC2B05DB620067A334 /* GooglePlace.swift in Sources */,
 				52783CE82B05C4DA0067A334 /* MapViewController.swift in Sources */,
 				52783CD82B0359110067A334 /* ProfileViewController.swift in Sources */,
+				523846ED2B18DC21006D58B0 /* EditMemoryCell.swift in Sources */,
 				5245BA782B0E17FA006594CC /* FirestoreManagerForOne.swift in Sources */,
 				5288CB292B07B98A00E089F9 /* AddToListCell.swift in Sources */,
 				5288CB122B076F7A00E089F9 /* CreatePlanViewController.swift in Sources */,
