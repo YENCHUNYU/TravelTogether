@@ -122,5 +122,61 @@ extension FirestoreManagerForPostLocation {
             }
         }
     }
+    
+    func clearLocationsUser(
+        travelPlanId: String,
+        completion: @escaping (Error?) -> Void
+    ) {
+        let database = Firestore.firestore()
+        let travelPlanRef = database.collection("TravelPlan").document(travelPlanId)
+
+        travelPlanRef.getDocument { document, error in
+            if let error = error {
+                print("Error getting document for updating locations order: \(error)")
+                completion(error)
+            } else {
+                do {
+                    guard var travelPlanData = document?.data() else {
+                        print("No document data found.")
+                        completion(nil)
+                        return
+                    }
+
+                    guard var daysArray = travelPlanData["days"] as? [[String: Any]] else {
+                        print("No 'days' array found.")
+                        completion(nil)
+                        return
+                    }
+
+                    var updatedDays: [[String: Any]] = []
+                    for var day in daysArray {
+                        var updatedLocations: [[String: Any]] = [] // Move inside the day loop
+                        if var locationsArray = day["locations"] as? [[String: Any]] {
+                            for var location in locationsArray {
+                                // Clear the user data in each location
+                                location["user"] = "" // or set it to an appropriate value
+                                updatedLocations.append(location)
+                            }
+                            // Update the locations array in the day
+                            day["locations"] = updatedLocations
+                        }
+                        updatedDays.append(day)
+                    }
+
+                    // Update the document in Firestore
+                    travelPlanData["days"] = updatedDays
+                    travelPlanRef.setData(travelPlanData, merge: true) { error in
+                        if let error = error {
+                            print("Error updating document after changing locations order: \(error)")
+                            completion(error)
+                        } else {
+                            print("Document updated successfully after changing locations order.")
+                            completion(nil)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }

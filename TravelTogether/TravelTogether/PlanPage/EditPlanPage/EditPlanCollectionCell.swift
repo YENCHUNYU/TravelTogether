@@ -14,7 +14,7 @@ class ButtonCell: UICollectionViewCell {
     
     let button: UIButton = {
         let button = UIButton()
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(UIColor(named: "darkGray"), for: .normal)
         return button
     }()
     
@@ -25,6 +25,8 @@ class ButtonCell: UICollectionViewCell {
         addSubview(button)
         button.frame = bounds
         button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        button.backgroundColor = UIColor(named: "yellowGreen")
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .regular)
     }
     
     required init?(coder: NSCoder) {

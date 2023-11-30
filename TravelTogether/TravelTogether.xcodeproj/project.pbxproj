@@ -24,6 +24,8 @@
 		524157002B149230005D41F6 /* EditPlanCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524156FF2B149230005D41F6 /* EditPlanCollectionCell.swift */; };
 		5245BA762B0E136E006594CC /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA752B0E136E006594CC /* FirestoreManager.swift */; };
 		5245BA782B0E17FA006594CC /* FirestoreManagerForOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */; };
+		524C30F12B1832FD00C5CEDC /* FirestoreUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F02B1832FD00C5CEDC /* FirestoreUserInfo.swift */; };
+		524C30F32B18336D00C5CEDC /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F22B18336D00C5CEDC /* UserInfo.swift */; };
 		5255286C2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5255286B2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift */; };
 		52783CC32B031B650067A334 /* SpotTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC22B031B650067A334 /* SpotTableViewCell.swift */; };
 		52783CC82B033B260067A334 /* PlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC72B033B260067A334 /* PlanViewController.swift */; };
@@ -86,6 +88,8 @@
 		524156FF2B149230005D41F6 /* EditPlanCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanCollectionCell.swift; sourceTree = "<group>"; };
 		5245BA752B0E136E006594CC /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
 		5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManagerForOne.swift; sourceTree = "<group>"; };
+		524C30F02B1832FD00C5CEDC /* FirestoreUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUserInfo.swift; sourceTree = "<group>"; };
+		524C30F22B18336D00C5CEDC /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		5255286B2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManagerForPostDay.swift; sourceTree = "<group>"; };
 		52783CC22B031B650067A334 /* SpotTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotTableViewCell.swift; sourceTree = "<group>"; };
 		52783CC72B033B260067A334 /* PlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanViewController.swift; sourceTree = "<group>"; };
@@ -176,6 +180,7 @@
 				52E0F95B2B0F2F3B00D23AFE /* FirebaseStorageUploadPhotos.swift */,
 				52E0F95D2B0F31FD00D23AFE /* FirebaseStorageManagerDownloadPhotos.swift */,
 				5255286B2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift */,
+				524C30F02B1832FD00C5CEDC /* FirestoreUserInfo.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -238,6 +243,7 @@
 				52292F082B0273E80083399E /* CustomSegmentedControl.swift */,
 				52783CEB2B05DB620067A334 /* GooglePlace.swift */,
 				5288CB242B07B74100E089F9 /* TravelPlan.swift */,
+				524C30F22B18336D00C5CEDC /* UserInfo.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -506,6 +512,7 @@
 				52783CEF2B05DBEE0067A334 /* GoogleDataProvider.swift in Sources */,
 				52E0F95C2B0F2F3B00D23AFE /* FirebaseStorageUploadPhotos.swift in Sources */,
 				5288CB252B07B74100E089F9 /* TravelPlan.swift in Sources */,
+				524C30F32B18336D00C5CEDC /* UserInfo.swift in Sources */,
 				52E0F95A2B0EE64A00D23AFE /* FirestoreForPostLocation.swift in Sources */,
 				523243A82B0A27B90078200C /* SelectDate SwiftUI.swift in Sources */,
 				5221A56A2B1452E30084F7C0 /* SelectDateViewController.swift in Sources */,
@@ -529,6 +536,7 @@
 				5288CB122B076F7A00E089F9 /* CreatePlanViewController.swift in Sources */,
 				52292F022B01F8E30083399E /* SearchMemoriesTableVIewCell.swift in Sources */,
 				5221A56E2B14567B0084F7C0 /* SelectDateCell.swift in Sources */,
+				524C30F12B1832FD00C5CEDC /* FirestoreUserInfo.swift in Sources */,
 				5221A56C2B14540F0084F7C0 /* SelectDateFooterView.swift in Sources */,
 				52783CDC2B036D480067A334 /* ProfileHeaderView.swift in Sources */,
 				52CD52202B0E406100CA7352 /* FirestoreForPost.swift in Sources */,

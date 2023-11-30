@@ -50,7 +50,7 @@ class MapViewController: UIViewController {
         return address
     }()
     
-    var addToPlanButton: UIButton = {
+    lazy var addToPlanButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("加入行程", for: .normal)
@@ -136,11 +136,13 @@ extension MapViewController: CLLocationManagerDelegate {
       return
     }
 
-    mapView.camera = GMSCameraPosition(
-      target: location.coordinate,
-      zoom: 15,
-      bearing: 0,
-      viewingAngle: 0)
+//    mapView.camera = GMSCameraPosition(
+//      target: location.coordinate,
+//      zoom: 15,
+//      bearing: 0,
+//      viewingAngle: 0)
+//    mapView.isUserInteractionEnabled = true
+
   }
 
   func locationManager(
@@ -175,23 +177,13 @@ extension MapViewController: UISearchResultsUpdating {
             
         }
     }
-    
-//    func updateMapInfo(with place: Place) {
-//            mapInfoViewController?.places = place
-//            mapInfoViewController?.updateContent()
-//        }
 }
 
 extension MapViewController: MapListViewControllerDelegate {
     func didTapPlace(with coordinates: CLLocationCoordinate2D, indexPath: IndexPath) {
         mapInfoView.isHidden = false
-        
-        //  remove keyboard
         searchVC.searchBar.resignFirstResponder()
-//        updateMapInfo(with: placesData[indexPath.row])
-        // remove
         mapView.clear()
-        // add
         
         let marker = GMSMarker()
         marker.position = coordinates
@@ -199,21 +191,7 @@ extension MapViewController: MapListViewControllerDelegate {
         
         let camera = GMSCameraPosition.camera(withTarget: coordinates, zoom: 15.0)
         mapView.animate(to: camera)
-        
-        //        if mapInfoViewController == nil {
-        //        mapInfoViewController = storyboard?.instantiateViewController(
-        //            withIdentifier: "MapInfoViewController") as? MapInfoViewController
-        //        mapInfoViewController?.places = placesData[indexPath.row]
-        //        mapInfoViewController?.isFromSearch = isFromSearch
-        //        addChild(mapInfoViewController!)
-        //        view.addSubview(mapInfoViewController!.view)
-        //        mapInfoViewController?.didMove(toParent: self)
-        //        mapInfoViewController?.travelPlanId = travelPlanId
-        //
-        //        mapInfoViewController?.selectedDay = selectedSection
-        //        }
-        
-        //        mapInfoView.isHidden = false
+     
         placeNameLabel.text = placesData[indexPath.row].name
         addressLabel.text = placesData[indexPath.row].address
         GooglePlacesManager.shared.fetchMapPhoto(for: placesData[indexPath.row].identifier) { result in
@@ -224,28 +202,27 @@ extension MapViewController: MapListViewControllerDelegate {
             case .failure(let error):
                 print(error)
             }
-            
         }
     }
 }
     
-extension MapViewController: UIViewControllerTransitioningDelegate {
-    func presentationController(
-        forPresented presented: UIViewController,
-        presenting: UIViewController?,
-        source: UIViewController) -> UIPresentationController? {
-        return MapInfoPresentationController(presentedViewController: presented, presenting: presenting)
-    }
-}
+//extension MapViewController: UIViewControllerTransitioningDelegate {
+//    func presentationController(
+//        forPresented presented: UIViewController,
+//        presenting: UIViewController?,
+//        source: UIViewController) -> UIPresentationController? {
+//        return MapInfoPresentationController(presentedViewController: presented, presenting: presenting)
+//    }
+//}
 
-class MapInfoPresentationController: UIPresentationController {
-    override var frameOfPresentedViewInContainerView: CGRect {
-        guard let containerView = containerView else { return CGRect.zero }
-
-        let height: CGFloat = containerView.bounds.height / 2.0
-        return CGRect(x: 0, y: containerView.bounds.height - height, width: containerView.bounds.width, height: height)
-    }
-}
+//class MapInfoPresentationController: UIPresentationController {
+//    override var frameOfPresentedViewInContainerView: CGRect {
+//        guard let containerView = containerView else { return CGRect.zero }
+//
+//        let height: CGFloat = containerView.bounds.height / 2.0
+//        return CGRect(x: 0, y: containerView.bounds.height - height, width: containerView.bounds.width, height: height)
+//    }
+//}
 
 extension MapViewController {
     @objc func addToPlanButtonTapped(sender: UIButton) {
@@ -314,21 +291,6 @@ extension MapViewController {
                 address: "\(String(describing: self.addressLabel.text ?? ""))")
             }
     }
-    // 如果再搜尋一次景點就再更新mapinfo
-//    func updateContent() {
-//        placeNameLabel.text = placesData[indexPath.row].name
-//        
-//        GooglePlacesManager.shared.fetchMapPhoto(for: places.identifier) { result in
-//            switch result {
-//            case .success(let photo):
-//                print("fetching photo")
-//                self.placeImageView.image = photo
-//            case .failure(let error):
-//                print(error)
-//            }
-//            
-//        }
-//    }
 }
 
 extension MapViewController: FirebaseStorageManagerDelegate {

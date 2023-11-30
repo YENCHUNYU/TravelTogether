@@ -23,6 +23,9 @@ class EditPlanViewController: UIViewController {
     var selectedSectionForAddLocation = 0 // 新增景點
     var days: [String] = ["第1天", "＋"]
     let headerView = EditPlanHeaderView(reuseIdentifier: "EditPlanHeaderView")
+//    var userChangedOrder = false
+//    var changedIndexPath: IndexPath?
+//    var userInfo: UserInfo?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +38,7 @@ class EditPlanViewController: UIViewController {
             forHeaderFooterViewReuseIdentifier: "EditPlanHeaderViewForSection")
         
         // tableView header
-        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 50)
+        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 40)
         headerView.delegate = self
         headerView.travelPlanId = travelPlanId
         
@@ -69,11 +72,19 @@ class EditPlanViewController: UIViewController {
                 print("One travel plan not found.")
             }
         }
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        let firestoreClearUser = FirestoreManagerForPostLocation()
+        firestoreClearUser.delegate = self
+        firestoreClearUser.clearLocationsUser(travelPlanId: travelPlanId) { error in
+            if error != nil {
+                print("Fail to clear users")
+            } else {
+                print("Clear users successfully!")
+            }
+        }
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
         firestoreManagerForOne.fetchOneTravelPlan(byId: travelPlanId) { (travelPlan, error) in
@@ -88,7 +99,6 @@ class EditPlanViewController: UIViewController {
             }
         }
     }
-
 }
 
 extension EditPlanViewController: UITableViewDataSource {
@@ -105,14 +115,21 @@ extension EditPlanViewController: UITableViewDataSource {
            }
            return onePlan.days[section].locations.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "EditPlanCell",
-                for: indexPath) as? EditPlanCell
-            else { fatalError("Could not create EditPlanCell") }
-        cell.placeNameLabel.text = onePlan.days[indexPath.section].locations[indexPath.row].name
-        cell.placeAddressLabel.text = onePlan.days[indexPath.section].locations[indexPath.row].address
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "EditPlanCell",
+            for: indexPath) as? EditPlanCell
+        else { fatalError("Could not create EditPlanCell") }
+
+        let location = onePlan.days[indexPath.section].locations[indexPath.row]
+
+        cell.placeNameLabel.text = location.name
+        cell.placeAddressLabel.text = location.address
+        cell.userLabel.layer.cornerRadius = 8
+        cell.userLabel.layer.masksToBounds = true
+        cell.userLabel.isHidden = false
+        cell.userLabel.text = location.user
         return cell
     }
 
@@ -217,11 +234,7 @@ extension EditPlanViewController: UITableViewDelegate {
                         print("Error deleting location from Firestore: \(error)")
                     } else {
                         print("Location deleted successfully from Firestore.")
-
-//                        DispatchQueue.main.async {
-//                            tableView.deleteRows(at: [indexPath], with: .fade)
                         tableView.reloadData()
-//                        }
                     }
                 }
             }
@@ -297,56 +310,75 @@ extension EditPlanViewController: UITableViewDropDelegate {
         return session.canLoadObjects(ofClass: NSString.self)
     }
     
-    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+    func tableView(_ tableView: UITableView, 
+                   performDropWith coordinator: UITableViewDropCoordinator) {
         coordinator.session.loadObjects(ofClass: NSString.self) { _ in
             var updatedIndexPaths = [IndexPath]()
             switch (coordinator.items.first?.sourceIndexPath, coordinator.destinationIndexPath) {
             case let (sourceIndexPath?, destinationIndexPath?):
                 if sourceIndexPath.section == destinationIndexPath.section {
                     if sourceIndexPath.row != destinationIndexPath.row {
-                        let locationData = self.onePlan.days[sourceIndexPath.section].locations[sourceIndexPath.row]
+                        var locations = self.onePlan.days[sourceIndexPath.section].locations
+//                        var locationData = locations[sourceIndexPath.row]
+                        
+                        let firestoreUserManger = FirestoreManagerFetchUser()
+                        firestoreUserManger.delegate = self
+                        firestoreUserManger.fetchUserInfo(id: "456@test.com") { userData, error  in
+                            if let error = error {
+                            } else {
+                                locations[destinationIndexPath.row].user = " \(String(describing: userData?.name ?? ""))已編輯 "
+                                let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
+                                firestoreMangerPostLocation.updateLocationsOrder(
+                                    travelPlanId: self.travelPlanId,
+                                    dayIndex: sourceIndexPath.section,
+                                    newLocationsOrder: locations
+                                ) { error in
+                                        if error != nil {
+                                            print("Failed to reorder the locations")
+                                        } else {
+                                            print("Reorder the locations successfully!")} }
+                            }
+                        }
                         self.onePlan.days[sourceIndexPath.section].locations.remove(at: sourceIndexPath.row)
                         self.onePlan.days[sourceIndexPath.section].locations.insert(
-                            locationData, at: destinationIndexPath.row)
+                            locations[sourceIndexPath.row], at: destinationIndexPath.row)
                         updatedIndexPaths.append(destinationIndexPath)
                         self.tableView.moveRow(at: sourceIndexPath, to: destinationIndexPath)
-                        let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
-                        firestoreMangerPostLocation.updateLocationsOrder(
-                            travelPlanId: self.travelPlanId,
-                            dayIndex: sourceIndexPath.section,
-                            newLocationsOrder: self.onePlan.days[sourceIndexPath.section].locations) { error in
-                                if error != nil {
-                                    print("Failed to reorder the locations")
-                                } else {
-                                    print("Reorder the locations successfully!")} }
+                        self.tableView.reloadData()
                     }} else {
-                        let locationData = self.onePlan.days[sourceIndexPath.section].locations[sourceIndexPath.row]
+//                        var locationData = self.onePlan.days[sourceIndexPath.section].locations[sourceIndexPath.row]
+                        var locations = self.onePlan.days[sourceIndexPath.section].locations
                         self.onePlan.days[sourceIndexPath.section].locations.remove(at: sourceIndexPath.row)
                         tableView.reloadData()
-                        let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
-                        firestoreMangerPostLocation.updateLocationsOrder(
-                            travelPlanId: self.travelPlanId,
-                            dayIndex: sourceIndexPath.section,
-                            newLocationsOrder: self.onePlan.days[sourceIndexPath.section].locations) { error in
-                                if error != nil {
-                                    print("Failed to reorder the locations")
-                                } else {
-                                    print("Reorder the locations successfully!")
-                                    self.onePlan.days[destinationIndexPath.section].locations.insert(
-                                        locationData, at: destinationIndexPath.row)
-                                    updatedIndexPaths.append(destinationIndexPath)
-                                    self.tableView.reloadData()
-                                    
-                                    firestoreMangerPostLocation.updateLocationsOrder(
-                                        travelPlanId: self.travelPlanId,
-                                        dayIndex: destinationIndexPath.section,
-                                        newLocationsOrder: self.onePlan.days[
-                                            destinationIndexPath.section].locations) { error in
-                                            if error != nil {
-                                                print("Failed to reorder the locations")
-                                            } else {
-                                                print("Reorder the locations successfully!")
-                                            } }} } }
+                        let firestoreUserManger = FirestoreManagerFetchUser()
+                        firestoreUserManger.delegate = self
+                        firestoreUserManger.fetchUserInfo(id: "456@test.com") { userData, error  in
+                            if let error = error {
+                            } else {
+                                locations[destinationIndexPath.row].user = " \(String(describing: userData?.name ?? ""))已編輯 "
+                                let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
+                                firestoreMangerPostLocation.updateLocationsOrder(
+                                    travelPlanId: self.travelPlanId,
+                                    dayIndex: sourceIndexPath.section,
+                                    newLocationsOrder: self.onePlan.days[sourceIndexPath.section].locations) { error in
+                                        if error != nil {
+                                            print("Failed to reorder the locations")
+                                        } else {
+                                            print("Reorder the locations successfully!")
+                                            self.onePlan.days[destinationIndexPath.section].locations.insert(
+                                                locations[destinationIndexPath.row], at: destinationIndexPath.row)
+                                            updatedIndexPaths.append(destinationIndexPath)
+                                            self.tableView.reloadData()
+                                            
+                                            firestoreMangerPostLocation.updateLocationsOrder(
+                                                travelPlanId: self.travelPlanId,
+                                                dayIndex: destinationIndexPath.section,
+                                                newLocationsOrder: locations) { error in
+                                                        if error != nil {
+                                                            print("Failed to reorder the locations")
+                                                        } else {
+                                                            print("Reorder the locations successfully!")
+                                                        } }} } }}}
             default:
                 break
             }}}
@@ -357,4 +389,14 @@ extension EditPlanViewController: UITableViewDropDelegate {
             withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
                 return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
             }
+}
+
+extension EditPlanViewController: FirestoreManagerFetchUserDelegate {
+    func manager(_ manager: FirestoreManager, didGet firestoreData: UserInfo) {
+    }
+}
+
+extension EditPlanViewController: FirestoreManagerForPostLocationDelegate {
+    func manager(_ manager: FirestoreManagerForPostLocation, didPost firestoreData: Location) {
+    }
 }

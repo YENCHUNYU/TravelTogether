@@ -29,7 +29,7 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
         layout.minimumLineSpacing = 10 // Adjust spacing between items if needed
 
         let collectionView = UICollectionView(
-            frame: CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width - 20, height: 50),
+            frame: CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width - 20, height: 40),
             collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -39,6 +39,7 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
         collectionView.dragInteractionEnabled = true
         collectionView.dragDelegate = self
         collectionView.dropDelegate = self
+        collectionView.backgroundColor = UIColor(named: "yellowGreen")
         return collectionView
     }()
     

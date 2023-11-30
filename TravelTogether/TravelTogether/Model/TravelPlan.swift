@@ -42,12 +42,14 @@ struct Location {
     var name: String
     var photo: String
     var address: String
+    var user: String?
     
     var dictionary: [String: Any] {
         return [
             "name": name,
             "photo": photo,
-            "address": address
+            "address": address,
+            "user": user ?? ""
         ]
     }
 }
