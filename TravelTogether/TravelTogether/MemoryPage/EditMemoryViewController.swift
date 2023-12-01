@@ -18,7 +18,6 @@ class EditMemoryViewController: UIViewController {
         startDate: Date(), endDate: Date(), days: [])
     var travelPlanId = "1sXW0pQVIAKEdFuLNeHK"
     var dayCounts = 1
-//    var selectedSectionForAddLocation = 0 // 新增景點
     var days: [String] = ["第1天"]
     let headerView = EditMemoryHeaderView(reuseIdentifier: "EditMemoryHeaderView")
     var imageCollections: ImageCollection = ImageCollection(data:  [[
@@ -124,6 +123,7 @@ extension EditMemoryViewController: UITableViewDataSource {
         cell.imageCollectionView.showsHorizontalScrollIndicator = false
         cell.imageCollectionView.tag = indexPath.row
         cell.imageCollectionView.reloadData()
+
         return cell
     }
 }
@@ -132,7 +132,7 @@ extension EditMemoryViewController: UITableViewDelegate {
     func tableView(
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath) -> CGFloat {
-            300
+            330
     }
 }
 
@@ -192,24 +192,12 @@ extension EditMemoryViewController: UICollectionViewDataSource,
            cell.imageView.image = imageCollections.data[0][indexPath.item - 1]
            return cell
        }
-       
    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-            if indexPath.item == 0 {
-                // 点击第一个单元格，触发图片选择器
-//                showImagePicker()
-                print("select1")
-            } else {
-                // 处理其他单元格的点击事件
-            }
-        }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var widthperItem: CGFloat = 0
         let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
         let availableWidth = view.frame.width - paddingSpace
-//        itemsPerRow = 3
         widthperItem = availableWidth / 3
         return CGSize(width: widthperItem, height: 88)
     }
@@ -226,12 +214,12 @@ extension EditMemoryViewController: UIImagePickerControllerDelegate, UINavigatio
            present(imagePicker, animated: true, completion: nil)
        }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
            if let selectedImage = info[.originalImage] as? UIImage {
-               // 将选中的图片添加到数组
                imageCollections.data[0].append(selectedImage)
                self.tableView.reloadData()
-//               collectionView.reloadData()
            }
            picker.dismiss(animated: true, completion: nil)
        }
