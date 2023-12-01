@@ -21,7 +21,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="darkGreen"/>
                         <color key="tintColor" name="lightGreen"/>
-                        <color key="selectedImageTintColor" systemColor="systemBackgroundColor"/>
+                        <color key="selectedImageTintColor" name="yellowGreen"/>
                     </tabBar>
                     <connections>
                         <segue destination="Lck-PZ-ZV0" kind="relationship" relationship="viewControllers" id="rkX-Q3-ZNu"/>

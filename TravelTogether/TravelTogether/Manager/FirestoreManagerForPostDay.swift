@@ -118,24 +118,6 @@ class FirestoreManagerForPostDay {
                         return
                     }
 
-//                    guard var locationsArray = daysArray[dayIndex]["locations"] as? [[String: Any]] else {
-//                        completion(nil)
-//                        return
-//                    }
-
-                    // Update the order of locations based on newLocationsOrder
-//                    var updatedLocations: [[String: Any]] = []
-//                    for location in locations {
-//                        let locationData = location.dictionary
-//                        updatedLocations.append(locationData)
-//                    }
-//                   
-                    
-//                    var updatedDays : [[String: Any]] = []
-//                    for day in newDaysArray {
-//                        let dayData = day.dictionary
-//                        updatedDays.append(dayData)
-//                    }
                     var updatedDays: [[String: Any]] = []
 
                     for day in newDaysArray {
@@ -146,14 +128,6 @@ class FirestoreManagerForPostDay {
                         updatedDays.append(dayData)
                     }
 
-                    // updatedDays 現在包含了每個 TravelDay 的字典形式，其中 locations 已經轉換為字典
-
-                    // Update the locations array in the days array
-//                    for dayData in updatedDays {
-//                        let newDay = dayData["locations"]
-//                        
-//                    }
-//                    updatedDays[dayIndex]["locations"] = updatedLocations
                     travelPlanData["days"] = updatedDays
 
                     // Update the document in Firestore

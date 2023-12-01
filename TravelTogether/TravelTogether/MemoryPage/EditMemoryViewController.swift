@@ -20,11 +20,14 @@ class EditMemoryViewController: UIViewController {
     var dayCounts = 1
     var days: [String] = ["第1天"]
     let headerView = EditMemoryHeaderView(reuseIdentifier: "EditMemoryHeaderView")
-    var imageCollections: ImageCollection = ImageCollection(data:  [[
+    var imageCollections: ImageCollection = ImageCollection(data: [
+        [
         UIImage(named: "台北景點") ?? UIImage(),
         UIImage(named: "台北景點") ?? UIImage(),
         UIImage(named: "台北景點") ?? UIImage(),
-        UIImage(named: "台北景點") ?? UIImage()]])
+        UIImage(named: "台北景點") ?? UIImage()],
+        [UIImage(named: "雲林古坑") ?? UIImage()],
+    ])
 
     private var itemsPerRow: CGFloat = 2
     private var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
