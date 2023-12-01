@@ -10,9 +10,16 @@ import UIKit
 class EditMemoryCell: UITableViewCell {
     
     @IBOutlet weak var pinImageView: UIImageView!
-    
     @IBOutlet weak var placeNameLabel: UILabel!
-    
     @IBOutlet weak var addressLabel: UILabel!
+    
+    @IBOutlet weak var imageCollectionView: UICollectionView!
+    
+    @IBOutlet weak var articleTextView: UITextView! {
+        didSet{
+            articleTextView.layer.cornerRadius = 15
+            articleTextView.clipsToBounds = true
+        }
+    }
     
 }

@@ -32,6 +32,8 @@
 		524C30F72B189F6200C5CEDC /* SelectPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F62B189F6200C5CEDC /* SelectPlanCell.swift */; };
 		524C30F92B18A55600C5CEDC /* EditMemoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F82B18A55600C5CEDC /* EditMemoryViewController.swift */; };
 		5255286C2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5255286B2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift */; };
+		525E7CB52B1987780057C5EE /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525E7CB42B1987780057C5EE /* ImageCollectionViewCell.swift */; };
+		525E7CB72B198C560057C5EE /* imageCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525E7CB62B198C560057C5EE /* imageCollections.swift */; };
 		52783CC32B031B650067A334 /* SpotTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC22B031B650067A334 /* SpotTableViewCell.swift */; };
 		52783CC82B033B260067A334 /* PlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC72B033B260067A334 /* PlanViewController.swift */; };
 		52783CCA2B033EE20067A334 /* MyPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC92B033EE20067A334 /* MyPlanCell.swift */; };
@@ -101,6 +103,8 @@
 		524C30F62B189F6200C5CEDC /* SelectPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPlanCell.swift; sourceTree = "<group>"; };
 		524C30F82B18A55600C5CEDC /* EditMemoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoryViewController.swift; sourceTree = "<group>"; };
 		5255286B2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManagerForPostDay.swift; sourceTree = "<group>"; };
+		525E7CB42B1987780057C5EE /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		525E7CB62B198C560057C5EE /* imageCollections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imageCollections.swift; sourceTree = "<group>"; };
 		52783CC22B031B650067A334 /* SpotTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotTableViewCell.swift; sourceTree = "<group>"; };
 		52783CC72B033B260067A334 /* PlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanViewController.swift; sourceTree = "<group>"; };
 		52783CC92B033EE20067A334 /* MyPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlanCell.swift; sourceTree = "<group>"; };
@@ -216,6 +220,7 @@
 				524C30F82B18A55600C5CEDC /* EditMemoryViewController.swift */,
 				523846EC2B18DC21006D58B0 /* EditMemoryCell.swift */,
 				523846EE2B18E418006D58B0 /* EditMemoryHeaderView.swift */,
+				525E7CB42B1987780057C5EE /* ImageCollectionViewCell.swift */,
 			);
 			path = MemoryPage;
 			sourceTree = "<group>";
@@ -259,6 +264,7 @@
 				52783CEB2B05DB620067A334 /* GooglePlace.swift */,
 				5288CB242B07B74100E089F9 /* TravelPlan.swift */,
 				524C30F22B18336D00C5CEDC /* UserInfo.swift */,
+				525E7CB62B198C560057C5EE /* imageCollections.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -523,6 +529,7 @@
 				524C30F52B1891D700C5CEDC /* SelectPlanPage.swift in Sources */,
 				52783CDE2B037B8E0067A334 /* MemoryDetailViewController.swift in Sources */,
 				524157002B149230005D41F6 /* EditPlanCollectionCell.swift in Sources */,
+				525E7CB52B1987780057C5EE /* ImageCollectionViewCell.swift in Sources */,
 				52292F072B0216C90083399E /* SearchHeaderView.swift in Sources */,
 				524C30F92B18A55600C5CEDC /* EditMemoryViewController.swift in Sources */,
 				52783CD12B034F6A0067A334 /* MemoryViewController.swift in Sources */,
@@ -554,6 +561,7 @@
 				5245BA782B0E17FA006594CC /* FirestoreManagerForOne.swift in Sources */,
 				5288CB292B07B98A00E089F9 /* AddToListCell.swift in Sources */,
 				5288CB122B076F7A00E089F9 /* CreatePlanViewController.swift in Sources */,
+				525E7CB72B198C560057C5EE /* imageCollections.swift in Sources */,
 				52292F022B01F8E30083399E /* SearchMemoriesTableVIewCell.swift in Sources */,
 				5221A56E2B14567B0084F7C0 /* SelectDateCell.swift in Sources */,
 				524C30F12B1832FD00C5CEDC /* FirestoreUserInfo.swift in Sources */,
