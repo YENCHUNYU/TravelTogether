@@ -28,7 +28,17 @@ struct Memory {
     }
 }
 
-struct MemoryLocation {
+struct MemoryDay {
+    var locations: [Location]
+    
+    var dictionary: [String: Any] {
+        return [
+            "locations": locations
+        ]
+    }
+}
+
+struct Location {
     var name: String
     var photo: String
     var address: String
@@ -47,4 +57,3 @@ struct MemoryLocation {
         ]
     }
 }
-

@@ -996,6 +996,7 @@
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="darkGreen"/>
+                        <color key="tintColor" name="yellowGreen"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </textAttributes>
@@ -1569,7 +1570,7 @@
             </objects>
             <point key="canvasLocation" x="-260" y="3405"/>
         </scene>
-        <!--Edit Memory View Controller-->
+        <!--編輯旅遊回憶-->
         <scene sceneID="hbz-qO-u3E">
             <objects>
                 <viewController id="Jsu-2S-It1" customClass="EditMemoryViewController" customModule="TravelTogether" customModuleProvider="target" sceneMemberID="viewController">
@@ -1753,14 +1754,93 @@
                             <constraint firstItem="VjO-nH-dra" firstAttribute="top" secondItem="348-pv-ETV" secondAttribute="top" id="caz-j1-BsV"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="ZQQ-2u-sbR"/>
+                    <navigationItem key="navigationItem" title="編輯旅遊回憶" id="jKX-xv-AhY"/>
                     <connections>
                         <outlet property="tableView" destination="VjO-nH-dra" id="zkl-EO-4wz"/>
+                        <segue destination="JKJ-mG-z3M" kind="show" identifier="goToEditTitle" id="aTg-C3-CtN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B4c-Zb-axl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1768.7022900763359" y="2556.3380281690143"/>
+        </scene>
+        <!--Edit Memory Title View Controller-->
+        <scene sceneID="YLu-LU-pi2">
+            <objects>
+                <viewController id="JKJ-mG-z3M" customClass="EditMemoryTitleViewController" customModule="TravelTogether" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="e0R-Nn-lpS">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Image_Placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="nZ3-DU-x43">
+                                <rect key="frame" x="20" y="123.00000000000001" width="353" height="188.33333333333337"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="nZ3-DU-x43" secondAttribute="height" multiplier="15:8" id="5Z8-y9-mye"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="標題" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qab-Ef-4th">
+                                <rect key="frame" x="24.999999999999996" y="331.33333333333331" width="34.666666666666657" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" name="darkGray"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xRy-RA-3WX">
+                                <rect key="frame" x="25" y="362.33333333333331" width="348" height="34"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fU7-jL-rdk">
+                                <rect key="frame" x="245.66666666666666" y="401.33333333333331" width="58.666666666666657" height="35"/>
+                                <color key="backgroundColor" name="lightGreen"/>
+                                <color key="tintColor" name="darkGray"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="編輯"/>
+                                <connections>
+                                    <action selector="editButtonTapped:" destination="JKJ-mG-z3M" eventType="touchUpInside" id="wcl-Og-WCg"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yd1-yT-DdM">
+                                <rect key="frame" x="309.33333333333331" y="401.33333333333331" width="58.666666666666686" height="35"/>
+                                <color key="backgroundColor" name="lightGreen"/>
+                                <color key="tintColor" name="darkGray"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="完成"/>
+                                <connections>
+                                    <action selector="doneButtonTapped:" destination="JKJ-mG-z3M" eventType="touchUpInside" id="cDx-7E-l2D"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="WOP-je-Mmy"/>
+                        <color key="backgroundColor" name="darkGreen"/>
+                        <constraints>
+                            <constraint firstItem="nZ3-DU-x43" firstAttribute="leading" secondItem="WOP-je-Mmy" secondAttribute="leading" constant="20" id="2kC-oe-FFN"/>
+                            <constraint firstItem="Yd1-yT-DdM" firstAttribute="leading" secondItem="fU7-jL-rdk" secondAttribute="trailing" constant="5" id="3dX-Ha-baC"/>
+                            <constraint firstItem="nZ3-DU-x43" firstAttribute="top" secondItem="WOP-je-Mmy" secondAttribute="top" constant="20" id="8nE-rQ-9Hh"/>
+                            <constraint firstItem="Qab-Ef-4th" firstAttribute="leading" secondItem="WOP-je-Mmy" secondAttribute="leading" constant="25" id="B47-9n-Z23"/>
+                            <constraint firstItem="WOP-je-Mmy" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Qab-Ef-4th" secondAttribute="trailing" constant="20" id="DRj-RP-yIu"/>
+                            <constraint firstItem="fU7-jL-rdk" firstAttribute="top" secondItem="xRy-RA-3WX" secondAttribute="bottom" constant="5" id="FY3-SC-Fev"/>
+                            <constraint firstItem="WOP-je-Mmy" firstAttribute="trailing" secondItem="nZ3-DU-x43" secondAttribute="trailing" constant="20" id="GOn-jn-BCu"/>
+                            <constraint firstItem="xRy-RA-3WX" firstAttribute="top" secondItem="Qab-Ef-4th" secondAttribute="bottom" constant="10" id="UNM-pa-Uxh"/>
+                            <constraint firstItem="Qab-Ef-4th" firstAttribute="top" secondItem="nZ3-DU-x43" secondAttribute="bottom" constant="20" id="aVk-Zz-k1l"/>
+                            <constraint firstItem="WOP-je-Mmy" firstAttribute="trailing" secondItem="Yd1-yT-DdM" secondAttribute="trailing" constant="25" id="ezM-uc-YAn"/>
+                            <constraint firstItem="fU7-jL-rdk" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="WOP-je-Mmy" secondAttribute="leading" symbolic="YES" id="gHx-pR-4EQ"/>
+                            <constraint firstItem="WOP-je-Mmy" firstAttribute="trailing" secondItem="xRy-RA-3WX" secondAttribute="trailing" constant="20" id="hFq-G4-y6t"/>
+                            <constraint firstItem="xRy-RA-3WX" firstAttribute="leading" secondItem="WOP-je-Mmy" secondAttribute="leading" constant="25" id="kHA-9x-nSs"/>
+                            <constraint firstItem="Yd1-yT-DdM" firstAttribute="top" secondItem="xRy-RA-3WX" secondAttribute="bottom" constant="5" id="s9b-3s-aI0"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="Apk-jL-9rj"/>
+                    <connections>
+                        <outlet property="doneButton" destination="Yd1-yT-DdM" id="A3G-fa-H9u"/>
+                        <outlet property="editButton" destination="fU7-jL-rdk" id="KTp-6H-RLh"/>
+                        <outlet property="memoryImageView" destination="nZ3-DU-x43" id="x76-Uo-lZN"/>
+                        <outlet property="titleLabel" destination="Qab-Ef-4th" id="fPB-NW-iNY"/>
+                        <outlet property="titleTextField" destination="xRy-RA-3WX" id="ppt-mS-7Cd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="T6k-BY-9yB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2523" y="2556"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
@@ -1780,6 +1860,9 @@
         <image name="person.circle.fill" catalog="system" width="128" height="123"/>
         <image name="person.crop.rectangle" catalog="system" width="128" height="93"/>
         <image name="plus" catalog="system" width="128" height="113"/>
+        <namedColor name="darkGray">
+            <color red="0.24705882352941178" green="0.25490196078431371" blue="0.30588235294117649" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="darkGreen">
             <color red="0.57647058823529407" green="0.69411764705882351" blue="0.65098039215686276" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

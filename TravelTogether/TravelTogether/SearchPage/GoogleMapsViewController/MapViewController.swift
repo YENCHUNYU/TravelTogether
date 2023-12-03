@@ -277,8 +277,7 @@ extension MapViewController {
             }
         }
     }
-    
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToPlanList" {
                 guard let navigationController = segue.destination as? UINavigationController,

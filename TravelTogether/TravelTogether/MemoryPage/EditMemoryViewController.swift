@@ -26,8 +26,9 @@ class EditMemoryViewController: UIViewController {
         UIImage(named: "台北景點") ?? UIImage(),
         UIImage(named: "台北景點") ?? UIImage(),
         UIImage(named: "台北景點") ?? UIImage()],
-        [UIImage(named: "雲林古坑") ?? UIImage()],
+        [UIImage(named: "雲林古坑") ?? UIImage()]
     ])
+    var oneMemory: Memory = Memory(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), days: [])
 
     private var itemsPerRow: CGFloat = 2
     private var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
@@ -69,7 +70,77 @@ class EditMemoryViewController: UIViewController {
                 print("One travel plan not found.")
             }
         }
+        
+        let rightButton = UIBarButtonItem(title: "下一步", style: .plain, 
+                                          target: self, action: #selector(rightButtonTapped))
+        navigationItem.rightBarButtonItem = rightButton
+        rightButton.tintColor = UIColor(named: "yellowGreen")
     }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "goToEditTitle" {
+//            if let destinationVC = segue.destination as? EditMemoryTitleViewController {
+//
+//                for day in 0..<onePlan.days.count {
+//                    oneMemory.days.append(onePlan.days[day])
+//                    for location in 0..<onePlan.days[day].locations.count {
+//                        oneMemory.days[day].locations.append(onePlan.days[day].locations[location])
+//                        let indexPath = IndexPath(row: location, section: day)
+//                        if let cell = tableView.cellForRow(at: indexPath) as? EditMemoryCell {
+//                            oneMemory.days[day].locations[location].article = cell.articleTextView.text
+//                        }
+//                    }
+//                }
+//                
+//                destinationVC.oneMemory = self.oneMemory
+//                print("self.oneMemory\(self.oneMemory)")
+//                destinationVC.onePlan = self.onePlan
+//            }
+//        }
+//    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToEditTitle" {
+            if let destinationVC = segue.destination as? EditMemoryTitleViewController {
+                
+                for day in 0..<onePlan.days.count {
+                    var memoryDay = TravelDay(locations: [])
+                    
+                    for location in 0..<onePlan.days[day].locations.count {
+                                         
+                        let indexPath = IndexPath(row: location, section: day)
+                        if let cell = tableView.cellForRow(at: indexPath) as? EditMemoryCell {
+                            var memoryLocation = Location(
+                                name: "", photo: "", address: "", user: "", memoryPhotos: [], article: "")
+                            
+                            memoryLocation.article = cell.articleTextView.text
+                             
+                            // You might need to populate other properties of memoryLocation as well
+                            memoryLocation.name = cell.placeNameLabel.text ?? ""
+                            memoryLocation.address = cell.addressLabel.text ?? ""
+                            // memoryLocation.photo = ...
+                            // memoryLocation.user = ...
+                            // memoryLocation.memoryPhotos = ...
+                            memoryDay.locations.append(memoryLocation)
+                        }
+                        
+                    }
+                    
+                    oneMemory.days.append(memoryDay)
+                }
+                
+                destinationVC.oneMemory = self.oneMemory
+                print("self.oneMemory\(self.oneMemory)")
+                destinationVC.onePlan = self.onePlan
+            }
+        }
+    }
+
+    
+    @objc func rightButtonTapped() {
+         performSegue(withIdentifier: "goToEditTitle", sender: self)
+       }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -126,7 +197,15 @@ extension EditMemoryViewController: UITableViewDataSource {
         cell.imageCollectionView.showsHorizontalScrollIndicator = false
         cell.imageCollectionView.tag = indexPath.row
         cell.imageCollectionView.reloadData()
-
+//        oneMemory.days = MemoryDay(locations: <#T##[MemoryLocation]#>)
+        
+//        var memoryLocation = MemoryLocation(name: location.name, photo: [], address: location.address)
+        // photo上傳到firestore再載下來 photo是url string array
+        // 先post整個plan再update memory
+//        var memoryDay = MemoryDay(locations: [memoryLocation])
+//        oneMemory.days = [memoryDay]
+//        oneMemory = Memory(id: onePlan.id, planName: onePlan.planName, destination: "", startDate: onePlan.startDate, endDate: onePlan.endDate, days: [memoryDay])
+//        oneMemory.days[indextPath.section].locations[indexPath.row] = MemoryLocation(name: location.name, photo: "", address: location.address)
         return cell
     }
 }
@@ -136,6 +215,7 @@ extension EditMemoryViewController: UITableViewDelegate {
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath) -> CGFloat {
             330
+            
     }
 }
 
@@ -219,7 +299,7 @@ extension EditMemoryViewController: UIImagePickerControllerDelegate, UINavigatio
     
     func imagePickerController(
         _ picker: UIImagePickerController,
-        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
            if let selectedImage = info[.originalImage] as? UIImage {
                imageCollections.data[0].append(selectedImage)
                self.tableView.reloadData()

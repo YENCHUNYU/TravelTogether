@@ -36,6 +36,7 @@
 		525E7CB72B198C560057C5EE /* imageCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525E7CB62B198C560057C5EE /* imageCollections.swift */; };
 		525E7CB92B19EE510057C5EE /* Memory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525E7CB82B19EE500057C5EE /* Memory.swift */; };
 		525E7CBB2B19F0AD0057C5EE /* FirestoreForPostMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525E7CBA2B19F0AD0057C5EE /* FirestoreForPostMemory.swift */; };
+		526005222B1AE14100F37E84 /* EditMemoryTitleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526005212B1AE14100F37E84 /* EditMemoryTitleViewController.swift */; };
 		52783CC32B031B650067A334 /* SpotTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC22B031B650067A334 /* SpotTableViewCell.swift */; };
 		52783CC82B033B260067A334 /* PlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC72B033B260067A334 /* PlanViewController.swift */; };
 		52783CCA2B033EE20067A334 /* MyPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC92B033EE20067A334 /* MyPlanCell.swift */; };
@@ -109,6 +110,7 @@
 		525E7CB62B198C560057C5EE /* imageCollections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = imageCollections.swift; sourceTree = "<group>"; };
 		525E7CB82B19EE500057C5EE /* Memory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memory.swift; sourceTree = "<group>"; };
 		525E7CBA2B19F0AD0057C5EE /* FirestoreForPostMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreForPostMemory.swift; sourceTree = "<group>"; };
+		526005212B1AE14100F37E84 /* EditMemoryTitleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoryTitleViewController.swift; sourceTree = "<group>"; };
 		52783CC22B031B650067A334 /* SpotTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotTableViewCell.swift; sourceTree = "<group>"; };
 		52783CC72B033B260067A334 /* PlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanViewController.swift; sourceTree = "<group>"; };
 		52783CC92B033EE20067A334 /* MyPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlanCell.swift; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 				523846EC2B18DC21006D58B0 /* EditMemoryCell.swift */,
 				523846EE2B18E418006D58B0 /* EditMemoryHeaderView.swift */,
 				525E7CB42B1987780057C5EE /* ImageCollectionViewCell.swift */,
+				526005212B1AE14100F37E84 /* EditMemoryTitleViewController.swift */,
 			);
 			path = MemoryPage;
 			sourceTree = "<group>";
@@ -567,6 +570,7 @@
 				5245BA782B0E17FA006594CC /* FirestoreManagerForOne.swift in Sources */,
 				5288CB292B07B98A00E089F9 /* AddToListCell.swift in Sources */,
 				5288CB122B076F7A00E089F9 /* CreatePlanViewController.swift in Sources */,
+				526005222B1AE14100F37E84 /* EditMemoryTitleViewController.swift in Sources */,
 				525E7CB72B198C560057C5EE /* imageCollections.swift in Sources */,
 				52292F022B01F8E30083399E /* SearchMemoriesTableVIewCell.swift in Sources */,
 				5221A56E2B14567B0084F7C0 /* SelectDateCell.swift in Sources */,
