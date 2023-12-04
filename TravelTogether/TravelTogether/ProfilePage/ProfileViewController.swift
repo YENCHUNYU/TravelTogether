@@ -25,7 +25,7 @@ class ProfileViewController: UIViewController {
     var profileIndex = 0
     var plans: [TravelPlan] = []
     var spotsData: [[String: Any]] = []
-    
+    var memories: [TravelPlan] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
@@ -50,6 +50,17 @@ class ProfileViewController: UIViewController {
                 self.plans = travelPlans ?? []
             }
         }
+        
+        let firestoreFetchMemory = FirestoreManagerFetchMemory()
+        firestoreFetchMemory.fetchMemories { (travelPlans, error) in
+            if let error = error {
+                print("Error fetching memories: \(error)")
+            } else {
+                print("Fetched memories: \(travelPlans ?? [])")
+                self.memories = travelPlans ?? []
+                self.tableView.reloadData()
+            }
+        }
     }
 }
 
@@ -67,10 +78,20 @@ extension ProfileViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell
             else { fatalError("Could not create ProfileCell") }
-            if let image = UIImage(named: "台北景點") {
-                cell.profileImageView.image = image
-            }
-            cell.profileImageNameLabel.text = "台北三日遊"
+            if memories.isEmpty == false {
+                let urlString = memories[indexPath.row].coverPhoto ?? ""
+                if let url = URL(string: urlString) {
+                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
+                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
+                        DispatchQueue.main.async {
+                            if let image = image {
+                                cell.profileImageView.image = image
+                                cell.profileImageNameLabel.text = self.memories[indexPath.row].planName
+                            } else {
+                                cell.profileImageView.image = UIImage(named: "Image_Placeholder")
+                            }    }
+                    }
+                }}
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(

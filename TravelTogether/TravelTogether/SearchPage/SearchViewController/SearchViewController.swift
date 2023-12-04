@@ -19,7 +19,7 @@ class SearchViewController: UIViewController {
     var plans: [TravelPlan] = []
     var mockImage = UIImage(named: "Image_Placeholder")
     var spotsData: [[String: Any]] = []
-    
+    var memories: [TravelPlan] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
@@ -38,6 +38,17 @@ class SearchViewController: UIViewController {
                 // Handle the retrieved travel plans
                 print("Fetched travel plans: \(travelPlans ?? [])")
                 self.plans = travelPlans ?? []
+            }
+        }
+        
+        let firestoreFetchMemory = FirestoreManagerFetchMemory()
+        firestoreFetchMemory.fetchMemories { (travelPlans, error) in
+            if let error = error {
+                print("Error fetching memories: \(error)")
+            } else {
+                print("Fetched memories: \(travelPlans ?? [])")
+                self.memories = travelPlans ?? []
+                self.tableView.reloadData()
             }
         }
     }
@@ -89,10 +100,20 @@ extension SearchViewController: UITableViewDataSource {
                 for: indexPath) as? SearchMemoriesCell
             else { fatalError("Could not create SearchMemoriesCell") }
             cell.userNameLabel.text = "Jenny"
-            if let image = UIImage(named: "台北景點") {
-                cell.memoryImageView.image = image
-                   }
-            cell.memoryNameLabel.text = "台北一日遊"
+            if memories.isEmpty == false {
+                let urlString = memories[indexPath.row].coverPhoto ?? ""
+                if let url = URL(string: urlString) {
+                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
+                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
+                        DispatchQueue.main.async {
+                            if let image = image {
+                                cell.memoryImageView.image = image
+                                cell.memoryNameLabel.text = self.memories[indexPath.row].planName
+                            } else {
+                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                            }    }
+                    }
+                }}
             return cell
         } else if searchIndex == 1 {
             guard let cell = tableView.dequeueReusableCell(

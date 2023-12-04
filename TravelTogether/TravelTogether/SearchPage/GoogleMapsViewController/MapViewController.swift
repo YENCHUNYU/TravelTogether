@@ -292,7 +292,7 @@ extension MapViewController {
     }
 }
 
-extension MapViewController: FirebaseStorageManagerDelegate {
+extension MapViewController: FirebaseStorageManagerUploadDelegate {
     func manager(_ manager: FirebaseStorageManagerUploadPhotos) {
     }
 }

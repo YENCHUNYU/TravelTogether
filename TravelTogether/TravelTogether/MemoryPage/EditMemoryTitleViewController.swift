@@ -44,7 +44,7 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
     var onePlan: TravelPlan = TravelPlan(
         id: "", planName: "",
         destination: "",
-        startDate: Date(), endDate: Date(), days: [])
+        startDate: Date(), endDate: Date(), days: [], coverPhoto: "")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,17 +57,13 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageViewTapped))
         memoryImageView.addGestureRecognizer(tapGesture)
         memoryImageView.isUserInteractionEnabled = true
+        titleTextField.delegate = self
+        titleTextField.text = onePlan.planName
     }
     
     @objc func rightButtonTapped() {
         let firestoreManagerForPost = FirestoreManagerMemoryPost()
         firestoreManagerForPost.delegate = self
-//        firestoreManagerForPost.postTravelPlan(travelPlan: onePlan) { error in
-//            if let error = error {
-//                print("Failed to post TravelPlan")
-//            } else {
-//                print("Posted TravelPlan successfully!")
-        print("self.onePlan2\(self.onePlan)")
                 firestoreManagerForPost.postMemory(memory: self.onePlan) { error in
                         if error != nil {
                             print("Failed to post TravelPlan")
@@ -83,23 +79,31 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
                                  }
                              }
             }
-//        }
-//       }
     
     @objc func imageViewTapped() {
-            // 顯示 UIImagePickerController
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
             imagePicker.sourceType = .photoLibrary
             present(imagePicker, animated: true, completion: nil)
         }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
            if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
                // 在這裡處理選擇的圖片
                memoryImageView.image = selectedImage
-           }
+               let firebaseStorageManager = FirebaseStorageManagerUploadPhotos()
+               firebaseStorageManager.delegate = self
 
+               firebaseStorageManager.uploadPhotoToFirebaseStorage(image: selectedImage) { uploadResult in
+                   switch uploadResult {
+                   case .success(let downloadURL):
+                       print("Upload to Firebase Storage successful. Download URL: \(downloadURL)")
+                       self.onePlan.coverPhoto = downloadURL.absoluteString
+                   case .failure(let error):
+                       print("Error uploading to Firebase Storage: \(error.localizedDescription)")
+                   }
+               }
+           }
            picker.dismiss(animated: true, completion: nil)
        }
 
@@ -113,5 +117,24 @@ extension EditMemoryTitleViewController: FirestoreManagerMemoryPostDelegate {
     }
     
     func manager(_ manager: FirestoreManagerMemoryPost, didPost firestoreData: TravelPlan) {
+    }
+}
+
+extension EditMemoryTitleViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+            // This method is called whenever the user types or deletes characters in the text field
+            // Update the planName property based on the changes in the text field
+            if let currentText = textField.text,
+                let range = Range(range, in: currentText) {
+                let updatedText = currentText.replacingCharacters(in: range, with: string)
+                onePlan.planName = updatedText
+            }
+
+            return true
+        }
+}
+
+extension EditMemoryTitleViewController: FirebaseStorageManagerUploadDelegate {
+    func manager(_ manager: FirebaseStorageManagerUploadPhotos) {
     }
 }

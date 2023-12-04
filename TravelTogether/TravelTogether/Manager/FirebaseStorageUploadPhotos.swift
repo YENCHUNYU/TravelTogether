@@ -8,13 +8,13 @@
 import UIKit
 import FirebaseStorage
 
-protocol FirebaseStorageManagerDelegate: AnyObject {
+protocol FirebaseStorageManagerUploadDelegate: AnyObject {
     func manager(_ manager: FirebaseStorageManagerUploadPhotos)
 }
 
 class FirebaseStorageManagerUploadPhotos {
     
-    var delegate: FirebaseStorageManagerDelegate?
+    var delegate: FirebaseStorageManagerUploadDelegate?
     
     func uploadPhotoToFirebaseStorage(image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
         let filename = "\(UUID().uuidString).jpg"

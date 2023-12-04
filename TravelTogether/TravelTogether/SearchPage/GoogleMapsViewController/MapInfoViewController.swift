@@ -128,7 +128,7 @@ class MapInfoViewController: UIViewController {
     }
 }
 
-extension MapInfoViewController: FirebaseStorageManagerDelegate {
+extension MapInfoViewController: FirebaseStorageManagerUploadDelegate {
     func manager(_ manager: FirebaseStorageManagerUploadPhotos) {
     }
 }

@@ -25,7 +25,7 @@ class MemoryViewController: UIViewController {
         return add
     }()
     var memoryIndex = 0
-    
+    var plans: [TravelPlan] = []
     @objc func createArticle() {
         performSegue(withIdentifier: "goToSelectPlan", sender: self)
         
@@ -41,6 +41,18 @@ class MemoryViewController: UIViewController {
         tableView.tableHeaderView = headerView
         view.addSubview(addButton)
         setUpButton()
+        
+        let firestoreFetchMemory = FirestoreManagerFetchMemory()
+        firestoreFetchMemory.delegate = self
+        firestoreFetchMemory.fetchMemories { (travelPlans, error) in
+            if let error = error {
+                print("Error fetching memories: \(error)")
+            } else {
+                print("Fetched memories: \(travelPlans ?? [])")
+                self.plans = travelPlans ?? []
+                self.tableView.reloadData()
+            }
+        }
     }
     
     func setUpButton() {
@@ -58,10 +70,22 @@ extension MemoryViewController: UITableViewDataSource {
         if memoryIndex == 0 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MemoryCell", for: indexPath) as? MemoryCell
             else { fatalError("Could not create MemoryCell") }
-            if let image = UIImage(named: "台北景點") {
-                cell.memoryImageView.image = image
-            }
-            cell.memoryNameLabel.text = "台北一日遊"
+
+            if plans.isEmpty == false {
+                let urlString = plans[indexPath.row].coverPhoto ?? ""
+                if let url = URL(string: urlString) {
+                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
+                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
+                        DispatchQueue.main.async {
+                            if let image = image {
+                                cell.memoryImageView.image = image
+                                cell.memoryNameLabel.text = self.plans[indexPath.row].planName
+                            } else {
+                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                            }    }
+                    }
+                }}
+            
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MemoryCell", for: indexPath) as? MemoryCell
@@ -85,5 +109,10 @@ extension MemoryViewController: MemoryHeaderViewDelegate {
     func change(to index: Int) {
         memoryIndex = index
         tableView.reloadData()
+    }
+}
+
+extension MemoryViewController: FirestoreManagerFetchMemoryDelegate {
+    func manager(_ manager: FirestoreManagerFetchMemory, didGet firestoreData: [TravelPlan]) {
     }
 }

@@ -41,7 +41,7 @@ class MemoryHeaderView: UITableViewHeaderFooterView {
             let searchBar = UITextField(frame: CGRect(
                 x: 20, y: codeSegmented.frame.maxY + 10,
                 width: UIScreen.main.bounds.width - 75, height: 40))
-                searchBar.placeholder = "搜尋行程"
+                searchBar.placeholder = "搜尋旅遊回憶"
                 searchBar.borderStyle = .roundedRect
                 contentView.addSubview(searchBar)
             

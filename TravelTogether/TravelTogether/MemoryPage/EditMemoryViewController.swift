@@ -342,7 +342,7 @@ extension EditMemoryViewController: UIImagePickerControllerDelegate, UINavigatio
     
 }
 
-extension EditMemoryViewController: FirebaseStorageManagerDelegate {
+extension EditMemoryViewController: FirebaseStorageManagerUploadDelegate {
     func manager(_ manager: FirebaseStorageManagerUploadPhotos) {
     }
 }
