@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="4FX-Pq-qY5">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -1643,7 +1642,7 @@
                                                             </collectionViewCellContentView>
                                                             <color key="backgroundColor" name="yellowGreen"/>
                                                             <connections>
-                                                                <outlet property="imageView" destination="hg0-hL-nNr" id="4Ri-lo-Wff"/>
+                                                                <outlet property="memoryImageView" destination="hg0-hL-nNr" id="4Ri-lo-Wff"/>
                                                             </connections>
                                                         </collectionViewCell>
                                                         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="AddPhotoCell" id="Xqc-88-P1q" customClass="AddPhotoCell" customModule="TravelTogether" customModuleProvider="target">

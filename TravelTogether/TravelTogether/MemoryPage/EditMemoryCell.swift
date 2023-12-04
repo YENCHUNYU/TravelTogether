@@ -6,9 +6,12 @@
 //
 
 import UIKit
+protocol EditMemoryCellDelegate: AnyObject {
+    func textViewDidChange(_ textView: UITextView) 
+}
 
 class EditMemoryCell: UITableViewCell, UITextViewDelegate {
-    
+    weak var delegate: EditMemoryCellDelegate?
     @IBOutlet weak var pinImageView: UIImageView!
     @IBOutlet weak var placeNameLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
@@ -47,6 +50,12 @@ class EditMemoryCell: UITableViewCell, UITextViewDelegate {
         textViewDidBeginEditing(articleTextView)
     }
     
+    var imageCollectionData: [String] = []
+    func setImageData(_ imageData: [String]) {
+            imageCollectionData = imageData
+            imageCollectionView.reloadData()
+        }
+    
         func setupTextView() {
             articleTextView.text = "輸入旅程中的美好回憶..."
             articleTextView.textColor = UIColor.lightGray
@@ -63,6 +72,10 @@ class EditMemoryCell: UITableViewCell, UITextViewDelegate {
             articleTextView.becomeFirstResponder()
         }
 
+    func textViewDidChange(_ textView: UITextView) {
+        delegate?.textViewDidChange(textView)
+    }
+    
         func textViewDidEndEditing(_ textView: UITextView) {
             if textView.text.isEmpty {
                 textView.text = "輸入旅程中的美好回憶..."

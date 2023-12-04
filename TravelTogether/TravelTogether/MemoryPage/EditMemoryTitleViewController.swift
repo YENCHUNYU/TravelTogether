@@ -67,7 +67,8 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
 //                print("Failed to post TravelPlan")
 //            } else {
 //                print("Posted TravelPlan successfully!")
-                firestoreManagerForPost.postMemory(memory: self.oneMemory) { error in
+        print("self.onePlan2\(self.onePlan)")
+                firestoreManagerForPost.postMemory(memory: self.onePlan) { error in
                         if error != nil {
                             print("Failed to post TravelPlan")
                         } else {

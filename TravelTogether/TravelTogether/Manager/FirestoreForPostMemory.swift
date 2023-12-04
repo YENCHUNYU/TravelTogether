@@ -69,14 +69,15 @@ class FirestoreManagerMemoryPost {
 
 extension FirestoreManagerMemoryPost {
     
-    func postMemory(memory: Memory, completion: @escaping (Error?) -> Void) {
+    func postMemory(memory: TravelPlan, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
         let memoryRef = database.collection("Memory")
         let memoryDay = memory.days
         var dayDictionary: [[String: Any]] = []
-        var locationDic: [[String: Any]] = []
+        
         for day in memoryDay {
             var updatedDay = day.dictionary
+            var locationDic: [[String: Any]] = []
             for location in day.locations {
                 let updatedLocation = location.dictionary
                 locationDic.append(updatedLocation)

@@ -7,11 +7,11 @@
 import UIKit
 
 class ImageCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var imageView: UIImageView! {
+    @IBOutlet weak var memoryImageView: UIImageView! {
         didSet {
-            imageView.layer.cornerRadius = 20
-            imageView.clipsToBounds = true
-            imageView.contentMode = .scaleAspectFill
+            memoryImageView.layer.cornerRadius = 20
+            memoryImageView.clipsToBounds = true
+            memoryImageView.contentMode = .scaleAspectFill
         }
     }
 
