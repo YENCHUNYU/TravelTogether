@@ -25,7 +25,7 @@ class MemoryViewController: UIViewController {
         return add
     }()
     var memoryIndex = 0
-    var plans: [TravelPlan] = []
+    var memories: [TravelPlan] = []
     @objc func createArticle() {
         performSegue(withIdentifier: "goToSelectPlan", sender: self)
         
@@ -49,7 +49,22 @@ class MemoryViewController: UIViewController {
                 print("Error fetching memories: \(error)")
             } else {
                 print("Fetched memories: \(travelPlans ?? [])")
-                self.plans = travelPlans ?? []
+                self.memories = travelPlans ?? []
+              
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let firestoreFetchMemory = FirestoreManagerFetchMemory()
+        firestoreFetchMemory.delegate = self
+        firestoreFetchMemory.fetchMemories { (travelPlans, error) in
+            if let error = error {
+                print("Error fetching memories: \(error)")
+            } else {
+                print("Fetched memories: \(travelPlans ?? [])")
+                self.memories = travelPlans ?? []
                 self.tableView.reloadData()
             }
         }
@@ -63,7 +78,7 @@ class MemoryViewController: UIViewController {
 
 extension MemoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1
+        memories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -71,15 +86,15 @@ extension MemoryViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MemoryCell", for: indexPath) as? MemoryCell
             else { fatalError("Could not create MemoryCell") }
 
-            if plans.isEmpty == false {
-                let urlString = plans[indexPath.row].coverPhoto ?? ""
+            if memories.isEmpty == false {
+                let urlString = memories[indexPath.row].coverPhoto ?? ""
                 if let url = URL(string: urlString) {
                     let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
                     firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
                         DispatchQueue.main.async {
                             if let image = image {
                                 cell.memoryImageView.image = image
-                                cell.memoryNameLabel.text = self.plans[indexPath.row].planName
+                                cell.memoryNameLabel.text = self.memories[indexPath.row].planName
                             } else {
                                 cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                             }    }

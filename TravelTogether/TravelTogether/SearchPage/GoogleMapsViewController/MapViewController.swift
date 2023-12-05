@@ -25,7 +25,7 @@ class MapViewController: UIViewController {
     var mapInfoView: UIView = {
         let mapInfo = UIView()
         mapInfo.translatesAutoresizingMaskIntoConstraints = false
-        mapInfo.backgroundColor = .white
+        mapInfo.backgroundColor = UIColor(named: "yellowGreen")
         mapInfo.layer.cornerRadius = 20
         return mapInfo
     }()
@@ -39,6 +39,8 @@ class MapViewController: UIViewController {
     var placeImageView: UIImageView = {
         let image = UIImageView()
         image.translatesAutoresizingMaskIntoConstraints = false
+        image.layer.cornerRadius = 20
+        image.clipsToBounds = true
         return image
     }()
     
@@ -46,16 +48,18 @@ class MapViewController: UIViewController {
         let address = UILabel()
         address.translatesAutoresizingMaskIntoConstraints = false
         address.numberOfLines = 0
-        address.font = UIFont.systemFont(ofSize: 16, weight: .light)
+        address.font = UIFont.systemFont(ofSize: 14, weight: .light)
         return address
     }()
     
     lazy var addToPlanButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("加入行程", for: .normal)
-        button.setTitleColor(.black, for: .normal)
+        button.setTitle("  加入行程  ", for: .normal)
+        button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(addToPlanButtonTapped), for: .touchUpInside)
+        button.backgroundColor = UIColor(named: "darkGreen")
+        button.layer.cornerRadius = 15
         return button
     }()
     
@@ -205,24 +209,6 @@ extension MapViewController: MapListViewControllerDelegate {
         }
     }
 }
-    
-//extension MapViewController: UIViewControllerTransitioningDelegate {
-//    func presentationController(
-//        forPresented presented: UIViewController,
-//        presenting: UIViewController?,
-//        source: UIViewController) -> UIPresentationController? {
-//        return MapInfoPresentationController(presentedViewController: presented, presenting: presenting)
-//    }
-//}
-
-//class MapInfoPresentationController: UIPresentationController {
-//    override var frameOfPresentedViewInContainerView: CGRect {
-//        guard let containerView = containerView else { return CGRect.zero }
-//
-//        let height: CGFloat = containerView.bounds.height / 2.0
-//        return CGRect(x: 0, y: containerView.bounds.height - height, width: containerView.bounds.width, height: height)
-//    }
-//}
 
 extension MapViewController {
     @objc func addToPlanButtonTapped(sender: UIButton) {
@@ -235,11 +221,12 @@ extension MapViewController {
                         case .success(let downloadURL):
                             print("Upload to Firebase Storage successful. Download URL: \(downloadURL)")
                             self.spotsPhotoUrl = downloadURL.absoluteString
+                            self.performSegue(withIdentifier: "goToPlanList", sender: sender)
                         case .failure(let error):
                             print("Error uploading to Firebase Storage: \(error.localizedDescription)")
                         }
                     }
-            performSegue(withIdentifier: "goToPlanList", sender: sender)
+            
         } else {
             
             let firestoreManagerPostLocation = FirestoreManagerForPostLocation()
@@ -288,6 +275,7 @@ extension MapViewController {
             destinationVC.location = Location(
                 name: "\(String(describing: self.placeNameLabel.text ?? "") )", photo: self.spotsPhotoUrl,
                 address: "\(String(describing: self.addressLabel.text ?? ""))")
+            print("location!!!!\(destinationVC.location)")
             }
     }
 }

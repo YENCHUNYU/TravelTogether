@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import Photos
 
 class EditMemoryViewController: UIViewController {
 
@@ -288,6 +289,23 @@ extension EditMemoryViewController: UIImagePickerControllerDelegate, UINavigatio
            imagePicker.delegate = self
            imagePicker.sourceType = .photoLibrary
            present(imagePicker, animated: true, completion: nil)
+//       let status = PHPhotoLibrary.authorizationStatus()
+//              if status == .notDetermined {
+//                  PHPhotoLibrary.requestAuthorization { status in
+//                      if status == .authorized {
+//                          DispatchQueue.main.async {
+//                              self.present(imagePicker, animated: true, completion: nil)
+//                          }
+//                      } else {
+//                          print("Permission denied.")
+//                      }
+//                  }
+//              } else if status == .authorized {
+//                  self.present(imagePicker, animated: true, completion: nil)
+//              } else {
+//                  // Handle the case where permission is denied
+//                  print("Permission denied.")
+//              }
        }
     
     func imagePickerController(

@@ -351,7 +351,8 @@ extension EditPlanViewController: UITableViewDropDelegate {
                             if let error = error {
                                 print("Failed to fetch userInfo")
                             } else {
-                                locations[destinationIndexPath.row].user = " \(String(describing: userData?.name ?? ""))已編輯 "
+                             if locations[destinationIndexPath.row].user?.isEmpty == true {
+                                    locations[destinationIndexPath.row].user = " \(String(describing: userData?.name ?? ""))已編輯 "}
                                 let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
                                 firestoreMangerPostLocation.updateLocationsOrder(
                                     travelPlanId: self.travelPlanId,

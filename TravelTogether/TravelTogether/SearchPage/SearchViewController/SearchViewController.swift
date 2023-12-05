@@ -78,6 +78,17 @@ class SearchViewController: UIViewController {
                 self.plans = travelPlans ?? []
             }
         }
+        
+        let firestoreFetchMemory = FirestoreManagerFetchMemory()
+        firestoreFetchMemory.fetchMemories { (travelPlans, error) in
+            if let error = error {
+                print("Error fetching memories: \(error)")
+            } else {
+                print("Fetched memories: \(travelPlans ?? [])")
+                self.memories = travelPlans ?? []
+                self.tableView.reloadData()
+            }
+        }
     }
     
 }
@@ -85,7 +96,7 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchIndex == 0 {
-            return 1
+            return memories.count
         } else if searchIndex == 1 {
             return plans.count
         } else {

@@ -78,7 +78,7 @@ extension SelectDateViewController: UITableViewDataSource {
             if let error = error {
                 print("Error posting location: \(error)")
             } else {
-                print("Location posted successfully!")
+                print("Location posted successfully! \(self.location)")
             }
         }
         self.dismiss(animated: true)

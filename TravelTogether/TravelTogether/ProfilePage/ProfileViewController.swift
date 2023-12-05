@@ -15,7 +15,11 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var userIntroduction: UILabel!
-    @IBOutlet weak var followButton: UIButton!
+    @IBOutlet weak var followButton: UIButton! {
+        didSet {
+            followButton.layer.cornerRadius = 15
+        }
+    }
     @IBOutlet weak var fanNumberLabel: UILabel!
     @IBOutlet weak var fanLabel: UILabel!
     @IBOutlet weak var followNumberLabel: UILabel!
@@ -62,12 +66,37 @@ class ProfileViewController: UIViewController {
             }
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let firestoreManager = FirestoreManager()
+        firestoreManager.delegate = self
+        firestoreManager.fetchTravelPlans { (travelPlans, error) in
+            if let error = error {
+                print("Error fetching travel plans: \(error)")
+            } else {
+                // Handle the retrieved travel plans
+                print("Fetched travel plans: \(travelPlans ?? [])")
+                self.plans = travelPlans ?? []
+            }
+        }
+        
+        let firestoreFetchMemory = FirestoreManagerFetchMemory()
+        firestoreFetchMemory.fetchMemories { (travelPlans, error) in
+            if let error = error {
+                print("Error fetching memories: \(error)")
+            } else {
+                print("Fetched memories: \(travelPlans ?? [])")
+                self.memories = travelPlans ?? []
+                self.tableView.reloadData()
+            }
+        }
+    }
 }
 
 extension ProfileViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if profileIndex == 0 {
-           return 1
+            return memories.count
         } else {
             return plans.count
         }
@@ -97,8 +126,7 @@ extension ProfileViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell
             else { fatalError("Could not create ProfileCell") }
-            cell.profileImageNameLabel.text = plans[indexPath.row].planName
-            
+                  
             let daysData = plans[indexPath.row].days
             if daysData.isEmpty == false {
                 let locationData = daysData[0]
@@ -111,6 +139,7 @@ extension ProfileViewController: UITableViewDataSource {
                             DispatchQueue.main.async {
                                 if let image = image {
                                     cell.profileImageView.image = image
+                                    cell.profileImageNameLabel.text = self.plans[indexPath.row].planName
                                 } else {
                                     cell.profileImageView.image = UIImage(named: "Image_Placeholder")
                                 }
