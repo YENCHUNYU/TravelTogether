@@ -13,13 +13,32 @@ import FirebaseStorage
 class SearchViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var button: UIButton!
     
     var searchIndex = 0
     var plans: [TravelPlan] = []
     var mockImage = UIImage(named: "Image_Placeholder")
     var spotsData: [[String: Any]] = []
     var memories: [TravelPlan] = []
+    
+    lazy var searchButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UIColor(named: "darkGreen")
+        button.layer.cornerRadius = 25
+        button.setImage(UIImage(named: "search"), for: .normal)
+        button.currentImage?.withTintColor(.blue)
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        button.addTarget(self, action: #selector(searchLocation), for: .touchUpInside)
+        button.imageView?.contentMode = .scaleAspectFill
+       
+        return button
+    }()
+    
+    @objc func searchLocation() {
+        performSegue(withIdentifier: "goToMapFromSearch", sender: self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
@@ -29,6 +48,8 @@ class SearchViewController: UIViewController {
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 100)
         headerView.delegate = self
         tableView.tableHeaderView = headerView
+        view.addSubview(searchButton)
+        setUpButton()
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
         firestoreManager.fetchTravelPlans { (travelPlans, error) in
@@ -52,9 +73,9 @@ class SearchViewController: UIViewController {
             }
         }
     }
-    
-    @IBAction func buttonTapped(_ sender: Any) {
-        performSegue(withIdentifier: "goToMapFromSearch", sender: sender)
+    func setUpButton() {
+        searchButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
+        searchButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

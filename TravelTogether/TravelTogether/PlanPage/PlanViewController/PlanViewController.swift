@@ -9,15 +9,32 @@ import UIKit
 import FirebaseFirestore
 import FirebaseStorage
 
-class PlanViewController: UIViewController { 
-    
-    @IBOutlet weak var addNewButton: UIButton!
+class PlanViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView! 
     
     var planIndex = 0
     var plans: [TravelPlan] = []
     var spotsData: [[String: Any]] = []
+    
+    lazy var addButton: UIButton = {
+        let add = UIButton()
+        add.translatesAutoresizingMaskIntoConstraints = false
+        add.backgroundColor = UIColor(named: "darkGreen")
+        add.layer.cornerRadius = 25
+        add.setTitle("＋", for: .normal)
+        add.setTitleColor(.white, for: .normal)
+        add.titleLabel?.font = UIFont.systemFont(ofSize: 40, weight: .heavy)
+        add.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        add.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        add.addTarget(self, action: #selector(createPlan), for: .touchUpInside)
+        return add
+    }()
+    
+    @objc func createPlan() {
+        performSegue(withIdentifier: "goToCreate", sender: self)  
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
@@ -26,7 +43,8 @@ class PlanViewController: UIViewController {
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 100)
         headerView.delegate = self
         tableView.tableHeaderView = headerView
-       
+        view.addSubview(addButton)
+        setUpButton()
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
         firestoreManager.fetchTravelPlans { (travelPlan, error) in
@@ -40,6 +58,10 @@ class PlanViewController: UIViewController {
                 print("Travel plan not found.")
             }
         }
+    }
+    func setUpButton() {
+        addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
+        addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,11 +79,6 @@ class PlanViewController: UIViewController {
             }
         }
     }
-    
-    @IBAction func addNewPlanButtonTapped(_ sender: Any) {
-        performSegue(withIdentifier: "goToCreate", sender: self)
-    }
-    
 }
 
 extension PlanViewController: UITableViewDataSource {
