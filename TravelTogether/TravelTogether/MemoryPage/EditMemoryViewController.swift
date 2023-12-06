@@ -70,6 +70,32 @@ class EditMemoryViewController: UIViewController {
                                           target: self, action: #selector(rightButtonTapped))
         navigationItem.rightBarButtonItem = rightButton
         rightButton.tintColor = UIColor(named: "yellowGreen")
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow(_:)),
+            name: UIResponder.keyboardWillShowNotification, object: nil)
+       NotificationCenter.default.addObserver(
+        self,
+        selector: #selector(keyboardWillHide(_:)),
+        name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+            guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] 
+                                      as? NSValue)?.cgRectValue.size else {
+                return
+            }
+
+            let contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
+            tableView.contentInset = contentInset
+        tableView.scrollIndicatorInsets = contentInset
+        }
+
+    @objc func keyboardWillHide(_ notification: Notification) {
+        let contentInset = UIEdgeInsets.zero
+        tableView.contentInset = contentInset
+        tableView.scrollIndicatorInsets = contentInset
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -105,7 +131,7 @@ class EditMemoryViewController: UIViewController {
     }
 }
 
-extension EditMemoryViewController: UITableViewDataSource, EditMemoryCellDelegate {
+extension EditMemoryViewController: UITableViewDataSource, UITextViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         onePlan.days.count
     }
@@ -144,7 +170,8 @@ extension EditMemoryViewController: UITableViewDataSource, EditMemoryCellDelegat
         cell.imageCollectionView.tag = indexPath.section * 1000 + indexPath.row
         cell.imageCollectionView.reloadData()
         cell.articleTextView.tag = indexPath.section * 1000 + indexPath.row
-        cell.delegate = self
+        cell.articleTextView.textColor = .lightGray
+        cell.articleTextView.delegate = self
         return cell
     }
     
@@ -153,6 +180,21 @@ extension EditMemoryViewController: UITableViewDataSource, EditMemoryCellDelegat
             let locationIndex = textView.tag % 1000
             onePlan.days[dayIndex].locations[locationIndex].article = textView.text
         }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "輸入旅程中的美好回憶..."
+            textView.textColor = UIColor.lightGray
+        }
+    }
+
 }
 
 extension EditMemoryViewController: UITableViewDelegate {

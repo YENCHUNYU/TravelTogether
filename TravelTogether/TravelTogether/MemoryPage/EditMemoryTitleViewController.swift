@@ -40,7 +40,6 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
         titleTextField.resignFirstResponder()
     }
     
-//    var oneMemory: Memory = Memory(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), days: [])
     var onePlan: TravelPlan = TravelPlan(
         id: "", planName: "",
         destination: "",
@@ -112,13 +111,6 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
            picker.dismiss(animated: true, completion: nil)
        }
    }
-//extension EditMemoryTitleViewController: FirestoreManagerMemoryPostDelegate {
-//    func manager(_ manager: FirestoreManagerMemoryPost, didPost firestoreData: Memory) {
-//    }
-//    
-//    func manager(_ manager: FirestoreManagerMemoryPost, didPost firestoreData: TravelPlan) {
-//    }
-//}
 
 extension EditMemoryTitleViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

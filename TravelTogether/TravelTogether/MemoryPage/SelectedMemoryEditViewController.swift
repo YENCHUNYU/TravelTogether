@@ -59,6 +59,30 @@ class SelectedMemoryEditViewController: UIViewController {
                                           target: self, action: #selector(rightButtonTapped))
         navigationItem.rightBarButtonItem = rightButton
         rightButton.tintColor = UIColor(named: "yellowGreen")
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow(_:)),
+            name: UIResponder.keyboardWillShowNotification, object: nil)
+       NotificationCenter.default.addObserver(
+        self, selector: #selector(keyboardWillHide(_:)),
+        name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+            guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] 
+                                      as? NSValue)?.cgRectValue.size else {
+                return
+            }
+
+            let contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
+            tableView.contentInset = contentInset
+        tableView.scrollIndicatorInsets = contentInset
+        }
+
+    @objc func keyboardWillHide(_ notification: Notification) {
+        let contentInset = UIEdgeInsets.zero
+        tableView.contentInset = contentInset
+        tableView.scrollIndicatorInsets = contentInset
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -72,6 +96,13 @@ class SelectedMemoryEditViewController: UIViewController {
     }
    
     @objc func rightButtonTapped() {
+        let firestoreManagerForPost = FirestoreManagerMemoryPost()
+            firestoreManagerForPost.updateMemory(memory: self.onePlan, memoryId: memoryId) { error in
+                    if error != nil {
+                        print("Failed to post Memory")
+                    } else {
+                        print("Posted Memory successfully!")}
+            }
         navigationController?.popViewController(animated: true)
          
        }
@@ -93,7 +124,8 @@ class SelectedMemoryEditViewController: UIViewController {
     }
 }
 
-extension SelectedMemoryEditViewController: UITableViewDataSource, EditMemoryCellDelegate {
+extension SelectedMemoryEditViewController: UITableViewDataSource, UITextViewDelegate {
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         onePlan.days.count
     }
@@ -118,6 +150,7 @@ extension SelectedMemoryEditViewController: UITableViewDataSource, EditMemoryCel
 
         cell.placeNameLabel.text = location.name
         cell.addressLabel.text = location.address
+        cell.articleTextView.text = location.article
         
         cell.imageCollectionView.dataSource = self
         cell.imageCollectionView.delegate = self
@@ -132,7 +165,7 @@ extension SelectedMemoryEditViewController: UITableViewDataSource, EditMemoryCel
         cell.imageCollectionView.tag = indexPath.section * 1000 + indexPath.row
         cell.imageCollectionView.reloadData()
         cell.articleTextView.tag = indexPath.section * 1000 + indexPath.row
-        cell.delegate = self
+        cell.articleTextView.delegate = self
         return cell
     }
     
@@ -246,14 +279,18 @@ extension SelectedMemoryEditViewController: UICollectionViewDataSource,
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, 
+                        layout collectionViewLayout: UICollectionViewLayout, 
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         var widthperItem: CGFloat = 0
         let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
         let availableWidth = view.frame.width - paddingSpace
         widthperItem = availableWidth / 3
         return CGSize(width: widthperItem, height: 88)
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView, 
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
         return sectionInsets
     }
 }
