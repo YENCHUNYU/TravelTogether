@@ -8,13 +8,13 @@
 import UIKit
 import FirebaseFirestore
 
-protocol FirestoreManagerMemoryPostDelegate: AnyObject {
-    func manager(_ manager: FirestoreManagerMemoryPost, didPost firestoreData: Memory)
-    func manager(_ manager: FirestoreManagerMemoryPost, didPost firestoreData: TravelPlan)
-}
+//protocol FirestoreManagerMemoryPostDelegate: AnyObject {
+//    func manager(_ manager: FirestoreManagerMemoryPost, didPost firestoreData: Memory)
+//    func manager(_ manager: FirestoreManagerMemoryPost, didPost firestoreData: TravelPlan)
+//}
 
 class FirestoreManagerMemoryPost {
-    var delegate: FirestoreManagerMemoryPostDelegate?
+//    var delegate: FirestoreManagerMemoryPostDelegate?
     
     func postTravelPlan(travelPlan: TravelPlan, completion: @escaping (Error?) -> Void) {
 //        let database = Firestore.firestore()

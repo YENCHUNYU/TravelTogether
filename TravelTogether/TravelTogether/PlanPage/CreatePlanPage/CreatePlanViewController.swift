@@ -16,10 +16,33 @@ class CreatePlanViewController: UIViewController {
     var endDate: Date?
     var newTravelPlan = TravelPlan(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), days: [])
     
-    @IBOutlet weak var planNameLabel: UILabel!
+    @IBOutlet weak var planNameLabel: UILabel! 
     @IBOutlet weak var planNameTextField: UITextField!
-    @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var datePickerContrainerView: UIView!
+    @IBOutlet weak var saveButton: UIButton! {
+        didSet {
+            saveButton.layer.cornerRadius = 10
+        }
+    }
+    @IBOutlet weak var datePickerContrainerView: UIView! {
+        didSet {
+            datePickerContrainerView.layer.cornerRadius = 15
+            datePickerContrainerView.clipsToBounds = true
+        }
+    }
+
+    @IBOutlet weak var startLabel: UILabel! {
+        didSet {
+            startLabel.layer.cornerRadius = 5
+            startLabel.layer.masksToBounds = true
+        }
+    }
+    
+    @IBOutlet weak var endLabel: UILabel! {
+        didSet {
+            endLabel.layer.cornerRadius = 5
+            endLabel.layer.masksToBounds = true
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

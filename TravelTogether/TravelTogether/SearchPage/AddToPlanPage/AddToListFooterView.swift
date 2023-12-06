@@ -12,8 +12,10 @@ class AddToListFooterView: UITableViewHeaderFooterView {
     let createNewPlanButton: UIButton = {
         let create = UIButton()
         create.translatesAutoresizingMaskIntoConstraints = false
-        create.setTitle("建立新行程", for: .normal)
-        create.backgroundColor = .lightGray
+        create.setTitle("  建立新行程  ", for: .normal)
+        create.backgroundColor = UIColor(named: "darkGreen")
+        create.layer.cornerRadius = 15
+        create.titleLabel?.textColor = .white
         return create
     }()
     

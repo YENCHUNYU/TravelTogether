@@ -16,7 +16,11 @@ class SearchMemoriesCell: UITableViewCell {
         }
     }
     @IBOutlet weak var userNameLabel: UILabel!
-    @IBOutlet weak var memoryImageView: UIImageView!
+    @IBOutlet weak var memoryImageView: UIImageView! {
+        didSet {
+            memoryImageView.layer.cornerRadius = 20
+        }
+    }
     @IBOutlet weak var thumbsUpButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var dateLabel: UILabel!

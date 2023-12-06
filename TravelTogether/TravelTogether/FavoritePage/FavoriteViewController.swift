@@ -19,7 +19,7 @@ class FavoriteViewController: UIViewController {
         tableView.delegate = self
         tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: "SearchHeaderView")
         let headerView = SearchHeaderView(reuseIdentifier: "SearchHeaderView")
-        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 100)
+        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
         tableView.tableHeaderView = headerView
         headerView.delegate = self
     }

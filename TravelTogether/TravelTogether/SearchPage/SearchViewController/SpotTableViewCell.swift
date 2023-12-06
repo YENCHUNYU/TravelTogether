@@ -9,7 +9,11 @@ import UIKit
 
 class SpotCell: UITableViewCell {
     
-    @IBOutlet weak var spotImageView: UIImageView!
+    @IBOutlet weak var spotImageView: UIImageView! {
+        didSet {
+            spotImageView.layer.cornerRadius = 20
+        }
+    }
     @IBOutlet weak var thumbsUpButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var thumbsUpCountsLabel: UILabel!

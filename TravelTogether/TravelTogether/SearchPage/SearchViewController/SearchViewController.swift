@@ -45,7 +45,7 @@ class SearchViewController: UIViewController {
         tableView.delegate = self
         tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: "SearchHeaderView")
         let headerView = SearchHeaderView(reuseIdentifier: "SearchHeaderView")
-        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 100)
+        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
         headerView.delegate = self
         tableView.tableHeaderView = headerView
         view.addSubview(searchButton)
@@ -134,18 +134,30 @@ extension SearchViewController: UITableViewDataSource {
             cell.userNameLabel.text = "Jenny"
             if memories.isEmpty == false {
                 let urlString = memories[indexPath.row].coverPhoto ?? ""
-                if let url = URL(string: urlString) {
+                if !urlString.isEmpty, let url = URL(string: urlString) {
                     let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
                     firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
                         DispatchQueue.main.async {
                             if let image = image {
                                 cell.memoryImageView.image = image
                                 cell.memoryNameLabel.text = self.memories[indexPath.row].planName
+                                let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
+                                let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
+                                cell.dateLabel.text = "\(start)-\(end)"
                             } else {
                                 cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                            }    }
+                            }
+                        }
                     }
-                }}
+                } else {
+                    // Handle the case where the URL is empty
+                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                    cell.memoryNameLabel.text = self.memories[indexPath.row].planName
+                    let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
+                    let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
+                    cell.dateLabel.text = "\(start)-\(end)"
+                }
+            }
             return cell
         } else if searchIndex == 1 {
             guard let cell = tableView.dequeueReusableCell(
@@ -187,6 +199,23 @@ extension SearchViewController: UITableViewDataSource {
             return cell
         }   
     }
+    
+    func changeDateFormat(date: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // Set the locale to handle the date format
+
+        if let date = dateFormatter.date(from: date) {
+            let outputFormatter = DateFormatter()
+            outputFormatter.dateFormat = "yyyy年MM月dd日"
+            let formattedString = outputFormatter.string(from: date)
+            return formattedString
+        } else {
+            print("Failed to convert the date string.")
+            return ""
+        }
+
+    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if searchIndex == 0 {
             performSegue(withIdentifier: "MemoryDetail", sender: self)
@@ -198,7 +227,7 @@ extension SearchViewController: UITableViewDataSource {
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if searchIndex == 0 || searchIndex == 1 {
-           return 350
+           return 370
         } else {
             return 300
         }

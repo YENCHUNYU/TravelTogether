@@ -7,27 +7,27 @@
 
 import UIKit
 import FirebaseFirestore
-
-protocol FirestoreManagerFetchMemoryDelegate: AnyObject {
-    func manager(_ manager: FirestoreManagerFetchMemory, didGet firestoreData: [TravelPlan])
-}
+//
+//protocol FirestoreManagerFetchMemoryDelegate: AnyObject {
+//    func manager(_ manager: FirestoreManagerFetchMemory, didGet firestoreData: [TravelPlan])
+//}
 
 class FirestoreManagerFetchMemory {
     
-    var delegate: FirestoreManagerFetchMemoryDelegate?
+//    var delegate: FirestoreManagerFetchMemoryDelegate?
 
     func fetchMemories(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
         let database = Firestore.firestore()
         
-        let travelPlansRef = database.collection("Memory")
-        let orderedQuery = travelPlansRef.order(by: "startDate", descending: false)
+        let memoriesRef = database.collection("Memory")
+        let orderedQuery = memoriesRef.order(by: "startDate", descending: false)
         orderedQuery.getDocuments { (querySnapshot, error) in
             
             if let error = error {
                 print("Error getting documents: \(error)")
                 completion(nil, error)
             } else {
-                var travelPlans: [TravelPlan] = []
+                var memories: [TravelPlan] = []
                 
                 for document in querySnapshot!.documents {
                     let data = document.data()
@@ -49,7 +49,9 @@ class FirestoreManagerFetchMemory {
                             let location = Location(
                                 name: locationData["name"] as? String ?? "",
                                 photo: locationData["photo"] as? String ?? "",
-                                address: locationData["address"] as? String ?? ""
+                                address: locationData["address"] as? String ?? "",
+                                memoryPhotos: locationData["article"] as? [String] ?? [],
+                                article: locationData["article"] as? String ?? ""
                             )
                             locations.append(location)
                         }
@@ -67,10 +69,88 @@ class FirestoreManagerFetchMemory {
                         days: travelDays,
                         coverPhoto: data["coverPhoto"] as? String ?? ""
                     )
-                    travelPlans.append(travelPlan)
+                    memories.append(travelPlan)
                 }
                 
-                completion(travelPlans, nil)
+                completion(memories, nil)
+            }
+        }
+    }
+    
+    func deleteMemory(withID memoryID: String, completion: @escaping (Error?) -> Void) {
+           let database = Firestore.firestore()
+           let memoryRef = database.collection("Memory").document(memoryID)
+
+        memoryRef.delete { error in
+               if let error = error {
+                   print("Error deleting memory document: \(error)")
+                   completion(error)
+               } else {
+                   print("Memory document deleted successfully.")
+                   completion(nil)
+               }
+           }
+       }
+    
+    func fetchOneMemory(byId memoryId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
+        let database = Firestore.firestore()
+        let memoryRef = database.collection("Memory").document(memoryId)
+
+        memoryRef.addSnapshotListener { document, error in
+            if let error = error {
+                print("Error getting document: \(error)")
+                completion(nil, error)
+            } else {
+                do {
+                    guard let document = document, document.exists else {
+                        completion(nil, nil)
+                        return
+                    }
+
+                    let data = document.data()
+                    let startDate = (data?["startDate"] as? Timestamp)?.dateValue() ?? Date()
+                    let endDate = (data?["endDate"] as? Timestamp)?.dateValue() ?? Date()
+
+                    guard let daysArray = data?["days"] as? [[String: Any]] else {
+                        return
+                    }
+
+                    var travelDays: [TravelDay] = []
+                    for dayData in daysArray {
+                    
+                        guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
+                            return
+                        }
+
+                        var locations: [Location] = []
+                        for locationData in locationsArray {
+                            let location = Location(
+                                name: locationData["name"] as? String ?? "",
+                                photo: locationData["photo"] as? String ?? "",
+                                address: locationData["address"] as? String ?? "",
+                                user: locationData["user"] as? String ?? "",
+                                memoryPhotos: locationData["memoryPhotos"] as? [String] ?? [], 
+                                article: locationData["article"] as? String ?? ""
+                            )
+                            locations.append(location)
+                        }
+
+                        let travelDay = TravelDay(locations: locations)
+                        travelDays.append(travelDay)
+                    }
+                    
+                    let travelPlan = TravelPlan(
+                        id: document.documentID,
+                        planName: data?["planName"] as? String ?? "",
+                        destination: data?["destination"] as? String ?? "",
+                        startDate: startDate,
+                        endDate: endDate,
+                        days: travelDays,
+                        coverPhoto: data?["coverPhoto"] as? String ?? ""
+                    )
+                    completion(travelPlan, nil)
+//                    self.delegate?.manager(self, didGet: travelPlan)
+                }
             }
         }
     }

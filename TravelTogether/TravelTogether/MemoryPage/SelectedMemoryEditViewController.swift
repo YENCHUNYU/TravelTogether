@@ -1,15 +1,15 @@
 //
-//  EditMemoryViewController.swift
+//  SelectedMemoryEditVC.swift
 //  TravelTogether
 //
-//  Created by User on 2023/11/30.
+//  Created by User on 2023/12/6.
 //
 
 import UIKit
 import FirebaseFirestore
 import Photos
 
-class EditMemoryViewController: UIViewController {
+class SelectedMemoryEditViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
 
@@ -22,8 +22,8 @@ class EditMemoryViewController: UIViewController {
     var days: [String] = ["第1天"]
     let headerView = EditMemoryHeaderView(reuseIdentifier: "EditMemoryHeaderView")
     var memoryPhotos: [String] = []
-//    var oneMemory: Memory = Memory(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), days: [])
     var currentIndexPath: IndexPath?
+    var memoryId = ""
 
     private var itemsPerRow: CGFloat = 2
     private var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
@@ -42,31 +42,20 @@ class EditMemoryViewController: UIViewController {
         
         tableView.dragInteractionEnabled = true
         
-        let firestoreManagerForOne = FirestoreManagerForOne()
-        firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(byId: travelPlanId) { (travelPlan, error) in
-            if let error = error {
-                print("Error fetching one travel plan: \(error)")
-            } else if let travelPlan = travelPlan {
-                print("Fetched one travel plan: \(travelPlan)")
-                self.onePlan = travelPlan
-                let counts = self.onePlan.days.count
-                let originalCount = self.days.count
-                    if counts > originalCount {
-                        for _ in originalCount...counts - 1 {
-                            let number = self.days.count
-                            self.days.insert("第\(number + 1)天", at: number)
+        let firestoreManagerForOne = FirestoreManagerFetchMemory()
+        firestoreManagerForOne.fetchOneMemory(byId: memoryId) { (memory, error) in
+                        if let error = error {
+                            print("Error fetching one memory: \(error)")
+                        } else if let memory = memory {
+                            print("Fetched one memory: \(memory)")
+                            self.onePlan = memory
+                            self.tableView.reloadData()
+                        } else {
+                            print("One memory not found.")
                         }
                     }
-                self.headerView.days = self.days
-                self.headerView.onePlan = self.onePlan
-                self.headerView.collectionView.reloadData()
-            } else {
-                print("One travel plan not found.")
-            }
-        }
-        
-        let rightButton = UIBarButtonItem(title: "下一步", style: .plain, 
+
+        let rightButton = UIBarButtonItem(title: "完成", style: .plain,
                                           target: self, action: #selector(rightButtonTapped))
         navigationItem.rightBarButtonItem = rightButton
         rightButton.tintColor = UIColor(named: "yellowGreen")
@@ -83,29 +72,28 @@ class EditMemoryViewController: UIViewController {
     }
    
     @objc func rightButtonTapped() {
-       
-         performSegue(withIdentifier: "goToEditTitle", sender: self)
+        navigationController?.popViewController(animated: true)
+         
        }
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let firestoreManagerForOne = FirestoreManagerForOne()
-        firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(byId: travelPlanId) { (travelPlan, error) in
-            if let error = error {
-                print("Error fetching one travel plan: \(error)")
-            } else if let travelPlan = travelPlan {
-                self.onePlan = travelPlan
-                self.tableView.reloadData()
-//               self.headerView.collectionView.reloadData()
-            } else {
-                print("One travel plan not found.")
-            }
-        }
+        let firestoreManagerForOne = FirestoreManagerFetchMemory()
+        firestoreManagerForOne.fetchOneMemory(byId: memoryId) { (memory, error) in
+                        if let error = error {
+                            print("Error fetching one memory: \(error)")
+                        } else if let memory = memory {
+                            print("Fetched one memory: \(memory)")
+                            self.onePlan = memory
+                            self.tableView.reloadData()
+                        } else {
+                            print("One memory not found.")
+                        }
+                    }
     }
 }
 
-extension EditMemoryViewController: UITableViewDataSource, EditMemoryCellDelegate {
+extension SelectedMemoryEditViewController: UITableViewDataSource, EditMemoryCellDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         onePlan.days.count
     }
@@ -125,7 +113,7 @@ extension EditMemoryViewController: UITableViewDataSource, EditMemoryCellDelegat
             withIdentifier: "EditMemoryCell",
             for: indexPath) as? EditMemoryCell
         else { fatalError("Could not create EditMemoryCell") }
-
+        currentIndexPath = indexPath
         let location = onePlan.days[indexPath.section].locations[indexPath.row]
 
         cell.placeNameLabel.text = location.name
@@ -155,7 +143,7 @@ extension EditMemoryViewController: UITableViewDataSource, EditMemoryCellDelegat
         }
 }
 
-extension EditMemoryViewController: UITableViewDelegate {
+extension SelectedMemoryEditViewController: UITableViewDelegate {
     func tableView(
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -163,13 +151,13 @@ extension EditMemoryViewController: UITableViewDelegate {
     }
 }
 
-extension EditMemoryViewController: FirestoreManagerForOneDelegate {
+extension SelectedMemoryEditViewController: FirestoreManagerForOneDelegate {
     func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan) {
         onePlan = firestoreData
     }
 }
 
-extension EditMemoryViewController: EditMemoryHeaderViewDelegate {
+extension SelectedMemoryEditViewController: EditMemoryHeaderViewDelegate {
     
     func passDays(daysData: [String]) {
         self.days = daysData
@@ -192,7 +180,7 @@ extension EditMemoryViewController: EditMemoryHeaderViewDelegate {
     }
 }
 
-extension EditMemoryViewController: UICollectionViewDataSource, 
+extension SelectedMemoryEditViewController: UICollectionViewDataSource,
                                         UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -226,8 +214,11 @@ extension EditMemoryViewController: UICollectionViewDataSource,
            
            let firestorageDownload = FirebaseStorageManagerDownloadPhotos()
            firestorageDownload.delegate = self
-               
-           guard let memoryPhotos = onePlan.days[currentIndexPath?.section ?? 0].locations[currentIndexPath?.row ?? 0].memoryPhotos else {
+           guard let section = currentIndexPath?.section,
+               let row = currentIndexPath?.row,
+               section < onePlan.days.count,
+               row < onePlan.days[section].locations.count,
+                 let memoryPhotos = onePlan.days[section].locations[row].memoryPhotos else {
                return cell
            }
            for image in memoryPhotos {
@@ -267,7 +258,7 @@ extension EditMemoryViewController: UICollectionViewDataSource,
     }
 }
 
-extension EditMemoryViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension SelectedMemoryEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
    @objc func showImagePicker(forIndexPath indexPath: IndexPath) {
        currentIndexPath = indexPath
 
@@ -329,12 +320,12 @@ extension EditMemoryViewController: UIImagePickerControllerDelegate, UINavigatio
     
 }
 
-extension EditMemoryViewController: FirebaseStorageManagerUploadDelegate {
+extension SelectedMemoryEditViewController: FirebaseStorageManagerUploadDelegate {
     func manager(_ manager: FirebaseStorageManagerUploadPhotos) {
     }
 }
 
-extension EditMemoryViewController: FirebaseStorageManagerDownloadDelegate {
+extension SelectedMemoryEditViewController: FirebaseStorageManagerDownloadDelegate {
     func manager(_ manager: FirebaseStorageManagerDownloadPhotos) {
     }
 }

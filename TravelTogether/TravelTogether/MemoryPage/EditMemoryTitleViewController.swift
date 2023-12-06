@@ -40,7 +40,7 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
         titleTextField.resignFirstResponder()
     }
     
-    var oneMemory: Memory = Memory(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), days: [])
+//    var oneMemory: Memory = Memory(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), days: [])
     var onePlan: TravelPlan = TravelPlan(
         id: "", planName: "",
         destination: "",
@@ -51,9 +51,9 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
         let rightButton = UIBarButtonItem(
             title: "發佈", style: .plain,
             target: self, action: #selector(rightButtonTapped))
-               navigationItem.rightBarButtonItem = rightButton
+        navigationItem.rightBarButtonItem = rightButton
         rightButton.tintColor = UIColor(named: "yellowGreen")
-        
+       
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageViewTapped))
         memoryImageView.addGestureRecognizer(tapGesture)
         memoryImageView.isUserInteractionEnabled = true
@@ -63,7 +63,7 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
     
     @objc func rightButtonTapped() {
         let firestoreManagerForPost = FirestoreManagerMemoryPost()
-        firestoreManagerForPost.delegate = self
+//        firestoreManagerForPost.delegate = self
                 firestoreManagerForPost.postMemory(memory: self.onePlan) { error in
                         if error != nil {
                             print("Failed to post TravelPlan")
@@ -112,13 +112,13 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
            picker.dismiss(animated: true, completion: nil)
        }
    }
-extension EditMemoryTitleViewController: FirestoreManagerMemoryPostDelegate {
-    func manager(_ manager: FirestoreManagerMemoryPost, didPost firestoreData: Memory) {
-    }
-    
-    func manager(_ manager: FirestoreManagerMemoryPost, didPost firestoreData: TravelPlan) {
-    }
-}
+//extension EditMemoryTitleViewController: FirestoreManagerMemoryPostDelegate {
+//    func manager(_ manager: FirestoreManagerMemoryPost, didPost firestoreData: Memory) {
+//    }
+//    
+//    func manager(_ manager: FirestoreManagerMemoryPost, didPost firestoreData: TravelPlan) {
+//    }
+//}
 
 extension EditMemoryTitleViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

@@ -40,7 +40,7 @@ class PlanViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         let headerView = PlanHeaderView(reuseIdentifier: "PlanHeaderView")
-        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 100)
+        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
         headerView.delegate = self
         tableView.tableHeaderView = headerView
         view.addSubview(addButton)

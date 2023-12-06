@@ -88,10 +88,9 @@ extension SelectPlanViewController: UITableViewDataSource {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToSelectDate" {
-            if let destinationVC = segue.destination as? SelectDateViewController {
-                destinationVC.planId = self.planId
-                destinationVC.location = self.location
+        if segue.identifier == "goToEditMemory" {
+            if let destinationVC = segue.destination as? EditMemoryViewController {
+                destinationVC.travelPlanId = self.planId
             }
         }
     }

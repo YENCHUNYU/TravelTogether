@@ -38,24 +38,24 @@ class PlanHeaderView: UITableViewHeaderFooterView {
             codeSegmented.delegate = self
             contentView.addSubview(codeSegmented)
             
-            let searchBar = UITextField(frame: CGRect(
-                x: 20, y: codeSegmented.frame.maxY + 10,
-                width: UIScreen.main.bounds.width - 75, height: 40))
-                searchBar.placeholder = "搜尋行程"
-                searchBar.borderStyle = .roundedRect
-                contentView.addSubview(searchBar)
-            
-            let searchButton = UIButton(type: .system)
-            searchButton.frame = CGRect(
-                x: UIScreen.main.bounds.width - 50, y: codeSegmented.frame.maxY + 10,
-                width: 30, height: 40)
-
-            let imageConfiguration = UIImage.SymbolConfiguration(pointSize: 30, weight: .regular)
-            let searchImage = UIImage(systemName: "magnifyingglass.circle.fill", withConfiguration: imageConfiguration)
-            searchButton.setImage(searchImage, for: .normal)
-            searchButton.tintColor = .black
-            searchButton.imageView?.contentMode = .scaleAspectFit
-            contentView.addSubview(searchButton)
+//            let searchBar = UITextField(frame: CGRect(
+//                x: 20, y: codeSegmented.frame.maxY + 10,
+//                width: UIScreen.main.bounds.width - 75, height: 40))
+//                searchBar.placeholder = "搜尋行程"
+//                searchBar.borderStyle = .roundedRect
+//                contentView.addSubview(searchBar)
+//            
+//            let searchButton = UIButton(type: .system)
+//            searchButton.frame = CGRect(
+//                x: UIScreen.main.bounds.width - 50, y: codeSegmented.frame.maxY + 10,
+//                width: 30, height: 40)
+//
+//            let imageConfiguration = UIImage.SymbolConfiguration(pointSize: 30, weight: .regular)
+//            let searchImage = UIImage(systemName: "magnifyingglass.circle.fill", withConfiguration: imageConfiguration)
+//            searchButton.setImage(searchImage, for: .normal)
+//            searchButton.tintColor = .black
+//            searchButton.imageView?.contentMode = .scaleAspectFit
+//            contentView.addSubview(searchButton)
         }
 }
 

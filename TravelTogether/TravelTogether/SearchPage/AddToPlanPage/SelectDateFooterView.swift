@@ -12,8 +12,10 @@ class SelectDateFooterView: UITableViewHeaderFooterView {
     let createNewDayButton: UIButton = {
         let create = UIButton()
         create.translatesAutoresizingMaskIntoConstraints = false
-        create.setTitle("新增天數", for: .normal)
-        create.backgroundColor = .lightGray
+        create.setTitle("  新增天數  ", for: .normal)
+        create.backgroundColor = UIColor(named: "darkGreen")
+        create.layer.cornerRadius = 15
+        create.titleLabel?.textColor = .white
         return create
     }()
     

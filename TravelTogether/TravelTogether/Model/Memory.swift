@@ -8,35 +8,35 @@
 import UIKit
 import FirebaseFirestore
 
-struct Memory {
-    var id: String
-    var planName: String
-    var destination: String
-    var startDate: Date
-    var endDate: Date
-    var days: [TravelDay]
-    
-    var dictionary: [String: Any] {
-        return [
-            "id": id,
-            "planName": planName,
-            "destination": destination,
-            "startDate": Timestamp(date: startDate),
-            "endDate": Timestamp(date: endDate),
-            "days": days
-        ]
-    }
-}
-
-struct MemoryDay {
-    var locations: [Location]
-    
-    var dictionary: [String: Any] {
-        return [
-            "locations": locations
-        ]
-    }
-}
+//struct Memory {
+//    var id: String
+//    var planName: String
+//    var destination: String
+//    var startDate: Date
+//    var endDate: Date
+//    var days: [TravelDay]
+//    
+//    var dictionary: [String: Any] {
+//        return [
+//            "id": id,
+//            "planName": planName,
+//            "destination": destination,
+//            "startDate": Timestamp(date: startDate),
+//            "endDate": Timestamp(date: endDate),
+//            "days": days
+//        ]
+//    }
+//}
+//
+//struct MemoryDay {
+//    var locations: [Location]
+//    
+//    var dictionary: [String: Any] {
+//        return [
+//            "locations": locations
+//        ]
+//    }
+//}
 
 struct Location {
     var name: String

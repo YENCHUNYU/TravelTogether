@@ -9,8 +9,18 @@ import UIKit
 
 class ProfileCell: UITableViewCell {
     
-    @IBOutlet weak var profileImageView: UIImageView!
-    @IBOutlet weak var profileImageNameLabel: UILabel!
+    @IBOutlet weak var memoryImageView: UIImageView! {
+        didSet {
+            memoryImageView.layer.cornerRadius = 20
+            memoryImageView.clipsToBounds = true
+        }
+    }
+    @IBOutlet weak var memoryNameLabel: UILabel!
      
-    @IBOutlet weak var labelBackgroundView: UIView!
+    @IBOutlet weak var labelBackgroundView: UIView! {
+        didSet {
+            labelBackgroundView.layer.cornerRadius = 15
+            labelBackgroundView.clipsToBounds = true
+        }
+    }
 }

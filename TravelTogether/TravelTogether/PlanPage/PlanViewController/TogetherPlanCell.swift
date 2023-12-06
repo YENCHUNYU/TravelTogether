@@ -9,7 +9,11 @@ import UIKit
 
 class TogetherPlanCell: UITableViewCell {
     
-    @IBOutlet weak var planImageView: UIImageView!
+    @IBOutlet weak var planImageView: UIImageView! {
+        didSet {
+            planImageView.layer.cornerRadius = 20
+        }
+    }
     @IBOutlet weak var planeNameLabel: UILabel!
     @IBOutlet weak var planDateLabel: UILabel!
   

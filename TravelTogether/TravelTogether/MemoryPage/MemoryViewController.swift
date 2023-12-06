@@ -25,10 +25,10 @@ class MemoryViewController: UIViewController {
         return add
     }()
     var memoryIndex = 0
+    var memoryId = ""
     var memories: [TravelPlan] = []
     @objc func createArticle() {
         performSegue(withIdentifier: "goToSelectPlan", sender: self)
-        
     }
     
     override func viewDidLoad() {
@@ -36,21 +36,20 @@ class MemoryViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         let headerView = MemoryHeaderView(reuseIdentifier: "MemoryHeaderView")
-        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 100)
+        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
         headerView.delegate = self
         tableView.tableHeaderView = headerView
         view.addSubview(addButton)
         setUpButton()
         
         let firestoreFetchMemory = FirestoreManagerFetchMemory()
-        firestoreFetchMemory.delegate = self
-        firestoreFetchMemory.fetchMemories { (travelPlans, error) in
+//        firestoreFetchMemory.delegate = self
+        firestoreFetchMemory.fetchMemories { (memories, error) in
             if let error = error {
                 print("Error fetching memories: \(error)")
             } else {
-                print("Fetched memories: \(travelPlans ?? [])")
-                self.memories = travelPlans ?? []
-              
+                print("Fetched memories: \(memories ?? [])")
+                self.memories = memories ?? []
                 self.tableView.reloadData()
             }
         }
@@ -58,13 +57,13 @@ class MemoryViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         let firestoreFetchMemory = FirestoreManagerFetchMemory()
-        firestoreFetchMemory.delegate = self
-        firestoreFetchMemory.fetchMemories { (travelPlans, error) in
+//        firestoreFetchMemory.delegate = self
+        firestoreFetchMemory.fetchMemories { (memories, error) in
             if let error = error {
                 print("Error fetching memories: \(error)")
             } else {
-                print("Fetched memories: \(travelPlans ?? [])")
-                self.memories = travelPlans ?? []
+                print("Fetched memories: \(memories ?? [])")
+                self.memories = memories ?? []
                 self.tableView.reloadData()
             }
         }
@@ -88,18 +87,30 @@ extension MemoryViewController: UITableViewDataSource {
 
             if memories.isEmpty == false {
                 let urlString = memories[indexPath.row].coverPhoto ?? ""
-                if let url = URL(string: urlString) {
+                if !urlString.isEmpty, let url = URL(string: urlString) {
                     let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
                     firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
                         DispatchQueue.main.async {
                             if let image = image {
                                 cell.memoryImageView.image = image
                                 cell.memoryNameLabel.text = self.memories[indexPath.row].planName
+                                let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
+                                let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
+                                cell.memoryDateLabel.text = "\(start)-\(end)"
                             } else {
                                 cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                            }    }
+                            }
+                        }
                     }
-                }}
+                } else {
+                    // Handle the case where the URL is empty
+                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                    cell.memoryNameLabel.text = self.memories[indexPath.row].planName
+                    let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
+                    let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
+                    cell.memoryDateLabel.text = "\(start)-\(end)"
+                }
+            }
             
             return cell
         } else {
@@ -107,6 +118,42 @@ extension MemoryViewController: UITableViewDataSource {
             else { fatalError("Could not create MemoryCell") }
             return cell
         }
+    }
+    func changeDateFormat(date: String) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // Set the locale to handle the date format
+
+        if let date = dateFormatter.date(from: date) {
+            let outputFormatter = DateFormatter()
+            outputFormatter.dateFormat = "yyyy年MM月dd日"
+            let formattedString = outputFormatter.string(from: date)
+            return formattedString
+        } else {
+            print("Failed to convert the date string.")
+            return ""
+        }
+
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "editMemory" {
+            if let destinationVC = segue.destination as? SelectedMemoryEditViewController {
+                print("memoryId\(memoryId)")
+                destinationVC.memoryId = memoryId
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        memoryId = memories[indexPath.row].id
+        performSegue(withIdentifier: "editMemory", sender: indexPath)
+    }
+    
+    func tableView(
+        _ tableView: UITableView,
+        editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
     }
 }
 
@@ -118,16 +165,35 @@ extension MemoryViewController: UITableViewDelegate {
             return 280
         }
     }
+    
+    func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            if indexPath.row < memories.count {
+               
+                let firestoreManager = FirestoreManagerFetchMemory()
+                firestoreManager.deleteMemory(withID: memories[indexPath.row].id) { error in
+                    if let error = error {
+                        print("Failed to delete travel plan: \(error)")
+                    } else {
+                        print("Travel plan deleted successfully.")
+                        self.memories.remove(at: indexPath.row)
+                        tableView.deleteRows(at: [indexPath], with: .fade)
+                    }
+                }
+                
+                   } else {
+                       print("Index out of range. indexPath.row: \(indexPath.row), memories count: \(memories.count)")
+                   }
+        }
+    }
 }
 
 extension MemoryViewController: MemoryHeaderViewDelegate {
     func change(to index: Int) {
         memoryIndex = index
         tableView.reloadData()
-    }
-}
-
-extension MemoryViewController: FirestoreManagerFetchMemoryDelegate {
-    func manager(_ manager: FirestoreManagerFetchMemory, didGet firestoreData: [TravelPlan]) {
     }
 }

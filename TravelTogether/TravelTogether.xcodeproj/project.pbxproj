@@ -57,6 +57,7 @@
 		52783CEF2B05DBEE0067A334 /* GoogleDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CEE2B05DBEE0067A334 /* GoogleDataProvider.swift */; };
 		52783CF12B05EB380067A334 /* MapsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CF02B05EB380067A334 /* MapsListViewController.swift */; };
 		52783CF32B0603BD0067A334 /* GooglePlacesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CF22B0603BD0067A334 /* GooglePlacesManager.swift */; };
+		527F3BA82B2056EA008CB8E2 /* SelectedMemoryEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527F3BA72B2056EA008CB8E2 /* SelectedMemoryEditViewController.swift */; };
 		5288CB0E2B0710EA00E089F9 /* MapInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB0D2B0710EA00E089F9 /* MapInfoViewController.swift */; };
 		5288CB102B07615400E089F9 /* AddToPlanListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB0F2B07615400E089F9 /* AddToPlanListViewController.swift */; };
 		5288CB122B076F7A00E089F9 /* CreatePlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB112B076F7A00E089F9 /* CreatePlanViewController.swift */; };
@@ -132,6 +133,7 @@
 		52783CEE2B05DBEE0067A334 /* GoogleDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleDataProvider.swift; sourceTree = "<group>"; };
 		52783CF02B05EB380067A334 /* MapsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapsListViewController.swift; sourceTree = "<group>"; };
 		52783CF22B0603BD0067A334 /* GooglePlacesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesManager.swift; sourceTree = "<group>"; };
+		527F3BA72B2056EA008CB8E2 /* SelectedMemoryEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedMemoryEditViewController.swift; sourceTree = "<group>"; };
 		5288CB0D2B0710EA00E089F9 /* MapInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapInfoViewController.swift; sourceTree = "<group>"; };
 		5288CB0F2B07615400E089F9 /* AddToPlanListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToPlanListViewController.swift; sourceTree = "<group>"; };
 		5288CB112B076F7A00E089F9 /* CreatePlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlanViewController.swift; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 				523846EE2B18E418006D58B0 /* EditMemoryHeaderView.swift */,
 				525E7CB42B1987780057C5EE /* ImageCollectionViewCell.swift */,
 				526005212B1AE14100F37E84 /* EditMemoryTitleViewController.swift */,
+				527F3BA72B2056EA008CB8E2 /* SelectedMemoryEditViewController.swift */,
 			);
 			path = MemoryPage;
 			sourceTree = "<group>";
@@ -591,6 +594,7 @@
 				525E7CB92B19EE510057C5EE /* Memory.swift in Sources */,
 				523243A62B0892930078200C /* EditPlanFooterView.swift in Sources */,
 				52783CF12B05EB380067A334 /* MapsListViewController.swift in Sources */,
+				527F3BA82B2056EA008CB8E2 /* SelectedMemoryEditViewController.swift in Sources */,
 				5245BA762B0E136E006594CC /* FirestoreManager.swift in Sources */,
 				52783CCE2B0345AC0067A334 /* TogetherPlanCell.swift in Sources */,
 				52783CD52B0354820067A334 /* MemoryHeaderView.swift in Sources */,

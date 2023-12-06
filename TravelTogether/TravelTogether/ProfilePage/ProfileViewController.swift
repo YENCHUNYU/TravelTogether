@@ -35,7 +35,7 @@ class ProfileViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         let headerView = ProfileHeaderView(reuseIdentifier: "ProfileHeaderView")
-        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 100)
+        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
         headerView.delegate = self
         tableView.tableHeaderView = headerView
         tableView.separatorStyle = .none
@@ -109,18 +109,24 @@ extension ProfileViewController: UITableViewDataSource {
             else { fatalError("Could not create ProfileCell") }
             if memories.isEmpty == false {
                 let urlString = memories[indexPath.row].coverPhoto ?? ""
-                if let url = URL(string: urlString) {
+                if !urlString.isEmpty, let url = URL(string: urlString) {
                     let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
                     firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
                         DispatchQueue.main.async {
                             if let image = image {
-                                cell.profileImageView.image = image
-                                cell.profileImageNameLabel.text = self.memories[indexPath.row].planName
+                                cell.memoryImageView.image = image
+                                cell.memoryNameLabel.text = self.memories[indexPath.row].planName
                             } else {
-                                cell.profileImageView.image = UIImage(named: "Image_Placeholder")
-                            }    }
+                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                            }
+                        }
                     }
-                }}
+                } else {
+                    // Handle the case where the URL is empty
+                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                    cell.memoryNameLabel.text = self.memories[indexPath.row].planName
+                }
+            }
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(
@@ -138,19 +144,19 @@ extension ProfileViewController: UITableViewDataSource {
                         firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
                             DispatchQueue.main.async {
                                 if let image = image {
-                                    cell.profileImageView.image = image
-                                    cell.profileImageNameLabel.text = self.plans[indexPath.row].planName
+                                    cell.memoryImageView.image = image
+                                    cell.memoryNameLabel.text = self.plans[indexPath.row].planName
                                 } else {
-                                    cell.profileImageView.image = UIImage(named: "Image_Placeholder")
+                                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                                 }
                             }
                         }
                     } else {
-                        cell.profileImageView.image = UIImage(named: "Image_Placeholder")
+                        cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                     }
                     
                 } else {
-                    cell.profileImageView.image = UIImage(named: "Image_Placeholder")
+                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                 }}
             return cell
         }
