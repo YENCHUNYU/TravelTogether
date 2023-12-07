@@ -11,7 +11,8 @@ protocol EditMemoryHeaderViewDelegate: AnyObject {
     func passDays(daysData: [String])
     }
 
-class EditMemoryHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class EditMemoryHeaderView:
+    UITableViewHeaderFooterView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     weak var delegate: EditMemoryHeaderViewDelegate?
     var days: [String] = ["第1天"]
@@ -61,7 +62,7 @@ class EditMemoryHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSou
             for: indexPath) as? ButtonCell else {
               fatalError("Failed to create ButtonCell")
           }
-        cell.configure(with: days[indexPath.item], indexPath: indexPath){}
+        cell.configure(with: days[indexPath.item], indexPath: indexPath) {}
           return cell
         }
       

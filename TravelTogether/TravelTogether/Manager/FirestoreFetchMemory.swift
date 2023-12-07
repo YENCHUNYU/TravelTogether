@@ -7,15 +7,9 @@
 
 import UIKit
 import FirebaseFirestore
-//
-//protocol FirestoreManagerFetchMemoryDelegate: AnyObject {
-//    func manager(_ manager: FirestoreManagerFetchMemory, didGet firestoreData: [TravelPlan])
-//}
 
 class FirestoreManagerFetchMemory {
     
-//    var delegate: FirestoreManagerFetchMemoryDelegate?
-
     func fetchMemories(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
         let database = Firestore.firestore()
         
@@ -149,9 +143,6 @@ class FirestoreManagerFetchMemory {
                         coverPhoto: data?["coverPhoto"] as? String ?? ""
                     )
                     completion(travelPlan, nil)
-//                    self.delegate?.manager(self, didGet: travelPlan)
-                }
-            }
-        }
+                } } }
     }
 }

@@ -40,18 +40,22 @@ struct TravelDay {
     }
 }
 
-//struct Location {
-//    var name: String
-//    var photo: String?
-//    var address: String
-//    var user: String?
-//    
-//    var dictionary: [String: Any] {
-//        return [
-//            "name": name,
-//            "photo": photo ?? "",
-//            "address": address,
-//            "user": user ?? ""
-//        ]
-//    }
-//}
+struct Location {
+    var name: String
+    var photo: String
+    var address: String
+    var user: String?
+    var memoryPhotos: [String]?
+    var article: String?
+    
+    var dictionary: [String: Any] {
+        return [
+            "name": name,
+            "photo": photo,
+            "address": address,
+            "user": user ?? "",
+            "memoryPhotos": memoryPhotos ?? "",
+            "article": article ?? ""
+        ]
+    }
+}

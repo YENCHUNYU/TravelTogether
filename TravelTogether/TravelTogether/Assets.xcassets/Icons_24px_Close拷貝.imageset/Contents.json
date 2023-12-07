@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "Icons_24px_Close拷貝.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "Icons_24px_Close@2x拷貝.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "Icons_24px_Close@3x拷貝.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

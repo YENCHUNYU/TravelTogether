@@ -92,7 +92,7 @@ extension FirestoreManagerForPostLocation {
                         return
                     }
 
-                    guard var locationsArray = daysArray[dayIndex]["locations"] as? [[String: Any]] else {
+                    guard daysArray[dayIndex]["locations"] is [[String: Any]] else {
                         completion(nil)
                         return
                     }
@@ -142,7 +142,7 @@ extension FirestoreManagerForPostLocation {
                         return
                     }
 
-                    guard var daysArray = travelPlanData["days"] as? [[String: Any]] else {
+                    guard let daysArray = travelPlanData["days"] as? [[String: Any]] else {
                         print("No 'days' array found.")
                         completion(nil)
                         return
@@ -151,7 +151,7 @@ extension FirestoreManagerForPostLocation {
                     var updatedDays: [[String: Any]] = []
                     for var day in daysArray {
                         var updatedLocations: [[String: Any]] = [] // Move inside the day loop
-                        if var locationsArray = day["locations"] as? [[String: Any]] {
+                        if let locationsArray = day["locations"] as? [[String: Any]] {
                             for var location in locationsArray {
                                 // Clear the user data in each location
                                 location["user"] = "" // or set it to an appropriate value

@@ -86,7 +86,9 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
             present(imagePicker, animated: true, completion: nil)
         }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+    func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
            if let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
                // 在這裡處理選擇的圖片
                memoryImageView.image = selectedImage
@@ -113,7 +115,9 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
    }
 
 extension EditMemoryTitleViewController: UITextFieldDelegate {
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    func textField(
+        _ textField: UITextField, shouldChangeCharactersIn range: NSRange,
+        replacementString string: String) -> Bool {
             // This method is called whenever the user types or deletes characters in the text field
             // Update the planName property based on the changes in the text field
             if let currentText = textField.text,

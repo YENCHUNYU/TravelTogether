@@ -102,7 +102,8 @@ extension ProfileViewController: UITableViewDataSource {
         }
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(
+        _ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if profileIndex == 0 {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell

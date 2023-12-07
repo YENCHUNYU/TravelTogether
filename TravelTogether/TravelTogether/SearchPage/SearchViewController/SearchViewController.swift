@@ -50,6 +50,7 @@ class SearchViewController: UIViewController {
         tableView.tableHeaderView = headerView
         view.addSubview(searchButton)
         setUpButton()
+        self.tabBarController?.delegate = self
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
         firestoreManager.fetchTravelPlans { (travelPlans, error) in
@@ -262,6 +263,24 @@ extension SearchViewController {
                 print("Failed to create UIImage from data.")
                 completion(nil)
             }
+        }
+    }
+}
+
+extension SearchViewController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if !LoginViewController.loginStatus {
+            if viewController.tabBarItem.tag > 0 {
+                if let loginVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController {
+                    // Present the login view controller within a navigation controller
+                    let loginNavController = UINavigationController(rootViewController: loginVC)
+                    present(loginNavController, animated: true, completion: nil)
+                    return false
+                }
+            }
+            return false
+        } else {
+            return true
         }
     }
 }

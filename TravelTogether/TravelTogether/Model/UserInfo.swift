@@ -10,4 +10,13 @@ import Foundation
 struct UserInfo {
     var email: String
     var name: String
+    var id: String
+    
+    func toDictionary() -> [String: Any] {
+        return [
+            "email": email,
+            "name": name,
+            "id": id,
+        ]
+    }
 }

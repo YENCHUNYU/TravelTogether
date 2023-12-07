@@ -5,7 +5,6 @@
 //  Created by User on 2023/11/30.
 //
 
-
 import UIKit
 import FirebaseFirestore
 
@@ -34,8 +33,9 @@ class FirestoreManagerFetchUser {
                 }
                 if let data = document.data(),
                    let email = data["email"] as? String,
-                   let name = data["name"] as? String {
-                    let userInfo = UserInfo(email: email, name: name)
+                   let name = data["name"] as? String,
+                let id = data["id"] as? String {
+                    let userInfo = UserInfo(email: email, name: name, id: id)
                     completion(userInfo, nil)
                 } else {
                     print("Error parsing user document data")
@@ -45,6 +45,3 @@ class FirestoreManagerFetchUser {
         }
     }
 }
-
-
-

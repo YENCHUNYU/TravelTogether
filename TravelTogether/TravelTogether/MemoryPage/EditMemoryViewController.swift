@@ -22,7 +22,6 @@ class EditMemoryViewController: UIViewController {
     var days: [String] = ["第1天"]
     let headerView = EditMemoryHeaderView(reuseIdentifier: "EditMemoryHeaderView")
     var memoryPhotos: [String] = []
-//    var oneMemory: Memory = Memory(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), days: [])
     var currentIndexPath: IndexPath?
 
     private var itemsPerRow: CGFloat = 2
@@ -268,10 +267,7 @@ extension EditMemoryViewController: UICollectionViewDataSource,
            
            let firestorageDownload = FirebaseStorageManagerDownloadPhotos()
            firestorageDownload.delegate = self
-               
-//           guard let memoryPhotos = onePlan.days[currentIndexPath?.section ?? 0].locations[currentIndexPath?.row ?? 0].memoryPhotos else {
-//               return cell
-//           }
+
            // cell 在image download前被reuse 而產生相同照片的cell
            guard let currentSection = currentIndexPath?.section,
              let currentRow = currentIndexPath?.row,
@@ -309,14 +305,19 @@ extension EditMemoryViewController: UICollectionViewDataSource,
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath) -> CGSize {
         var widthperItem: CGFloat = 0
         let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
         let availableWidth = view.frame.width - paddingSpace
         widthperItem = availableWidth / 3
         return CGSize(width: widthperItem, height: 88)
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView, 
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
         return sectionInsets
     }
 }

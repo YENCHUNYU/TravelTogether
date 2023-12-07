@@ -307,7 +307,9 @@ extension EditPlanViewController: UITableViewDropDelegate {
         return session.canLoadObjects(ofClass: NSString.self)
     }
     
-    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+    func tableView(
+        _ tableView: UITableView,
+        performDropWith coordinator: UITableViewDropCoordinator) {
         coordinator.session.loadObjects(ofClass: NSString.self) { _ in
             var updatedIndexPaths = [IndexPath]()
             
@@ -325,8 +327,8 @@ extension EditPlanViewController: UITableViewDropDelegate {
                         
                         let firestoreUserManger = FirestoreManagerFetchUser()
                         firestoreUserManger.delegate = self
-                        firestoreUserManger.fetchUserInfo(id: "456@test.com") { userData, error  in
-                            if let error = error {
+                        firestoreUserManger.fetchUserInfo(id: "456@test.com") { userData, error in
+                            if error != nil {
                                 print("Failed to fetch userInfo")
                             } else {
                                 locations[destinationIndexPath.row].user = " \(String(describing: userData?.name ?? ""))已編輯 "
@@ -342,13 +344,13 @@ extension EditPlanViewController: UITableViewDropDelegate {
                                         print("Reorder the locations successfully!")
                                     }}}}}
                 } else {
-                    var locations = self.onePlan.days[sourceIndexPath.section].locations
+                    let locations = self.onePlan.days[sourceIndexPath.section].locations
                     self.onePlan.days[sourceIndexPath.section].locations.remove(at: sourceIndexPath.row)
                     tableView.reloadData()
                     let firestoreUserManger = FirestoreManagerFetchUser()
                     firestoreUserManger.delegate = self
                     firestoreUserManger.fetchUserInfo(id: "456@test.com") { userData, error  in
-                        if let error = error {
+                        if error != nil {
                         } else {
 //                            locations[destinationIndexPath.row].user = " \(String(describing: userData?.name ?? ""))已編輯 "
                             let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
