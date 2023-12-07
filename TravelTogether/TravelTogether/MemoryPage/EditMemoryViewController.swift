@@ -151,7 +151,7 @@ extension EditMemoryViewController: UITableViewDataSource, UITextViewDelegate {
             withIdentifier: "EditMemoryCell",
             for: indexPath) as? EditMemoryCell
         else { fatalError("Could not create EditMemoryCell") }
-
+currentIndexPath = indexPath
         let location = onePlan.days[indexPath.section].locations[indexPath.row]
 
         cell.placeNameLabel.text = location.name
@@ -269,11 +269,23 @@ extension EditMemoryViewController: UICollectionViewDataSource,
            let firestorageDownload = FirebaseStorageManagerDownloadPhotos()
            firestorageDownload.delegate = self
                
-           guard let memoryPhotos = onePlan.days[currentIndexPath?.section ?? 0].locations[currentIndexPath?.row ?? 0].memoryPhotos else {
-               return cell
-           }
-           for image in memoryPhotos {
-               if let url = URL(string: image) {
+//           guard let memoryPhotos = onePlan.days[currentIndexPath?.section ?? 0].locations[currentIndexPath?.row ?? 0].memoryPhotos else {
+//               return cell
+//           }
+           // cell 在image download前被reuse 而產生相同照片的cell
+           guard let currentSection = currentIndexPath?.section,
+             let currentRow = currentIndexPath?.row,
+             currentSection < onePlan.days.count,
+             currentRow < onePlan.days[currentSection].locations.count,
+             let memoryPhotos = onePlan.days[currentSection].locations[currentRow].memoryPhotos else {
+           return cell
+       }
+           let imageIndex = indexPath.item - 1 // Subtract 1 because the first item is the "AddPhotoCell"
+            let imageURLString = memoryPhotos[imageIndex]
+
+               if let url = URL(string: imageURLString) {
+//           for image in memoryPhotos {
+//               if let url = URL(string: image) {
                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
                        DispatchQueue.main.async {
@@ -283,7 +295,7 @@ extension EditMemoryViewController: UICollectionViewDataSource,
                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                            }
                        }
-                   }
+//                   }
            }}
            return cell
        }

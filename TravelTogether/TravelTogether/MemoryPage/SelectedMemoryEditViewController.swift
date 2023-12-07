@@ -166,6 +166,7 @@ extension SelectedMemoryEditViewController: UITableViewDataSource, UITextViewDel
         cell.imageCollectionView.reloadData()
         cell.articleTextView.tag = indexPath.section * 1000 + indexPath.row
         cell.articleTextView.delegate = self
+        
         return cell
     }
     
@@ -251,11 +252,14 @@ extension SelectedMemoryEditViewController: UICollectionViewDataSource,
                let row = currentIndexPath?.row,
                section < onePlan.days.count,
                row < onePlan.days[section].locations.count,
-                 let memoryPhotos = onePlan.days[section].locations[row].memoryPhotos else {
+            let memoryPhotos = onePlan.days[section].locations[row].memoryPhotos else {
                return cell
            }
-           for image in memoryPhotos {
-               if let url = URL(string: image) {
+//           for image in memoryPhotos {
+           let imageIndex = indexPath.item - 1 // Subtract 1 because the first item is the "AddPhotoCell"
+            let imageURLString = memoryPhotos[imageIndex]
+
+               if let url = URL(string: imageURLString) {
                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
                        DispatchQueue.main.async {
@@ -265,7 +269,7 @@ extension SelectedMemoryEditViewController: UICollectionViewDataSource,
                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                            }
                        }
-                   }
+//                   }
            }}
            return cell
        }
