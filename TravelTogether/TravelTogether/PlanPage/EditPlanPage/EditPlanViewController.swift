@@ -125,7 +125,7 @@ extension EditPlanViewController: UITableViewDataSource {
         cell.placeAddressLabel.text = location.address
         cell.userLabel.layer.cornerRadius = 8
         cell.userLabel.layer.masksToBounds = true
-        cell.userLabel.isHidden = false
+        cell.userLabel.isHidden = true
         cell.userLabel.text = location.user
         return cell
     }
@@ -307,15 +307,22 @@ extension EditPlanViewController: UITableViewDropDelegate {
         return session.canLoadObjects(ofClass: NSString.self)
     }
     
-    func tableView(_ tableView: UITableView, 
-                   performDropWith coordinator: UITableViewDropCoordinator) {
+    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
         coordinator.session.loadObjects(ofClass: NSString.self) { _ in
             var updatedIndexPaths = [IndexPath]()
-            switch (coordinator.items.first?.sourceIndexPath, coordinator.destinationIndexPath) {
-            case let (sourceIndexPath?, destinationIndexPath?):
+            
+            if let sourceIndexPath = coordinator.items.first?.sourceIndexPath,
+               let destinationIndexPath = coordinator.destinationIndexPath {
+                
                 if sourceIndexPath.section == destinationIndexPath.section {
                     if sourceIndexPath.row != destinationIndexPath.row {
                         var locations = self.onePlan.days[sourceIndexPath.section].locations
+                        
+                        self.onePlan.days[sourceIndexPath.section].locations.remove(at: sourceIndexPath.row)
+                        self.onePlan.days[sourceIndexPath.section].locations.insert(
+                            locations[sourceIndexPath.row], at: destinationIndexPath.row)
+                        updatedIndexPaths.append(destinationIndexPath)
+                        
                         let firestoreUserManger = FirestoreManagerFetchUser()
                         firestoreUserManger.delegate = self
                         firestoreUserManger.fetchUserInfo(id: "456@test.com") { userData, error  in
@@ -327,59 +334,47 @@ extension EditPlanViewController: UITableViewDropDelegate {
                                 firestoreMangerPostLocation.updateLocationsOrder(
                                     travelPlanId: self.travelPlanId,
                                     dayIndex: sourceIndexPath.section,
-                                    newLocationsOrder: locations
+                                    newLocationsOrder: self.onePlan.days[sourceIndexPath.section].locations
                                 ) { error in
-                                        if error != nil {
-                                            print("Failed to reorder the locations")
-                                        } else {
-                                            print("Reorder the locations successfully!")} }
-                            }
-                        }
-                        self.onePlan.days[sourceIndexPath.section].locations.remove(at: sourceIndexPath.row)
-                        self.onePlan.days[sourceIndexPath.section].locations.insert(
-                            locations[sourceIndexPath.row], at: destinationIndexPath.row)
-                        updatedIndexPaths.append(destinationIndexPath)
-                        self.tableView.moveRow(at: sourceIndexPath, to: destinationIndexPath)
-                        self.tableView.reloadData()
-                    }} else {
-                        var locations = self.onePlan.days[sourceIndexPath.section].locations
-                        self.onePlan.days[sourceIndexPath.section].locations.remove(at: sourceIndexPath.row)
-                        tableView.reloadData()
-                        let firestoreUserManger = FirestoreManagerFetchUser()
-                        firestoreUserManger.delegate = self
-                        firestoreUserManger.fetchUserInfo(id: "456@test.com") { userData, error  in
-                            if let error = error {
-                                print("Failed to fetch userInfo")
-                            } else {
-                             if locations[destinationIndexPath.row].user?.isEmpty == true {
-                                    locations[destinationIndexPath.row].user = " \(String(describing: userData?.name ?? ""))已編輯 "}
-                                let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
-                                firestoreMangerPostLocation.updateLocationsOrder(
-                                    travelPlanId: self.travelPlanId,
-                                    dayIndex: sourceIndexPath.section,
-                                    newLocationsOrder: self.onePlan.days[sourceIndexPath.section].locations) { error in
-                                        if error != nil {
-                                            print("Failed to reorder the locations")
-                                        } else {
-                                            print("Reorder the locations successfully!")
-                                            self.onePlan.days[destinationIndexPath.section].locations.insert(
-                                                locations[destinationIndexPath.row], at: destinationIndexPath.row)
-                                            updatedIndexPaths.append(destinationIndexPath)
-                                            self.tableView.reloadData()
-                                            
-                                            firestoreMangerPostLocation.updateLocationsOrder(
-                                                travelPlanId: self.travelPlanId,
-                                                dayIndex: destinationIndexPath.section,
-                                                newLocationsOrder: locations) { error in
-                                                        if error != nil {
-                                                            print("Failed to reorder the locations")
-                                                        } else {
-                                                            print("Reorder the locations successfully!")
-                                                        } }} } }}}
-            default:
-                break
-            }}}
-        
+                                    if error != nil {
+                                        print("Failed to reorder the locations")
+                                    } else {
+                                        print("Reorder the locations successfully!")
+                                    }}}}}
+                } else {
+                    var locations = self.onePlan.days[sourceIndexPath.section].locations
+                    self.onePlan.days[sourceIndexPath.section].locations.remove(at: sourceIndexPath.row)
+                    tableView.reloadData()
+                    let firestoreUserManger = FirestoreManagerFetchUser()
+                    firestoreUserManger.delegate = self
+                    firestoreUserManger.fetchUserInfo(id: "456@test.com") { userData, error  in
+                        if let error = error {
+                        } else {
+//                            locations[destinationIndexPath.row].user = " \(String(describing: userData?.name ?? ""))已編輯 "
+                            let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
+                            firestoreMangerPostLocation.updateLocationsOrder(
+                                travelPlanId: self.travelPlanId,
+                                dayIndex: sourceIndexPath.section,
+                                newLocationsOrder: self.onePlan.days[sourceIndexPath.section].locations) { error in
+                                    if error != nil {
+                                        print("Failed to reorder the locations")
+                                    } else {
+                                        print("Reorder the locations successfully!")
+                                        self.onePlan.days[destinationIndexPath.section].locations.insert(
+                                            locations[sourceIndexPath.row], at: destinationIndexPath.row)
+                                        updatedIndexPaths.append(destinationIndexPath)
+                                        
+                                        firestoreMangerPostLocation.updateLocationsOrder(
+                                            travelPlanId: self.travelPlanId,
+                                            dayIndex: destinationIndexPath.section,
+                                            newLocationsOrder: self.onePlan.days[destinationIndexPath.section].locations) { error in
+                                                if error != nil {
+                                                    print("Failed to reorder the locations")
+                                                } else {
+                                                    print("Reorder the locations successfully!")
+                                                } }}}}}}}
+        }
+    }
         func tableView(
             _ tableView: UITableView,
             dropSessionDidUpdate session: UIDropSession,
