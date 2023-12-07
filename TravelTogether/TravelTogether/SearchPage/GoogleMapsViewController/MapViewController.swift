@@ -9,6 +9,7 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 import GooglePlaces
+import FirebaseAuth
 
 class MapViewController: UIViewController {
  
@@ -244,7 +245,7 @@ extension MapViewController {
                         name: "\(String(describing: self.placeNameLabel.text ?? "") )", photo: self.spotsPhotoUrl,
                         address: "\(String(describing: self.addressLabel.text ?? ""))")
                     firestoreManagerPostLocation.addLocationToTravelPlan(
-                        planId: self.travelPlanId, location: theLocation, day: self.selectedSection) { error in
+                        userId: Auth.auth().currentUser?.uid ?? "", planId: self.travelPlanId, location: theLocation, day: self.selectedSection) { error in
                         if let error = error {
                             print("Error posting travel plan: \(error)")
                         } else {

@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import FirebaseAuth
 
 protocol FirestoreManagerForPostDelegate: AnyObject {
     func manager(_ manager: FirestoreManagerForPost, didPost firestoreData: TravelPlan)
@@ -14,7 +15,7 @@ protocol FirestoreManagerForPostDelegate: AnyObject {
 
 class FirestoreManagerForPost {
     var delegate: FirestoreManagerForPostDelegate?
-    
+
     func postTravelPlan(travelPlan: TravelPlan, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
         
@@ -24,7 +25,7 @@ class FirestoreManagerForPost {
         travelPlanData["days"] = [["locations": []]]
         print("travelPlanData\(travelPlanData)")
         
-        ref = database.collection("TravelPlan").addDocument(data: travelPlanData) { error in
+        ref = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("TravelPlan").addDocument(data: travelPlanData) { error in
             if let error = error {
                 print("Error adding document: \(error)")
                 completion(error)

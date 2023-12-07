@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import FirebaseAuth
 
 protocol FirestoreManagerForPostDayDelegate: AnyObject {
     func manager(_ manager: FirestoreManagerForPostDay)
@@ -18,7 +19,7 @@ class FirestoreManagerForPostDay {
     
     func addDayToTravelPlan(planId: String, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let travelPlanRef = database.collection("TravelPlan").document(planId)
+        let travelPlanRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("TravelPlan").document(planId)
         
         travelPlanRef.getDocument { (document, error) in
             if let error = error {
@@ -47,60 +48,9 @@ class FirestoreManagerForPostDay {
         }
     }
     
-    func postNewDaysArray2(planId: String, newDaysArray: [TravelDay], completion: @escaping (Error?) -> Void) {
-            let database = Firestore.firestore()
-            let travelPlanRef = database.collection("TravelPlan").document(planId)
-            print("newDaysArray!\(newDaysArray)")
-            travelPlanRef.setData(["days": newDaysArray], merge: false) { error in
-                if let error = error {
-                    print("Error setting document with new days array: \(error)")
-                    completion(error)
-                } else {
-                    self.delegate?.manager(self)
-                    completion(nil)
-                }
-            }
-        }
-    
     func postNewDaysArray(planId: String, newDaysArray: [TravelDay], completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let travelPlanRef = database.collection("TravelPlan").document(planId)
-        
-//        travelPlanRef.getDocument { (document, error) in
-//            if let error = error {
-//                print("Error getting document: \(error)")
-//                completion(error)
-//                return
-//            }
-//            
-//            var updatedData: [String: Any] = [:]
-////            if let existingData = document?.data() {
-////                if var daysData = existingData["days"] as? [[String: Any]], !daysData.isEmpty {
-//                    
-////                    daysData.append(["locations": []] as? [String: [Location]] ?? ["locations": []])
-////                    updatedData["days"] = newDaysArray
-////            var updatedLocations: [[String: Any]] = []
-//            for location in locations {
-//                let locationData = location.dictionary
-////               updatedLocations.append(locationData)
-//            }
-//            for day in newDaysArray {
-//                let dayData = day.dictionary
-//            }
-//            // Update the locations array in the days array
-//            daysArray[dayIndex]["locations"] = updatedLocations
-//                    travelPlanRef.setData(updatedData, merge: true) { error in
-//                        if let error = error {
-//                            print("Error setting document: \(error)")
-//                            completion(error)
-//                        } else {
-//                            self.delegate?.manager(self)
-//                            completion(nil)
-//                        }
-//                    }
-////                }
-////            }
-//        }
+        let travelPlanRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("TravelPlan").document(planId)
         
         travelPlanRef.getDocument { document, error in
             if let error = error {

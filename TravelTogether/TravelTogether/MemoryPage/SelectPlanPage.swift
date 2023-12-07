@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import FirebaseAuth
 
 class SelectPlanViewController: UIViewController {
 
@@ -23,7 +24,7 @@ class SelectPlanViewController: UIViewController {
            
             let firestoreManager = FirestoreManager()
             firestoreManager.delegate = self
-            firestoreManager.fetchTravelPlans { (travelPlans, error) in
+            firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
                 if let error = error {
                     print("Error fetching travel plans: \(error)")
                 } else {
@@ -37,7 +38,7 @@ class SelectPlanViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
-        firestoreManager.fetchTravelPlans { (travelPlans, error) in
+        firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
             if let error = error {
                 print("Error fetching travel plans: \(error)")
             } else {

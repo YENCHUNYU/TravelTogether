@@ -53,7 +53,7 @@ class SearchViewController: UIViewController {
         self.tabBarController?.delegate = self
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
-        firestoreManager.fetchTravelPlans { (travelPlans, error) in
+        firestoreManager.fetchAllTravelPlans { (travelPlans, error) in
             if let error = error {
                 print("Error fetching travel plans: \(error)")
             } else {
@@ -64,7 +64,7 @@ class SearchViewController: UIViewController {
         }
         
         let firestoreFetchMemory = FirestoreManagerFetchMemory()
-        firestoreFetchMemory.fetchMemories { (travelPlans, error) in
+        firestoreFetchMemory.fetchAllMemories { (travelPlans, error) in
             if let error = error {
                 print("Error fetching memories: \(error)")
             } else {
@@ -91,7 +91,7 @@ class SearchViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
-        firestoreManager.fetchTravelPlans { (travelPlans, error) in
+        firestoreManager.fetchAllTravelPlans { (travelPlans, error) in
             if let error = error {
                 print("Error fetching travel plans: \(error)")
             } else {
@@ -102,7 +102,7 @@ class SearchViewController: UIViewController {
         }
         
         let firestoreFetchMemory = FirestoreManagerFetchMemory()
-        firestoreFetchMemory.fetchMemories { (travelPlans, error) in
+        firestoreFetchMemory.fetchAllMemories { (travelPlans, error) in
             if let error = error {
                 print("Error fetching memories: \(error)")
             } else {

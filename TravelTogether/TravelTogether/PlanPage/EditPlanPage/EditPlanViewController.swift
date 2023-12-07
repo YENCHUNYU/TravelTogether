@@ -9,6 +9,7 @@ import UIKit
 import FirebaseFirestore
 import MobileCoreServices
 import UniformTypeIdentifiers
+import FirebaseAuth
 
 class EditPlanViewController: UIViewController {
 
@@ -48,7 +49,7 @@ class EditPlanViewController: UIViewController {
         
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(byId: travelPlanId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -84,7 +85,7 @@ class EditPlanViewController: UIViewController {
         }
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(byId: travelPlanId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId)  { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -194,7 +195,7 @@ extension EditPlanViewController: UITableViewDataSource {
            let firestoreManagerForOne = FirestoreManagerForOne()
            firestoreManagerForOne.delegate = self
            firestoreManagerForOne.deleteDayFromTravelPlan(
-            travelPlanId: travelPlanId, dayIndex: index) { error in
+            userId: Auth.auth().currentUser?.uid ?? "", travelPlanId: travelPlanId, dayIndex: index) { error in
                if let error = error {
                    print("Error deleting section from Firestore: \(error)")
                } else {
@@ -226,7 +227,7 @@ extension EditPlanViewController: UITableViewDelegate {
                 firestoreManagerForOne.delegate = self
                 firestoreManagerForOne.deleteLocationFromTravelPlan(
                     travelPlanId: travelPlanId, dayIndex: indexPath.section,
-                    location: deletedLocation) { error in
+                    location: deletedLocation, userId: Auth.auth().currentUser?.uid ?? "") { error in
                     if let error = error {
                         print("Error deleting location from Firestore: \(error)")
                     } else {
@@ -248,7 +249,7 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
     func reloadNewData() {
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(byId: travelPlanId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId)  { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -277,7 +278,7 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
     func reloadData() {
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(byId: travelPlanId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {

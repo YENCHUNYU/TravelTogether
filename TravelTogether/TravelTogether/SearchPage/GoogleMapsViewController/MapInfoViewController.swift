@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseFirestore
 import FirebaseStorage
+import FirebaseAuth
 
 class MapInfoViewController: UIViewController {
     
@@ -80,7 +81,7 @@ class MapInfoViewController: UIViewController {
                         address: self.places.address)
                     print("qqqqq\(self.selectedDay)")
                     firestoreManagerPostLocation.addLocationToTravelPlan(
-                        planId: self.travelPlanId, location: theLocation, day: self.selectedDay) { error in
+                        userId: Auth.auth().currentUser?.uid ?? "", planId: self.travelPlanId, location: theLocation, day: self.selectedDay) { error in
                         if let error = error {
                             print("Error posting travel plan: \(error)")
                         } else {

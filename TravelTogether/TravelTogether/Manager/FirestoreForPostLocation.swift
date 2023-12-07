@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import FirebaseAuth
 
 protocol FirestoreManagerForPostLocationDelegate: AnyObject {
     func manager(_ manager: FirestoreManagerForPostLocation, didPost firestoreData: Location)
@@ -16,9 +17,10 @@ class FirestoreManagerForPostLocation {
     
     var delegate: FirestoreManagerForPostLocationDelegate?
     
-    func addLocationToTravelPlan(planId: String, location: Location, day: Int, completion: @escaping (Error?) -> Void) {
+    func addLocationToTravelPlan(userId: String, planId: String,
+                                 location: Location, day: Int, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let travelPlanRef = database.collection("TravelPlan").document(planId)
+        let travelPlanRef = database.collection("UserInfo").document(userId).collection("TravelPlan").document(planId)
 
         travelPlanRef.getDocument { (document, error) in
             if let error = error {
@@ -74,7 +76,7 @@ extension FirestoreManagerForPostLocation {
                               newLocationsOrder: [Location],
                               completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let travelPlanRef = database.collection("TravelPlan").document(travelPlanId)
+        let travelPlanRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("TravelPlan").document(travelPlanId)
 
         travelPlanRef.getDocument { document, error in
             if let error = error {
@@ -123,12 +125,10 @@ extension FirestoreManagerForPostLocation {
         }
     }
     
-    func clearLocationsUser(
-        travelPlanId: String,
-        completion: @escaping (Error?) -> Void
+    func clearLocationsUser(travelPlanId: String, completion: @escaping (Error?) -> Void
     ) {
         let database = Firestore.firestore()
-        let travelPlanRef = database.collection("TravelPlan").document(travelPlanId)
+        let travelPlanRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("TravelPlan").document(travelPlanId)
 
         travelPlanRef.getDocument { document, error in
             if let error = error {

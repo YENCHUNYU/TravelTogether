@@ -16,9 +16,9 @@ class FirestoreManagerForOne {
     
     var delegate: FirestoreManagerForOneDelegate?
     
-    func fetchOneTravelPlan(byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
+    func fetchOneTravelPlan(userId: String, byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
         let database = Firestore.firestore()
-        let travelPlanRef = database.collection("TravelPlan").document(planId)
+        let travelPlanRef = database.collection("UserInfo").document(userId).collection("TravelPlan").document(planId)
 
         travelPlanRef.addSnapshotListener { document, error in
             if let error = error {
@@ -81,9 +81,9 @@ extension FirestoreManagerForOne {
 
     func deleteLocationFromTravelPlan(
         travelPlanId: String, dayIndex: Int, location: Location,
-        completion: @escaping (Error?) -> Void) {
+        userId: String, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let travelPlanRef = database.collection("TravelPlan").document(travelPlanId)
+        let travelPlanRef = database.collection("UserInfo").document(userId).collection("TravelPlan").document(travelPlanId)
 
         travelPlanRef.getDocument { document, error in
             if let error = error {
@@ -134,9 +134,9 @@ extension FirestoreManagerForOne {
 }
 
 extension FirestoreManagerForOne {
-    func deleteDayFromTravelPlan(travelPlanId: String, dayIndex: Int, completion: @escaping (Error?) -> Void) {
+    func deleteDayFromTravelPlan(userId: String, travelPlanId: String, dayIndex: Int, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let travelPlanRef = database.collection("TravelPlan").document(travelPlanId)
+        let travelPlanRef = database.collection("UserInfo").document(userId).collection("TravelPlan").document(travelPlanId)
 
         travelPlanRef.getDocument { document, error in
             if let error = error {

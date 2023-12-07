@@ -47,7 +47,19 @@ class PlanViewController: UIViewController {
         setUpButton()
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
-        firestoreManager.fetchTravelPlans { (travelPlan, error) in
+//        firestoreManager.fetchTravelPlans { (travelPlan, error) in
+//            if let error = error {
+//                print("Error fetching travel plan: \(error)")
+//            } else if let travelPlan = travelPlan {
+//                print("Fetched travel plan: \(travelPlan)")
+//                self.plans = travelPlan
+//                self.tableView.reloadData()
+//            } else {
+//                print("Travel plan not found.")
+//            }
+//        }
+        
+        firestoreManager.fetchTravelPlans(userId: "ExKL3HZJiMacm93GATS9UcGbJlj2") { (travelPlan, error) in
             if let error = error {
                 print("Error fetching travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -67,7 +79,19 @@ class PlanViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
-        firestoreManager.fetchTravelPlans { (travelPlan, error) in
+//        firestoreManager.fetchTravelPlans { (travelPlan, error) in
+//            if let error = error {
+//                print("Error fetching travel plan: \(error)")
+//            } else if let travelPlan = travelPlan {
+//                print("Fetched travel plan: \(travelPlan)")
+//                self.plans = travelPlan
+//                self.tableView.reloadData()
+//            } else {
+//                print("Travel plan not found.")
+//            }
+//        }
+//        
+        firestoreManager.fetchTravelPlans(userId: "ExKL3HZJiMacm93GATS9UcGbJlj2") { (travelPlan, error) in
             if let error = error {
                 print("Error fetching travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -107,14 +131,19 @@ extension PlanViewController: UITableViewDataSource {
                             DispatchQueue.main.async {
                                 if let image = image {
                                     cell.planImageView.image = image
+                                    cell.planNameLabel.text = self.plans[indexPath.row].planName
                                 } else {
                                     cell.planImageView.image = UIImage(named: "Image_Placeholder")
                                 }
                             }
                         }
+                    } else {
+                        cell.planImageView.image = UIImage(named: "Image_Placeholder")
                     }
-                }
-            }
+                    
+                } else {
+                    cell.planImageView.image = UIImage(named: "Image_Placeholder")
+                }}
             
             return cell
         } else {

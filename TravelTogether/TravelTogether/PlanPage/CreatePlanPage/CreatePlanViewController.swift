@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseFirestore
 import SwiftUI
+import FirebaseAuth
 
 class CreatePlanViewController: UIViewController {
 

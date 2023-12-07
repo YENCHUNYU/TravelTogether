@@ -8,6 +8,7 @@
 import UIKit
 import FirebaseFirestore
 import FirebaseStorage
+import FirebaseAuth
 
 class ProfileViewController: UIViewController {
     
@@ -45,7 +46,7 @@ class ProfileViewController: UIViewController {
         
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
-        firestoreManager.fetchTravelPlans { (travelPlans, error) in
+        firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
             if let error = error {
                 print("Error fetching travel plans: \(error)")
             } else {
@@ -70,7 +71,7 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
-        firestoreManager.fetchTravelPlans { (travelPlans, error) in
+        firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
             if let error = error {
                 print("Error fetching travel plans: \(error)")
             } else {
@@ -133,7 +134,7 @@ extension ProfileViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell
             else { fatalError("Could not create ProfileCell") }
-                  
+            cell.memoryNameLabel.text = plans[indexPath.row].planName
             let daysData = plans[indexPath.row].days
             if daysData.isEmpty == false {
                 let locationData = daysData[0]
@@ -159,6 +160,7 @@ extension ProfileViewController: UITableViewDataSource {
                 } else {
                     cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                 }}
+            
             return cell
         }
     }

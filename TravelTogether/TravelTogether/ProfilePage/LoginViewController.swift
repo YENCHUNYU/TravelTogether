@@ -157,7 +157,7 @@ class LoginViewController: UIViewController {
             return
         }
         
-        let usersRef = database.collection("UserInfo").document("\(emailText)")
+        let usersRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
         
         let users = UserInfo(email: emailText, name: nameText, id: Auth.auth().currentUser?.uid ?? "")
        
