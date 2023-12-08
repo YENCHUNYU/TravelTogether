@@ -10,6 +10,7 @@ import GoogleMaps
 import FirebaseFirestore
 import FirebaseStorage
 import FirebaseAuth
+import Kingfisher
 
 class SearchViewController: UIViewController {
 
@@ -139,7 +140,8 @@ extension SearchViewController: UITableViewDataSource {
                 withIdentifier: "SearchMemoriesCell",
                 for: indexPath) as? SearchMemoriesCell
             else { fatalError("Could not create SearchMemoriesCell") }
-            cell.userNameLabel.text = "Jenny"
+            cell.userNameLabel.text = memories[indexPath.row].user
+            cell.userImageView.kf.setImage(with: URL(string: memories[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
             if memories.isEmpty == false {
                 let urlString = memories[indexPath.row].coverPhoto ?? ""
                 if !urlString.isEmpty, let url = URL(string: urlString) {
@@ -172,10 +174,13 @@ extension SearchViewController: UITableViewDataSource {
                 withIdentifier: "SearchMemoriesCell",
                 for: indexPath) as? SearchMemoriesCell
             else { fatalError("Could not create SearchMemoriesCell") }
-            cell.userNameLabel.text = "Jenny"
+            cell.userNameLabel.text = plans[indexPath.row].user
             cell.memoryImageView.image = mockImage
             cell.memoryNameLabel.text = plans[indexPath.row].planName
-            
+            cell.userImageView.kf.setImage(with: URL(string: plans[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
+            let start = self.changeDateFormat(date: "\(self.plans[indexPath.row].startDate)")
+            let end = self.changeDateFormat(date: "\(self.plans[indexPath.row].endDate)")
+            cell.dateLabel.text = "\(start)-\(end)"
             let daysData = plans[indexPath.row].days
             if daysData.isEmpty == false {
                 let locationData = daysData[0]

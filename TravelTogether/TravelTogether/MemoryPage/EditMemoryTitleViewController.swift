@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import FirebaseAuth
 
 class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet weak var memoryImageView: UIImageView! {
@@ -63,6 +64,8 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
     @objc func rightButtonTapped() {
         let firestoreManagerForPost = FirestoreManagerMemoryPost()
 //        firestoreManagerForPost.delegate = self
+        onePlan.user = Auth.auth().currentUser?.displayName
+        onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
                 firestoreManagerForPost.postMemory(memory: self.onePlan) { error in
                         if error != nil {
                             print("Failed to post TravelPlan")

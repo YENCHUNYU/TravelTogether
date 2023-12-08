@@ -123,7 +123,9 @@ class FirestoreManagerFetchMemory {
                         startDate: startDate,
                         endDate: endDate,
                         days: travelDays,
-                        coverPhoto: data["coverPhoto"] as? String ?? ""
+                        coverPhoto: data["coverPhoto"] as? String ?? "",
+                        user: data["user"] as? String ?? "",
+                        userPhoto: data["userPhoto"] as? String ?? ""
                     )
                     memories.append(travelPlan)
                 }

@@ -383,7 +383,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UserName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7lo-8G-FKe">
-                                                    <rect key="frame" x="75" y="26" width="72.666666666666686" height="18"/>
+                                                    <rect key="frame" x="80" y="26" width="72.666666666666686" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -469,7 +469,7 @@
                                                 <constraint firstItem="yva-3v-pCb" firstAttribute="top" secondItem="IYL-ru-lu2" secondAttribute="bottom" constant="5" id="lST-K9-D0K"/>
                                                 <constraint firstItem="sxF-6X-7ck" firstAttribute="top" secondItem="3T2-yk-mDe" secondAttribute="bottom" constant="3" id="pHX-RQ-7vs"/>
                                                 <constraint firstItem="kLS-ba-OXz" firstAttribute="top" secondItem="sxF-6X-7ck" secondAttribute="bottom" constant="3" id="qAg-a1-bcX"/>
-                                                <constraint firstItem="7lo-8G-FKe" firstAttribute="leading" secondItem="IYL-ru-lu2" secondAttribute="trailing" constant="5" id="vVA-ia-GHp"/>
+                                                <constraint firstItem="7lo-8G-FKe" firstAttribute="leading" secondItem="IYL-ru-lu2" secondAttribute="trailing" constant="10" id="vVA-ia-GHp"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="4tr-86-Kdo" secondAttribute="trailing" constant="20" id="wEI-U0-Sgg"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -1204,7 +1204,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="UserName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Np0-2z-4dT">
-                                                    <rect key="frame" x="75" y="26" width="72.666666666666686" height="18"/>
+                                                    <rect key="frame" x="80" y="26" width="72.666666666666686" height="18"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1277,7 +1277,7 @@
                                                 <constraint firstItem="OV8-YR-1eS" firstAttribute="leading" secondItem="zIm-6g-i0l" secondAttribute="leading" constant="10" id="lP8-vq-rdR"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Np0-2z-4dT" secondAttribute="trailing" constant="20" symbolic="YES" id="n5i-i9-gWg"/>
                                                 <constraint firstItem="VdH-SQ-3Kx" firstAttribute="top" secondItem="904-bd-VlW" secondAttribute="bottom" constant="5" id="rok-z0-95A"/>
-                                                <constraint firstItem="Np0-2z-4dT" firstAttribute="leading" secondItem="kDZ-1w-6Jf" secondAttribute="trailing" constant="5" id="whA-8z-GGw"/>
+                                                <constraint firstItem="Np0-2z-4dT" firstAttribute="leading" secondItem="kDZ-1w-6Jf" secondAttribute="trailing" constant="10" id="whA-8z-GGw"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" name="yellowGreen"/>
@@ -2270,7 +2270,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="HNF-ZE-dku"/>
-        <segue reference="jsr-wJ-nje"/>
+        <segue reference="YPG-wh-Qv6"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Icons_24px_Close拷貝" width="24" height="24"/>

@@ -68,7 +68,10 @@ class CreatePlanViewController: UIViewController {
                 destination: "Destination",
                 startDate: startDate ?? Date(),
                 endDate: endDate ?? Date(),
-                days: [])
+                days: [],
+                user: Auth.auth().currentUser?.displayName,
+                userPhoto: Auth.auth().currentUser?.photoURL?.absoluteString
+            )
         }
         
         let firestoreManagerForPost = FirestoreManagerForPost()

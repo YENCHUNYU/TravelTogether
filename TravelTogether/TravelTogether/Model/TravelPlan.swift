@@ -16,6 +16,8 @@ struct TravelPlan {
     var endDate: Date
     var days: [TravelDay]
     var coverPhoto: String?
+    var user: String?
+    var userPhoto: String?
     
     var dictionary: [String: Any] {
         return [
@@ -25,7 +27,9 @@ struct TravelPlan {
             "startDate": Timestamp(date: startDate),
             "endDate": Timestamp(date: endDate),
             "days": days,
-            "coverPhoto": coverPhoto ?? ""
+            "coverPhoto": coverPhoto ?? "",
+            "user": user ?? "",
+            "userPhoto": userPhoto ?? ""
         ]
     }
 }
