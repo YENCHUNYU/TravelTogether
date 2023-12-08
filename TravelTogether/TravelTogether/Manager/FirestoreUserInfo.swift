@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import FirebaseAuth
 
 protocol FirestoreManagerFetchUserDelegate: AnyObject {
     func manager(_ manager: FirestoreManager, didGet firestoreData: UserInfo)
@@ -16,10 +17,10 @@ class FirestoreManagerFetchUser {
 
     weak var delegate: FirestoreManagerFetchUserDelegate?
 
-    func fetchUserInfo(id: String, completion: @escaping (UserInfo?, Error?) -> Void) {
+    func fetchUserInfo(completion: @escaping (UserInfo?, Error?) -> Void) {
         let database = Firestore.firestore()
 
-        let userRef = database.collection("UserInfo").document(id)
+        let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
 
         userRef.getDocument { (document, error) in
             if let error = error {
@@ -34,8 +35,9 @@ class FirestoreManagerFetchUser {
                 if let data = document.data(),
                    let email = data["email"] as? String,
                    let name = data["name"] as? String,
-                let id = data["id"] as? String {
-                    let userInfo = UserInfo(email: email, name: name, id: id)
+                let id = data["id"] as? String,
+                let photo = data["photo"] as? String {
+                    let userInfo = UserInfo(email: email, name: name, id: id, photo: photo)
                     completion(userInfo, nil)
                 } else {
                     print("Error parsing user document data")

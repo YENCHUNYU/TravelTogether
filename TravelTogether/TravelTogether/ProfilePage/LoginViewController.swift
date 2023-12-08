@@ -10,10 +10,12 @@ import FirebaseAuth
 import FirebaseFirestore
 import GoogleSignIn
 import FirebaseCore
+import FirebaseStorage
 
 class LoginViewController: UIViewController {
     static var loginStatus = false
     var database = Firestore.firestore()
+    let user = Auth.auth().currentUser
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     @IBOutlet weak var emailLabel: UILabel! {
@@ -119,7 +121,7 @@ class LoginViewController: UIViewController {
     @IBAction func googleSigninButtonTapped(_ sender: Any) {
         GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in
         guard error == nil else {
-            self.showAlert(title: "Error", message: "登入失敗，請改由其他方式登入。")
+            self.showAlert(title: "Error", message: "登入失敗。")
             return
         }
 
@@ -139,20 +141,38 @@ class LoginViewController: UIViewController {
     }
     
     func signInWithFirebase(_ credential: AuthCredential) {
-          // Use Firebase Auth to sign in with the credential
-          Auth.auth().signIn(with: credential) { authResult, error in
-              if let error = error {
-                  self.showAlert(title: "Error", message: "登入失敗，請改由其他方式登入。")
-                  print("Firebase sign-in error: \(error.localizedDescription)")
-                  return
-              }
 
-              self.showAlert(title: "Success", message: "登入成功！")
-              print("User signed in with Firebase")
-              LoginViewController.loginStatus = true
-//              self.dismiss(animated: true)
-          }
+        Auth.auth().signIn(with: credential) { authResult, error in
+            if let error = error {
+                self.showAlert(title: "Error", message: "登入失敗，請改由其他方式登入。")
+                print("Firebase sign-in error: \(error.localizedDescription)")
+                return
+            }
+            
+            self.showAlert(title: "Success", message: "登入成功！")
+            print("User signed in with Firebase")
+            LoginViewController.loginStatus = true
+            
+            //              let usersRef = self.database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+            //              if let user = self.user {
+            //                  let userInfo = UserInfo(email: user.email ?? "", name: user.displayName ?? "", id: user.uid, photo: user.photoURL?.absoluteString)
+            //                  let usersData = userInfo.toDictionary()
+            //                  usersRef.setData(usersData)
+            //              }
+            
+            
+            
+            if let user = authResult?.user {
+                let usersRef = self.database.collection("UserInfo").document(user.uid)
+                let userInfo = UserInfo(email: user.email ?? "", name: user.displayName ?? "", id: user.uid, photo: user.photoURL?.absoluteString)
+                let usersData = userInfo.toDictionary()
+                usersRef.setData(usersData)
+            }}
+
+                  // The rest of your code
+              
       }
+    
     @IBAction func doneButtonTapped(_ sender: Any) {
         
         let emailText = emailTextField.text ?? ""
@@ -229,5 +249,4 @@ class LoginViewController: UIViewController {
         
         usersRef.setData(usersData)
        }
-    
 }

@@ -19,8 +19,19 @@ class ProfileCell: UITableViewCell {
      
     @IBOutlet weak var labelBackgroundView: UIView! {
         didSet {
-            labelBackgroundView.layer.cornerRadius = 15
-            labelBackgroundView.clipsToBounds = true
+            addRoundedBottomCorners(to: labelBackgroundView, cornerRadius: 15)
         }
     }
+    
+    func addRoundedBottomCorners(to view: UIView, cornerRadius: CGFloat) {
+            let maskPath = UIBezierPath(
+                roundedRect: view.bounds,
+                byRoundingCorners: [.bottomLeft, .bottomRight],
+                cornerRadii: CGSize(width: cornerRadius, height: cornerRadius)
+            )
+
+            let shapeLayer = CAShapeLayer()
+            shapeLayer.path = maskPath.cgPath
+            view.layer.mask = shapeLayer
+        }
 }

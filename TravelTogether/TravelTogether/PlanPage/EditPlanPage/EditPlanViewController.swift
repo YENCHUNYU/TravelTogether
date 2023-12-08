@@ -328,7 +328,7 @@ extension EditPlanViewController: UITableViewDropDelegate {
                         
                         let firestoreUserManger = FirestoreManagerFetchUser()
                         firestoreUserManger.delegate = self
-                        firestoreUserManger.fetchUserInfo(id: "456@test.com") { userData, error in
+                        firestoreUserManger.fetchUserInfo { userData, error in
                             if error != nil {
                                 print("Failed to fetch userInfo")
                             } else {
@@ -350,7 +350,7 @@ extension EditPlanViewController: UITableViewDropDelegate {
                     tableView.reloadData()
                     let firestoreUserManger = FirestoreManagerFetchUser()
                     firestoreUserManger.delegate = self
-                    firestoreUserManger.fetchUserInfo(id: "456@test.com") { userData, error  in
+                    firestoreUserManger.fetchUserInfo { userData, error  in
                         if error != nil {
                         } else {
 //                            locations[destinationIndexPath.row].user = " \(String(describing: userData?.name ?? ""))已編輯 "

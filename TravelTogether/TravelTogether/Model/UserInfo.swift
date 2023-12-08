@@ -11,12 +11,14 @@ struct UserInfo {
     var email: String
     var name: String
     var id: String
+    var photo: String?
     
     func toDictionary() -> [String: Any] {
         return [
             "email": email,
             "name": name,
             "id": id,
+            "photo": photo ?? ""
         ]
     }
 }

@@ -9,11 +9,17 @@ import UIKit
 import FirebaseFirestore
 import FirebaseStorage
 import FirebaseAuth
+import Kingfisher
 
 class ProfileViewController: UIViewController {
     
     @IBOutlet weak var separatorView: UIView!
-    @IBOutlet weak var userImageView: UIImageView!
+    @IBOutlet weak var userImageView: UIImageView! {
+        didSet {
+            userImageView.layer.cornerRadius = 45
+            userImageView.clipsToBounds = true
+        }
+    }
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var userIntroduction: UILabel!
     @IBOutlet weak var followButton: UIButton! {
@@ -31,6 +37,7 @@ class ProfileViewController: UIViewController {
     var plans: [TravelPlan] = []
     var spotsData: [[String: Any]] = []
     var memories: [TravelPlan] = []
+    var userInfo = UserInfo(email: "", name: "", id: "")
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
@@ -64,6 +71,18 @@ class ProfileViewController: UIViewController {
                 print("Fetched memories: \(travelPlans ?? [])")
                 self.memories = travelPlans ?? []
                 self.tableView.reloadData()
+            }
+        }
+        
+        let firestoreUser = FirestoreManagerFetchUser()
+        firestoreUser.fetchUserInfo { (userInfo, error) in
+            if let error = error {
+                print("Error fetching UserInfo: \(error)")
+            } else {
+                print("Fetched UserInfo: \(String(describing: userInfo))")
+                self.userInfo = userInfo ?? UserInfo(email: "", name: "", id: "")
+                self.userNameLabel.text = self.userInfo.name
+                self.userImageView.kf.setImage(with: URL(string: "\(String(describing: self.userInfo.photo ?? ""))"), placeholder: UIImage(systemName: "person.circle.fill"))
             }
         }
               
@@ -115,6 +134,18 @@ class ProfileViewController: UIViewController {
                 print("Fetched memories: \(travelPlans ?? [])")
                 self.memories = travelPlans ?? []
                 self.tableView.reloadData()
+            }
+        }
+        
+        let firestoreUser = FirestoreManagerFetchUser()
+        firestoreUser.fetchUserInfo { (userInfo, error) in
+            if let error = error {
+                print("Error fetching UserInfo: \(error)")
+            } else {
+                print("Fetched UserInfo: \(String(describing: userInfo))")
+                self.userInfo = userInfo ?? UserInfo(email: "", name: "", id: "")
+                self.userNameLabel.text = self.userInfo.name
+                self.userImageView.kf.setImage(with: URL(string: "\(String(describing: self.userInfo.photo ?? ""))"))
             }
         }
     }
