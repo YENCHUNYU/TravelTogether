@@ -66,6 +66,32 @@ class ProfileViewController: UIViewController {
                 self.tableView.reloadData()
             }
         }
+              
+        let rightButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(rightButtonTapped))
+        navigationItem.rightBarButtonItem = rightButton
+    }
+    
+    @objc func rightButtonTapped() {
+       
+//         performSegue(withIdentifier: "", sender: self)
+        let firebaseAuth = Auth.auth()
+        do {
+          try firebaseAuth.signOut()
+            LoginViewController.loginStatus = false
+            self.showAlert(title: "Success", message: "已登出帳戶")
+        } catch let signOutError as NSError {
+          print("Error signing out", signOutError)
+        }
+       }
+    
+    func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default) { [weak self] action in
+           
+        }
+        alert.addAction(action)
+        present(alert, animated: true)
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

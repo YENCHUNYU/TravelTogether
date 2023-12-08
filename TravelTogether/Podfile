@@ -10,5 +10,4 @@ target 'TravelTogether' do
   pod 'GoogleMaps', '~> 3.7.0'
   pod 'GooglePlaces'
 
-
 end

@@ -60,7 +60,6 @@
 		5288CB0E2B0710EA00E089F9 /* MapInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB0D2B0710EA00E089F9 /* MapInfoViewController.swift */; };
 		5288CB102B07615400E089F9 /* AddToPlanListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB0F2B07615400E089F9 /* AddToPlanListViewController.swift */; };
 		5288CB122B076F7A00E089F9 /* CreatePlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB112B076F7A00E089F9 /* CreatePlanViewController.swift */; };
-		5288CB142B07B08700E089F9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5288CB132B07B08700E089F9 /* GoogleService-Info.plist */; };
 		5288CB1C2B07B36500E089F9 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5288CB1B2B07B36500E089F9 /* FirebaseAnalytics */; };
 		5288CB1E2B07B36500E089F9 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 5288CB1D2B07B36500E089F9 /* FirebaseAuth */; };
 		5288CB202B07B36500E089F9 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 5288CB1F2B07B36500E089F9 /* FirebaseFirestore */; };
@@ -69,6 +68,9 @@
 		5288CB272B07B95800E089F9 /* AddToListFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB262B07B95800E089F9 /* AddToListFooterView.swift */; };
 		5288CB292B07B98A00E089F9 /* AddToListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB282B07B98A00E089F9 /* AddToListCell.swift */; };
 		52ABB13E2B1E1737005D690E /* FirestoreFetchMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52ABB13D2B1E1737005D690E /* FirestoreFetchMemory.swift */; };
+		52B41BB12B22DEB500B28225 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 52B41BB02B22DEB500B28225 /* GoogleSignIn */; };
+		52B41BB32B22DEB500B28225 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 52B41BB22B22DEB500B28225 /* GoogleSignInSwift */; };
+		52B41BB52B22DF4400B28225 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 52B41BB42B22DF4400B28225 /* GoogleService-Info.plist */; };
 		52CD52202B0E406100CA7352 /* FirestoreForPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CD521F2B0E406100CA7352 /* FirestoreForPost.swift */; };
 		52DF40EE2B218FBC005F60FD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DF40ED2B218FBC005F60FD /* LoginViewController.swift */; };
 		52E0F95A2B0EE64A00D23AFE /* FirestoreForPostLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E0F9592B0EE64A00D23AFE /* FirestoreForPostLocation.swift */; };
@@ -136,11 +138,11 @@
 		5288CB0D2B0710EA00E089F9 /* MapInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapInfoViewController.swift; sourceTree = "<group>"; };
 		5288CB0F2B07615400E089F9 /* AddToPlanListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToPlanListViewController.swift; sourceTree = "<group>"; };
 		5288CB112B076F7A00E089F9 /* CreatePlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlanViewController.swift; sourceTree = "<group>"; };
-		5288CB132B07B08700E089F9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5288CB242B07B74100E089F9 /* TravelPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelPlan.swift; sourceTree = "<group>"; };
 		5288CB262B07B95800E089F9 /* AddToListFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToListFooterView.swift; sourceTree = "<group>"; };
 		5288CB282B07B98A00E089F9 /* AddToListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToListCell.swift; sourceTree = "<group>"; };
 		52ABB13D2B1E1737005D690E /* FirestoreFetchMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreFetchMemory.swift; sourceTree = "<group>"; };
+		52B41BB42B22DF4400B28225 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		52CD521F2B0E406100CA7352 /* FirestoreForPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreForPost.swift; sourceTree = "<group>"; };
 		52DF40ED2B218FBC005F60FD /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		52E0F9592B0EE64A00D23AFE /* FirestoreForPostLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreForPostLocation.swift; sourceTree = "<group>"; };
@@ -165,9 +167,11 @@
 			files = (
 				5288CB1C2B07B36500E089F9 /* FirebaseAnalytics in Frameworks */,
 				5288CB202B07B36500E089F9 /* FirebaseFirestore in Frameworks */,
+				52B41BB32B22DEB500B28225 /* GoogleSignInSwift in Frameworks */,
 				5288CB1E2B07B36500E089F9 /* FirebaseAuth in Frameworks */,
 				5288CB222B07B36500E089F9 /* FirebaseStorage in Frameworks */,
 				893338DDC46947964D93D5C1 /* Pods_TravelTogether.framework in Frameworks */,
+				52B41BB12B22DEB500B28225 /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,7 +379,7 @@
 				52E70D8D2B0107F300440D4C /* Assets.xcassets */,
 				52E70D8F2B0107F300440D4C /* LaunchScreen.storyboard */,
 				52E70D922B0107F300440D4C /* Info.plist */,
-				5288CB132B07B08700E089F9 /* GoogleService-Info.plist */,
+				52B41BB42B22DF4400B28225 /* GoogleService-Info.plist */,
 			);
 			path = TravelTogether;
 			sourceTree = "<group>";
@@ -421,6 +425,8 @@
 				5288CB1D2B07B36500E089F9 /* FirebaseAuth */,
 				5288CB1F2B07B36500E089F9 /* FirebaseFirestore */,
 				5288CB212B07B36500E089F9 /* FirebaseStorage */,
+				52B41BB02B22DEB500B28225 /* GoogleSignIn */,
+				52B41BB22B22DEB500B28225 /* GoogleSignInSwift */,
 			);
 			productName = TravelTogether;
 			productReference = 52E70D812B0107F100440D4C /* TravelTogether.app */;
@@ -452,6 +458,7 @@
 			mainGroup = 52E70D782B0107F100440D4C;
 			packageReferences = (
 				5288CB1A2B07B36500E089F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				52B41BAF2B22DEB500B28225 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			productRefGroup = 52E70D822B0107F100440D4C /* Products */;
 			projectDirPath = "";
@@ -469,8 +476,8 @@
 			files = (
 				52E70D912B0107F300440D4C /* LaunchScreen.storyboard in Resources */,
 				52E70D8E2B0107F300440D4C /* Assets.xcassets in Resources */,
+				52B41BB52B22DF4400B28225 /* GoogleService-Info.plist in Resources */,
 				52E70D8C2B0107F100440D4C /* Main.storyboard in Resources */,
-				5288CB142B07B08700E089F9 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -837,6 +844,14 @@
 				minimumVersion = 10.0.0;
 			};
 		};
+		52B41BAF2B22DEB500B28225 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -859,6 +874,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5288CB1A2B07B36500E089F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
+		};
+		52B41BB02B22DEB500B28225 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 52B41BAF2B22DEB500B28225 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		52B41BB22B22DEB500B28225 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 52B41BAF2B22DEB500B28225 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -9,6 +9,8 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 import FirebaseCore
+import FirebaseAuth
+import GoogleSignIn
 
 let googleApiKey = "AIzaSyCiR-wZWz3f4L4OtxMGLcCTlt4mpc7oz6I"
 
@@ -21,6 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GMSServices.provideAPIKey(googleApiKey)
         GMSPlacesClient.provideAPIKey(googleApiKey)
         FirebaseApp.configure()
+//        let authUI = FUIAuth.defaultAuthUI()
         return true
     }
 
@@ -39,5 +42,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running,
         // this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    }
+    
+    func application(_ app: UIApplication,
+                     open url: URL,
+                     options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+      return GIDSignIn.sharedInstance.handle(url)
     }
 }

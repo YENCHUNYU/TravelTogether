@@ -9,6 +9,7 @@ import UIKit
 import GoogleMaps
 import FirebaseFirestore
 import FirebaseStorage
+import FirebaseAuth
 
 class SearchViewController: UIViewController {
 
@@ -72,6 +73,12 @@ class SearchViewController: UIViewController {
                 self.memories = travelPlans ?? []
                 self.tableView.reloadData()
             }
+        }
+        
+        if Auth.auth().currentUser != nil {
+            LoginViewController.loginStatus = true
+        } else {
+            LoginViewController.loginStatus = false
         }
     }
     func setUpButton() {

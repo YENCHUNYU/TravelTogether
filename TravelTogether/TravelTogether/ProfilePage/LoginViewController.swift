@@ -8,6 +8,8 @@
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
+import GoogleSignIn
+import FirebaseCore
 
 class LoginViewController: UIViewController {
     static var loginStatus = false
@@ -47,6 +49,25 @@ class LoginViewController: UIViewController {
         }
     }
     @IBOutlet weak var closeButton: UIButton!
+    
+    @IBOutlet weak var googleSigninButton: GIDSignInButton! {
+        didSet {
+            googleSigninButton.layer.cornerRadius = 8
+
+            let googleIconImageView = UIImageView(image: UIImage(named: "google"))
+            googleIconImageView.contentMode = .scaleAspectFill
+            googleSigninButton.addSubview(googleIconImageView)
+
+            googleIconImageView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                googleIconImageView.centerYAnchor.constraint(equalTo: googleSigninButton.centerYAnchor),
+                googleIconImageView.leadingAnchor.constraint(equalTo: googleSigninButton.leadingAnchor, constant: 35),
+                googleIconImageView.widthAnchor.constraint(equalToConstant: 28),
+                googleIconImageView.heightAnchor.constraint(equalToConstant: 28) 
+            ])
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // 將使用者進入畫面預設成select log-in
@@ -56,10 +77,14 @@ class LoginViewController: UIViewController {
         nameLabel.textColor = UIColor.lightGray
         nameTextField.backgroundColor = UIColor(named: "lightGreen")
 
-
-        // 設置選項的字體大小
-        let font = UIFont.systemFont(ofSize: 16) // 調整這裡的大小
+        let font = UIFont.systemFont(ofSize: 16)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)
+        
+       guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+       let config = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.configuration = config
+        
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -67,8 +92,8 @@ class LoginViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 25
         view.layer.masksToBounds = true
-        view.frame = CGRect(x: 0, y: (UIScreen.main.bounds.height) - 500,
-                            width: UIScreen.main.bounds.width, height: 500 )
+        view.frame = CGRect(x: 0, y: (UIScreen.main.bounds.height) - 600,
+                            width: UIScreen.main.bounds.width, height: 600 )
     }
     
     @IBAction func changeMode(_ sender: UISegmentedControl) {
@@ -91,6 +116,43 @@ class LoginViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    @IBAction func googleSigninButtonTapped(_ sender: Any) {
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in
+        guard error == nil else {
+            self.showAlert(title: "Error", message: "登入失敗，請改由其他方式登入。")
+            return
+        }
+
+        guard let user = result?.user,
+            let idToken = user.idToken?.tokenString
+        else {
+            self.showAlert(title: "Error", message: "登入失敗，請改由其他方式登入。")
+            return
+        }
+
+        let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                       accessToken: user.accessToken.tokenString)
+
+        // Use the Google Sign-In credential for Firebase authentication
+        self.signInWithFirebase(credential)
+                }
+    }
+    
+    func signInWithFirebase(_ credential: AuthCredential) {
+          // Use Firebase Auth to sign in with the credential
+          Auth.auth().signIn(with: credential) { authResult, error in
+              if let error = error {
+                  self.showAlert(title: "Error", message: "登入失敗，請改由其他方式登入。")
+                  print("Firebase sign-in error: \(error.localizedDescription)")
+                  return
+              }
+
+              self.showAlert(title: "Success", message: "登入成功！")
+              print("User signed in with Firebase")
+              LoginViewController.loginStatus = true
+//              self.dismiss(animated: true)
+          }
+      }
     @IBAction func doneButtonTapped(_ sender: Any) {
         
         let emailText = emailTextField.text ?? ""
@@ -106,6 +168,7 @@ class LoginViewController: UIViewController {
                    }
                 self.showAlert(title: "Success", message: "登入成功!")
                 LoginViewController.loginStatus = true
+//                self.dismiss(animated: true)
         }
             
             // select sign-up
@@ -128,7 +191,7 @@ class LoginViewController: UIViewController {
                         self.showAlert(title: "Error", message: "請輸入暱稱")
                         
                     } else {
-                        self.showAlert(title: "Success", message: "註冊成功！請輸入帳號資訊以登入。")
+                        self.showAlert(title: "Success", message: "註冊成功！請前往登入畫面並輸入登入資訊。")
                         self.addData()
                     }
                 }}}
@@ -138,6 +201,7 @@ class LoginViewController: UIViewController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default) { [weak self] action in
             if title == "Success" {
+//                LoginViewController.loginStatus = true
                 self?.dismiss(animated: true)
             }
         }
