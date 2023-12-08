@@ -169,7 +169,7 @@ extension SearchViewController: UITableViewDataSource {
                 }
             }
             return cell
-        } else if searchIndex == 1 {
+        } else {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "SearchMemoriesCell",
                 for: indexPath) as? SearchMemoriesCell
@@ -201,16 +201,16 @@ extension SearchViewController: UITableViewDataSource {
                     }}
             }
             
-            return cell
-        } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SpotCell", for: indexPath) as? SpotCell
-            else { fatalError("Could not create SpotCell") }
-            if let image = UIImage(named: "雲林古坑") {
-                cell.spotImageView.image = image
-                   }
-            cell.spotNameLabel.text = "雲林古坑"
-            return cell
-        }   
+            return cell}
+//        } else {
+//            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SpotCell", for: indexPath) as? SpotCell
+//            else { fatalError("Could not create SpotCell") }
+//            if let image = UIImage(named: "雲林古坑") {
+//                cell.spotImageView.image = image
+//                   }
+//            cell.spotNameLabel.text = "雲林古坑"
+//            return cell
+//        }   
     }
     
     func changeDateFormat(date: String) -> String {

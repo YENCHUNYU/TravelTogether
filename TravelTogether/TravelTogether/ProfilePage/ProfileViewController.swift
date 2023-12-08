@@ -49,7 +49,7 @@ class ProfileViewController: UIViewController {
         tableView.separatorStyle = .none
         
         userNameLabel.text = "Jenny"
-        userIntroduction.text = "什麼時候可以出去玩:D"
+//        userIntroduction.text = "什麼時候可以出去玩:D"
         
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self

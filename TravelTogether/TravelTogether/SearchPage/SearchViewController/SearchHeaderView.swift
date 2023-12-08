@@ -33,7 +33,7 @@ class SearchHeaderView: UITableViewHeaderFooterView {
             
             let codeSegmented = CustomSegmentedControl(
                 frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50),
-                buttonTitle: ["旅遊回憶", "行程", "熱門景點"])
+                buttonTitle: ["旅遊回憶", "行程"])
             codeSegmented.backgroundColor = .clear
             codeSegmented.delegate = self
             contentView.addSubview(codeSegmented)
