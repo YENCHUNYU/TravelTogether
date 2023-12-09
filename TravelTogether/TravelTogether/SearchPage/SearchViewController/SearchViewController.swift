@@ -21,6 +21,8 @@ class SearchViewController: UIViewController {
     var mockImage = UIImage(named: "Image_Placeholder")
     var spotsData: [[String: Any]] = []
     var memories: [TravelPlan] = []
+    var memoryId = ""
+    var userId = ""
     
     lazy var searchButton: UIButton = {
         let button = UIButton()
@@ -43,6 +45,7 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: "SearchHeaderView")
@@ -82,6 +85,7 @@ class SearchViewController: UIViewController {
             LoginViewController.loginStatus = false
         }
     }
+    
     func setUpButton() {
         searchButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
         searchButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
@@ -92,6 +96,13 @@ class SearchViewController: UIViewController {
   
             if let destinationVC = segue.destination as? MapViewController {
                 destinationVC.isFromSearch = true
+            }
+        }
+        if segue.identifier == "MemoryDetail" {
+            if let destinationVC = segue.destination as? MemoryDetailViewController {
+                destinationVC.memoryId = self.memoryId
+                destinationVC.userId = self.userId
+                print("userid@\(destinationVC.userId)")
             }
         }
     }
@@ -231,10 +242,13 @@ extension SearchViewController: UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if searchIndex == 0 {
+            memoryId = memories[indexPath.row].id
+            userId = memories[indexPath.row].userId ?? ""
             performSegue(withIdentifier: "MemoryDetail", sender: self)
         }
         
     }
+    
 }
 
 extension SearchViewController: UITableViewDelegate {

@@ -65,6 +65,21 @@
                   endingLineNumber = "165"
                   offsetFromSymbolStart = "710">
                </Location>
+               <Location
+                  uuid = "18DF9CA2-C60D-4FA9-81A8-A7B0E1270B7A - cfbf4c2a43eaa14f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;__C.FIRAuthDataResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in TravelTogether.LoginViewController.signInWithFirebase(__C.FIRAuthCredential) -&gt; ()"
+                  moduleName = "TravelTogether"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/test/Desktop/TravelTogether/TravelTogether/TravelTogether/ProfilePage/LoginViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "165"
+                  endingLineNumber = "165"
+                  offsetFromSymbolStart = "716">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -112,6 +127,21 @@
                   startingLineNumber = "165"
                   endingLineNumber = "165"
                   offsetFromSymbolStart = "710">
+               </Location>
+               <Location
+                  uuid = "71A4B498-6215-40B1-937D-BE19CD4533E1 - cfbf4c2a43eaa14f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;__C.FIRAuthDataResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in TravelTogether.LoginViewController.signInWithFirebase(__C.FIRAuthCredential) -&gt; ()"
+                  moduleName = "TravelTogether"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/test/Desktop/TravelTogether/TravelTogether/TravelTogether/ProfilePage/LoginViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "165"
+                  endingLineNumber = "165"
+                  offsetFromSymbolStart = "716">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -161,6 +191,21 @@
                   endingLineNumber = "165"
                   offsetFromSymbolStart = "710">
                </Location>
+               <Location
+                  uuid = "A655ACE0-AE3B-40AB-8759-94E5C783DC47 - cfbf4c2a43eaa14f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;__C.FIRAuthDataResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in TravelTogether.LoginViewController.signInWithFirebase(__C.FIRAuthCredential) -&gt; ()"
+                  moduleName = "TravelTogether"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/test/Desktop/TravelTogether/TravelTogether/TravelTogether/ProfilePage/LoginViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "165"
+                  endingLineNumber = "165"
+                  offsetFromSymbolStart = "716">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -208,6 +253,21 @@
                   startingLineNumber = "165"
                   endingLineNumber = "165"
                   offsetFromSymbolStart = "710">
+               </Location>
+               <Location
+                  uuid = "19A5EA83-DAEB-45A1-BC93-A5A0E56A0D1F - cfbf4c2a43eaa14f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;__C.FIRAuthDataResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in TravelTogether.LoginViewController.signInWithFirebase(__C.FIRAuthCredential) -&gt; ()"
+                  moduleName = "TravelTogether"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/test/Desktop/TravelTogether/TravelTogether/TravelTogether/ProfilePage/LoginViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "165"
+                  endingLineNumber = "165"
+                  offsetFromSymbolStart = "716">
                </Location>
             </Locations>
          </BreakpointContent>

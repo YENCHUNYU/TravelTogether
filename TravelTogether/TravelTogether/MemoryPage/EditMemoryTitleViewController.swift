@@ -66,6 +66,7 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
 //        firestoreManagerForPost.delegate = self
         onePlan.user = Auth.auth().currentUser?.displayName
         onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
+        onePlan.userId = Auth.auth().currentUser?.uid
                 firestoreManagerForPost.postMemory(memory: self.onePlan) { error in
                         if error != nil {
                             print("Failed to post TravelPlan")

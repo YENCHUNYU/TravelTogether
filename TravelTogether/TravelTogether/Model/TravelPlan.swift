@@ -18,6 +18,7 @@ struct TravelPlan {
     var coverPhoto: String?
     var user: String?
     var userPhoto: String?
+    var userId: String?
     
     var dictionary: [String: Any] {
         return [
@@ -29,7 +30,8 @@ struct TravelPlan {
             "days": days,
             "coverPhoto": coverPhoto ?? "",
             "user": user ?? "",
-            "userPhoto": userPhoto ?? ""
+            "userPhoto": userPhoto ?? "",
+            "userId": userId ?? ""
         ]
     }
 }
