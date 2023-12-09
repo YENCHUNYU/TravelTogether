@@ -7,8 +7,9 @@
 
 import UIKit
 import FirebaseFirestore
-import Photos
 import FirebaseAuth
+import SwiftEntryKit
+
 class MemoryDetailViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
@@ -44,6 +45,7 @@ class MemoryDetailViewController: UIViewController {
     }()
     
     @objc func copyPlan() {
+        
         let firestoreFetch = FirestoreManagerForOne()
         firestoreFetch.fetchOneTravelPlan(userId: userId, byId: memoryId) { (memory, error) in
             if let error = error {
@@ -61,13 +63,15 @@ class MemoryDetailViewController: UIViewController {
             if let error = error {
                 print("Error fetching one plan: \(error)")
             } else {
-                print("One plan not found.")
+                self.swiftEntryKit()
+                print("One plan was added.")
             }
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+   
         view.addSubview(copyButton)
         setUpButton()
         tableView.dataSource = self
@@ -97,6 +101,29 @@ class MemoryDetailViewController: UIViewController {
                         }
                     }
     }
+    
+    func swiftEntryKit() {
+        // Generate top floating entry and set some properties
+        var attributes = EKAttributes.topFloat
+//        attributes.entryBackground = .gradient(gradient: .init(colors: [EKColor(.red), EKColor(.green)], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.entryBackground = .color(color: EKColor(UIColor(named: "darkGreen") ?? .white))
+        attributes.popBehavior = .animated(animation: .init(translate: .init(duration: 5), scale: .init(from: 1, to: 0.7, duration: 0.7)))
+        attributes.shadow = .active(with: .init(color: .black, opacity: 0.5, radius: 10, offset: .zero))
+        attributes.statusBar = .dark
+        attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
+        attributes.positionConstraints.maxSize = .init(width: .constant(value: UIScreen.main.bounds.width - 40), height: .intrinsic)
+
+        let title = EKProperty.LabelContent(text: "已成功複製到我的行程！", style: .init(font: UIFont.systemFont(ofSize: 14, weight: .light), color: .white))
+        let description = EKProperty.LabelContent(text: "請前往「我的行程」查看。", style: .init(font: UIFont.systemFont(ofSize: 12, weight: .light), color: EKColor(UIColor(named: "yellowGreen") ?? .white) ))
+        var image = EKProperty.ImageContent(image: UIImage(systemName: "doc.on.doc.fill") ?? UIImage(), size: CGSize(width: 35, height: 35))
+        image.tint = .white
+        let simpleMessage = EKSimpleMessage(image: image, title: title, description: description)
+        let notificationMessage = EKNotificationMessage(simpleMessage: simpleMessage)
+
+        let contentView = EKNotificationMessageView(with: notificationMessage)
+        SwiftEntryKit.display(entry: contentView, using: attributes)
+    }
+    
     func setUpButton() {
         copyButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
         copyButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true

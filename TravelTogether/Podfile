@@ -9,5 +9,5 @@ target 'TravelTogether' do
   pod 'SwiftLint'
   pod 'GoogleMaps', '~> 3.7.0'
   pod 'GooglePlaces'
-
+  pod 'SwiftEntryKit', '2.0.0'
 end

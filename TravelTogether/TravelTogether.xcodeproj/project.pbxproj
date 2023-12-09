@@ -474,6 +474,7 @@
 				52783CE32B051DA20067A334 /* ShellScript */,
 				E9580ACA3E78BD96F92389E2 /* [CP] Copy Pods Resources */,
 				52E51A112B2374A900D88E30 /* ShellScript */,
+				8D2693355A6C9834D6C832A5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -547,7 +548,7 @@
 			packageReferences = (
 				5288CB1A2B07B36500E089F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				52B41BAF2B22DEB500B28225 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
-				52B41BB62B232D4200B28225 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				52B41BB62B232D4200B28225 /* XCRemoteSwiftPackageReference "Kingfisher.git" */,
 			);
 			productRefGroup = 52E70D822B0107F100440D4C /* Products */;
 			projectDirPath = "";
@@ -611,6 +612,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
+		8D2693355A6C9834D6C832A5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TravelTogether/Pods-TravelTogether-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TravelTogether/Pods-TravelTogether-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TravelTogether/Pods-TravelTogether-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
 		};
 		9914EEF66865584DE2447756 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -965,7 +983,7 @@
 				minimumVersion = 7.0.0;
 			};
 		};
-		52B41BB62B232D4200B28225 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+		52B41BB62B232D4200B28225 /* XCRemoteSwiftPackageReference "Kingfisher.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
 			requirement = {
@@ -1008,7 +1026,7 @@
 		};
 		52B41BB72B232D4200B28225 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 52B41BB62B232D4200B28225 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			package = 52B41BB62B232D4200B28225 /* XCRemoteSwiftPackageReference "Kingfisher.git" */;
 			productName = Kingfisher;
 		};
 		52E519DB2B23748800D88E30 /* FirebaseAnalytics */ = {

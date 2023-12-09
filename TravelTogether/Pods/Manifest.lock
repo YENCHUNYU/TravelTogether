@@ -5,24 +5,28 @@ PODS:
   - GoogleMaps/Maps (3.7.0):
     - GoogleMaps/Base
   - GooglePlaces (8.3.0)
+  - SwiftEntryKit (2.0.0)
   - SwiftLint (0.54.0)
 
 DEPENDENCIES:
   - GoogleMaps (~> 3.7.0)
   - GooglePlaces
+  - SwiftEntryKit (= 2.0.0)
   - SwiftLint
 
 SPEC REPOS:
   trunk:
     - GoogleMaps
     - GooglePlaces
+    - SwiftEntryKit
     - SwiftLint
 
 SPEC CHECKSUMS:
   GoogleMaps: 55da829c68aa931f3ae982b9e341cc2f3d89c587
   GooglePlaces: b922e192c50994436900ef14d19f84971950250b
+  SwiftEntryKit: 61b5fa36f34a97dd8013e48a7345bc4c4720be9a
   SwiftLint: c1de071d9d08c8aba837545f6254315bc900e211
 
-PODFILE CHECKSUM: 433a3b9a368054b0ef37e79b16564a0d14b23e84
+PODFILE CHECKSUM: 841846c2ba13f8de2a70f3b5b47b355350807f91
 
 COCOAPODS: 1.13.0
