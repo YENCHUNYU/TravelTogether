@@ -23,6 +23,7 @@ class SearchViewController: UIViewController {
     var memories: [TravelPlan] = []
     var memoryId = ""
     var userId = ""
+    var planId = ""
     
     lazy var searchButton: UIButton = {
         let button = UIButton()
@@ -103,6 +104,13 @@ class SearchViewController: UIViewController {
                 destinationVC.memoryId = self.memoryId
                 destinationVC.userId = self.userId
                 print("userid@\(destinationVC.userId)")
+            }
+        }
+        if segue.identifier == "PlanDetail" {
+            if let destinationVC = segue.destination as? PlanDetailViewController {
+                destinationVC.travelPlanId = self.planId
+//                print("destinationVC.userId\(destinationVC.userId)")
+                destinationVC.userId = self.userId
             }
         }
     }
@@ -212,16 +220,7 @@ extension SearchViewController: UITableViewDataSource {
                     }}
             }
             
-            return cell}
-//        } else {
-//            guard let cell = tableView.dequeueReusableCell(withIdentifier: "SpotCell", for: indexPath) as? SpotCell
-//            else { fatalError("Could not create SpotCell") }
-//            if let image = UIImage(named: "雲林古坑") {
-//                cell.spotImageView.image = image
-//                   }
-//            cell.spotNameLabel.text = "雲林古坑"
-//            return cell
-//        }   
+            return cell} 
     }
     
     func changeDateFormat(date: String) -> String {
@@ -245,6 +244,11 @@ extension SearchViewController: UITableViewDataSource {
             memoryId = memories[indexPath.row].id
             userId = memories[indexPath.row].userId ?? ""
             performSegue(withIdentifier: "MemoryDetail", sender: self)
+        } else {
+            planId = plans[indexPath.row].id
+            print("planId\(planId)")
+            userId = plans[indexPath.row].userId ?? ""
+            performSegue(withIdentifier: "PlanDetail", sender: self)
         }
         
     }
@@ -253,11 +257,7 @@ extension SearchViewController: UITableViewDataSource {
 
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if searchIndex == 0 || searchIndex == 1 {
-           return 370
-        } else {
-            return 300
-        }
+          370
     }
 }
 

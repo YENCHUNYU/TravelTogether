@@ -67,6 +67,8 @@
 		5288CB252B07B74100E089F9 /* TravelPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB242B07B74100E089F9 /* TravelPlan.swift */; };
 		5288CB272B07B95800E089F9 /* AddToListFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB262B07B95800E089F9 /* AddToListFooterView.swift */; };
 		5288CB292B07B98A00E089F9 /* AddToListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB282B07B98A00E089F9 /* AddToListCell.swift */; };
+		529781BB2B2564D600F53476 /* PlanDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529781BA2B2564D600F53476 /* PlanDetailViewController.swift */; };
+		529781BD2B25650300F53476 /* PlanDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529781BC2B25650300F53476 /* PlanDetailCell.swift */; };
 		52ABB13E2B1E1737005D690E /* FirestoreFetchMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52ABB13D2B1E1737005D690E /* FirestoreFetchMemory.swift */; };
 		52B41BB12B22DEB500B28225 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 52B41BB02B22DEB500B28225 /* GoogleSignIn */; };
 		52B41BB32B22DEB500B28225 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 52B41BB22B22DEB500B28225 /* GoogleSignInSwift */; };
@@ -170,6 +172,8 @@
 		5288CB242B07B74100E089F9 /* TravelPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelPlan.swift; sourceTree = "<group>"; };
 		5288CB262B07B95800E089F9 /* AddToListFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToListFooterView.swift; sourceTree = "<group>"; };
 		5288CB282B07B98A00E089F9 /* AddToListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToListCell.swift; sourceTree = "<group>"; };
+		529781BA2B2564D600F53476 /* PlanDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDetailViewController.swift; sourceTree = "<group>"; };
+		529781BC2B25650300F53476 /* PlanDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDetailCell.swift; sourceTree = "<group>"; };
 		52ABB13D2B1E1737005D690E /* FirestoreFetchMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreFetchMemory.swift; sourceTree = "<group>"; };
 		52B41BB42B22DF4400B28225 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		52CD521F2B0E406100CA7352 /* FirestoreForPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreForPost.swift; sourceTree = "<group>"; };
@@ -242,6 +246,7 @@
 				52CD52222B0E47E900CA7352 /* AddToPlanPage */,
 				52CD52212B0E477100CA7352 /* SearchViewController */,
 				52783CDF2B03C7480067A334 /* MemoryDetailPage */,
+				529781B92B2564B100F53476 /* PlanDetailPage */,
 				52783CE62B05C4AE0067A334 /* GoogleMapsViewController */,
 			);
 			path = SearchPage;
@@ -345,6 +350,15 @@
 				525E7CB62B198C560057C5EE /* imageCollections.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		529781B92B2564B100F53476 /* PlanDetailPage */ = {
+			isa = PBXGroup;
+			children = (
+				529781BA2B2564D600F53476 /* PlanDetailViewController.swift */,
+				529781BC2B25650300F53476 /* PlanDetailCell.swift */,
+			);
+			path = PlanDetailPage;
 			sourceTree = "<group>";
 		};
 		52CD52212B0E477100CA7352 /* SearchViewController */ = {
@@ -548,7 +562,7 @@
 			packageReferences = (
 				5288CB1A2B07B36500E089F9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				52B41BAF2B22DEB500B28225 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
-				52B41BB62B232D4200B28225 /* XCRemoteSwiftPackageReference "Kingfisher.git" */,
+				52B41BB62B232D4200B28225 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 52E70D822B0107F100440D4C /* Products */;
 			projectDirPath = "";
@@ -708,6 +722,7 @@
 				5288CB0E2B0710EA00E089F9 /* MapInfoViewController.swift in Sources */,
 				5288CB102B07615400E089F9 /* AddToPlanListViewController.swift in Sources */,
 				52783CEC2B05DB620067A334 /* GooglePlace.swift in Sources */,
+				529781BB2B2564D600F53476 /* PlanDetailViewController.swift in Sources */,
 				52783CE82B05C4DA0067A334 /* MapViewController.swift in Sources */,
 				52783CD82B0359110067A334 /* ProfileViewController.swift in Sources */,
 				523846ED2B18DC21006D58B0 /* EditMemoryCell.swift in Sources */,
@@ -741,6 +756,7 @@
 				52292F092B0273E80083399E /* CustomSegmentedControl.swift in Sources */,
 				523243A22B0871710078200C /* EditPlanCell.swift in Sources */,
 				52783CE52B05B8E50067A334 /* MapListCell.swift in Sources */,
+				529781BD2B25650300F53476 /* PlanDetailCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -983,7 +999,7 @@
 				minimumVersion = 7.0.0;
 			};
 		};
-		52B41BB62B232D4200B28225 /* XCRemoteSwiftPackageReference "Kingfisher.git" */ = {
+		52B41BB62B232D4200B28225 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
 			requirement = {
@@ -1026,7 +1042,7 @@
 		};
 		52B41BB72B232D4200B28225 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 52B41BB62B232D4200B28225 /* XCRemoteSwiftPackageReference "Kingfisher.git" */;
+			package = 52B41BB62B232D4200B28225 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
 		};
 		52E519DB2B23748800D88E30 /* FirebaseAnalytics */ = {

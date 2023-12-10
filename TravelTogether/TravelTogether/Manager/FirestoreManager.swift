@@ -128,7 +128,8 @@ class FirestoreManager {
                         endDate: endDate,
                         days: travelDays,
                         user: data["user"] as? String ?? "",
-                        userPhoto: data["userPhoto"] as? String ?? ""
+                        userPhoto: data["userPhoto"] as? String ?? "",
+                        userId: data["userId"] as? String ?? ""
                     )
                     
                     travelPlans.append(travelPlan)

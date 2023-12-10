@@ -59,6 +59,9 @@ class MemoryDetailViewController: UIViewController {
             }
         }
         let firestorePost = FirestoreManagerForPost()
+        self.onePlan.user = Auth.auth().currentUser?.displayName
+        self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
+        self.onePlan.userId = Auth.auth().currentUser?.uid
         firestorePost.postFullPlan(plan: self.onePlan)  { error in
             if let error = error {
                 print("Error fetching one plan: \(error)")

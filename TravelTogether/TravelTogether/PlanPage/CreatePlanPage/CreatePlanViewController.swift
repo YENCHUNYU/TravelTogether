@@ -70,7 +70,8 @@ class CreatePlanViewController: UIViewController {
                 endDate: endDate ?? Date(),
                 days: [],
                 user: Auth.auth().currentUser?.displayName,
-                userPhoto: Auth.auth().currentUser?.photoURL?.absoluteString
+                userPhoto: Auth.auth().currentUser?.photoURL?.absoluteString,
+                userId: Auth.auth().currentUser?.uid
             )
         }
         

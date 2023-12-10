@@ -46,31 +46,6 @@ class PlanViewController: UIViewController {
         tableView.tableHeaderView = headerView
         view.addSubview(addButton)
         setUpButton()
-//        let firestoreManager = FirestoreManager()
-//        firestoreManager.delegate = self
-//        firestoreManager.fetchTravelPlans { (travelPlan, error) in
-//            if let error = error {
-//                print("Error fetching travel plan: \(error)")
-//            } else if let travelPlan = travelPlan {
-//                print("Fetched travel plan: \(travelPlan)")
-//                self.plans = travelPlan
-//                self.tableView.reloadData()
-//            } else {
-//                print("Travel plan not found.")
-//            }
-//        }
-        
-//        firestoreManager.fetchTravelPlans(userId: "ExKL3HZJiMacm93GATS9UcGbJlj2") { (travelPlan, error) in
-//            if let error = error {
-//                print("Error fetching travel plan: \(error)")
-//            } else if let travelPlan = travelPlan {
-//                print("Fetched travel plan: \(travelPlan)")
-//                self.plans = travelPlan
-//                self.tableView.reloadData()
-//            } else {
-//                print("Travel plan not found.")
-//            }
-//        }
         
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
@@ -91,32 +66,6 @@ class PlanViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        let firestoreManager = FirestoreManager()
-//        firestoreManager.delegate = self
-////        firestoreManager.fetchTravelPlans { (travelPlan, error) in
-////            if let error = error {
-////                print("Error fetching travel plan: \(error)")
-////            } else if let travelPlan = travelPlan {
-////                print("Fetched travel plan: \(travelPlan)")
-////                self.plans = travelPlan
-////                self.tableView.reloadData()
-////            } else {
-////                print("Travel plan not found.")
-////            }
-////        }
-////        
-//        firestoreManager.fetchTravelPlans(userId: "ExKL3HZJiMacm93GATS9UcGbJlj2") { (travelPlan, error) in
-//            if let error = error {
-//                print("Error fetching travel plan: \(error)")
-//            } else if let travelPlan = travelPlan {
-//                print("Fetched travel plan: \(travelPlan)")
-//                self.plans = travelPlan
-//                self.tableView.reloadData()
-//            } else {
-//                print("Travel plan not found.")
-//            }
-//        }
-        
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
         firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in

@@ -17,4 +17,3 @@ class MyPlanCell: UITableViewCell {
     @IBOutlet weak var planNameLabel: UILabel!
     @IBOutlet weak var planDateLabel: UILabel!
 }
-    
