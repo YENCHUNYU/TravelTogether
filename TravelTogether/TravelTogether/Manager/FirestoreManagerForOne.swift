@@ -75,6 +75,66 @@ class FirestoreManagerForOne {
             }
         }
     }
+    
+    func fetchOneTravelPlanFromFavorite(userId: String, byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
+        let database = Firestore.firestore()
+        let travelPlanRef = database.collection("UserInfo").document(userId).collection("FavoritePlan").document(planId)
+
+        travelPlanRef.addSnapshotListener { document, error in
+            if let error = error {
+                print("Error getting document: \(error)")
+                completion(nil, error)
+            } else {
+                do {
+                    guard let document = document, document.exists else {
+                        completion(nil, nil)
+                        return
+                    }
+
+                    let data = document.data()
+                    let startDate = (data?["startDate"] as? Timestamp)?.dateValue() ?? Date()
+                    let endDate = (data?["endDate"] as? Timestamp)?.dateValue() ?? Date()
+
+                    guard let daysArray = data?["days"] as? [[String: Any]] else {
+                        return
+                    }
+
+                    var travelDays: [TravelDay] = []
+                    for dayData in daysArray {
+                    
+                        guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
+                            return
+                        }
+
+                        var locations: [Location] = []
+                        for locationData in locationsArray {
+                            let location = Location(
+                                name: locationData["name"] as? String ?? "",
+                                photo: locationData["photo"] as? String ?? "",
+                                address: locationData["address"] as? String ?? "",
+                                user: locationData["user"] as? String ?? ""
+                            )
+                            locations.append(location)
+                        }
+
+                        let travelDay = TravelDay(locations: locations)
+                        travelDays.append(travelDay)
+                    }
+                    
+                    let travelPlan = TravelPlan(
+                        id: document.documentID,
+                        planName: data?["planName"] as? String ?? "",
+                        destination: data?["destination"] as? String ?? "",
+                        startDate: startDate,
+                        endDate: endDate,
+                        days: travelDays
+                    )
+                    completion(travelPlan, nil)
+                    self.delegate?.manager(self, didGet: travelPlan)
+                }
+            }
+        }
+    }
 }
 
 extension FirestoreManagerForOne {

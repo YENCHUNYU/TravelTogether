@@ -26,6 +26,7 @@ class MemoryDetailViewController: UIViewController {
     var currentIndexPath: IndexPath?
     var memoryId = ""
     var userId = ""
+    var isFromFavorite = false
 
     private var itemsPerRow: CGFloat = 2
     private var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
@@ -62,12 +63,48 @@ class MemoryDetailViewController: UIViewController {
         self.onePlan.user = Auth.auth().currentUser?.displayName
         self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
         self.onePlan.userId = Auth.auth().currentUser?.uid
-        firestorePost.postFullPlan(plan: self.onePlan)  { error in
+        firestorePost.postFullPlan(plan: self.onePlan) { error in
             if let error = error {
                 print("Error fetching one plan: \(error)")
             } else {
-                self.swiftEntryKit()
+                let copyTitle = "已成功複製到我的行程！"
+                let copyDescript = "請前往「我的行程」查看。"
+                let copyImage = "doc.on.doc.fill"
+                self.swiftEntryKit(titleText: copyTitle, descriptText: copyDescript, imageString: copyImage)
                 print("One plan was added.")
+            }
+        }
+    }
+    
+    lazy var likeButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UIColor(named: "darkGreen")
+        button.layer.cornerRadius = 25
+        button.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        button.addTarget(self, action: #selector(likeMemory), for: .touchUpInside)
+        button.imageView?.contentMode = .scaleAspectFill
+        button.tintColor = .white
+        return button
+    }()
+    
+    @objc func likeMemory() {
+
+        let firestorePost = FirestoreManagerFavorite()
+        self.onePlan.user = Auth.auth().currentUser?.displayName
+        self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
+        self.onePlan.userId = Auth.auth().currentUser?.uid
+        firestorePost.postMemoryToFavorite(memory: self.onePlan) { error in
+            if let error = error {
+                print("Error fetching one favorite: \(error)")
+            } else {
+                let likeTitle = "收藏成功！"
+                let likeDescript = "請前往「收藏」查看。"
+                let likeImage = "heart.fill"
+        self.swiftEntryKit(titleText: likeTitle, descriptText: likeDescript, imageString: likeImage)
+                print("One favorite was added.")
             }
         }
     }
@@ -76,11 +113,10 @@ class MemoryDetailViewController: UIViewController {
         super.viewDidLoad()
    
         view.addSubview(copyButton)
+        view.addSubview(likeButton)
         setUpButton()
         tableView.dataSource = self
         tableView.delegate = self
-//        tableView.rowHeight = UITableView.automaticDimension
-//        tableView.estimatedRowHeight = 300
 
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 50)
 //        headerView.delegate = self
@@ -91,21 +127,70 @@ class MemoryDetailViewController: UIViewController {
         
         tableView.dragInteractionEnabled = true
         
-        let firestoreManagerForOne = FirestoreManagerFetchMemory()
-        firestoreManagerForOne.fetchOneMemoryFromSearch(byId: memoryId, userId: userId) { (memory, error) in
-                        if let error = error {
-                            print("Error fetching one memory: \(error)")
-                        } else if let memory = memory {
-                            print("Fetched one memory: \(memory)")
-                            self.onePlan = memory
-                            self.tableView.reloadData()
-                        } else {
-                            print("One memory not found.")
+//        let firestoreManagerForOne = FirestoreManagerFetchMemory()
+//        firestoreManagerForOne.fetchOneMemoryFromSearch(byId: memoryId, userId: userId) { (memory, error) in
+//                        if let error = error {
+//                            print("Error fetching one memory: \(error)")
+//                        } else if let memory = memory {
+//                            print("Fetched one memory: \(memory)")
+//                            self.onePlan = memory
+//                            self.tableView.reloadData()
+//                        } else {
+//                            print("One memory not found.")
+//                        }
+//                    }
+        
+        if isFromFavorite == false {
+            let firestoreManagerForOne = FirestoreManagerFetchMemory()
+            firestoreManagerForOne.fetchOneMemoryFromSearch(byId: memoryId, userId: userId) { (memory, error) in
+                if let error = error {
+                    print("Error fetching one travel plan: \(error)")
+                } else if let memory = memory {
+                    print("Fetched one travel plan: \(memory)")
+                    self.onePlan = memory
+                    let counts = self.onePlan.days.count
+                    let originalCount = self.days.count
+                    if counts > originalCount {
+                        for _ in originalCount...counts - 1 {
+                            let number = self.days.count
+                            self.days.insert("第\(number + 1)天", at: number)
                         }
                     }
+                    self.headerView.days = self.days
+                    self.headerView.onePlan = self.onePlan
+                    self.headerView.collectionView.reloadData()
+                    self.tableView.reloadData()
+                } else {
+                    print("One travel plan not found.")
+                }
+            }} else {
+                let firestoreManagerForOne = FirestoreManagerFetchMemory()
+                firestoreManagerForOne.fetchOneMemoryFromFavorite(byId: memoryId) { (travelPlan, error) in
+                    if let error = error {
+                        print("Error fetching one travel plan: \(error)")
+                    } else if let travelPlan = travelPlan {
+                        print("Fetched one travel plan: \(travelPlan)")
+                        self.onePlan = travelPlan
+                        let counts = self.onePlan.days.count
+                        let originalCount = self.days.count
+                        if counts > originalCount {
+                            for _ in originalCount...counts - 1 {
+                                let number = self.days.count
+                                self.days.insert("第\(number + 1)天", at: number)
+                            }
+                        }
+                        self.headerView.days = self.days
+                        self.headerView.onePlan = self.onePlan
+                        self.headerView.collectionView.reloadData()
+                        self.tableView.reloadData()
+                    } else {
+                        print("One travel plan not found.")
+                    }
+                }
+            }
     }
     
-    func swiftEntryKit() {
+    func swiftEntryKit(titleText: String, descriptText: String, imageString: String) {
         // Generate top floating entry and set some properties
         var attributes = EKAttributes.topFloat
 //        attributes.entryBackground = .gradient(gradient: .init(colors: [EKColor(.red), EKColor(.green)], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
@@ -116,9 +201,9 @@ class MemoryDetailViewController: UIViewController {
         attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
         attributes.positionConstraints.maxSize = .init(width: .constant(value: UIScreen.main.bounds.width - 40), height: .intrinsic)
 
-        let title = EKProperty.LabelContent(text: "已成功複製到我的行程！", style: .init(font: UIFont.systemFont(ofSize: 14, weight: .light), color: .white))
-        let description = EKProperty.LabelContent(text: "請前往「我的行程」查看。", style: .init(font: UIFont.systemFont(ofSize: 12, weight: .light), color: EKColor(UIColor(named: "yellowGreen") ?? .white) ))
-        var image = EKProperty.ImageContent(image: UIImage(systemName: "doc.on.doc.fill") ?? UIImage(), size: CGSize(width: 35, height: 35))
+        let title = EKProperty.LabelContent(text: titleText, style: .init(font: UIFont.systemFont(ofSize: 14, weight: .light), color: .white))
+        let description = EKProperty.LabelContent(text: descriptText, style: .init(font: UIFont.systemFont(ofSize: 12, weight: .light), color: EKColor(UIColor(named: "yellowGreen") ?? .white) ))
+        var image = EKProperty.ImageContent(image: UIImage(systemName: imageString) ?? UIImage(), size: CGSize(width: 35, height: 35))
         image.tint = .white
         let simpleMessage = EKSimpleMessage(image: image, title: title, description: description)
         let notificationMessage = EKNotificationMessage(simpleMessage: simpleMessage)
@@ -130,22 +215,60 @@ class MemoryDetailViewController: UIViewController {
     func setUpButton() {
         copyButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
         copyButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
+        likeButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
+        likeButton.trailingAnchor.constraint(equalTo: copyButton.leadingAnchor, constant: -10).isActive = true
     }
  
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let firestoreManagerForOne = FirestoreManagerFetchMemory()
-        firestoreManagerForOne.fetchOneMemoryFromSearch(byId: memoryId, userId: userId) { (memory, error) in
-                        if let error = error {
-                            print("Error fetching one memory: \(error)")
-                        } else if let memory = memory {
-                            print("Fetched one memory: \(memory)")
-                            self.onePlan = memory
-                            self.tableView.reloadData()
-                        } else {
-                            print("One memory not found.")
+        if isFromFavorite == false {
+            let firestoreManagerForOne = FirestoreManagerFetchMemory()
+            firestoreManagerForOne.fetchOneMemoryFromSearch(byId: memoryId, userId: userId) { (memory, error) in
+                if let error = error {
+                    print("Error fetching one travel plan: \(error)")
+                } else if let memory = memory {
+                    print("Fetched one travel plan: \(memory)")
+                    self.onePlan = memory
+                    let counts = self.onePlan.days.count
+                    let originalCount = self.days.count
+                    if counts > originalCount {
+                        for _ in originalCount...counts - 1 {
+                            let number = self.days.count
+                            self.days.insert("第\(number + 1)天", at: number)
                         }
                     }
+                    self.headerView.days = self.days
+                    self.headerView.onePlan = self.onePlan
+                    self.headerView.collectionView.reloadData()
+                    self.tableView.reloadData()
+                } else {
+                    print("One travel plan not found.")
+                }
+            }} else {
+                let firestoreManagerForOne = FirestoreManagerFetchMemory()
+                firestoreManagerForOne.fetchOneMemoryFromFavorite(byId: memoryId) { (travelPlan, error) in
+                    if let error = error {
+                        print("Error fetching one travel plan: \(error)")
+                    } else if let travelPlan = travelPlan {
+                        print("Fetched one travel plan: \(travelPlan)")
+                        self.onePlan = travelPlan
+                        let counts = self.onePlan.days.count
+                        let originalCount = self.days.count
+                        if counts > originalCount {
+                            for _ in originalCount...counts - 1 {
+                                let number = self.days.count
+                                self.days.insert("第\(number + 1)天", at: number)
+                            }
+                        }
+                        self.headerView.days = self.days
+                        self.headerView.onePlan = self.onePlan
+                        self.headerView.collectionView.reloadData()
+                        self.tableView.reloadData()
+                    } else {
+                        print("One travel plan not found.")
+                    }
+                }
+            }
     }
 }
 

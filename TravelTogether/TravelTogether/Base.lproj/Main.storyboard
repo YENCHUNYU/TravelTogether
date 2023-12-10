@@ -627,7 +627,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FzH-th-Ibi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-929" y="2006"/>
+            <point key="canvasLocation" x="-885" y="2128"/>
         </scene>
         <!--Map Info View Controller-->
         <scene sceneID="zGB-Re-HNP">
@@ -699,7 +699,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e1C-O3-TcI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1866" y="2730"/>
+            <point key="canvasLocation" x="-1866" y="2862"/>
         </scene>
         <!--Add To Plan List View Controller-->
         <scene sceneID="tm2-dJ-Mrz">
@@ -769,7 +769,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ot3-pS-OxO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-367" y="2730"/>
+            <point key="canvasLocation" x="-329" y="2862"/>
         </scene>
         <!--Select Date View Controller-->
         <scene sceneID="2Dd-kc-rMQ">
@@ -1116,7 +1116,7 @@
                                 <rect key="frame" x="0.0" y="103" width="393" height="666"/>
                                 <color key="backgroundColor" name="yellowGreen"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SearchMemoriesCell" rowHeight="330" id="gBk-bI-pPD" customClass="SearchMemoriesCell" customModule="TravelTogether" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FavoriteMemoryCell" rowHeight="330" id="gBk-bI-pPD" customClass="FavoriteMemoryCell" customModule="TravelTogether" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="393" height="330"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gBk-bI-pPD" id="aMT-IM-aez">
@@ -1143,81 +1143,43 @@
                                                         <constraint firstAttribute="width" secondItem="904-bd-VlW" secondAttribute="height" multiplier="16:9" id="9GQ-uY-2EA"/>
                                                     </constraints>
                                                 </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zIm-6g-i0l">
-                                                    <rect key="frame" x="85.666666666666671" y="268.66666666666669" width="82.000000000000014" height="35"/>
-                                                    <color key="tintColor" systemColor="labelColor"/>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="heart" catalog="system" title="收藏">
-                                                        <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
-                                                    </buttonConfiguration>
-                                                    <connections>
-                                                        <action selector="favoriteButtonTapped:" destination="gBk-bI-pPD" eventType="touchUpInside" id="pdM-qy-Ql5"/>
-                                                    </connections>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9wO-hA-1wE">
-                                                    <rect key="frame" x="20" y="268.66666666666669" width="64.666666666666671" height="34.333333333333314"/>
-                                                    <color key="tintColor" systemColor="labelColor"/>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="hand.thumbsup" catalog="system" title="讚">
-                                                        <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
-                                                    </buttonConfiguration>
-                                                    <connections>
-                                                        <action selector="thumbUpButtonTapped:" destination="gBk-bI-pPD" eventType="touchUpInside" id="fgk-km-Lzd"/>
-                                                    </connections>
-                                                </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2023年11月13日" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VdH-SQ-3Kx">
-                                                    <rect key="frame" x="250" y="268.66666666666669" width="123" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="回憶" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SKd-kF-G8y">
+                                                    <rect key="frame" x="19.999999999999996" y="268.66666666666669" width="34.666666666666657" height="20.333333333333314"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10個讚" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hF4-mO-A46">
-                                                    <rect key="frame" x="29.999999999999996" y="308" width="57.666666666666657" height="15"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10個收藏" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OV8-YR-1eS">
-                                                    <rect key="frame" x="95.666666666666657" y="308.66666666666669" width="277.33333333333337" height="15"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2023年11月13日" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4HM-ak-J96">
+                                                    <rect key="frame" x="20.000000000000007" y="292" width="109.66666666666669" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="zIm-6g-i0l" firstAttribute="top" secondItem="904-bd-VlW" secondAttribute="bottom" constant="5" id="1v6-vo-JRh"/>
                                                 <constraint firstAttribute="trailing" secondItem="904-bd-VlW" secondAttribute="trailing" constant="20" id="3xx-Ky-Qbn"/>
-                                                <constraint firstItem="zIm-6g-i0l" firstAttribute="leading" secondItem="9wO-hA-1wE" secondAttribute="trailing" constant="1" id="6bg-Dn-KFh"/>
-                                                <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="OV8-YR-1eS" secondAttribute="trailing" constant="20" symbolic="YES" id="7fo-pC-8HT"/>
-                                                <constraint firstItem="hF4-mO-A46" firstAttribute="leading" secondItem="9wO-hA-1wE" secondAttribute="leading" constant="10" id="Bbh-9v-QaF"/>
-                                                <constraint firstItem="hF4-mO-A46" firstAttribute="top" secondItem="9wO-hA-1wE" secondAttribute="bottom" constant="5" id="DEq-YK-htv"/>
+                                                <constraint firstItem="SKd-kF-G8y" firstAttribute="top" secondItem="904-bd-VlW" secondAttribute="bottom" constant="5" id="4ml-2O-bv5"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="SKd-kF-G8y" secondAttribute="trailing" constant="20" id="EXD-hT-f6C"/>
                                                 <constraint firstItem="kDZ-1w-6Jf" firstAttribute="leading" secondItem="aMT-IM-aez" secondAttribute="leading" constant="20" id="Iiu-fe-aZL"/>
-                                                <constraint firstItem="OV8-YR-1eS" firstAttribute="top" secondItem="zIm-6g-i0l" secondAttribute="bottom" constant="5" id="PYU-oD-dgu"/>
-                                                <constraint firstItem="9wO-hA-1wE" firstAttribute="top" secondItem="904-bd-VlW" secondAttribute="bottom" constant="5" id="PgL-dc-V3d"/>
-                                                <constraint firstItem="OV8-YR-1eS" firstAttribute="leading" secondItem="hF4-mO-A46" secondAttribute="trailing" constant="8" symbolic="YES" id="Rpp-dt-1pR"/>
-                                                <constraint firstItem="9wO-hA-1wE" firstAttribute="leading" secondItem="aMT-IM-aez" secondAttribute="leading" constant="20" id="UNf-ve-5rQ"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="4HM-ak-J96" secondAttribute="trailing" constant="20" id="Mxu-A5-H9E"/>
+                                                <constraint firstItem="4HM-ak-J96" firstAttribute="top" secondItem="SKd-kF-G8y" secondAttribute="bottom" constant="3" id="RxH-3p-gPX"/>
                                                 <constraint firstItem="904-bd-VlW" firstAttribute="leading" secondItem="aMT-IM-aez" secondAttribute="leading" constant="20" id="aTz-ov-gAr"/>
                                                 <constraint firstItem="904-bd-VlW" firstAttribute="top" secondItem="kDZ-1w-6Jf" secondAttribute="bottom" constant="5" id="bXw-kl-gY5"/>
-                                                <constraint firstAttribute="trailing" secondItem="VdH-SQ-3Kx" secondAttribute="trailing" constant="20" id="cpv-zb-M9b"/>
                                                 <constraint firstItem="Np0-2z-4dT" firstAttribute="centerY" secondItem="kDZ-1w-6Jf" secondAttribute="centerY" id="eIi-JN-Pnm"/>
                                                 <constraint firstItem="kDZ-1w-6Jf" firstAttribute="top" secondItem="aMT-IM-aez" secondAttribute="top" constant="10" id="fQA-c6-WkC"/>
-                                                <constraint firstItem="VdH-SQ-3Kx" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="zIm-6g-i0l" secondAttribute="trailing" constant="8" symbolic="YES" id="gNi-bu-R0W"/>
-                                                <constraint firstItem="OV8-YR-1eS" firstAttribute="leading" secondItem="zIm-6g-i0l" secondAttribute="leading" constant="10" id="lP8-vq-rdR"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Np0-2z-4dT" secondAttribute="trailing" constant="20" symbolic="YES" id="n5i-i9-gWg"/>
-                                                <constraint firstItem="VdH-SQ-3Kx" firstAttribute="top" secondItem="904-bd-VlW" secondAttribute="bottom" constant="5" id="rok-z0-95A"/>
+                                                <constraint firstItem="SKd-kF-G8y" firstAttribute="leading" secondItem="aMT-IM-aez" secondAttribute="leading" constant="20" id="sr5-St-nOy"/>
+                                                <constraint firstItem="4HM-ak-J96" firstAttribute="leading" secondItem="aMT-IM-aez" secondAttribute="leading" constant="20" id="vhN-d3-1QN"/>
                                                 <constraint firstItem="Np0-2z-4dT" firstAttribute="leading" secondItem="kDZ-1w-6Jf" secondAttribute="trailing" constant="10" id="whA-8z-GGw"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" name="yellowGreen"/>
                                         <connections>
-                                            <outlet property="dateLabel" destination="VdH-SQ-3Kx" id="BU8-iI-Dfe"/>
-                                            <outlet property="favoriteButton" destination="zIm-6g-i0l" id="MX8-ju-Na2"/>
-                                            <outlet property="favoriteCountsLabel" destination="OV8-YR-1eS" id="63V-5d-dYN"/>
-                                            <outlet property="memoryImageView" destination="904-bd-VlW" id="gBO-oy-1CE"/>
-                                            <outlet property="thumbsUpButton" destination="9wO-hA-1wE" id="A0c-Wg-Cch"/>
-                                            <outlet property="thumbsUpCountsLabel" destination="hF4-mO-A46" id="Yei-4m-BYy"/>
-                                            <outlet property="userImageView" destination="kDZ-1w-6Jf" id="paq-f2-b0L"/>
-                                            <outlet property="userNameLabel" destination="Np0-2z-4dT" id="xfy-PE-oGe"/>
+                                            <outlet property="dateLabel" destination="4HM-ak-J96" id="Wfr-v9-6zC"/>
+                                            <outlet property="memoryImageView" destination="904-bd-VlW" id="UN6-c5-c1s"/>
+                                            <outlet property="memoryNameLabel" destination="SKd-kF-G8y" id="GTR-7q-19S"/>
+                                            <outlet property="userImageView" destination="kDZ-1w-6Jf" id="O0z-8t-tOY"/>
+                                            <outlet property="userNameLabel" destination="Np0-2z-4dT" id="9Bs-wb-kcb"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SpotCell" rowHeight="280" id="cZM-Ws-67O" customClass="SpotCell" customModule="TravelTogether" customModuleProvider="target">
@@ -1310,11 +1272,13 @@
                     <navigationItem key="navigationItem" title="收藏" id="jtL-65-QDz"/>
                     <connections>
                         <outlet property="tableView" destination="aFs-Gh-Pcp" id="SM7-Y7-2wt"/>
+                        <segue destination="QZi-MT-SaE" kind="show" identifier="FavoriteMemory" id="Kbo-8L-0cW"/>
+                        <segue destination="Rfc-QS-3Zr" kind="show" identifier="FavoritePlan" id="hTW-xY-giV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ut5-Sa-9zE" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-367" y="1225"/>
+            <point key="canvasLocation" x="-367.17557251908397" y="1224.6478873239437"/>
         </scene>
         <!--個人頁-->
         <scene sceneID="xJc-AE-2Q2">
@@ -1480,7 +1444,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jYJ-UZ-NXE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1153" y="2730"/>
+            <point key="canvasLocation" x="-1153" y="2862"/>
         </scene>
         <!--編輯旅遊回憶-->
         <scene sceneID="hbz-qO-u3E">
@@ -2275,7 +2239,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u32-Fp-zWT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1764" y="1965"/>
+            <point key="canvasLocation" x="-1625" y="2092"/>
         </scene>
         <!--Plan Detail View Controller-->
         <scene sceneID="964-Bz-JbY">
@@ -2379,10 +2343,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="erd-b4-MYr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2531" y="1965"/>
+            <point key="canvasLocation" x="-2498" y="2092"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="hTW-xY-giV"/>
+        <segue reference="Kbo-8L-0cW"/>
         <segue reference="HNF-ZE-dku"/>
         <segue reference="YPG-wh-Qv6"/>
     </inferredMetricsTieBreakers>
