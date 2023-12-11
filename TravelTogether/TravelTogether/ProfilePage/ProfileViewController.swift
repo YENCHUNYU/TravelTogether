@@ -49,8 +49,7 @@ class ProfileViewController: UIViewController {
         tableView.separatorStyle = .none
         
         userNameLabel.text = "User"
-//        userIntroduction.text = "什麼時候可以出去玩:D"
-        
+   
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
         firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in

@@ -8,6 +8,7 @@
 import UIKit
 
 class PlanDetailCell: UITableViewCell {
+    var currentImageUrl = ""
     @IBOutlet weak var pinImageView: UIImageView!
     @IBOutlet weak var lineView: UIView!
     @IBOutlet weak var placeStackView: UIView! {
@@ -17,6 +18,13 @@ class PlanDetailCell: UITableViewCell {
     }
     @IBOutlet weak var placeNameLabel: UILabel!
     @IBOutlet weak var placeAddressLabel: UILabel!
+    
+    @IBOutlet weak var locationImageView: UIImageView! {
+        didSet {
+            locationImageView.layer.cornerRadius = 15
+            locationImageView.contentMode = .scaleAspectFill
+        }
+    }
     
 }
     

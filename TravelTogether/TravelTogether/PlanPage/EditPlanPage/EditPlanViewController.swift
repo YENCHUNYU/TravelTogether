@@ -124,12 +124,30 @@ extension EditPlanViewController: UITableViewDataSource {
 
         cell.placeNameLabel.text = location.name
         cell.placeAddressLabel.text = location.address
-        cell.userLabel.layer.cornerRadius = 8
-        cell.userLabel.layer.masksToBounds = true
-        cell.userLabel.isHidden = true
-        cell.userLabel.text = location.user
+        let firestorage = FirebaseStorageManagerDownloadPhotos()
+        let urlString = location.photo
+        
+        // Record the URL being processed by this cell
+        cell.currentImageURL = urlString
+        
+        if !urlString.isEmpty, let url = URL(string: urlString) {
+            firestorage.downloadPhotoFromFirebaseStorage(url: url) { image in
+                DispatchQueue.main.async {
+                    // Check if the URL still matches the current cell's URL
+                    if cell.currentImageURL == urlString {
+                        if let image = image {
+                            cell.locationImageView.image = image
+                        } else {
+                            cell.locationImageView.image = UIImage(named: "Image_Placeholder")
+                        }
+                    }
+                }
+            }
+        }
+        
         return cell
     }
+
 
 // FOOTER
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -213,7 +231,7 @@ extension EditPlanViewController: UITableViewDelegate {
     func tableView(
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath) -> CGFloat {
-            80
+            100
     }
     
     func tableView(_ tableView: UITableView, 
