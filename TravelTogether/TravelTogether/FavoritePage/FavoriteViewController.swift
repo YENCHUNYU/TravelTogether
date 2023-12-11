@@ -21,6 +21,7 @@ class FavoriteViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(FavoriteHeaderView.self, forHeaderFooterViewReuseIdentifier: "FavoriteHeaderView")

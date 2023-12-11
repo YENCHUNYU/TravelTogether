@@ -56,6 +56,7 @@
 		52783CEF2B05DBEE0067A334 /* GoogleDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CEE2B05DBEE0067A334 /* GoogleDataProvider.swift */; };
 		52783CF12B05EB380067A334 /* MapsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CF02B05EB380067A334 /* MapsListViewController.swift */; };
 		52783CF32B0603BD0067A334 /* GooglePlacesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CF22B0603BD0067A334 /* GooglePlacesManager.swift */; };
+		527941C62B27004800EE9A9B /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527941C52B27004800EE9A9B /* SettingViewController.swift */; };
 		527F3BA82B2056EA008CB8E2 /* SelectedMemoryEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527F3BA72B2056EA008CB8E2 /* SelectedMemoryEditViewController.swift */; };
 		5288CB0E2B0710EA00E089F9 /* MapInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB0D2B0710EA00E089F9 /* MapInfoViewController.swift */; };
 		5288CB102B07615400E089F9 /* AddToPlanListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB0F2B07615400E089F9 /* AddToPlanListViewController.swift */; };
@@ -168,6 +169,8 @@
 		52783CEE2B05DBEE0067A334 /* GoogleDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleDataProvider.swift; sourceTree = "<group>"; };
 		52783CF02B05EB380067A334 /* MapsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapsListViewController.swift; sourceTree = "<group>"; };
 		52783CF22B0603BD0067A334 /* GooglePlacesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesManager.swift; sourceTree = "<group>"; };
+		527941C42B26A49400EE9A9B /* TravelTogether.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TravelTogether.entitlements; sourceTree = "<group>"; };
+		527941C52B27004800EE9A9B /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		527F3BA72B2056EA008CB8E2 /* SelectedMemoryEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedMemoryEditViewController.swift; sourceTree = "<group>"; };
 		5288CB0D2B0710EA00E089F9 /* MapInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapInfoViewController.swift; sourceTree = "<group>"; };
 		5288CB0F2B07615400E089F9 /* AddToPlanListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToPlanListViewController.swift; sourceTree = "<group>"; };
@@ -322,6 +325,7 @@
 				52783CD92B03612B0067A334 /* ProfileTableViewCell.swift */,
 				52783CDB2B036D480067A334 /* ProfileHeaderView.swift */,
 				52DF40ED2B218FBC005F60FD /* LoginViewController.swift */,
+				527941C52B27004800EE9A9B /* SettingViewController.swift */,
 			);
 			path = ProfilePage;
 			sourceTree = "<group>";
@@ -448,6 +452,7 @@
 		52E70D832B0107F100440D4C /* TravelTogether */ = {
 			isa = PBXGroup;
 			children = (
+				527941C42B26A49400EE9A9B /* TravelTogether.entitlements */,
 				5245BA742B0E135A006594CC /* Manager */,
 				52783CED2B05DB6F0067A334 /* Model */,
 				52292EFE2B01F3750083399E /* SearchPage */,
@@ -751,6 +756,7 @@
 				52CD52202B0E406100CA7352 /* FirestoreForPost.swift in Sources */,
 				52783CCA2B033EE20067A334 /* MyPlanCell.swift in Sources */,
 				525E7CBB2B19F0AD0057C5EE /* FirestoreForPostMemory.swift in Sources */,
+				527941C62B27004800EE9A9B /* SettingViewController.swift in Sources */,
 				52E70D852B0107F100440D4C /* AppDelegate.swift in Sources */,
 				52292F002B01F3930083399E /* SearchViewController.swift in Sources */,
 				52292F052B0212FC0083399E /* FavoriteViewController.swift in Sources */,
@@ -914,6 +920,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TravelTogether/TravelTogether.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -946,6 +953,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TravelTogether/TravelTogether.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8MJLHJN65R;

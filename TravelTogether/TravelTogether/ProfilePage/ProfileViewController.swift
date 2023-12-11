@@ -48,7 +48,7 @@ class ProfileViewController: UIViewController {
         tableView.tableHeaderView = headerView
         tableView.separatorStyle = .none
         
-        userNameLabel.text = "Jenny"
+        userNameLabel.text = "User"
 //        userIntroduction.text = "什麼時候可以出去玩:D"
         
         let firestoreManager = FirestoreManager()
@@ -82,7 +82,12 @@ class ProfileViewController: UIViewController {
                 print("Fetched UserInfo: \(String(describing: userInfo))")
                 self.userInfo = userInfo ?? UserInfo(email: "", name: "", id: "")
                 self.userNameLabel.text = self.userInfo.name
-                self.userImageView.kf.setImage(with: URL(string: "\(String(describing: self.userInfo.photo ?? ""))"), placeholder: UIImage(systemName: "person.circle.fill"))
+                if let photoURLString = self.userInfo.photo, let photoURL = URL(string: photoURLString) {
+                    self.userImageView.kf.setImage(with: photoURL, placeholder: UIImage(systemName: "person.circle.fill"))
+                } else {
+                    self.userImageView.image = UIImage(systemName: "person.circle.fill")
+                }
+
             }
         }
               
@@ -91,16 +96,20 @@ class ProfileViewController: UIViewController {
     }
     
     @objc func rightButtonTapped() {
-       
-//         performSegue(withIdentifier: "", sender: self)
-        let firebaseAuth = Auth.auth()
-        do {
-          try firebaseAuth.signOut()
-            LoginViewController.loginStatus = false
-            self.showAlert(title: "Success", message: "已登出帳戶")
-        } catch let signOutError as NSError {
-          print("Error signing out", signOutError)
+        if let settingVC = storyboard?.instantiateViewController(withIdentifier: "SettingViewController") as? SettingViewController {
+            // Present the login view controller within a navigation controller
+            let settingNavController = UINavigationController(rootViewController: settingVC)
+            present(settingNavController, animated: true, completion: nil)
         }
+
+//        let firebaseAuth = Auth.auth()
+//        do {
+//          try firebaseAuth.signOut()
+//            LoginViewController.loginStatus = false
+//            self.showAlert(title: "Success", message: "已登出帳戶")
+//        } catch let signOutError as NSError {
+//          print("Error signing out", signOutError)
+//        }
        }
     
     func showAlert(title: String, message: String) {
@@ -145,7 +154,11 @@ class ProfileViewController: UIViewController {
                 print("Fetched UserInfo: \(String(describing: userInfo))")
                 self.userInfo = userInfo ?? UserInfo(email: "", name: "", id: "")
                 self.userNameLabel.text = self.userInfo.name
-                self.userImageView.kf.setImage(with: URL(string: "\(String(describing: self.userInfo.photo ?? ""))"))
+                if let photoURLString = self.userInfo.photo, let photoURL = URL(string: photoURLString) {
+                    self.userImageView.kf.setImage(with: photoURL, placeholder: UIImage(systemName: "person.circle.fill"))
+                } else {
+                    self.userImageView.image = UIImage(systemName: "person.circle.fill")
+                }
             }
         }
     }

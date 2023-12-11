@@ -11,6 +11,7 @@ import FirebaseFirestore
 import FirebaseStorage
 import FirebaseAuth
 import Kingfisher
+import AuthenticationServices
 
 class SearchViewController: UIViewController {
 
@@ -46,7 +47,7 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: "SearchHeaderView")
@@ -257,7 +258,7 @@ extension SearchViewController: UITableViewDataSource {
 
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-          370
+          330
     }
 }
 
