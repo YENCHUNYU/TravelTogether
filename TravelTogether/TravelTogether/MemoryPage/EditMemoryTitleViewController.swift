@@ -45,6 +45,7 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
         id: "", planName: "",
         destination: "",
         startDate: Date(), endDate: Date(), days: [], coverPhoto: "")
+    var isFromDraft = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,11 +77,28 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
                 
                 if let navigationController = self.navigationController {
                  let viewControllers = navigationController.viewControllers
-                 if viewControllers.count >= 4 {
+                 if viewControllers.count == 4 {
                      let targetViewController = viewControllers[viewControllers.count - 4]
                      navigationController.popToViewController(targetViewController, animated: true)
                                  }
                              }
+        if let navigationController = self.navigationController {
+         let viewControllers = navigationController.viewControllers
+         if viewControllers.count == 3 {
+             let targetViewController = viewControllers[viewControllers.count - 3]
+             navigationController.popToViewController(targetViewController, animated: true)
+                         }
+                     }
+        if isFromDraft == true {
+            let firestoreManager = FirestoreManagerFetchMemory()
+            firestoreManager.deleteMemory(dbcollection: "MemoryDraft", withID: onePlan.id) { error in
+                if let error = error {
+                    print("Failed to delete Draft: \(error)")
+                } else {
+                    print("Draft deleted successfully.")
+                }
+            }
+        }      
             }
     
     @objc func imageViewTapped() {

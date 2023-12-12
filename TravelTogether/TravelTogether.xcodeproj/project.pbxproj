@@ -26,6 +26,8 @@
 		524157002B149230005D41F6 /* EditPlanCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524156FF2B149230005D41F6 /* EditPlanCollectionCell.swift */; };
 		5245BA762B0E136E006594CC /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA752B0E136E006594CC /* FirestoreManager.swift */; };
 		5245BA782B0E17FA006594CC /* FirestoreManagerForOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */; };
+		5248E5D92B27F5850052DD20 /* SaveAsDraftorPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5248E5D82B27F5850052DD20 /* SaveAsDraftorPostViewController.swift */; };
+		5248E5DB2B28227F0052DD20 /* UpdateDraftorPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5248E5DA2B28227F0052DD20 /* UpdateDraftorPostViewController.swift */; };
 		524C30F12B1832FD00C5CEDC /* FirestoreUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F02B1832FD00C5CEDC /* FirestoreUserInfo.swift */; };
 		524C30F32B18336D00C5CEDC /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F22B18336D00C5CEDC /* UserInfo.swift */; };
 		524C30F52B1891D700C5CEDC /* SelectPlanPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F42B1891D700C5CEDC /* SelectPlanPage.swift */; };
@@ -139,6 +141,8 @@
 		524156FF2B149230005D41F6 /* EditPlanCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanCollectionCell.swift; sourceTree = "<group>"; };
 		5245BA752B0E136E006594CC /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
 		5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManagerForOne.swift; sourceTree = "<group>"; };
+		5248E5D82B27F5850052DD20 /* SaveAsDraftorPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveAsDraftorPostViewController.swift; sourceTree = "<group>"; };
+		5248E5DA2B28227F0052DD20 /* UpdateDraftorPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDraftorPostViewController.swift; sourceTree = "<group>"; };
 		524C30F02B1832FD00C5CEDC /* FirestoreUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUserInfo.swift; sourceTree = "<group>"; };
 		524C30F22B18336D00C5CEDC /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		524C30F42B1891D700C5CEDC /* SelectPlanPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPlanPage.swift; sourceTree = "<group>"; };
@@ -314,6 +318,8 @@
 				525E7CB42B1987780057C5EE /* ImageCollectionViewCell.swift */,
 				526005212B1AE14100F37E84 /* EditMemoryTitleViewController.swift */,
 				527F3BA72B2056EA008CB8E2 /* SelectedMemoryEditViewController.swift */,
+				5248E5D82B27F5850052DD20 /* SaveAsDraftorPostViewController.swift */,
+				5248E5DA2B28227F0052DD20 /* UpdateDraftorPostViewController.swift */,
 			);
 			path = MemoryPage;
 			sourceTree = "<group>";
@@ -737,6 +743,7 @@
 				5288CB0E2B0710EA00E089F9 /* MapInfoViewController.swift in Sources */,
 				5288CB102B07615400E089F9 /* AddToPlanListViewController.swift in Sources */,
 				52783CEC2B05DB620067A334 /* GooglePlace.swift in Sources */,
+				5248E5DB2B28227F0052DD20 /* UpdateDraftorPostViewController.swift in Sources */,
 				529781BB2B2564D600F53476 /* PlanDetailViewController.swift in Sources */,
 				52783CE82B05C4DA0067A334 /* MapViewController.swift in Sources */,
 				52783CD82B0359110067A334 /* ProfileViewController.swift in Sources */,
@@ -746,6 +753,7 @@
 				5288CB122B076F7A00E089F9 /* CreatePlanViewController.swift in Sources */,
 				526005222B1AE14100F37E84 /* EditMemoryTitleViewController.swift in Sources */,
 				525E7CB72B198C560057C5EE /* imageCollections.swift in Sources */,
+				5248E5D92B27F5850052DD20 /* SaveAsDraftorPostViewController.swift in Sources */,
 				52292F022B01F8E30083399E /* SearchMemoriesTableVIewCell.swift in Sources */,
 				5221A56E2B14567B0084F7C0 /* SelectDateCell.swift in Sources */,
 				524C30F12B1832FD00C5CEDC /* FirestoreUserInfo.swift in Sources */,

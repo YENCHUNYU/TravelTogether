@@ -1716,6 +1716,80 @@
             </objects>
             <point key="canvasLocation" x="1373" y="2698"/>
         </scene>
+        <!--Save As Draftor Post View Controller-->
+        <scene sceneID="41U-oR-hOu">
+            <objects>
+                <viewController storyboardIdentifier="SaveAsDraftorPostViewController" id="4zX-BE-5zr" customClass="SaveAsDraftorPostViewController" customModule="TravelTogether" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="XKW-if-JyZ">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mk7-g8-j5P">
+                                <rect key="frame" x="50" y="109" width="293" height="38"/>
+                                <color key="backgroundColor" name="yellowGreen"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="38" id="w5A-Sn-Lfm"/>
+                                </constraints>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="儲存成草稿">
+                                    <fontDescription key="titleFontDescription" type="system" weight="light" pointSize="16"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="saveAsDraftButtonTapped:" destination="4zX-BE-5zr" eventType="touchUpInside" id="IdS-zt-4Wc"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c77-Dx-UOh">
+                                <rect key="frame" x="335" y="69" width="48" height="38"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="Icons_24px_Close拷貝">
+                                    <color key="baseForegroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="closeButtonTapped:" destination="4zX-BE-5zr" eventType="touchUpInside" id="wS1-fp-X0A"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2tL-CG-MyB">
+                                <rect key="frame" x="50" y="162" width="293" height="38"/>
+                                <color key="backgroundColor" name="yellowGreen"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="38" id="hH1-Oe-kRa"/>
+                                </constraints>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="準備發佈">
+                                    <fontDescription key="titleFontDescription" type="system" weight="light" pointSize="16"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="toPostButtonTapped:" destination="4zX-BE-5zr" eventType="touchUpInside" id="g6v-2e-k30"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="8C7-r6-xOm"/>
+                        <color key="backgroundColor" name="darkGreen"/>
+                        <constraints>
+                            <constraint firstItem="8C7-r6-xOm" firstAttribute="trailing" secondItem="2tL-CG-MyB" secondAttribute="trailing" constant="50" id="06h-BC-iXl"/>
+                            <constraint firstItem="2tL-CG-MyB" firstAttribute="top" secondItem="mk7-g8-j5P" secondAttribute="bottom" constant="15" id="D48-tB-xaH"/>
+                            <constraint firstItem="8C7-r6-xOm" firstAttribute="trailing" secondItem="c77-Dx-UOh" secondAttribute="trailing" constant="10" id="EOG-BD-Jar"/>
+                            <constraint firstItem="c77-Dx-UOh" firstAttribute="leading" secondItem="8C7-r6-xOm" secondAttribute="leading" priority="750" constant="335" id="Nbg-g5-Gp4"/>
+                            <constraint firstItem="mk7-g8-j5P" firstAttribute="top" secondItem="8C7-r6-xOm" secondAttribute="top" constant="50" id="eWc-7X-rvV"/>
+                            <constraint firstItem="c77-Dx-UOh" firstAttribute="top" secondItem="8C7-r6-xOm" secondAttribute="top" constant="10" id="j9g-oq-lQh"/>
+                            <constraint firstItem="2tL-CG-MyB" firstAttribute="leading" secondItem="8C7-r6-xOm" secondAttribute="leading" constant="50" id="km1-je-G9r"/>
+                            <constraint firstItem="mk7-g8-j5P" firstAttribute="leading" secondItem="8C7-r6-xOm" secondAttribute="leading" constant="50" id="lwE-nI-B6S"/>
+                            <constraint firstItem="8C7-r6-xOm" firstAttribute="trailing" secondItem="mk7-g8-j5P" secondAttribute="trailing" constant="50" id="xJZ-No-0zG"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="OaW-TM-t9o"/>
+                    <connections>
+                        <outlet property="closeButton" destination="c77-Dx-UOh" id="dOw-SC-sxD"/>
+                        <outlet property="saveAsDraftButton" destination="mk7-g8-j5P" id="2VO-B9-niX"/>
+                        <outlet property="toPostButton" destination="2tL-CG-MyB" id="ndj-bh-2hN"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nUt-ZE-gAv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1372" y="3377"/>
+        </scene>
         <!--Edit Memory Title View Controller-->
         <scene sceneID="YLu-LU-pi2">
             <objects>
@@ -1987,6 +2061,7 @@
                     <navigationItem key="navigationItem" title="編輯旅遊回憶" id="unn-aH-ihv"/>
                     <connections>
                         <outlet property="tableView" destination="V3G-P7-gse" id="8Su-i6-VTW"/>
+                        <segue destination="JKJ-mG-z3M" kind="show" identifier="draftPost" id="fOh-e2-FVh"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oir-QL-mqw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2381,6 +2456,9 @@
                                                         </label>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WeR-e0-5eg">
                                                             <rect key="frame" x="209" y="5" width="89" height="50"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" secondItem="WeR-e0-5eg" secondAttribute="height" multiplier="16:9" id="BbZ-e1-VDD"/>
+                                                            </constraints>
                                                         </imageView>
                                                     </subviews>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -2389,7 +2467,6 @@
                                                         <constraint firstItem="WeR-e0-5eg" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="aLj-Io-Kae" secondAttribute="trailing" constant="10" id="2nH-wx-oqv"/>
                                                         <constraint firstItem="WeR-e0-5eg" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="URe-Vk-hWD" secondAttribute="trailing" constant="10" id="31M-Up-vAP"/>
                                                         <constraint firstAttribute="trailing" secondItem="WeR-e0-5eg" secondAttribute="trailing" constant="5" id="682-Zm-7xv"/>
-                                                        <constraint firstItem="WeR-e0-5eg" firstAttribute="width" secondItem="WeR-e0-5eg" secondAttribute="height" multiplier="16:9" id="BbZ-e1-VDD"/>
                                                         <constraint firstItem="URe-Vk-hWD" firstAttribute="top" secondItem="d7u-ms-p83" secondAttribute="top" constant="10" id="Yv7-LX-uc8"/>
                                                         <constraint firstItem="aLj-Io-Kae" firstAttribute="top" secondItem="URe-Vk-hWD" secondAttribute="bottom" id="b1z-At-qyc"/>
                                                         <constraint firstItem="WeR-e0-5eg" firstAttribute="top" secondItem="d7u-ms-p83" secondAttribute="top" constant="5" id="eUj-rT-mBF"/>
@@ -2442,10 +2519,85 @@
             </objects>
             <point key="canvasLocation" x="-2486" y="2110"/>
         </scene>
+        <!--Update Draftor Post View Controller-->
+        <scene sceneID="tqp-D6-RUq">
+            <objects>
+                <viewController storyboardIdentifier="UpdateDraftorPostViewController" id="4Ef-qg-uzd" customClass="UpdateDraftorPostViewController" customModule="TravelTogether" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="wIZ-ua-3n5">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dip-ot-6Cy">
+                                <rect key="frame" x="50" y="109" width="293" height="38"/>
+                                <color key="backgroundColor" name="yellowGreen"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="38" id="r1g-Go-Hp6"/>
+                                </constraints>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="更新草稿">
+                                    <fontDescription key="titleFontDescription" type="system" weight="light" pointSize="16"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="updateButtonTapped:" destination="4Ef-qg-uzd" eventType="touchUpInside" id="tCZ-11-eQA"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yhh-qm-aeQ">
+                                <rect key="frame" x="335" y="69" width="48" height="38"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" image="Icons_24px_Close拷貝">
+                                    <color key="baseForegroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="closeButtonTapped:" destination="4Ef-qg-uzd" eventType="touchUpInside" id="P5g-Lj-WBI"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4FY-ip-O5z">
+                                <rect key="frame" x="50" y="162" width="293" height="38"/>
+                                <color key="backgroundColor" name="yellowGreen"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="38" id="pyS-4R-K8e"/>
+                                </constraints>
+                                <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="更新草稿並準備發佈">
+                                    <fontDescription key="titleFontDescription" type="system" weight="light" pointSize="16"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="postButtonTapped:" destination="4Ef-qg-uzd" eventType="touchUpInside" id="v9C-Z5-Btk"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="PDL-yN-sP7"/>
+                        <color key="backgroundColor" name="darkGreen"/>
+                        <constraints>
+                            <constraint firstItem="4FY-ip-O5z" firstAttribute="top" secondItem="dip-ot-6Cy" secondAttribute="bottom" constant="15" id="3mY-W0-cYg"/>
+                            <constraint firstItem="Yhh-qm-aeQ" firstAttribute="leading" secondItem="PDL-yN-sP7" secondAttribute="leading" priority="750" constant="335" id="Hgf-xZ-1Fi"/>
+                            <constraint firstItem="4FY-ip-O5z" firstAttribute="leading" secondItem="PDL-yN-sP7" secondAttribute="leading" constant="50" id="KIN-1l-xqc"/>
+                            <constraint firstItem="dip-ot-6Cy" firstAttribute="leading" secondItem="PDL-yN-sP7" secondAttribute="leading" constant="50" id="LqC-gu-Sus"/>
+                            <constraint firstItem="PDL-yN-sP7" firstAttribute="trailing" secondItem="4FY-ip-O5z" secondAttribute="trailing" constant="50" id="a0J-qC-eMe"/>
+                            <constraint firstItem="PDL-yN-sP7" firstAttribute="trailing" secondItem="dip-ot-6Cy" secondAttribute="trailing" constant="50" id="jWl-mc-d7M"/>
+                            <constraint firstItem="PDL-yN-sP7" firstAttribute="trailing" secondItem="Yhh-qm-aeQ" secondAttribute="trailing" constant="10" id="mnu-BU-8bX"/>
+                            <constraint firstItem="Yhh-qm-aeQ" firstAttribute="top" secondItem="PDL-yN-sP7" secondAttribute="top" constant="10" id="s6X-w8-yWI"/>
+                            <constraint firstItem="dip-ot-6Cy" firstAttribute="top" secondItem="PDL-yN-sP7" secondAttribute="top" constant="50" id="sfC-hY-8zz"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="kqX-eV-XRi"/>
+                    <connections>
+                        <outlet property="closeButton" destination="Yhh-qm-aeQ" id="ed2-3r-SsY"/>
+                        <outlet property="toPostButton" destination="4FY-ip-O5z" id="wRw-Ey-ume"/>
+                        <outlet property="updateDraftButton" destination="dip-ot-6Cy" id="MUI-TA-2Fm"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="M6W-Zp-807" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2544" y="1965"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="uKr-hy-xv3"/>
         <segue reference="VQK-Ip-Ga7"/>
+        <segue reference="fOh-e2-FVh"/>
         <segue reference="HNF-ZE-dku"/>
         <segue reference="jsr-wJ-nje"/>
     </inferredMetricsTieBreakers>

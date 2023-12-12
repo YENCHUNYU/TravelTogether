@@ -25,6 +25,7 @@ class SelectedMemoryEditViewController: UIViewController {
     var memoryPhotos: [String] = []
     var currentIndexPath: IndexPath?
     var memoryId = ""
+    var dbCollection = ""
 
     private var itemsPerRow: CGFloat = 2
     private var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
@@ -44,7 +45,7 @@ class SelectedMemoryEditViewController: UIViewController {
         tableView.dragInteractionEnabled = true
         
         let firestoreManagerForOne = FirestoreManagerFetchMemory()
-        firestoreManagerForOne.fetchOneMemory(byId: memoryId) { (memory, error) in
+        firestoreManagerForOne.fetchOneMemory(dbcollection: dbCollection, byId: memoryId) { (memory, error) in
                         if let error = error {
                             print("Error fetching one memory: \(error)")
                         } else if let memory = memory {
@@ -87,31 +88,64 @@ class SelectedMemoryEditViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToEditTitle" {
+        if segue.identifier == "goToEditTitle" || segue.identifier == "draftPost" {
             if let destinationVC = segue.destination as? EditMemoryTitleViewController {
-                destinationVC.onePlan = self.onePlan
-                print("self.onePlan\(self.onePlan)")
                 destinationVC.onePlan = self.onePlan
             }
         }
+        if segue.identifier == "draftPost" {
+            if let destinationVC = segue.destination as? EditMemoryTitleViewController {
+                destinationVC.isFromDraft = true
+            }
+        }
+        
+        
     }
    
     @objc func rightButtonTapped() {
-        let firestoreManagerForPost = FirestoreManagerMemoryPost()
-            firestoreManagerForPost.updateMemory(memory: self.onePlan, memoryId: memoryId) { error in
-                    if error != nil {
-                        print("Failed to post Memory")
-                    } else {
-                        print("Posted Memory successfully!")}
+        if dbCollection == "Memory" {
+            let firestoreManagerForPost = FirestoreManagerMemoryPost()
+            self.onePlan.user = Auth.auth().currentUser?.displayName
+            self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
+            self.onePlan.userId = Auth.auth().currentUser?.uid
+            firestoreManagerForPost.updateMemory(dbcollection: dbCollection, memory: self.onePlan, memoryId: memoryId) { error in
+                if error != nil {
+                    print("Failed to post Memory")
+                } else {
+                    print("Posted Memory successfully!")}
             }
-        navigationController?.popViewController(animated: true)
-         
+            navigationController?.popViewController(animated: true)
+        } else {
+            // 草稿頁的話要先問用戶要更新草稿還是發布成回憶
+            if let updateorPostVC = storyboard?.instantiateViewController(withIdentifier: "UpdateDraftorPostViewController") as? UpdateDraftorPostViewController {
+                updateorPostVC.postButtonTapped = {
+                    self.performSegue(withIdentifier: "draftPost", sender: self)
+                    updateorPostVC.dismiss(animated: true)
+                }
+                updateorPostVC.updateButtonTapped = {
+                    let firestoreManagerForPost = FirestoreManagerMemoryPost()
+                    self.onePlan.user = Auth.auth().currentUser?.displayName
+                    self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
+                    self.onePlan.userId = Auth.auth().currentUser?.uid
+                    firestoreManagerForPost.updateMemory(dbcollection: self.dbCollection, memory: self.onePlan, memoryId: self.memoryId) { error in
+                        if error != nil {
+                            print("Failed to post Memory")
+                        } else {
+                            print("Posted Memory successfully!")}
+                    }
+                    updateorPostVC.dismiss(animated: true)
+                    self.navigationController?.popViewController(animated: true)
+                }
+                
+                present(updateorPostVC, animated: true, completion: nil)
+            }
+        }
        }
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let firestoreManagerForOne = FirestoreManagerFetchMemory()
-        firestoreManagerForOne.fetchOneMemory(byId: memoryId) { (memory, error) in
+        firestoreManagerForOne.fetchOneMemory(dbcollection: dbCollection, byId: memoryId) { (memory, error) in
                         if let error = error {
                             print("Error fetching one memory: \(error)")
                         } else if let memory = memory {

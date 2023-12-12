@@ -109,8 +109,15 @@ class EditMemoryViewController: UIViewController {
     }
    
     @objc func rightButtonTapped() {
-       
-         performSegue(withIdentifier: "goToEditTitle", sender: self)
+
+        if let draftorPostVC = storyboard?.instantiateViewController(withIdentifier: "SaveAsDraftorPostViewController") as? SaveAsDraftorPostViewController {
+            draftorPostVC.toPostButtonTapped = {
+                self.performSegue(withIdentifier: "goToEditTitle", sender: self)
+                draftorPostVC.dismiss(animated: true)
+            }
+            draftorPostVC.onePlan = self.onePlan
+            present(draftorPostVC, animated: true, completion: nil)
+        }
        }
         
     override func viewWillAppear(_ animated: Bool) {

@@ -27,6 +27,8 @@ class MemoryViewController: UIViewController {
     var memoryIndex = 0
     var memoryId = ""
     var memories: [TravelPlan] = []
+    var memoryDrafts: [TravelPlan] = []
+    var dbCollection = ""
     @objc func createArticle() {
         performSegue(withIdentifier: "goToSelectPlan", sender: self)
     }
@@ -54,17 +56,36 @@ class MemoryViewController: UIViewController {
                 self.tableView.reloadData()
             }
         }
+        
+        firestoreFetchMemory.fetchMemoryDrafts { (memories, error) in
+            if let error = error {
+                print("Error fetching memoryDrafts: \(error)")
+            } else {
+                print("Fetched memoryDrafts: \(memories ?? [])")
+                self.memoryDrafts = memories ?? []
+                self.tableView.reloadData()
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         let firestoreFetchMemory = FirestoreManagerFetchMemory()
-//        firestoreFetchMemory.delegate = self
         firestoreFetchMemory.fetchMemories { (memories, error) in
             if let error = error {
                 print("Error fetching memories: \(error)")
             } else {
                 print("Fetched memories: \(memories ?? [])")
                 self.memories = memories ?? []
+                self.tableView.reloadData()
+            }
+        }
+        
+        firestoreFetchMemory.fetchMemoryDrafts { (memories, error) in
+            if let error = error {
+                print("Error fetching memoryDrafts: \(error)")
+            } else {
+                print("Fetched memoryDrafts: \(memories ?? [])")
+                self.memoryDrafts = memories ?? []
                 self.tableView.reloadData()
             }
         }
@@ -78,7 +99,11 @@ class MemoryViewController: UIViewController {
 
 extension MemoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        memories.count
+        if memoryIndex == 0 {
+            memories.count
+        } else {
+            memoryDrafts.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -117,8 +142,35 @@ extension MemoryViewController: UITableViewDataSource {
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "MemoryCell", for: indexPath) as? MemoryCell
             else { fatalError("Could not create MemoryCell") }
+            
+            if memoryDrafts.isEmpty == false {
+                let urlString = memoryDrafts[indexPath.row].coverPhoto ?? ""
+                if !urlString.isEmpty, let url = URL(string: urlString) {
+                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
+                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
+                        DispatchQueue.main.async {
+                            if let image = image {
+                                cell.memoryImageView.image = image
+                                cell.memoryNameLabel.text = self.memoryDrafts[indexPath.row].planName
+                                let start = self.changeDateFormat(date: "\(self.memoryDrafts[indexPath.row].startDate)")
+                                let end = self.changeDateFormat(date: "\(self.memoryDrafts[indexPath.row].endDate)")
+                                cell.memoryDateLabel.text = "\(start)-\(end)"
+                            } else {
+                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                            }
+                        }
+                    }
+                } else {
+                    // Handle the case where the URL is empty
+                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                    cell.memoryNameLabel.text = self.memoryDrafts[indexPath.row].planName
+                    let start = self.changeDateFormat(date: "\(self.memoryDrafts[indexPath.row].startDate)")
+                    let end = self.changeDateFormat(date: "\(self.memoryDrafts[indexPath.row].endDate)")
+                    cell.memoryDateLabel.text = "\(start)-\(end)"
+                }}
             return cell
         }
+        
     }
     func changeDateFormat(date: String) -> String {
         let dateFormatter = DateFormatter()
@@ -142,13 +194,24 @@ extension MemoryViewController: UITableViewDataSource {
             if let destinationVC = segue.destination as? SelectedMemoryEditViewController {
                 print("memoryId\(memoryId)")
                 destinationVC.memoryId = memoryId
+                if memoryIndex == 0 {
+                    destinationVC.dbCollection = "Memory"
+                } else {
+                    destinationVC.dbCollection = "MemoryDraft"
+                }
             }
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        memoryId = memories[indexPath.row].id
-        performSegue(withIdentifier: "editMemory", sender: indexPath)
+        if memoryIndex == 0 {
+            memoryId = memories[indexPath.row].id
+            performSegue(withIdentifier: "editMemory", sender: indexPath)
+        } else {
+            memoryId = memoryDrafts[indexPath.row].id
+            performSegue(withIdentifier: "editMemory", sender: indexPath)
+        }
+        
     }
     
     func tableView(
@@ -172,22 +235,42 @@ extension MemoryViewController: UITableViewDelegate {
         commit editingStyle: UITableViewCell.EditingStyle,
         forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            if indexPath.row < memories.count {
-               
-                let firestoreManager = FirestoreManagerFetchMemory()
-                firestoreManager.deleteMemory(withID: memories[indexPath.row].id) { error in
-                    if let error = error {
-                        print("Failed to delete travel plan: \(error)")
-                    } else {
-                        print("Travel plan deleted successfully.")
-                        self.memories.remove(at: indexPath.row)
-                        tableView.deleteRows(at: [indexPath], with: .fade)
+            if memoryIndex == 0 {
+                if indexPath.row < memories.count {
+                    
+                    let firestoreManager = FirestoreManagerFetchMemory()
+                    firestoreManager.deleteMemory(dbcollection: dbCollection, withID: memories[indexPath.row].id) { error in
+                        if let error = error {
+                            print("Failed to delete travel plan: \(error)")
+                        } else {
+                            print("Travel plan deleted successfully.")
+                            self.memories.remove(at: indexPath.row)
+                            tableView.deleteRows(at: [indexPath], with: .fade)
+                        }
                     }
+                    
+                } else {
+                    print("Index out of range. indexPath.row: \(indexPath.row), memories count: \(memories.count)")
                 }
-                
-                   } else {
-                       print("Index out of range. indexPath.row: \(indexPath.row), memories count: \(memories.count)")
-                   }
+            } else {
+                if indexPath.row < memoryDrafts.count {
+                    
+                    let firestoreManager = FirestoreManagerFetchMemory()
+                    firestoreManager.deleteMemory(dbcollection: dbCollection, withID: memoryDrafts[indexPath.row].id) { error in
+                        if let error = error {
+                            print("Failed to delete travel plan: \(error)")
+                        } else {
+                            print("Travel plan deleted successfully.")
+                            self.memoryDrafts.remove(at: indexPath.row)
+                            tableView.deleteRows(at: [indexPath], with: .fade)
+                        }
+                    }
+                    
+                } else {
+                    print("Index out of range. indexPath.row: \(indexPath.row), memories count: \(memoryDrafts.count)")
+                }
+            }
+            
         }
     }
 }
@@ -195,6 +278,11 @@ extension MemoryViewController: UITableViewDelegate {
 extension MemoryViewController: MemoryHeaderViewDelegate {
     func change(to index: Int) {
         memoryIndex = index
+        if memoryIndex == 0 {
+            dbCollection = "Memory"
+        } else {
+            dbCollection = "MemoryDraft"
+        }
         tableView.reloadData()
     }
 }
