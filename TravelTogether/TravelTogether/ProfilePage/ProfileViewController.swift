@@ -45,6 +45,7 @@ class ProfileViewController: UIViewController {
         let headerView = ProfileHeaderView(reuseIdentifier: "ProfileHeaderView")
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
         headerView.delegate = self
+        headerView.backgroundColor = UIColor(named: "yellowGreen")
         tableView.tableHeaderView = headerView
         tableView.separatorStyle = .none
         

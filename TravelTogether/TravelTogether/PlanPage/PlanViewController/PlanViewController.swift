@@ -44,6 +44,7 @@ class PlanViewController: UIViewController {
         let headerView = PlanHeaderView(reuseIdentifier: "PlanHeaderView")
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
         headerView.delegate = self
+        headerView.backgroundColor = UIColor(named: "yellowGreen")
         tableView.tableHeaderView = headerView
         view.addSubview(addButton)
         setUpButton()

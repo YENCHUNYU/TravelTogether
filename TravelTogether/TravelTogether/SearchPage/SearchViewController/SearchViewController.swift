@@ -54,6 +54,7 @@ class SearchViewController: UIViewController {
         let headerView = SearchHeaderView(reuseIdentifier: "SearchHeaderView")
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
         headerView.delegate = self
+        headerView.backgroundColor = UIColor(named: "yellowGreen")
         tableView.tableHeaderView = headerView
         view.addSubview(searchButton)
         setUpButton()
@@ -162,8 +163,35 @@ extension SearchViewController: UITableViewDataSource {
                 withIdentifier: "SearchMemoriesCell",
                 for: indexPath) as? SearchMemoriesCell
             else { fatalError("Could not create SearchMemoriesCell") }
+            cell.userImageView.image = UIImage(systemName: "person.circle")
             cell.userNameLabel.text = memories[indexPath.row].user
-            cell.userImageView.kf.setImage(with: URL(string: memories[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
+            if let userPhotoURL = URL(string: memories[indexPath.row].userPhoto ?? "") {
+                cell.userImageView.kf.setImage(
+                    with: userPhotoURL,
+                    placeholder: UIImage(systemName: "person.circle.fill"),
+                    completionHandler: { result in
+                        switch result {
+                        case .success(_):
+                            print("user photo was set up by kingfisher")
+                            break
+                        case .failure(_):
+                            // Image failed to load, fetch from Firestore
+                            let firestorageManager = FirebaseStorageManagerDownloadPhotos()
+                            firestorageManager.downloadPhotoFromFirebaseStorage(url: userPhotoURL) { image in
+                                DispatchQueue.main.async {
+                                    if let image = image {
+                                        cell.userImageView.image = image
+                                        cell.userImageView.contentMode = .scaleAspectFill
+                                    } else {
+                                        cell.userImageView.image = UIImage(systemName: "person.circle.fill")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                )
+            }
+
             if memories.isEmpty == false {
                 let urlString = memories[indexPath.row].coverPhoto ?? ""
                 if !urlString.isEmpty, let url = URL(string: urlString) {
