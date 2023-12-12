@@ -9,6 +9,7 @@ import FirebaseAuth
 
 class SaveAsDraftorPostViewController: UIViewController {
     var toPostButtonTapped: (() -> Void)?
+    var toSaveButtonTapped:  (() -> Void)?
     var onePlan: TravelPlan = TravelPlan(
         id: "", planName: "",
         destination: "",
@@ -31,25 +32,25 @@ class SaveAsDraftorPostViewController: UIViewController {
     }
     
     @IBAction func saveAsDraftButtonTapped(_ sender: Any) {
-        let firestoreManagerForPost = FirestoreManagerMemoryPost()
-        onePlan.user = Auth.auth().currentUser?.displayName
-        onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-        onePlan.userId = Auth.auth().currentUser?.uid
-                firestoreManagerForPost.postMemoryDraft(memory: self.onePlan) { error in
-                        if error != nil {
-                            print("Failed to post MemoryDraft")
-                        } else {
-                            print("Posted MemoryDraft successfully!")}
-                }
-                
-                if let navigationController = self.navigationController {
-                 let viewControllers = navigationController.viewControllers
-                 if viewControllers.count >= 1 {
-                     let targetViewController = viewControllers[viewControllers.count - 1]
-                     navigationController.popToViewController(targetViewController, animated: true)
-                                 }
-                             }
-    
+//        let firestoreManagerForPost = FirestoreManagerMemoryPost()
+//        onePlan.user = Auth.auth().currentUser?.displayName
+//        onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
+//        onePlan.userId = Auth.auth().currentUser?.uid
+//                firestoreManagerForPost.postMemoryDraft(memory: self.onePlan) { error in
+//                        if error != nil {
+//                            print("Failed to post MemoryDraft")
+//                        } else {
+//                            print("Posted MemoryDraft successfully!")}
+//                }
+//                
+//                if let navigationController = self.navigationController {
+//                 let viewControllers = navigationController.viewControllers
+//                 if viewControllers.count >= 1 {
+//                     let targetViewController = viewControllers[viewControllers.count - 1]
+//                     navigationController.popToViewController(targetViewController, animated: true)
+//                                 }
+//                             }
+    toSaveButtonTapped?()
     }
     
     @IBAction func toPostButtonTapped(_ sender: Any) {

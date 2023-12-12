@@ -115,7 +115,29 @@ class EditMemoryViewController: UIViewController {
                 self.performSegue(withIdentifier: "goToEditTitle", sender: self)
                 draftorPostVC.dismiss(animated: true)
             }
-            draftorPostVC.onePlan = self.onePlan
+            
+            draftorPostVC.toSaveButtonTapped = {
+                let firestoreManagerForPost = FirestoreManagerMemoryPost()
+                self.onePlan.user = Auth.auth().currentUser?.displayName
+                self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
+                self.onePlan.userId = Auth.auth().currentUser?.uid
+                        firestoreManagerForPost.postMemoryDraft(memory: self.onePlan) { error in
+                                if error != nil {
+                                    print("Failed to post MemoryDraft")
+                                } else {
+                                    print("Posted MemoryDraft successfully!")}
+                        }
+                draftorPostVC.dismiss(animated: true)
+                        if let navigationController = self.navigationController {
+                         let viewControllers = navigationController.viewControllers
+                         if viewControllers.count >= 3 {
+                             let targetViewController = viewControllers[viewControllers.count - 3]
+                             navigationController.popToViewController(targetViewController, animated: true)
+                                         }
+                                     }
+                
+            }
+//            draftorPostVC.onePlan = self.onePlan
             present(draftorPostVC, animated: true, completion: nil)
         }
        }
