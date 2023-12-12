@@ -67,7 +67,10 @@ class FirestoreManagerForOne {
                         destination: data?["destination"] as? String ?? "",
                         startDate: startDate,
                         endDate: endDate,
-                        days: travelDays
+                        days: travelDays,
+                        user: data?["user"] as? String ?? "",
+                        userPhoto: data?["userPhoto"] as? String ?? "",
+                        userId: data?["userId"] as? String ?? ""
                     )
                     completion(travelPlan, nil)
                     self.delegate?.manager(self, didGet: travelPlan)
@@ -127,7 +130,10 @@ class FirestoreManagerForOne {
                         destination: data?["destination"] as? String ?? "",
                         startDate: startDate,
                         endDate: endDate,
-                        days: travelDays
+                        days: travelDays,
+                        user: data?["user"] as? String ?? "",
+                        userPhoto: data?["userPhoto"] as? String ?? "",
+                        userId: data?["userId"] as? String ?? ""
                     )
                     completion(travelPlan, nil)
                     self.delegate?.manager(self, didGet: travelPlan)

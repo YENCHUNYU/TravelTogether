@@ -28,7 +28,7 @@ class MemoryViewController: UIViewController {
     var memoryId = ""
     var memories: [TravelPlan] = []
     var memoryDrafts: [TravelPlan] = []
-    var dbCollection = ""
+    var dbCollection = "Memory"
     @objc func createArticle() {
         performSegue(withIdentifier: "goToSelectPlan", sender: self)
     }

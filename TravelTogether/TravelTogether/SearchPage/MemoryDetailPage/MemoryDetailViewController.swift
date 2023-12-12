@@ -93,9 +93,9 @@ class MemoryDetailViewController: UIViewController {
     @objc func likeMemory() {
 
         let firestorePost = FirestoreManagerFavorite()
-        self.onePlan.user = Auth.auth().currentUser?.displayName
-        self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-        self.onePlan.userId = Auth.auth().currentUser?.uid
+//        self.onePlan.user = Auth.auth().currentUser?.displayName
+//        self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
+//        self.onePlan.userId = Auth.auth().currentUser?.uid
         firestorePost.postMemoryToFavorite(memory: self.onePlan) { error in
             if let error = error {
                 print("Error fetching one favorite: \(error)")

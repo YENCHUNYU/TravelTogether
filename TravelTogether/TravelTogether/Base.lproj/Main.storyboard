@@ -1033,7 +1033,7 @@
                             </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="MGL-rq-BXd"/>
-                        <color key="backgroundColor" name="darkGreen"/>
+                        <color key="backgroundColor" red="0.57647058823529407" green="0.69411764705882351" blue="0.65098039215686276" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="zK3-TT-Grc" firstAttribute="leading" secondItem="MGL-rq-BXd" secondAttribute="leading" id="2ao-VB-qIz"/>
                             <constraint firstItem="zK3-TT-Grc" firstAttribute="top" secondItem="MGL-rq-BXd" secondAttribute="top" id="7nn-4c-Pb4"/>

@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "travelTogether2-2-2.png",
+      "filename" : "travelTogether2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "travelTogether2-2.png",
+      "filename" : "travelTogether2 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "travelTogether2.png",
+      "filename" : "travelTogether2 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

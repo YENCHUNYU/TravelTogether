@@ -18,6 +18,7 @@ class FavoriteViewController: UIViewController {
     var plans: [TravelPlan] = []
     var mockImage = UIImage(named: "Image_Placeholder")
     var planId = ""
+    var dbCollection = "FavoriteMemory"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -202,20 +203,56 @@ extension FavoriteViewController: UITableViewDataSource {
             }
         }
     }
+    
+    func tableView(
+        _ tableView: UITableView,
+        editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
 }
-    extension FavoriteViewController: UITableViewDelegate {
-        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-            if favoriteIndex == 0 || favoriteIndex == 1 {
-                return 330
-            } else {
-                return 280
-            }
+extension FavoriteViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if favoriteIndex == 0 || favoriteIndex == 1 {
+            return 330
+        } else {
+            return 280
         }
     }
+    
+    func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            if indexPath.row < plans.count {
+                
+                
+                
+                let firestoreManager = FirestoreManagerFavorite()
+                firestoreManager.deleteFavorite(dbcollection: dbCollection, withID: plans[indexPath.row].id) { error in
+                    if let error = error {
+                        print("Failed to delete favorite: \(error)")
+                    } else {
+                        print("favorite deleted successfully.")
+                        self.plans.remove(at: indexPath.row)
+                        tableView.deleteRows(at: [indexPath], with: .fade)
+                    }
+                }
+            } else {
+                       print("Index out of range. indexPath.row: \(indexPath.row), plans count: \(plans.count)")
+                   }
+        }
+    }
+}
 
 extension FavoriteViewController: FavoriteHeaderViewDelegate {
     func change(to index: Int) {
         favoriteIndex = index
+        if favoriteIndex == 0 {
+            dbCollection = "FavoriteMemory"
+        } else {
+            dbCollection = "FavoritePlan"
+        }
         tableView.reloadData()
     }
 }

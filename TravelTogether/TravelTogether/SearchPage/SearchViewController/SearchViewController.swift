@@ -67,6 +67,7 @@ class SearchViewController: UIViewController {
                 // Handle the retrieved travel plans
                 print("Fetched travel plans: \(travelPlans ?? [])")
                 self.plans = travelPlans ?? []
+                self.tableView.reloadData()
             }
         }
         
@@ -126,6 +127,7 @@ class SearchViewController: UIViewController {
                 // Handle the retrieved travel plans
                 print("Fetched travel plans: \(travelPlans ?? [])")
                 self.plans = travelPlans ?? []
+                self.tableView.reloadData()
             }
         }
         

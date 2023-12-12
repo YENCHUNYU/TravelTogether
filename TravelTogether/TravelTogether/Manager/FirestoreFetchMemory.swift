@@ -327,7 +327,10 @@ class FirestoreManagerFetchMemory {
                         startDate: startDate,
                         endDate: endDate,
                         days: travelDays,
-                        coverPhoto: data?["coverPhoto"] as? String ?? ""
+                        coverPhoto: data?["coverPhoto"] as? String ?? "",
+                        user: data?["user"] as? String ?? "",
+                        userPhoto: data?["userPhoto"] as? String ?? "",
+                        userId: data?["userId"] as? String ?? ""
                     )
                     completion(travelPlan, nil)
                 } } }
@@ -387,7 +390,10 @@ class FirestoreManagerFetchMemory {
                         startDate: startDate,
                         endDate: endDate,
                         days: travelDays,
-                        coverPhoto: data?["coverPhoto"] as? String ?? ""
+                        coverPhoto: data?["coverPhoto"] as? String ?? "",
+                        user: data?["user"] as? String ?? "",
+                        userPhoto: data?["userPhoto"] as? String ?? "",
+                        userId: data?["userId"] as? String ?? ""
                     )
                     completion(travelPlan, nil)
                 } } }

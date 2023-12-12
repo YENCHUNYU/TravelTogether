@@ -200,4 +200,19 @@ class FirestoreManagerFavorite {
             }
         }
     }
+    
+    func deleteFavorite(dbcollection: String, withID memoryID: String, completion: @escaping (Error?) -> Void) {
+           let database = Firestore.firestore()
+           let favoriteRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection(dbcollection).document(memoryID)
+
+        favoriteRef.delete { error in
+               if let error = error {
+                   print("Error deleting favorite document: \(error)")
+                   completion(error)
+               } else {
+                   print("Favorite document deleted successfully.")
+                   completion(nil)
+               }
+           }
+       }
 }

@@ -116,8 +116,8 @@ class LoginViewController: UIViewController {
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 25
         view.layer.masksToBounds = true
-        view.frame = CGRect(x: 0, y: (UIScreen.main.bounds.height) - 600,
-                            width: UIScreen.main.bounds.width, height: 600 )
+        view.frame = CGRect(x: 0, y: (UIScreen.main.bounds.height) - 800,
+                            width: UIScreen.main.bounds.width, height: 800 )
     }
     
     @IBAction func changeMode(_ sender: UISegmentedControl) {
