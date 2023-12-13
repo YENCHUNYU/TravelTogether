@@ -10,4 +10,5 @@ target 'TravelTogether' do
   pod 'GoogleMaps', '~> 3.7.0'
   pod 'GooglePlaces'
   pod 'SwiftEntryKit', '2.0.0'
+  pod 'NVActivityIndicatorView'
 end

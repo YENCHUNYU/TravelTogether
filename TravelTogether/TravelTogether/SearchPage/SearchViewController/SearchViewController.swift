@@ -12,6 +12,7 @@ import FirebaseStorage
 import FirebaseAuth
 import Kingfisher
 import AuthenticationServices
+import NVActivityIndicatorView
 
 class SearchViewController: UIViewController {
 
@@ -44,9 +45,21 @@ class SearchViewController: UIViewController {
     @objc func searchLocation() {
         performSegue(withIdentifier: "goToMapFromSearch", sender: self)
     }
-    
+    let activityIndicatorView = NVActivityIndicatorView(
+        frame: CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 50, height: 50),
+              type: .ballBeat,
+              color: UIColor(named: "darkGreen") ?? .white,
+              padding: 0
+          )
+    var blurEffectView: UIVisualEffectView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let blurEffect = UIBlurEffect(style: .light)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+        view.addSubview(blurEffectView)
+        view.addSubview(activityIndicatorView)
         tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.delegate = self
@@ -65,10 +78,11 @@ class SearchViewController: UIViewController {
             if let error = error {
                 print("Error fetching travel plans: \(error)")
             } else {
-                // Handle the retrieved travel plans
                 print("Fetched travel plans: \(travelPlans ?? [])")
                 self.plans = travelPlans ?? []
                 self.tableView.reloadData()
+//                self.activityIndicatorView.stopAnimating()
+//                self.blurEffectView.removeFromSuperview()
             }
         }
         
@@ -80,6 +94,8 @@ class SearchViewController: UIViewController {
                 print("Fetched memories: \(travelPlans ?? [])")
                 self.memories = travelPlans ?? []
                 self.tableView.reloadData()
+//                self.activityIndicatorView.stopAnimating()
+                //                self.blurEffectView.removeFromSuperview()
             }
         }
         
@@ -112,38 +128,43 @@ class SearchViewController: UIViewController {
         if segue.identifier == "PlanDetail" {
             if let destinationVC = segue.destination as? PlanDetailViewController {
                 destinationVC.travelPlanId = self.planId
-//                print("destinationVC.userId\(destinationVC.userId)")
                 destinationVC.userId = self.userId
             }
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let firestoreManager = FirestoreManager()
-        firestoreManager.delegate = self
-        firestoreManager.fetchAllTravelPlans { (travelPlans, error) in
-            if let error = error {
-                print("Error fetching travel plans: \(error)")
-            } else {
-                // Handle the retrieved travel plans
-                print("Fetched travel plans: \(travelPlans ?? [])")
-                self.plans = travelPlans ?? []
-                self.tableView.reloadData()
+        activityIndicatorView.startAnimating()
+
+        if searchIndex == 1 {
+            let firestoreManager = FirestoreManager()
+            firestoreManager.delegate = self
+            firestoreManager.fetchAllTravelPlans { (travelPlans, error) in
+                if let error = error {
+                    print("Error fetching travel plans: \(error)")
+                } else {
+                    print("Fetched travel plans: \(travelPlans ?? [])")
+                    self.plans = travelPlans ?? []
+                    self.tableView.reloadData()
+                    self.activityIndicatorView.stopAnimating()
+                    self.blurEffectView.removeFromSuperview()
+                }
             }
-        }
-        
-        let firestoreFetchMemory = FirestoreManagerFetchMemory()
-        firestoreFetchMemory.fetchAllMemories { (travelPlans, error) in
-            if let error = error {
-                print("Error fetching memories: \(error)")
-            } else {
-                print("Fetched memories: \(travelPlans ?? [])")
-                self.memories = travelPlans ?? []
-                self.tableView.reloadData()
+        } else if searchIndex == 0 {
+            let firestoreFetchMemory = FirestoreManagerFetchMemory()
+            firestoreFetchMemory.fetchAllMemories { (travelPlans, error) in
+                if let error = error {
+                    print("Error fetching memories: \(error)")
+                } else {
+                    print("Fetched memories: \(travelPlans ?? [])")
+                    self.memories = travelPlans ?? []
+                    self.tableView.reloadData()
+                    self.activityIndicatorView.stopAnimating()
+                    self.blurEffectView.removeFromSuperview()
+                }
             }
         }
     }
-    
 }
 
 extension SearchViewController: UITableViewDataSource {
