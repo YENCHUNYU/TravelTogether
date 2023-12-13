@@ -212,37 +212,49 @@ extension FavoriteViewController: UITableViewDataSource {
 }
 extension FavoriteViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if favoriteIndex == 0 || favoriteIndex == 1 {
-            return 330
-        } else {
-            return 280
-        }
+       330
     }
     
     func tableView(
         _ tableView: UITableView,
         commit editingStyle: UITableViewCell.EditingStyle,
         forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            if indexPath.row < plans.count {
-                
-                
-                
-                let firestoreManager = FirestoreManagerFavorite()
-                firestoreManager.deleteFavorite(dbcollection: dbCollection, withID: plans[indexPath.row].id) { error in
-                    if let error = error {
-                        print("Failed to delete favorite: \(error)")
+            if editingStyle == .delete {
+                if favoriteIndex == 1 {
+                    if indexPath.row < plans.count {
+                        
+                        let firestoreManager = FirestoreManagerFavorite()
+                        firestoreManager.deleteFavorite(dbcollection: dbCollection, withID: plans[indexPath.row].id) { error in
+                            if let error = error {
+                                print("Failed to delete favorite: \(error)")
+                            } else {
+                                print("favorite deleted successfully.")
+                                self.plans.remove(at: indexPath.row)
+                                tableView.deleteRows(at: [indexPath], with: .fade)
+                            }
+                        }
                     } else {
-                        print("favorite deleted successfully.")
-                        self.plans.remove(at: indexPath.row)
-                        tableView.deleteRows(at: [indexPath], with: .fade)
+                        print("Index out of range. indexPath.row: \(indexPath.row), plans count: \(plans.count)")
+                    }
+                } else {
+                    if indexPath.row < memories.count {
+                        
+                        let firestoreManager = FirestoreManagerFavorite()
+                        firestoreManager.deleteFavorite(dbcollection: dbCollection, withID: memories[indexPath.row].id) { error in
+                            if let error = error {
+                                print("Failed to delete favorite: \(error)")
+                            } else {
+                                print("favorite deleted successfully.")
+                                self.memories.remove(at: indexPath.row)
+                                tableView.deleteRows(at: [indexPath], with: .fade)
+                            }
+                        }
+                    } else {
+                        print("Index out of range. indexPath.row: \(indexPath.row), plans count: \(memories.count)")
                     }
                 }
-            } else {
-                       print("Index out of range. indexPath.row: \(indexPath.row), plans count: \(plans.count)")
-                   }
+            }
         }
-    }
 }
 
 extension FavoriteViewController: FavoriteHeaderViewDelegate {
