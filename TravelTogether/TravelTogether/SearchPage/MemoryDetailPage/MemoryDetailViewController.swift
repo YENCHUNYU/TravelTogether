@@ -9,6 +9,7 @@ import UIKit
 import FirebaseFirestore
 import FirebaseAuth
 import SwiftEntryKit
+import NVActivityIndicatorView
 
 class MemoryDetailViewController: UIViewController {
 
@@ -30,6 +31,12 @@ class MemoryDetailViewController: UIViewController {
 
     private var itemsPerRow: CGFloat = 2
     private var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+    
+    let activityIndicatorView = NVActivityIndicatorView(
+        frame: CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 50, height: 50),
+        type: .ballBeat, color: UIColor(named: "darkGreen") ?? .white, padding: 0
+          )
+    var blurEffectView: UIVisualEffectView!
     
     lazy var copyButton: UIButton = {
         let button = UIButton()
@@ -112,6 +119,10 @@ class MemoryDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
    
+        let blurEffect = UIBlurEffect(style: .light)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+        
         view.addSubview(copyButton)
         view.addSubview(likeButton)
         setUpButton()
@@ -126,19 +137,6 @@ class MemoryDetailViewController: UIViewController {
         tableView.separatorStyle = .none
         
         tableView.dragInteractionEnabled = true
-        
-//        let firestoreManagerForOne = FirestoreManagerFetchMemory()
-//        firestoreManagerForOne.fetchOneMemoryFromSearch(byId: memoryId, userId: userId) { (memory, error) in
-//                        if let error = error {
-//                            print("Error fetching one memory: \(error)")
-//                        } else if let memory = memory {
-//                            print("Fetched one memory: \(memory)")
-//                            self.onePlan = memory
-//                            self.tableView.reloadData()
-//                        } else {
-//                            print("One memory not found.")
-//                        }
-//                    }
         
         if isFromFavorite == false {
             let firestoreManagerForOne = FirestoreManagerFetchMemory()
@@ -221,6 +219,9 @@ class MemoryDetailViewController: UIViewController {
  
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        view.addSubview(blurEffectView)
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
         if isFromFavorite == false {
             let firestoreManagerForOne = FirestoreManagerFetchMemory()
             firestoreManagerForOne.fetchOneMemoryFromSearch(byId: memoryId, userId: userId) { (memory, error) in
@@ -317,11 +318,7 @@ currentIndexPath = indexPath
 }
 
 extension MemoryDetailViewController: UITableViewDelegate {
-//    func tableView(
-//        _ tableView: UITableView,
-//        heightForRowAt indexPath: IndexPath) -> CGFloat {
-//            330
-//    }
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
@@ -331,29 +328,6 @@ extension MemoryDetailViewController: UITableViewDelegate {
     }
 
 }
-
-//extension MemoryDetailViewController: EditMemoryHeaderViewDelegate {
-//    
-//    func passDays(daysData: [String]) {
-//        self.days = daysData
-//    }
-//    
-//    func reloadData() {
-//        let firestoreManagerForOne = FirestoreManagerForOne()
-////        firestoreManagerForOne.delegate = self
-//        firestoreManagerForOne.fetchOneTravelPlan(userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
-//            if let error = error {
-//                print("Error fetching one travel plan: \(error)")
-//            } else if let travelPlan = travelPlan {
-//                self.onePlan = travelPlan
-//                self.tableView.reloadData()
-//                self.headerView.collectionView.reloadData()
-//            } else {
-//                print("One travel plan not found.")
-//            }
-//        }
-//    }
-//}
 
 extension MemoryDetailViewController: UICollectionViewDataSource,
                                         UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -378,8 +352,6 @@ extension MemoryDetailViewController: UICollectionViewDataSource,
            }
            
            let firestorageDownload = FirebaseStorageManagerDownloadPhotos()
-//           firestorageDownload.delegate = self
-
            // cell 在image download前被reuse 而產生相同照片的cell
            guard let currentSection = currentIndexPath?.section,
              let currentRow = currentIndexPath?.row,
@@ -392,13 +364,14 @@ extension MemoryDetailViewController: UICollectionViewDataSource,
             let imageURLString = memoryPhotos[imageIndex]
 
                if let url = URL(string: imageURLString) {
-//           for image in memoryPhotos {
-//               if let url = URL(string: image) {
                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
                        DispatchQueue.main.async {
                            if let image = image {
                                cell.memoryImageView.image = image
+                               self.activityIndicatorView.stopAnimating()
+                               self.blurEffectView.removeFromSuperview()
+                               self.activityIndicatorView.removeFromSuperview()
                            } else {
                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                            }

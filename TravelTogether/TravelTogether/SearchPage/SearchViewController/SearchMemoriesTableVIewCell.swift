@@ -29,7 +29,7 @@ class SearchMemoriesCell: UITableViewCell {
     @IBOutlet weak var memoryNameLabel: UILabel!
     var isLiked = false
     var isFavorite = false
-    
+    var taskIdentifier = ""
     @IBAction func thumbUpButtonTapped(_ sender: Any) {
         
         isLiked = !isLiked

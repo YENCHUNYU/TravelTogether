@@ -16,5 +16,5 @@ class MemoryCell: UITableViewCell {
     }
     @IBOutlet weak var memoryNameLabel: UILabel!
     @IBOutlet weak var memoryDateLabel: UILabel!
-    
+    var taskIdentifier = ""
 }

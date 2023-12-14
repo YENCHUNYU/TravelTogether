@@ -24,5 +24,5 @@ class FavoriteMemoryCell: UITableViewCell {
   
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var memoryNameLabel: UILabel!
-    
+    var taskIdentifier = ""
 }

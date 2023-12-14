@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 class FavoriteViewController: UIViewController {
 
@@ -20,8 +21,19 @@ class FavoriteViewController: UIViewController {
     var planId = ""
     var dbCollection = "FavoriteMemory"
     
+    let activityIndicatorView = NVActivityIndicatorView(
+            frame: CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 50, height: 50),
+                  type: .ballBeat,
+                  color: UIColor(named: "darkGreen") ?? .white,
+                  padding: 0
+              )
+        var blurEffectView: UIVisualEffectView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let blurEffect = UIBlurEffect(style: .light)
+               blurEffectView = UIVisualEffectView(effect: blurEffect)
+               blurEffectView.frame = view.bounds
         tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.delegate = self
@@ -54,6 +66,9 @@ class FavoriteViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        view.addSubview(blurEffectView)
+         view.addSubview(activityIndicatorView)
+         activityIndicatorView.startAnimating()
         let firestoreFetch = FirestoreManagerFavorite()
         firestoreFetch.fetchAllMemories { (travelPlans, error) in
             if let error = error {
@@ -87,30 +102,18 @@ extension FavoriteViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "FavoriteMemoryCell",
+            for: indexPath) as? FavoriteMemoryCell
+        else { fatalError("Could not create SearchMemoriesCell") }
         if favoriteIndex == 0 {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "FavoriteMemoryCell",
-                for: indexPath) as? FavoriteMemoryCell
-            else { fatalError("Could not create SearchMemoriesCell") }
+           
             cell.userNameLabel.text = memories[indexPath.row].user
             cell.userImageView.kf.setImage(with: URL(string: memories[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
             if memories.isEmpty == false {
                 let urlString = memories[indexPath.row].coverPhoto ?? ""
                 if !urlString.isEmpty, let url = URL(string: urlString) {
-                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-                        DispatchQueue.main.async {
-                            if let image = image {
-                                cell.memoryImageView.image = image
-                                cell.memoryNameLabel.text = self.memories[indexPath.row].planName
-                                let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
-                                let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
-                                cell.dateLabel.text = "\(start)-\(end)"
-                            } else {
-                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                            }
-                        }
-                    }
+                    downloadImages(cell: cell, indexPath: indexPath, url: url )
                 } else {
                     // Handle the case where the URL is empty
                     cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
@@ -122,12 +125,8 @@ extension FavoriteViewController: UITableViewDataSource {
             }
             return cell
         } else {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "FavoriteMemoryCell",
-                for: indexPath) as? FavoriteMemoryCell
-            else { fatalError("Could not create FavoriteMemoryCell") }
             cell.userNameLabel.text = plans[indexPath.row].user
-            cell.memoryImageView.image = mockImage
+//            cell.memoryImageView.image = mockImage
             cell.memoryNameLabel.text = plans[indexPath.row].planName
             cell.userImageView.kf.setImage(with: URL(string: plans[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
             let start = self.changeDateFormat(date: "\(self.plans[indexPath.row].startDate)")
@@ -140,20 +139,36 @@ extension FavoriteViewController: UITableViewDataSource {
                 if theLocation.isEmpty == false {
                     let urlString = theLocation[0].photo
                     if let url = URL(string: urlString) {
-                        let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-                        firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-                            DispatchQueue.main.async {
-                                if let image = image {
-                                    cell.memoryImageView.image = image
-                                } else {
-                                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                                }
-                            }
-                        }
+                        downloadImages(cell: cell, indexPath: indexPath, url: url )
                     }}
             }
-            
             return cell}
+    }
+    
+    func downloadImages(cell: FavoriteMemoryCell, indexPath: IndexPath, url: URL ) {
+        cell.memoryImageView.image = nil
+        let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
+        let taskIdentifier = UUID().uuidString
+        cell.taskIdentifier = taskIdentifier
+        firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
+            DispatchQueue.main.async {
+                guard cell.taskIdentifier == taskIdentifier else {
+                               return
+                           }
+                if let image = image {
+                    cell.memoryImageView.image = image
+                    cell.memoryNameLabel.text = self.memories[indexPath.row].planName
+                    let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
+                    let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
+                    cell.dateLabel.text = "\(start)-\(end)"
+                    self.activityIndicatorView.stopAnimating()
+                    self.blurEffectView.removeFromSuperview()
+                    self.activityIndicatorView.removeFromSuperview()
+                } else {
+                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                }
+            }
+        }
     }
     
     func changeDateFormat(date: String) -> String {
@@ -259,6 +274,9 @@ extension FavoriteViewController: UITableViewDelegate {
 
 extension FavoriteViewController: FavoriteHeaderViewDelegate {
     func change(to index: Int) {
+        view.addSubview(blurEffectView)
+       view.addSubview(activityIndicatorView)
+       activityIndicatorView.startAnimating()
         favoriteIndex = index
         if favoriteIndex == 0 {
             dbCollection = "FavoriteMemory"

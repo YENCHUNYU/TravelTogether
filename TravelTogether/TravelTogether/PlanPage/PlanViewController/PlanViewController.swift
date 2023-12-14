@@ -9,6 +9,7 @@ import UIKit
 import FirebaseFirestore
 import FirebaseStorage
 import FirebaseAuth
+import NVActivityIndicatorView
 
 class PlanViewController: UIViewController {
     
@@ -17,7 +18,13 @@ class PlanViewController: UIViewController {
     var planIndex = 0
     var plans: [TravelPlan] = []
     var spotsData: [[String: Any]] = []
-    
+    let activityIndicatorView = NVActivityIndicatorView(
+            frame: CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 50, height: 50),
+                  type: .ballBeat,
+                  color: UIColor(named: "darkGreen") ?? .white,
+                  padding: 0
+              )
+    var blurEffectView: UIVisualEffectView!
     lazy var addButton: UIButton = {
         let add = UIButton()
         add.translatesAutoresizingMaskIntoConstraints = false
@@ -38,6 +45,9 @@ class PlanViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let blurEffect = UIBlurEffect(style: .light)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
         tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.delegate = self
@@ -68,6 +78,9 @@ class PlanViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        view.addSubview(blurEffectView)
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
         firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
@@ -90,8 +103,10 @@ extension PlanViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if planIndex == 0 {
+            
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlanCell", for: indexPath) as? MyPlanCell
             else { fatalError("Could not create PlanCell") }
+            cell.planImageView.image = nil
             cell.planNameLabel.text = plans[indexPath.row].planName
             let start = changeDateFormat(date: "\(plans[indexPath.row].startDate)")
             let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
@@ -104,12 +119,16 @@ extension PlanViewController: UITableViewDataSource {
                 if theLocation.isEmpty == false {
                     let urlString = theLocation[0].photo
                     if let url = URL(string: urlString) {
+                        
                         let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
                         firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
                             DispatchQueue.main.async {
                                 if let image = image {
                                     cell.planImageView.image = image
                                     cell.planNameLabel.text = self.plans[indexPath.row].planName
+                                    self.activityIndicatorView.stopAnimating()
+                                    self.blurEffectView.removeFromSuperview()
+                                    self.activityIndicatorView.removeFromSuperview()
                                 } else {
                                     cell.planImageView.image = UIImage(named: "Image_Placeholder")
                                 }
@@ -210,6 +229,9 @@ extension PlanViewController: UITableViewDelegate {
 extension PlanViewController: PlanHeaderViewDelegate {
     func change(to index: Int) {
         planIndex = index
+        view.addSubview(blurEffectView)
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
         tableView.reloadData()
     }
 }

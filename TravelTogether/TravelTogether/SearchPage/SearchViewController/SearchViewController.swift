@@ -60,6 +60,7 @@ class SearchViewController: UIViewController {
         blurEffectView.frame = view.bounds
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
         tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.delegate = self
@@ -130,6 +131,9 @@ class SearchViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        view.addSubview(blurEffectView)
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
         if searchIndex == 1 {
             let firestoreManager = FirestoreManager()
             firestoreManager.delegate = self
@@ -169,83 +173,24 @@ extension SearchViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "SearchMemoriesCell",
+            for: indexPath) as? SearchMemoriesCell
+        else { fatalError("Could not create SearchMemoriesCell") }
+//        let currentIndexPath = indexPath
         if searchIndex == 0 {
-            view.addSubview(blurEffectView)
-            view.addSubview(activityIndicatorView)
-            activityIndicatorView.startAnimating()
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "SearchMemoriesCell",
-                for: indexPath) as? SearchMemoriesCell
-            else { fatalError("Could not create SearchMemoriesCell") }
 // userinfo
-            cell.userImageView.image = UIImage(systemName: "person.circle")
             cell.userNameLabel.text = memories[indexPath.row].user
-            if let userPhotoURL = URL(string: memories[indexPath.row].userPhoto ?? "") {
-                cell.userImageView.kf.setImage(
-                    with: userPhotoURL,
-                    placeholder: UIImage(systemName: "person.circle.fill"),
-                    completionHandler: { result in
-                        switch result {
-                        case .success(_):
-                            print("user photo was set up by kingfisher")
-                            break
-                        case .failure(_):
-                            // Image failed to load, fetch from Firestore
-                            let firestorageManager = FirebaseStorageManagerDownloadPhotos()
-                            firestorageManager.downloadPhotoFromFirebaseStorage(url: userPhotoURL) { image in
-                                DispatchQueue.main.async {
-                                    if let image = image {
-                                        cell.userImageView.image = image
-                                        cell.userImageView.contentMode = .scaleAspectFill
-                                    } else {
-                                        cell.userImageView.image = UIImage(systemName: "person.circle.fill")}}}}})}
+            cell.userImageView.kf.setImage(with: URL(string: memories[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
+
             if memories.isEmpty == false {
-                loadingCounter += 1
                 let urlString = memories[indexPath.row].coverPhoto ?? ""
                 if !urlString.isEmpty, let url = URL(string: urlString) {
-                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-                        DispatchQueue.main.async {
-                            
-                            self.loadingCounter -= 1
-                            
-                            if let image = image {
-                                cell.memoryImageView.image = image
-                                cell.memoryNameLabel.text = self.memories[indexPath.row].planName
-                                let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
-                                let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
-                                cell.dateLabel.text = "\(start)-\(end)"
-                                
-                                if self.loadingCounter == 0 {
-                                   // Remove the loading indicator when all tasks are finished
-                                   self.activityIndicatorView.stopAnimating()
-                                   self.blurEffectView.removeFromSuperview()
-                                    self.activityIndicatorView.removeFromSuperview()
-                                               }
-                            } else {
-                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                            }
-                        }
-                    }
-                } else {
-                    // Handle the case where the URL is empty
-                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                    cell.memoryNameLabel.text = self.memories[indexPath.row].planName
-                    let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
-                    let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
-                    cell.dateLabel.text = "\(start)-\(end)"
+                    downloadImageFromFirestorage(url: url, cell: cell, indexPath: indexPath)
                 }
             }
             return cell
         } else {
-// searchindex == 1 userinfo照片
-            view.addSubview(blurEffectView)
-            view.addSubview(activityIndicatorView)
-            activityIndicatorView.startAnimating()
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "SearchMemoriesCell",
-                for: indexPath) as? SearchMemoriesCell
-            else { fatalError("Could not create SearchMemoriesCell") }
             cell.userNameLabel.text = plans[indexPath.row].user
             cell.memoryImageView.image = mockImage
             cell.memoryNameLabel.text = plans[indexPath.row].planName
@@ -258,26 +203,37 @@ extension SearchViewController: UITableViewDataSource {
                 let locationData = daysData[0]
                 let theLocation = locationData.locations
                 if theLocation.isEmpty == false {
-                    self.loadingCounter += 1
                     let urlString = theLocation[0].photo
                     if let url = URL(string: urlString) {
-                        let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-                        firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-                            DispatchQueue.main.async {
-                                
-                                self.loadingCounter -= 1
-                                
-                                if let image = image {
-                                    cell.memoryImageView.image = image
-                                    if self.loadingCounter == 0 {
-                                       self.activityIndicatorView.stopAnimating()
-                                       self.blurEffectView.removeFromSuperview()
-                                    self.activityIndicatorView.removeFromSuperview()}
-                                } else {
-                                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")}}}}} }
+                        downloadImageFromFirestorage(url: url, cell: cell, indexPath: indexPath)
+                    }} }
             
             return cell} 
     }
+    
+    func downloadImageFromFirestorage(url: URL, cell: SearchMemoriesCell, indexPath: IndexPath) {
+        cell.memoryImageView.image = nil
+        let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
+        let taskIdentifier = UUID().uuidString
+        cell.taskIdentifier = taskIdentifier
+        firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
+            DispatchQueue.main.async {
+                guard cell.taskIdentifier == taskIdentifier else {
+                               return
+                           }
+                if let image = image {
+                    cell.memoryImageView.image = image
+                    cell.memoryNameLabel.text = self.memories[indexPath.row].planName
+                    let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
+                    let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
+                    cell.dateLabel.text = "\(start)-\(end)"
+                        self.activityIndicatorView.stopAnimating()
+                        self.blurEffectView.removeFromSuperview()
+                        self.activityIndicatorView.removeFromSuperview()
+                } else {
+                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                }
+            }}}
     
     func changeDateFormat(date: String) -> String {
         let dateFormatter = DateFormatter()
@@ -320,6 +276,9 @@ extension SearchViewController: UITableViewDelegate {
 extension SearchViewController: SearchHeaderViewDelegate {
     func change(to index: Int) {
         searchIndex = index
+        view.addSubview(blurEffectView)
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
         tableView.reloadData()
     }
 }

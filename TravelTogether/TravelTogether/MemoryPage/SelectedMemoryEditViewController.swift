@@ -9,6 +9,7 @@ import UIKit
 import FirebaseFirestore
 import Photos
 import FirebaseAuth
+import NVActivityIndicatorView
 
 class SelectedMemoryEditViewController: UIViewController {
 
@@ -29,9 +30,19 @@ class SelectedMemoryEditViewController: UIViewController {
 
     private var itemsPerRow: CGFloat = 2
     private var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+    let activityIndicatorView = NVActivityIndicatorView(
+            frame: CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 50, height: 50),
+                  type: .ballBeat,
+                  color: UIColor(named: "darkGreen") ?? .white,
+                  padding: 0
+              )
+    var blurEffectView: UIVisualEffectView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let blurEffect = UIBlurEffect(style: .light)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
         tableView.dataSource = self
         tableView.delegate = self
 
@@ -98,8 +109,6 @@ class SelectedMemoryEditViewController: UIViewController {
                 destinationVC.isFromDraft = true
             }
         }
-        
-        
     }
    
     @objc func rightButtonTapped() {
@@ -144,6 +153,9 @@ class SelectedMemoryEditViewController: UIViewController {
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        view.addSubview(blurEffectView)
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
         let firestoreManagerForOne = FirestoreManagerFetchMemory()
         firestoreManagerForOne.fetchOneMemory(dbcollection: dbCollection, byId: memoryId) { (memory, error) in
                         if let error = error {
@@ -290,10 +302,9 @@ extension SelectedMemoryEditViewController: UICollectionViewDataSource,
             let memoryPhotos = onePlan.days[section].locations[row].memoryPhotos else {
                return cell
            }
-//           for image in memoryPhotos {
            let imageIndex = indexPath.item - 1 // Subtract 1 because the first item is the "AddPhotoCell"
             let imageURLString = memoryPhotos[imageIndex]
-
+           cell.memoryImageView.image = nil
                if let url = URL(string: imageURLString) {
                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
@@ -303,8 +314,10 @@ extension SelectedMemoryEditViewController: UICollectionViewDataSource,
                            } else {
                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                            }
+                           self.activityIndicatorView.stopAnimating()
+                           self.blurEffectView.removeFromSuperview()
+                           self.activityIndicatorView.removeFromSuperview()
                        }
-//                   }
            }}
            return cell
        }

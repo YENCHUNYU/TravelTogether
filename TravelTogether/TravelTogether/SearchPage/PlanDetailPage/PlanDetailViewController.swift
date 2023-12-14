@@ -10,6 +10,7 @@ import FirebaseFirestore
 import FirebaseStorage
 import FirebaseAuth
 import SwiftEntryKit
+import NVActivityIndicatorView
 
 class PlanDetailViewController: UIViewController {
 
@@ -26,6 +27,13 @@ class PlanDetailViewController: UIViewController {
     let headerView = EditPlanHeaderView(reuseIdentifier: "EditPlanHeaderView")
     var userId = ""
     var isFromFavorite = false
+    let activityIndicatorView = NVActivityIndicatorView(
+        frame: CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 50, height: 50),
+              type: .ballBeat,
+              color: UIColor(named: "darkGreen") ?? .white,
+              padding: 0
+          )
+    var blurEffectView: UIVisualEffectView!
     
     lazy var copyButton: UIButton = {
         let button = UIButton()
@@ -89,9 +97,6 @@ class PlanDetailViewController: UIViewController {
     @objc func likeMemory() {
 
         let firestorePost = FirestoreManagerFavorite()
-//        self.onePlan.user = Auth.auth().currentUser?.displayName
-//        self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-//        self.onePlan.userId = Auth.auth().currentUser?.uid
         firestorePost.postPlanToFavorite(memory: self.onePlan) { error in
             if let error = error {
                 print("Error fetching one favorite: \(error)")
@@ -107,6 +112,10 @@ class PlanDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let blurEffect = UIBlurEffect(style: .light)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+        
         view.addSubview(copyButton)
         view.addSubview(likeButton)
         setUpButton()
@@ -205,7 +214,9 @@ class PlanDetailViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-       
+        view.addSubview(blurEffectView)
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
         if isFromFavorite == false {
             let firestoreManagerForOne = FirestoreManagerForOne()
             //        firestoreManagerForOne.delegate = self
@@ -298,6 +309,9 @@ extension PlanDetailViewController: UITableViewDataSource {
                     if cell.currentImageUrl == urlString {
                         if let image = image {
                             cell.locationImageView.image = image
+                            self.activityIndicatorView.stopAnimating()
+                            self.blurEffectView.removeFromSuperview()
+                            self.activityIndicatorView.removeFromSuperview()
                         } else {
                             cell.locationImageView.image = UIImage(named: "Image_Placeholder")
                         }

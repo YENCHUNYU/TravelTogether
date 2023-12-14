@@ -10,6 +10,7 @@ import FirebaseFirestore
 import MobileCoreServices
 import UniformTypeIdentifiers
 import FirebaseAuth
+import NVActivityIndicatorView
 
 class EditPlanViewController: UIViewController {
 
@@ -24,9 +25,19 @@ class EditPlanViewController: UIViewController {
     var selectedSectionForAddLocation = 0 // 新增景點
     var days: [String] = ["第1天", "＋"]
     let headerView = EditPlanHeaderView(reuseIdentifier: "EditPlanHeaderView")
+    let activityIndicatorView = NVActivityIndicatorView(
+            frame: CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 50, height: 50),
+                  type: .ballBeat,
+                  color: UIColor(named: "darkGreen") ?? .white,
+                  padding: 0
+              )
+    var blurEffectView: UIVisualEffectView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let blurEffect = UIBlurEffect(style: .light)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(EditPlanFooterView.self, forHeaderFooterViewReuseIdentifier: "EditPlanFooterView")
@@ -74,6 +85,10 @@ class EditPlanViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        view.addSubview(blurEffectView)
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
+
         let firestoreClearUser = FirestoreManagerForPostLocation()
         firestoreClearUser.delegate = self
         firestoreClearUser.clearLocationsUser(travelPlanId: travelPlanId) { error in
@@ -119,7 +134,7 @@ extension EditPlanViewController: UITableViewDataSource {
             withIdentifier: "EditPlanCell",
             for: indexPath) as? EditPlanCell
         else { fatalError("Could not create EditPlanCell") }
-
+        cell.locationImageView.image = nil
         let location = onePlan.days[indexPath.section].locations[indexPath.row]
 
         cell.placeNameLabel.text = location.name
@@ -137,6 +152,9 @@ extension EditPlanViewController: UITableViewDataSource {
                     if cell.currentImageURL == urlString {
                         if let image = image {
                             cell.locationImageView.image = image
+                            self.activityIndicatorView.stopAnimating()
+                            self.blurEffectView.removeFromSuperview()
+                            self.activityIndicatorView.removeFromSuperview()
                         } else {
                             cell.locationImageView.image = UIImage(named: "Image_Placeholder")
                         }
@@ -147,7 +165,6 @@ extension EditPlanViewController: UITableViewDataSource {
         
         return cell
     }
-
 
 // FOOTER
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -207,6 +224,10 @@ extension EditPlanViewController: UITableViewDataSource {
        }
 
        func deleteSection(at index: Int) {
+           view.addSubview(blurEffectView)
+           view.addSubview(activityIndicatorView)
+           activityIndicatorView.startAnimating()
+           
            onePlan.days.remove(at: index)
            days.remove(at: days.count - 2)
 
@@ -238,7 +259,9 @@ extension EditPlanViewController: UITableViewDelegate {
                    commit editingStyle: UITableViewCell.EditingStyle,
                    forRowAt indexPath: IndexPath) {
             if editingStyle == .delete {
-               
+                view.addSubview(blurEffectView)
+                view.addSubview(activityIndicatorView)
+                activityIndicatorView.startAnimating()
                 let deletedLocation = onePlan.days[indexPath.section].locations.remove(at: indexPath.row)
                
                 let firestoreManagerForOne = FirestoreManagerForOne()
@@ -279,9 +302,6 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
                     self.days.insert("第\(count)天", at: count - 1)
                 }
                 self.headerView.days = self.days
-//                self.headerView.onePlan = self.onePlan
-//                self.headerView.collectionView.reloadData()
-               
                 self.tableView.reloadData()
             } else {
                 print("One travel plan not found.")
@@ -294,6 +314,9 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
     }
     
     func reloadData() {
+        view.addSubview(blurEffectView)
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
         firestoreManagerForOne.fetchOneTravelPlan(userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
@@ -329,6 +352,9 @@ extension EditPlanViewController: UITableViewDropDelegate {
     func tableView(
         _ tableView: UITableView,
         performDropWith coordinator: UITableViewDropCoordinator) {
+            view.addSubview(blurEffectView)
+            view.addSubview(activityIndicatorView)
+            activityIndicatorView.startAnimating()
         coordinator.session.loadObjects(ofClass: NSString.self) { _ in
             var updatedIndexPaths = [IndexPath]()
             
