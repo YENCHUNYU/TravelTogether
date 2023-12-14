@@ -53,36 +53,41 @@ class MemoryDetailViewController: UIViewController {
     }()
     
     @objc func copyPlan() {
-        
-        let firestoreFetch = FirestoreManagerForOne()
-        firestoreFetch.fetchOneTravelPlan(userId: userId, byId: memoryId) { (memory, error) in
-            if let error = error {
-                print("Error fetching one memory: \(error)")
-            } else if let memory = memory {
-                print("Fetched one memory: \(memory)")
-                self.onePlan = memory
-                self.tableView.reloadData()
-            } else {
-                print("One memory not found.")
+        if !LoginViewController.loginStatus {
+            if let loginVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController {
+                let loginNavController = UINavigationController(rootViewController: loginVC)
+                present(loginNavController, animated: true, completion: nil)
             }
-        }
-        let firestorePost = FirestoreManagerForPost()
-        self.onePlan.user = Auth.auth().currentUser?.displayName
-        self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-        self.onePlan.userId = Auth.auth().currentUser?.uid
-        firestorePost.postFullPlan(plan: self.onePlan) { error in
-            if let error = error {
-                print("Error fetching one plan: \(error)")
-            } else {
-                let copyTitle = "已成功複製到我的行程！"
-                let copyDescript = "請前往「我的行程」查看。"
-                let copyImage = "doc.on.doc.fill"
-                self.swiftEntryKit(titleText: copyTitle, descriptText: copyDescript, imageString: copyImage)
-                print("One plan was added.")
+        } else {
+            let firestoreFetch = FirestoreManagerForOne()
+            firestoreFetch.fetchOneTravelPlan(userId: userId, byId: memoryId) { (memory, error) in
+                if let error = error {
+                    print("Error fetching one memory: \(error)")
+                } else if let memory = memory {
+                    print("Fetched one memory: \(memory)")
+                    self.onePlan = memory
+                    self.tableView.reloadData()
+                } else {
+                    print("One memory not found.")
+                }
+            }
+            let firestorePost = FirestoreManagerForPost()
+            self.onePlan.user = Auth.auth().currentUser?.displayName
+            self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
+            self.onePlan.userId = Auth.auth().currentUser?.uid
+            firestorePost.postFullPlan(plan: self.onePlan) { error in
+                if let error = error {
+                    print("Error fetching one plan: \(error)")
+                } else {
+                    let copyTitle = "已成功複製到我的行程！"
+                    let copyDescript = "請前往「我的行程」查看。"
+                    let copyImage = "doc.on.doc.fill"
+                    self.swiftEntryKit(titleText: copyTitle, descriptText: copyDescript, imageString: copyImage)
+                    print("One plan was added.")
+                }
             }
         }
     }
-    
     lazy var likeButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -98,24 +103,28 @@ class MemoryDetailViewController: UIViewController {
     }()
     
     @objc func likeMemory() {
-
-        let firestorePost = FirestoreManagerFavorite()
-//        self.onePlan.user = Auth.auth().currentUser?.displayName
-//        self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-//        self.onePlan.userId = Auth.auth().currentUser?.uid
-        firestorePost.postMemoryToFavorite(memory: self.onePlan) { error in
-            if let error = error {
-                print("Error fetching one favorite: \(error)")
-            } else {
-                let likeTitle = "收藏成功！"
-                let likeDescript = "請前往「收藏」查看。"
-                let likeImage = "heart.fill"
-        self.swiftEntryKit(titleText: likeTitle, descriptText: likeDescript, imageString: likeImage)
-                print("One favorite was added.")
+        
+        if !LoginViewController.loginStatus {
+            if let loginVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController {
+                let loginNavController = UINavigationController(rootViewController: loginVC)
+                present(loginNavController, animated: true, completion: nil)
+            }
+        } else {
+            
+            let firestorePost = FirestoreManagerFavorite()
+            firestorePost.postMemoryToFavorite(memory: self.onePlan) { error in
+                if let error = error {
+                    print("Error fetching one favorite: \(error)")
+                } else {
+                    let likeTitle = "收藏成功！"
+                    let likeDescript = "請前往「收藏」查看。"
+                    let likeImage = "heart.fill"
+                    self.swiftEntryKit(titleText: likeTitle, descriptText: likeDescript, imageString: likeImage)
+                    print("One favorite was added.")
+                }
             }
         }
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
    
