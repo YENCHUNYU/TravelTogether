@@ -26,7 +26,7 @@ class EditPlanViewController: UIViewController {
     var days: [String] = ["第1天", "＋"]
     let headerView = EditPlanHeaderView(reuseIdentifier: "EditPlanHeaderView")
     let activityIndicatorView = NVActivityIndicatorView(
-            frame: CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 50, height: 50),
+            frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
                   type: .ballBeat,
                   color: UIColor(named: "darkGreen") ?? .white,
                   padding: 0
@@ -85,10 +85,19 @@ class EditPlanViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
 
+        let allDaysHaveNoLocations = onePlan.days.allSatisfy { $0.locations.isEmpty }
+
+            if allDaysHaveNoLocations {
+                self.activityIndicatorView.stopAnimating()
+                self.blurEffectView.removeFromSuperview()
+                self.activityIndicatorView.removeFromSuperview()
+            }
+        
         let firestoreClearUser = FirestoreManagerForPostLocation()
         firestoreClearUser.delegate = self
         firestoreClearUser.clearLocationsUser(travelPlanId: travelPlanId) { error in
@@ -135,8 +144,9 @@ extension EditPlanViewController: UITableViewDataSource {
             for: indexPath) as? EditPlanCell
         else { fatalError("Could not create EditPlanCell") }
         cell.locationImageView.image = nil
+        
         let location = onePlan.days[indexPath.section].locations[indexPath.row]
-
+        
         cell.placeNameLabel.text = location.name
         cell.placeAddressLabel.text = location.address
         let firestorage = FirebaseStorageManagerDownloadPhotos()

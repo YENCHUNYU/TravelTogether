@@ -31,7 +31,7 @@ class SelectedMemoryEditViewController: UIViewController {
     private var itemsPerRow: CGFloat = 2
     private var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     let activityIndicatorView = NVActivityIndicatorView(
-            frame: CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 50, height: 50),
+            frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
                   type: .ballBeat,
                   color: UIColor(named: "darkGreen") ?? .white,
                   padding: 0
@@ -156,6 +156,15 @@ class SelectedMemoryEditViewController: UIViewController {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
+        
+        let allLocationsHaveNoMemeoryPhotos = onePlan.days.allSatisfy { $0.locations.allSatisfy { $0.memoryPhotos?.isEmpty == true } }
+
+            if allLocationsHaveNoMemeoryPhotos {
+                self.activityIndicatorView.stopAnimating()
+                self.blurEffectView.removeFromSuperview()
+                self.activityIndicatorView.removeFromSuperview()
+            }
+        
         let firestoreManagerForOne = FirestoreManagerFetchMemory()
         firestoreManagerForOne.fetchOneMemory(dbcollection: dbCollection, byId: memoryId) { (memory, error) in
                         if let error = error {

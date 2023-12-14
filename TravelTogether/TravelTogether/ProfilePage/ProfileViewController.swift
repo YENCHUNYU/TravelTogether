@@ -10,6 +10,7 @@ import FirebaseFirestore
 import FirebaseStorage
 import FirebaseAuth
 import Kingfisher
+import NVActivityIndicatorView
 
 class ProfileViewController: UIViewController {
     
@@ -38,8 +39,19 @@ class ProfileViewController: UIViewController {
     var spotsData: [[String: Any]] = []
     var memories: [TravelPlan] = []
     var userInfo = UserInfo(email: "", name: "", id: "")
+    let activityIndicatorView = NVActivityIndicatorView(
+            frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: (UIScreen.main.bounds.height - 173) / 2 - 50, width: 50, height: 50),
+                  type: .ballBeat,
+                  color: UIColor(named: "darkGreen") ?? .white,
+                  padding: 0
+              )
+    var blurEffectView: UIVisualEffectView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let blurEffect = UIBlurEffect(style: .light)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
         tableView.dataSource = self
         tableView.delegate = self
         let headerView = ProfileHeaderView(reuseIdentifier: "ProfileHeaderView")
@@ -102,14 +114,6 @@ class ProfileViewController: UIViewController {
             present(settingNavController, animated: true, completion: nil)
         }
 
-//        let firebaseAuth = Auth.auth()
-//        do {
-//          try firebaseAuth.signOut()
-//            LoginViewController.loginStatus = false
-//            self.showAlert(title: "Success", message: "已登出帳戶")
-//        } catch let signOutError as NSError {
-//          print("Error signing out", signOutError)
-//        }
        }
     
     func showAlert(title: String, message: String) {
@@ -123,6 +127,9 @@ class ProfileViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        tableView.addSubview(blurEffectView)
+        tableView.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
         firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
@@ -180,6 +187,8 @@ extension ProfileViewController: UITableViewDataSource {
                 withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell
             else { fatalError("Could not create ProfileCell") }
             if memories.isEmpty == false {
+                cell.memoryImageView.image = nil
+                cell.memoryNameLabel.text = nil
                 let urlString = memories[indexPath.row].coverPhoto ?? ""
                 if !urlString.isEmpty, let url = URL(string: urlString) {
                     let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
@@ -188,6 +197,9 @@ extension ProfileViewController: UITableViewDataSource {
                             if let image = image {
                                 cell.memoryImageView.image = image
                                 cell.memoryNameLabel.text = self.memories[indexPath.row].planName
+                                self.activityIndicatorView.stopAnimating()
+                                self.blurEffectView.removeFromSuperview()
+                                self.activityIndicatorView.removeFromSuperview()
                             } else {
                                 cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                             }
@@ -204,7 +216,8 @@ extension ProfileViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell
             else { fatalError("Could not create ProfileCell") }
-            cell.memoryNameLabel.text = plans[indexPath.row].planName
+            cell.memoryImageView.image = nil
+            cell.memoryNameLabel.text = nil
             let daysData = plans[indexPath.row].days
             if daysData.isEmpty == false {
                 let locationData = daysData[0]
@@ -218,6 +231,9 @@ extension ProfileViewController: UITableViewDataSource {
                                 if let image = image {
                                     cell.memoryImageView.image = image
                                     cell.memoryNameLabel.text = self.plans[indexPath.row].planName
+                                    self.activityIndicatorView.stopAnimating()
+                                    self.blurEffectView.removeFromSuperview()
+                                    self.activityIndicatorView.removeFromSuperview()
                                 } else {
                                     cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                                 }
@@ -248,6 +264,9 @@ extension ProfileViewController: UITableViewDelegate {
 
 extension ProfileViewController: ProfileHeaderViewDelegate {
     func change(to index: Int) {
+        tableView.addSubview(blurEffectView)
+        tableView.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
         profileIndex = index
         tableView.reloadData()
     }

@@ -60,7 +60,7 @@ struct Location {
             "photo": photo,
             "address": address,
             "user": user ?? "",
-            "memoryPhotos": memoryPhotos ?? "",
+            "memoryPhotos": memoryPhotos ?? [],
             "article": article ?? ""
         ]
     }

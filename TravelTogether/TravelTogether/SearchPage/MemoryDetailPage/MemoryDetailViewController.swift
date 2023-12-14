@@ -33,7 +33,7 @@ class MemoryDetailViewController: UIViewController {
     private var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     
     let activityIndicatorView = NVActivityIndicatorView(
-        frame: CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 50, height: 50),
+        frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
         type: .ballBeat, color: UIColor(named: "darkGreen") ?? .white, padding: 0
           )
     var blurEffectView: UIVisualEffectView!

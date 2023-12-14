@@ -12,7 +12,7 @@ class MemoryViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     let activityIndicatorView = NVActivityIndicatorView(
-            frame: CGRect(x: UIScreen.main.bounds.width / 2, y: UIScreen.main.bounds.height / 2, width: 50, height: 50),
+            frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
                   type: .ballBeat,
                   color: UIColor(named: "darkGreen") ?? .white,
                   padding: 0
