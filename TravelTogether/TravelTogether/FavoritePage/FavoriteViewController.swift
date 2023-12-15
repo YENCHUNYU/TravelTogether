@@ -69,6 +69,16 @@ class FavoriteViewController: UIViewController {
         view.addSubview(blurEffectView)
          view.addSubview(activityIndicatorView)
          activityIndicatorView.startAnimating()
+        if plans.isEmpty && favoriteIndex == 1 {
+            self.activityIndicatorView.stopAnimating()
+            self.blurEffectView.removeFromSuperview()
+            self.activityIndicatorView.removeFromSuperview()
+        }
+        if memories.isEmpty && favoriteIndex == 0 {
+            self.activityIndicatorView.stopAnimating()
+            self.blurEffectView.removeFromSuperview()
+            self.activityIndicatorView.removeFromSuperview()
+        }
         let firestoreFetch = FirestoreManagerFavorite()
         firestoreFetch.fetchAllMemories { (travelPlans, error) in
             if let error = error {
@@ -110,6 +120,10 @@ extension FavoriteViewController: UITableViewDataSource {
            
             cell.userNameLabel.text = memories[indexPath.row].user
             cell.userImageView.kf.setImage(with: URL(string: memories[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
+            cell.memoryNameLabel.text = self.memories[indexPath.row].planName
+            let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
+            let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
+            cell.dateLabel.text = "\(start)-\(end)"
             if memories.isEmpty == false {
                 let urlString = memories[indexPath.row].coverPhoto ?? ""
                 if !urlString.isEmpty, let url = URL(string: urlString) {
@@ -157,16 +171,12 @@ extension FavoriteViewController: UITableViewDataSource {
                            }
                 if let image = image {
                     cell.memoryImageView.image = image
-                    cell.memoryNameLabel.text = self.memories[indexPath.row].planName
-                    let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
-                    let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
-                    cell.dateLabel.text = "\(start)-\(end)"
-                    self.activityIndicatorView.stopAnimating()
-                    self.blurEffectView.removeFromSuperview()
-                    self.activityIndicatorView.removeFromSuperview()
                 } else {
                     cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                 }
+                self.activityIndicatorView.stopAnimating()
+                self.blurEffectView.removeFromSuperview()
+                self.activityIndicatorView.removeFromSuperview()
             }
         }
     }
@@ -191,11 +201,9 @@ extension FavoriteViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if favoriteIndex == 0 {
             memoryId = memories[indexPath.row].id
-//            userId = memories[indexPath.row].userId ?? ""
             performSegue(withIdentifier: "FavoriteMemory", sender: self)
         } else {
             planId = plans[indexPath.row].id
-//            userId = plans[indexPath.row].userId ?? ""
             performSegue(withIdentifier: "FavoritePlan", sender: self)
         }
         
@@ -206,14 +214,12 @@ extension FavoriteViewController: UITableViewDataSource {
         if segue.identifier == "FavoriteMemory" {
             if let destinationVC = segue.destination as? MemoryDetailViewController {
                 destinationVC.memoryId = self.memoryId
-//                destinationVC.userId = self.userId
                 destinationVC.isFromFavorite = true
             }
         }
         if segue.identifier == "FavoritePlan" {
             if let destinationVC = segue.destination as? PlanDetailViewController {
                 destinationVC.travelPlanId = self.planId
-//                destinationVC.userId = self.userId
                 destinationVC.isFromFavorite = true
             }
         }
@@ -277,6 +283,7 @@ extension FavoriteViewController: FavoriteHeaderViewDelegate {
         view.addSubview(blurEffectView)
        view.addSubview(activityIndicatorView)
        activityIndicatorView.startAnimating()
+       
         favoriteIndex = index
         if favoriteIndex == 0 {
             dbCollection = "FavoriteMemory"
@@ -284,5 +291,15 @@ extension FavoriteViewController: FavoriteHeaderViewDelegate {
             dbCollection = "FavoritePlan"
         }
         tableView.reloadData()
+        if plans.isEmpty && favoriteIndex == 1 {
+            self.activityIndicatorView.stopAnimating()
+            self.blurEffectView.removeFromSuperview()
+            self.activityIndicatorView.removeFromSuperview()
+        }
+        if memories.isEmpty && favoriteIndex == 0 {
+            self.activityIndicatorView.stopAnimating()
+            self.blurEffectView.removeFromSuperview()
+            self.activityIndicatorView.removeFromSuperview()
+        }
     }
 }

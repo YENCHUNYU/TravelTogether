@@ -17,6 +17,7 @@ class PlanViewController: UIViewController {
     
     var planIndex = 0
     var plans: [TravelPlan] = []
+    var togetherPlans: [TravelPlan] = []
     var spotsData: [[String: Any]] = []
     let activityIndicatorView = NVActivityIndicatorView(
             frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
@@ -58,7 +59,7 @@ class PlanViewController: UIViewController {
         tableView.tableHeaderView = headerView
         view.addSubview(addButton)
         setUpButton()
-        
+
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
         firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
@@ -81,6 +82,7 @@ class PlanViewController: UIViewController {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
+        
         let firestoreManager = FirestoreManager()
         firestoreManager.delegate = self
         firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
@@ -91,7 +93,18 @@ class PlanViewController: UIViewController {
                 print("Fetched travel plans: \(travelPlans ?? [])")
                 self.plans = travelPlans ?? []
                 self.tableView.reloadData()
+                if self.plans.isEmpty && self.planIndex == 0 {
+                    self.activityIndicatorView.stopAnimating()
+                    self.blurEffectView.removeFromSuperview()
+                    self.activityIndicatorView.removeFromSuperview()
+                }
+                
             }
+        }
+        if togetherPlans.isEmpty && planIndex == 1 {
+            self.activityIndicatorView.stopAnimating()
+            self.blurEffectView.removeFromSuperview()
+            self.activityIndicatorView.removeFromSuperview()
         }
     }
 }
@@ -233,6 +246,16 @@ extension PlanViewController: PlanHeaderViewDelegate {
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
         tableView.reloadData()
+        if plans.isEmpty && planIndex == 0 {
+            self.activityIndicatorView.stopAnimating()
+            self.blurEffectView.removeFromSuperview()
+            self.activityIndicatorView.removeFromSuperview()
+        }
+        if togetherPlans.isEmpty && planIndex == 1 {
+            self.activityIndicatorView.stopAnimating()
+            self.blurEffectView.removeFromSuperview()
+            self.activityIndicatorView.removeFromSuperview()
+        }
     }
 }
 

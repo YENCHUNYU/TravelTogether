@@ -28,6 +28,8 @@ class MemoryDetailViewController: UIViewController {
     var memoryId = ""
     var userId = ""
     var isFromFavorite = false
+    var isFromProfile = false
+    var dbCollection = ""
 
     private var itemsPerRow: CGFloat = 2
     private var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
@@ -59,18 +61,19 @@ class MemoryDetailViewController: UIViewController {
                 present(loginNavController, animated: true, completion: nil)
             }
         } else {
-            let firestoreFetch = FirestoreManagerForOne()
-            firestoreFetch.fetchOneTravelPlan(userId: userId, byId: memoryId) { (memory, error) in
-                if let error = error {
-                    print("Error fetching one memory: \(error)")
-                } else if let memory = memory {
-                    print("Fetched one memory: \(memory)")
-                    self.onePlan = memory
-                    self.tableView.reloadData()
-                } else {
-                    print("One memory not found.")
-                }
-            }
+//            let firestoreFetch = FirestoreManagerForOne()
+//            firestoreFetch.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: memoryId) { (memory, error) in
+//                if let error = error {
+//                    print("Error fetching one memory: \(error)")
+//                } else if let memory = memory {
+//                    print("Fetched one memory: \(memory)")
+//                    print("self.memoryId2\(self.memoryId)")
+//                    self.onePlan = memory
+//                    self.tableView.reloadData()
+//                } else {
+//                    print("One memory not found.")
+//                }
+//            }
             let firestorePost = FirestoreManagerForPost()
             self.onePlan.user = Auth.auth().currentUser?.displayName
             self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
@@ -147,7 +150,7 @@ class MemoryDetailViewController: UIViewController {
         
         tableView.dragInteractionEnabled = true
         
-        if isFromFavorite == false {
+        if isFromFavorite == false && isFromProfile == false {
             let firestoreManagerForOne = FirestoreManagerFetchMemory()
             firestoreManagerForOne.fetchOneMemoryFromSearch(byId: memoryId, userId: userId) { (memory, error) in
                 if let error = error {
@@ -171,8 +174,11 @@ class MemoryDetailViewController: UIViewController {
                     print("One travel plan not found.")
                 }
             }} else {
+                // from favorite or profile
+                dbCollection = isFromFavorite ? "FavoriteMemory" : "Memory"
+                dbCollection = isFromProfile ? "Memory" : "FavoriteMemory"
                 let firestoreManagerForOne = FirestoreManagerFetchMemory()
-                firestoreManagerForOne.fetchOneMemoryFromFavorite(byId: memoryId) { (travelPlan, error) in
+                firestoreManagerForOne.fetchOneMemory(dbcollection: dbCollection, byId: memoryId) { (travelPlan, error) in
                     if let error = error {
                         print("Error fetching one travel plan: \(error)")
                     } else if let travelPlan = travelPlan {
@@ -231,7 +237,7 @@ class MemoryDetailViewController: UIViewController {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
-        if isFromFavorite == false {
+        if isFromFavorite == false && isFromProfile == false {
             let firestoreManagerForOne = FirestoreManagerFetchMemory()
             firestoreManagerForOne.fetchOneMemoryFromSearch(byId: memoryId, userId: userId) { (memory, error) in
                 if let error = error {
@@ -255,8 +261,11 @@ class MemoryDetailViewController: UIViewController {
                     print("One travel plan not found.")
                 }
             }} else {
+                // from favorite or profile
+                dbCollection = isFromFavorite ? "FavoriteMemory" : "Memory"
+                dbCollection = isFromProfile ? "Memory" : "FavoriteMemory"
                 let firestoreManagerForOne = FirestoreManagerFetchMemory()
-                firestoreManagerForOne.fetchOneMemoryFromFavorite(byId: memoryId) { (travelPlan, error) in
+                firestoreManagerForOne.fetchOneMemory(dbcollection: dbCollection, byId: memoryId) { (travelPlan, error) in
                     if let error = error {
                         print("Error fetching one travel plan: \(error)")
                     } else if let travelPlan = travelPlan {

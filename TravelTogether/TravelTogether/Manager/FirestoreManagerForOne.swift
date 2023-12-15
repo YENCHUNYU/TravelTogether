@@ -16,9 +16,9 @@ class FirestoreManagerForOne {
     
     var delegate: FirestoreManagerForOneDelegate?
     
-    func fetchOneTravelPlan(userId: String, byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
+    func fetchOneTravelPlan(dbCollection: String, userId: String, byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
         let database = Firestore.firestore()
-        let travelPlanRef = database.collection("UserInfo").document(userId).collection("TravelPlan").document(planId)
+        let travelPlanRef = database.collection("UserInfo").document(userId).collection(dbCollection).document(planId)
 
         travelPlanRef.addSnapshotListener { document, error in
             if let error = error {

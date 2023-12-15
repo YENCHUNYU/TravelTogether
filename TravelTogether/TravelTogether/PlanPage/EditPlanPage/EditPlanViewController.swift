@@ -60,7 +60,7 @@ class EditPlanViewController: UIViewController {
         
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -109,7 +109,7 @@ class EditPlanViewController: UIViewController {
         }
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId)  { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId)  { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -300,7 +300,7 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
     func reloadNewData() {
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId)  { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId)  { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -329,7 +329,7 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
         activityIndicatorView.startAnimating()
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {

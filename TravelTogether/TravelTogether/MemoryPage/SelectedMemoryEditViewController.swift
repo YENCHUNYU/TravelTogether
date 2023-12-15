@@ -256,7 +256,7 @@ extension SelectedMemoryEditViewController: EditMemoryHeaderViewDelegate {
     func reloadData() {
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {

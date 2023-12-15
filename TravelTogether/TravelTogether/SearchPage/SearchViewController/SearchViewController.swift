@@ -58,9 +58,6 @@ class SearchViewController: UIViewController {
         let blurEffect = UIBlurEffect(style: .light)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = view.bounds
-        view.addSubview(blurEffectView)
-        view.addSubview(activityIndicatorView)
-        activityIndicatorView.startAnimating()
         tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.delegate = self
@@ -118,6 +115,7 @@ class SearchViewController: UIViewController {
         if segue.identifier == "MemoryDetail" {
             if let destinationVC = segue.destination as? MemoryDetailViewController {
                 destinationVC.memoryId = self.memoryId
+                print("self.memoryId\(self.memoryId)")
                 destinationVC.userId = self.userId
                 print("userid@\(destinationVC.userId)")
             }
@@ -134,6 +132,7 @@ class SearchViewController: UIViewController {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
+       
         if searchIndex == 1 {
             let firestoreManager = FirestoreManager()
             firestoreManager.delegate = self
@@ -145,7 +144,13 @@ class SearchViewController: UIViewController {
                     self.plans = travelPlans ?? []
                     self.tableView.reloadData()
                 }
+                if self.plans.isEmpty {
+                    self.activityIndicatorView.stopAnimating()
+                    self.blurEffectView.removeFromSuperview()
+                    self.activityIndicatorView.removeFromSuperview()
+                }
             }
+            
         } else if searchIndex == 0 {
             let firestoreFetchMemory = FirestoreManagerFetchMemory()
             firestoreFetchMemory.fetchAllMemories { (travelPlans, error) in
@@ -155,6 +160,11 @@ class SearchViewController: UIViewController {
                     print("Fetched memories: \(travelPlans ?? [])")
                     self.memories = travelPlans ?? []
                     self.tableView.reloadData()
+                }
+                if self.memories.isEmpty {
+                    self.activityIndicatorView.stopAnimating()
+                    self.blurEffectView.removeFromSuperview()
+                    self.activityIndicatorView.removeFromSuperview()
                 }
             }
         }
@@ -182,19 +192,26 @@ extension SearchViewController: UITableViewDataSource {
 // userinfo
             cell.userNameLabel.text = memories[indexPath.row].user
             cell.userImageView.kf.setImage(with: URL(string: memories[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
-
+            cell.memoryNameLabel.text = memories[indexPath.row].planName
+            let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
+            let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
+            cell.dateLabel.text = "\(start)-\(end)"
             if memories.isEmpty == false {
                 let urlString = memories[indexPath.row].coverPhoto ?? ""
                 if !urlString.isEmpty, let url = URL(string: urlString) {
                     downloadImageFromFirestorage(url: url, cell: cell, indexPath: indexPath)
+                } else {
+                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                    self.activityIndicatorView.stopAnimating()
+                    self.blurEffectView.removeFromSuperview()
+                    self.activityIndicatorView.removeFromSuperview()
                 }
             }
             return cell
         } else {
             cell.userNameLabel.text = plans[indexPath.row].user
-            cell.memoryImageView.image = mockImage
-            cell.memoryNameLabel.text = plans[indexPath.row].planName
             cell.userImageView.kf.setImage(with: URL(string: plans[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
+            cell.memoryNameLabel.text = plans[indexPath.row].planName
             let start = self.changeDateFormat(date: "\(self.plans[indexPath.row].startDate)")
             let end = self.changeDateFormat(date: "\(self.plans[indexPath.row].endDate)")
             cell.dateLabel.text = "\(start)-\(end)"
@@ -223,16 +240,12 @@ extension SearchViewController: UITableViewDataSource {
                            }
                 if let image = image {
                     cell.memoryImageView.image = image
-                    cell.memoryNameLabel.text = self.memories[indexPath.row].planName
-                    let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
-                    let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
-                    cell.dateLabel.text = "\(start)-\(end)"
-                        self.activityIndicatorView.stopAnimating()
-                        self.blurEffectView.removeFromSuperview()
-                        self.activityIndicatorView.removeFromSuperview()
                 } else {
                     cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                 }
+                self.activityIndicatorView.stopAnimating()
+                self.blurEffectView.removeFromSuperview()
+                self.activityIndicatorView.removeFromSuperview()
             }}}
     
     func changeDateFormat(date: String) -> String {
@@ -279,7 +292,18 @@ extension SearchViewController: SearchHeaderViewDelegate {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
+        
         tableView.reloadData()
+        if plans.isEmpty && searchIndex == 1 {
+            self.activityIndicatorView.stopAnimating()
+            self.blurEffectView.removeFromSuperview()
+            self.activityIndicatorView.removeFromSuperview()
+        }
+        if memories.isEmpty && searchIndex == 0 {
+            self.activityIndicatorView.stopAnimating()
+            self.blurEffectView.removeFromSuperview()
+            self.activityIndicatorView.removeFromSuperview()
+        }
     }
 }
 

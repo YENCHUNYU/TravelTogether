@@ -74,7 +74,7 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
                         } else {
                             print("Posted TravelPlan successfully!")}
                 }
-                
+           
                 if let navigationController = self.navigationController {
                  let viewControllers = navigationController.viewControllers
                  if viewControllers.count == 4 {
@@ -82,14 +82,20 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
                      navigationController.popToViewController(targetViewController, animated: true)
                                  }
                              }
-        if let navigationController = self.navigationController {
-         let viewControllers = navigationController.viewControllers
-         if viewControllers.count == 3 {
-             let targetViewController = viewControllers[viewControllers.count - 3]
-             navigationController.popToViewController(targetViewController, animated: true)
-                         }
-                     }
+        
         if isFromDraft == true {
+            // draft edit and complete
+            if let navigationController = self.navigationController {
+             let viewControllers = navigationController.viewControllers
+             if viewControllers.count == 3 {
+                 if let targetViewController = viewControllers[viewControllers.count - 3] as? MemoryViewController {
+                    
+//                     targetViewController.viewWillAppear(true)
+                     navigationController.popToViewController(targetViewController, animated: true)
+                     
+                 }
+                             }
+                         }
             let firestoreManager = FirestoreManagerFetchMemory()
             firestoreManager.deleteMemory(dbcollection: "MemoryDraft", withID: onePlan.id) { error in
                 if let error = error {

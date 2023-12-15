@@ -44,7 +44,7 @@ class EditMemoryViewController: UIViewController {
         
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -131,13 +131,14 @@ class EditMemoryViewController: UIViewController {
                         if let navigationController = self.navigationController {
                          let viewControllers = navigationController.viewControllers
                          if viewControllers.count >= 3 {
-                             let targetViewController = viewControllers[viewControllers.count - 3]
-                             navigationController.popToViewController(targetViewController, animated: true)
-                                         }
+                             if let targetViewController = viewControllers[viewControllers.count - 3] as? MemoryViewController {
+                                 navigationController.popToViewController(targetViewController, animated: true)
+                                 
+                             }
+                         }
                                      }
                 
             }
-//            draftorPostVC.onePlan = self.onePlan
             present(draftorPostVC, animated: true, completion: nil)
         }
        }
@@ -146,7 +147,7 @@ class EditMemoryViewController: UIViewController {
         super.viewWillAppear(animated)
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -249,7 +250,7 @@ extension EditMemoryViewController: EditMemoryHeaderViewDelegate {
     func reloadData() {
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {

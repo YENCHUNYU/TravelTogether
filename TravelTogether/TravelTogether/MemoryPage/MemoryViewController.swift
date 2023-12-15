@@ -84,28 +84,40 @@ class MemoryViewController: UIViewController {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
-        let firestoreFetchMemory = FirestoreManagerFetchMemory()
-        firestoreFetchMemory.fetchMemories { (memories, error) in
-            if let error = error {
-                print("Error fetching memories: \(error)")
-            } else {
-                print("Fetched memories: \(memories ?? [])")
-                self.memories = memories ?? []
-                self.tableView.reloadData()
+//        if memoryIndex == 0 {
+            let firestoreFetchMemory = FirestoreManagerFetchMemory()
+            firestoreFetchMemory.fetchMemories { (memories, error) in
+                if let error = error {
+                    print("Error fetching memories: \(error)")
+                } else {
+                    print("Fetched memories: \(memories ?? [])")
+                    self.memories = memories ?? []
+                    self.tableView.reloadData()
+                    if self.memories.isEmpty && self.memoryIndex == 0 {
+                        self.activityIndicatorView.stopAnimating()
+                        self.blurEffectView.removeFromSuperview()
+                        self.activityIndicatorView.removeFromSuperview()
+                    }
+                }
             }
-        }
-        
-        firestoreFetchMemory.fetchMemoryDrafts { (memories, error) in
-            if let error = error {
-                print("Error fetching memoryDrafts: \(error)")
-            } else {
-                print("Fetched memoryDrafts: \(memories ?? [])")
-                self.memoryDrafts = memories ?? []
-                self.tableView.reloadData()
+//        } else if memoryIndex == 1 {
+//            let firestoreFetchMemory = FirestoreManagerFetchMemory()
+            firestoreFetchMemory.fetchMemoryDrafts { (memories, error) in
+                if let error = error {
+                    print("Error fetching memoryDrafts: \(error)")
+                } else {
+                    print("Fetched memoryDrafts: \(memories ?? [])")
+                    self.memoryDrafts = memories ?? []
+                    self.tableView.reloadData()
+                    if self.memoryDrafts.isEmpty && self.memoryIndex == 1 {
+                        self.activityIndicatorView.stopAnimating()
+                        self.blurEffectView.removeFromSuperview()
+                        self.activityIndicatorView.removeFromSuperview()
+                    }
+                }
             }
-        }
+//        }
     }
-    
     func setUpButton() {
         addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
         addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
@@ -121,105 +133,28 @@ extension MemoryViewController: UITableViewDataSource {
         }
     }
     
-//    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-//        if memoryIndex == 0 {
-//            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MemoryCell", for: indexPath) as? MemoryCell
-//            else { fatalError("Could not create MemoryCell") }
-//            cell.memoryImageView.image = nil
-//            if memories.isEmpty == false {
-//                let urlString = memories[indexPath.row].coverPhoto ?? ""
-//                if !urlString.isEmpty, let url = URL(string: urlString) {
-//                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-//                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-//                        DispatchQueue.main.async {
-//                            if let image = image {
-//                                cell.memoryImageView.image = image
-//                                cell.memoryNameLabel.text = self.memories[indexPath.row].planName
-//                                let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
-//                                let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
-//                                cell.memoryDateLabel.text = "\(start)-\(end)"
-//                                
-//                                self.activityIndicatorView.stopAnimating()
-//                                self.blurEffectView.removeFromSuperview()
-//                                self.activityIndicatorView.removeFromSuperview()
-//                            } else {
-//                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-//                            }
-//                        }
-//                    }
-//                } else {
-//                    // Handle the case where the URL is empty
-//                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-//                    cell.memoryNameLabel.text = self.memories[indexPath.row].planName
-//                    let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
-//                    let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
-//                    cell.memoryDateLabel.text = "\(start)-\(end)"
-//                }
-//            }
-//            
-//            return cell
-//        } else {
-//            guard let cell = tableView.dequeueReusableCell(withIdentifier: "MemoryCell", for: indexPath) as? MemoryCell
-//            else { fatalError("Could not create MemoryCell") }
-//            cell.memoryImageView.image = nil
-//            if memoryDrafts.isEmpty == false {
-//                let urlString = memoryDrafts[indexPath.row].coverPhoto ?? ""
-//                if !urlString.isEmpty, let url = URL(string: urlString) {
-//                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-//                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-//                        DispatchQueue.main.async {
-//                            if let image = image {
-//                                cell.memoryImageView.image = image
-//                                cell.memoryNameLabel.text = self.memoryDrafts[indexPath.row].planName
-//                                let start = self.changeDateFormat(date: "\(self.memoryDrafts[indexPath.row].startDate)")
-//                                let end = self.changeDateFormat(date: "\(self.memoryDrafts[indexPath.row].endDate)")
-//                                cell.memoryDateLabel.text = "\(start)-\(end)"
-//                                
-//                                self.activityIndicatorView.stopAnimating()
-//                                self.blurEffectView.removeFromSuperview()
-//                                self.activityIndicatorView.removeFromSuperview()
-//                            } else {
-//                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-//                            }
-//                        }
-//                    }
-//                } else {
-//                    // Handle the case where the URL is empty
-//                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-//                    cell.memoryNameLabel.text = self.memoryDrafts[indexPath.row].planName
-//                    let start = self.changeDateFormat(date: "\(self.memoryDrafts[indexPath.row].startDate)")
-//                    let end = self.changeDateFormat(date: "\(self.memoryDrafts[indexPath.row].endDate)")
-//                    cell.memoryDateLabel.text = "\(start)-\(end)"
-//                }}
-//            return cell
-//        }
-//        
-//    }
-    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "MemoryCell",
             for: indexPath) as? MemoryCell
         else { fatalError("Could not create MemoryCell") }
         if memoryIndex == 0 {
-            if memories.isEmpty == false {
+            cell.memoryNameLabel.text = self.memories[indexPath.row].planName
+            let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
+            let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
+            cell.memoryDateLabel.text = "\(start)-\(end)"
+            cell.memoryImageView.image = nil
+//            if memories.isEmpty == false {
                 let urlString = memories[indexPath.row].coverPhoto ?? ""
                 if !urlString.isEmpty, let url = URL(string: urlString) {
                     downloadImageFromFirestorage(url: url, cell: cell, indexPath: indexPath)
                 } else {
-                    let taskIdentifier = UUID().uuidString
-                    cell.taskIdentifier = taskIdentifier
-                    cell.taskIdentifier = taskIdentifier
-                    cell.memoryNameLabel.text = self.memories[indexPath.row].planName
-                    let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
-                    let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
-                    cell.memoryDateLabel.text = "\(start)-\(end)"
                     cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-//                    self.activityIndicatorView.stopAnimating()
-//                    self.blurEffectView.removeFromSuperview()
-//                    self.activityIndicatorView.removeFromSuperview()
+                    self.activityIndicatorView.stopAnimating()
+                    self.blurEffectView.removeFromSuperview()
+                    self.activityIndicatorView.removeFromSuperview()
                 }
-            }
+//            }
             return cell
         } else {
 //            cell.memoryImageView.image = mockImage
@@ -242,7 +177,6 @@ extension MemoryViewController: UITableViewDataSource {
     
     func downloadImageFromFirestorage(url: URL, cell: MemoryCell, indexPath: IndexPath) {
         cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-        cell.memoryNameLabel.text = nil
         let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
         let taskIdentifier = UUID().uuidString
         cell.taskIdentifier = taskIdentifier
@@ -253,16 +187,12 @@ extension MemoryViewController: UITableViewDataSource {
                            }
                 if let image = image {
                     cell.memoryImageView.image = image
-                    cell.memoryNameLabel.text = self.memories[indexPath.row].planName
-                    let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
-                    let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
-                    cell.memoryDateLabel.text = "\(start)-\(end)"
-                        self.activityIndicatorView.stopAnimating()
-                        self.blurEffectView.removeFromSuperview()
-                        self.activityIndicatorView.removeFromSuperview()
                 } else {
                     cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                 }
+                self.activityIndicatorView.stopAnimating()
+                self.blurEffectView.removeFromSuperview()
+                self.activityIndicatorView.removeFromSuperview()
             }}}
     
     func changeDateFormat(date: String) -> String {
@@ -380,5 +310,15 @@ extension MemoryViewController: MemoryHeaderViewDelegate {
             dbCollection = "MemoryDraft"
         }
         tableView.reloadData()
+        if memoryDrafts.isEmpty && memoryIndex == 1 {
+            self.activityIndicatorView.stopAnimating()
+            self.blurEffectView.removeFromSuperview()
+            self.activityIndicatorView.removeFromSuperview()
+        }
+        if memories.isEmpty && memoryIndex == 0 {
+            self.activityIndicatorView.stopAnimating()
+            self.blurEffectView.removeFromSuperview()
+            self.activityIndicatorView.removeFromSuperview()
+        }
     }
 }
