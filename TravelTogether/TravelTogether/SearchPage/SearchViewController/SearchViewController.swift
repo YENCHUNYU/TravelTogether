@@ -133,7 +133,7 @@ class SearchViewController: UIViewController {
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
        
-        if searchIndex == 1 {
+//        if searchIndex == 1 {
             let firestoreManager = FirestoreManager()
             firestoreManager.delegate = self
             firestoreManager.fetchAllTravelPlans { (travelPlans, error) in
@@ -144,14 +144,14 @@ class SearchViewController: UIViewController {
                     self.plans = travelPlans ?? []
                     self.tableView.reloadData()
                 }
-                if self.plans.isEmpty {
+                if self.plans.isEmpty && self.searchIndex == 1 {
                     self.activityIndicatorView.stopAnimating()
                     self.blurEffectView.removeFromSuperview()
                     self.activityIndicatorView.removeFromSuperview()
                 }
             }
             
-        } else if searchIndex == 0 {
+//        } else if searchIndex == 0 {
             let firestoreFetchMemory = FirestoreManagerFetchMemory()
             firestoreFetchMemory.fetchAllMemories { (travelPlans, error) in
                 if let error = error {
@@ -161,13 +161,13 @@ class SearchViewController: UIViewController {
                     self.memories = travelPlans ?? []
                     self.tableView.reloadData()
                 }
-                if self.memories.isEmpty {
+                if self.memories.isEmpty && self.searchIndex == 0 {
                     self.activityIndicatorView.stopAnimating()
                     self.blurEffectView.removeFromSuperview()
                     self.activityIndicatorView.removeFromSuperview()
                 }
             }
-        }
+     //   }
     }
 }
 
@@ -190,6 +190,8 @@ extension SearchViewController: UITableViewDataSource {
 //        let currentIndexPath = indexPath
         if searchIndex == 0 {
 // userinfo
+            let taskIdentifier = UUID().uuidString
+            cell.taskIdentifier = taskIdentifier
             cell.userNameLabel.text = memories[indexPath.row].user
             cell.userImageView.kf.setImage(with: URL(string: memories[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
             cell.memoryNameLabel.text = memories[indexPath.row].planName
@@ -201,6 +203,7 @@ extension SearchViewController: UITableViewDataSource {
                 if !urlString.isEmpty, let url = URL(string: urlString) {
                     downloadImageFromFirestorage(url: url, cell: cell, indexPath: indexPath)
                 } else {
+                    
                     cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                     self.activityIndicatorView.stopAnimating()
                     self.blurEffectView.removeFromSuperview()

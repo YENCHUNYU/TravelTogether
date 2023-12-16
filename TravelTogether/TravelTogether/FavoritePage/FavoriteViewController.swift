@@ -69,16 +69,8 @@ class FavoriteViewController: UIViewController {
         view.addSubview(blurEffectView)
          view.addSubview(activityIndicatorView)
          activityIndicatorView.startAnimating()
-        if plans.isEmpty && favoriteIndex == 1 {
-            self.activityIndicatorView.stopAnimating()
-            self.blurEffectView.removeFromSuperview()
-            self.activityIndicatorView.removeFromSuperview()
-        }
-        if memories.isEmpty && favoriteIndex == 0 {
-            self.activityIndicatorView.stopAnimating()
-            self.blurEffectView.removeFromSuperview()
-            self.activityIndicatorView.removeFromSuperview()
-        }
+        
+       
         let firestoreFetch = FirestoreManagerFavorite()
         firestoreFetch.fetchAllMemories { (travelPlans, error) in
             if let error = error {
@@ -87,6 +79,11 @@ class FavoriteViewController: UIViewController {
                 print("Fetched memories: \(travelPlans ?? [])")
                 self.memories = travelPlans ?? []
                 self.tableView.reloadData()
+                if self.memories.isEmpty && self.favoriteIndex == 0 {
+                    self.activityIndicatorView.stopAnimating()
+                    self.blurEffectView.removeFromSuperview()
+                    self.activityIndicatorView.removeFromSuperview()
+                }
             }
         }
         
@@ -97,6 +94,11 @@ class FavoriteViewController: UIViewController {
                 print("Fetched memories: \(travelPlans ?? [])")
                 self.plans = travelPlans ?? []
                 self.tableView.reloadData()
+                if self.plans.isEmpty && self.favoriteIndex == 1 {
+                    self.activityIndicatorView.stopAnimating()
+                    self.blurEffectView.removeFromSuperview()
+                    self.activityIndicatorView.removeFromSuperview()
+                }
             }
         }
     }
@@ -130,11 +132,14 @@ extension FavoriteViewController: UITableViewDataSource {
                     downloadImages(cell: cell, indexPath: indexPath, url: url )
                 } else {
                     // Handle the case where the URL is empty
+                    let taskIdentifier = UUID().uuidString
+                    cell.taskIdentifier = taskIdentifier
                     cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                     cell.memoryNameLabel.text = self.memories[indexPath.row].planName
                     let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
                     let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
                     cell.dateLabel.text = "\(start)-\(end)"
+                    
                 }
             }
             return cell

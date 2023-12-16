@@ -139,6 +139,7 @@ extension MemoryViewController: UITableViewDataSource {
             for: indexPath) as? MemoryCell
         else { fatalError("Could not create MemoryCell") }
         if memoryIndex == 0 {
+            
             cell.memoryNameLabel.text = self.memories[indexPath.row].planName
             let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
             let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
@@ -149,6 +150,8 @@ extension MemoryViewController: UITableViewDataSource {
                 if !urlString.isEmpty, let url = URL(string: urlString) {
                     downloadImageFromFirestorage(url: url, cell: cell, indexPath: indexPath)
                 } else {
+                    let taskIdentifier = UUID().uuidString
+                    cell.taskIdentifier = taskIdentifier
                     cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                     self.activityIndicatorView.stopAnimating()
                     self.blurEffectView.removeFromSuperview()

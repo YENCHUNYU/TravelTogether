@@ -162,15 +162,19 @@ extension EditPlanViewController: UITableViewDataSource {
                     if cell.currentImageURL == urlString {
                         if let image = image {
                             cell.locationImageView.image = image
-                            self.activityIndicatorView.stopAnimating()
-                            self.blurEffectView.removeFromSuperview()
-                            self.activityIndicatorView.removeFromSuperview()
                         } else {
                             cell.locationImageView.image = UIImage(named: "Image_Placeholder")
                         }
+                        self.activityIndicatorView.stopAnimating()
+                        self.blurEffectView.removeFromSuperview()
+                        self.activityIndicatorView.removeFromSuperview()
                     }
                 }
             }
+        } else {
+            self.activityIndicatorView.stopAnimating()
+            self.blurEffectView.removeFromSuperview()
+            self.activityIndicatorView.removeFromSuperview()
         }
         
         return cell
@@ -237,7 +241,13 @@ extension EditPlanViewController: UITableViewDataSource {
            view.addSubview(blurEffectView)
            view.addSubview(activityIndicatorView)
            activityIndicatorView.startAnimating()
-           
+           let allDaysHaveNoLocations = onePlan.days.allSatisfy { $0.locations.isEmpty }
+
+               if allDaysHaveNoLocations {
+                   self.activityIndicatorView.stopAnimating()
+                   self.blurEffectView.removeFromSuperview()
+                   self.activityIndicatorView.removeFromSuperview()
+               }
            onePlan.days.remove(at: index)
            days.remove(at: days.count - 2)
 
@@ -272,6 +282,13 @@ extension EditPlanViewController: UITableViewDelegate {
                 view.addSubview(blurEffectView)
                 view.addSubview(activityIndicatorView)
                 activityIndicatorView.startAnimating()
+                let allDaysHaveNoLocations = onePlan.days.allSatisfy { $0.locations.isEmpty }
+
+                    if allDaysHaveNoLocations {
+                        self.activityIndicatorView.stopAnimating()
+                        self.blurEffectView.removeFromSuperview()
+                        self.activityIndicatorView.removeFromSuperview()
+                    }
                 let deletedLocation = onePlan.days[indexPath.section].locations.remove(at: indexPath.row)
                
                 let firestoreManagerForOne = FirestoreManagerForOne()
@@ -327,6 +344,13 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
+        let allDaysHaveNoLocations = onePlan.days.allSatisfy { $0.locations.isEmpty }
+
+            if allDaysHaveNoLocations {
+                self.activityIndicatorView.stopAnimating()
+                self.blurEffectView.removeFromSuperview()
+                self.activityIndicatorView.removeFromSuperview()
+            }
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
         firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in

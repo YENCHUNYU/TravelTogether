@@ -160,7 +160,7 @@ class ProfileViewController: UIViewController {
                 self.activityIndicatorViewFull.removeFromSuperview()
             }
         }
-        if profileIndex == 1 {
+//        if profileIndex == 1 {
             let firestoreManager = FirestoreManager()
             firestoreManager.delegate = self
             firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
@@ -178,7 +178,7 @@ class ProfileViewController: UIViewController {
                     self.activityIndicatorView.removeFromSuperview()
                 }
             }
-        } else if profileIndex == 0 {
+//        } else if profileIndex == 0 {
             let firestoreFetchMemory = FirestoreManagerFetchMemory()
             firestoreFetchMemory.fetchMemories { (travelPlans, error) in
                 if let error = error {
@@ -194,7 +194,7 @@ class ProfileViewController: UIViewController {
                     self.activityIndicatorView.removeFromSuperview()
                 }
             }
-        }
+//        }
        
     }
 }
@@ -251,9 +251,17 @@ extension ProfileViewController: UITableViewDataSource {
             if daysData.isEmpty == false {
                 let locationData = daysData[0]
                 let theLocation = locationData.locations
-                if theLocation.isEmpty == false {
+                guard theLocation.isEmpty == false else {
+                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                    self.stopLoading()
+                    return cell
+                }
                     let urlString = theLocation[0].photo
-                    if let url = URL(string: urlString) {
+                guard let url = URL(string: urlString) else {
+                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                    self.stopLoading()
+                    return cell
+                }
                         let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
                         firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
                             DispatchQueue.main.async {
@@ -262,20 +270,17 @@ extension ProfileViewController: UITableViewDataSource {
                                 } else {
                                     cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                                 }
-                                self.activityIndicatorView.stopAnimating()
-                                self.blurEffectView.removeFromSuperview()
-                                self.activityIndicatorView.removeFromSuperview()
+                                self.stopLoading()
                             }
                         }
-                    } else {
-                        cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                        self.activityIndicatorView.stopAnimating()
-                        self.blurEffectView.removeFromSuperview()
-                        self.activityIndicatorView.removeFromSuperview()
-                    }
-                }}
+            }
             return cell
         }
+    }
+    func stopLoading() {
+        self.activityIndicatorView.stopAnimating()
+        self.blurEffectView.removeFromSuperview()
+        self.activityIndicatorView.removeFromSuperview()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

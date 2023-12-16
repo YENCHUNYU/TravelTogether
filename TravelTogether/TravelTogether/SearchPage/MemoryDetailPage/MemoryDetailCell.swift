@@ -23,4 +23,5 @@ class MemoryDetailCell: UITableViewCell {
             
         }
     }
+    @IBOutlet weak var articleConstraint: NSLayoutConstraint!
 }

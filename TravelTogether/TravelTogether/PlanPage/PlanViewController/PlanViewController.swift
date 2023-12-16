@@ -139,21 +139,24 @@ extension PlanViewController: UITableViewDataSource {
                                 if let image = image {
                                     cell.planImageView.image = image
                                     cell.planNameLabel.text = self.plans[indexPath.row].planName
-                                    self.activityIndicatorView.stopAnimating()
-                                    self.blurEffectView.removeFromSuperview()
-                                    self.activityIndicatorView.removeFromSuperview()
+                                    
                                 } else {
                                     cell.planImageView.image = UIImage(named: "Image_Placeholder")
                                 }
+                                
                             }
                         }
                     } else {
                         cell.planImageView.image = UIImage(named: "Image_Placeholder")
                     }
-                    
                 } else {
                     cell.planImageView.image = UIImage(named: "Image_Placeholder")
-                }}
+                }
+                self.activityIndicatorView.stopAnimating()
+                self.blurEffectView.removeFromSuperview()
+                self.activityIndicatorView.removeFromSuperview()
+            }
+            
             
             return cell
         } else {

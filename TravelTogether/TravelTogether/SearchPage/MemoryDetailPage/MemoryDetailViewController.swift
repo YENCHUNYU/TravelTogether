@@ -61,19 +61,7 @@ class MemoryDetailViewController: UIViewController {
                 present(loginNavController, animated: true, completion: nil)
             }
         } else {
-//            let firestoreFetch = FirestoreManagerForOne()
-//            firestoreFetch.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: memoryId) { (memory, error) in
-//                if let error = error {
-//                    print("Error fetching one memory: \(error)")
-//                } else if let memory = memory {
-//                    print("Fetched one memory: \(memory)")
-//                    print("self.memoryId2\(self.memoryId)")
-//                    self.onePlan = memory
-//                    self.tableView.reloadData()
-//                } else {
-//                    print("One memory not found.")
-//                }
-//            }
+
             let firestorePost = FirestoreManagerForPost()
             self.onePlan.user = Auth.auth().currentUser?.displayName
             self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
@@ -102,6 +90,10 @@ class MemoryDetailViewController: UIViewController {
         button.addTarget(self, action: #selector(likeMemory), for: .touchUpInside)
         button.imageView?.contentMode = .scaleAspectFill
         button.tintColor = .white
+        if isFromFavorite || isFromProfile {
+            button.backgroundColor = UIColor(named: "darkGreen")?.withAlphaComponent(0.7)
+            button.isEnabled = false
+        }
         return button
     }()
     
@@ -237,7 +229,9 @@ class MemoryDetailViewController: UIViewController {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
+        
         if isFromFavorite == false && isFromProfile == false {
+            // from search
             let firestoreManagerForOne = FirestoreManagerFetchMemory()
             firestoreManagerForOne.fetchOneMemoryFromSearch(byId: memoryId, userId: userId) { (memory, error) in
                 if let error = error {
@@ -257,13 +251,23 @@ class MemoryDetailViewController: UIViewController {
                     self.headerView.onePlan = self.onePlan
                     self.headerView.collectionView.reloadData()
                     self.tableView.reloadData()
+                    
                 } else {
                     print("One travel plan not found.")
                 }
-            }} else {
+                let allLocationsHaveNoMemeoryPhotos = self.onePlan.days.allSatisfy { $0.locations.allSatisfy { $0.memoryPhotos?.isEmpty == true } }
+
+                    if allLocationsHaveNoMemeoryPhotos {
+                        self.activityIndicatorView.stopAnimating()
+                        self.blurEffectView.removeFromSuperview()
+                        self.activityIndicatorView.removeFromSuperview()
+                    }
+            }
+        } else {
                 // from favorite or profile
                 dbCollection = isFromFavorite ? "FavoriteMemory" : "Memory"
                 dbCollection = isFromProfile ? "Memory" : "FavoriteMemory"
+               
                 let firestoreManagerForOne = FirestoreManagerFetchMemory()
                 firestoreManagerForOne.fetchOneMemory(dbcollection: dbCollection, byId: memoryId) { (travelPlan, error) in
                     if let error = error {
@@ -286,6 +290,13 @@ class MemoryDetailViewController: UIViewController {
                     } else {
                         print("One travel plan not found.")
                     }
+                    let allLocationsHaveNoMemeoryPhotos = self.onePlan.days.allSatisfy { $0.locations.allSatisfy { $0.memoryPhotos?.isEmpty == true } }
+
+                        if allLocationsHaveNoMemeoryPhotos {
+                            self.activityIndicatorView.stopAnimating()
+                            self.blurEffectView.removeFromSuperview()
+                            self.activityIndicatorView.removeFromSuperview()
+                        }
                 }
             }
     }
@@ -319,7 +330,17 @@ currentIndexPath = indexPath
         cell.articleTextView.text = location.article
         cell.memoryCollectionView.dataSource = self
         cell.memoryCollectionView.delegate = self
-//        cell.imageCollectionData = onePlan.days[indexPath.section].locations[indexPath.row].memoryPhotos ?? []
+        
+        if cell.articleTextView.text == "" {
+                cell.articleTextView.isHidden = true
+            } else if location.memoryPhotos == [] {
+                cell.memoryCollectionView.isHidden = true
+                cell.articleConstraint.constant = 62
+            } else {
+                cell.articleTextView.isHidden = false
+                cell.memoryCollectionView.isHidden = false
+                cell.articleConstraint.constant = 242
+            }
         
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal // Set scroll direction to horizontal
@@ -338,7 +359,15 @@ currentIndexPath = indexPath
 extension MemoryDetailViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        let location = onePlan.days[indexPath.section].locations[indexPath.row]
+        
+        if location.memoryPhotos == [] && location.article == "" {
+                return 70
+        } else if location.article == "" {
+                return 240
+            } else {
+                return UITableView.automaticDimension
+            }
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -378,7 +407,7 @@ extension MemoryDetailViewController: UICollectionViewDataSource,
              let memoryPhotos = onePlan.days[currentSection].locations[currentRow].memoryPhotos else {
            return cell
        }
-           let imageIndex = indexPath.item // Subtract 1 because the first item is the "AddPhotoCell"
+           let imageIndex = indexPath.item
             let imageURLString = memoryPhotos[imageIndex]
 
                if let url = URL(string: imageURLString) {
@@ -387,12 +416,12 @@ extension MemoryDetailViewController: UICollectionViewDataSource,
                        DispatchQueue.main.async {
                            if let image = image {
                                cell.memoryImageView.image = image
-                               self.activityIndicatorView.stopAnimating()
-                               self.blurEffectView.removeFromSuperview()
-                               self.activityIndicatorView.removeFromSuperview()
                            } else {
                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                            }
+                           self.activityIndicatorView.stopAnimating()
+                           self.blurEffectView.removeFromSuperview()
+                           self.activityIndicatorView.removeFromSuperview()
                        }
 
            }}
