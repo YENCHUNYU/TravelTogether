@@ -37,7 +37,7 @@ class SettingViewController: UIViewController, ASAuthorizationControllerDelegate
         
         let firebaseAuth = Auth.auth()
            do {
-               self.showAlert(title: "登出帳戶", message: "是否確定要登出帳戶？", completion: {
+               self.showAlert(title: "登出帳戶", message: "確定要登出帳戶？", completion: {
                    LoginViewController.loginStatus = false
                    self.showAlert(title: "Success", message: "已登出帳戶", completion: {
                        try? firebaseAuth.signOut()
@@ -52,14 +52,24 @@ class SettingViewController: UIViewController, ASAuthorizationControllerDelegate
     
     @IBAction func deleteAccountButtonTapped(_ sender: Any) {
         let user = Auth.auth().currentUser
-        user?.delete { error in
-            if let error = error {
-                print("error.")
-            } else {
-                print("Account deleted.")
-                LoginViewController.loginStatus = false
-            }
-        }
+        self.showAlert(title: "刪除帳戶", message: "確定要刪除帳戶？", completion: {
+            LoginViewController.loginStatus = false
+            self.showAlert(title: "Success", message: "已刪除帳戶", completion: {
+                
+                user?.delete { error in
+                    if let error = error {
+                        print("error.")
+                    } else {
+                        print("Account deleted.")
+                        LoginViewController.loginStatus = false
+//                        try? Auth.auth().signOut()
+                    }
+                }
+                self.dismiss(animated: true)
+                self.signOutButtonTap?()
+            })
+        })
+        
     }
     
     @IBAction func contactButtonTapped(_ sender: Any) {

@@ -226,9 +226,13 @@ extension SearchViewController: UITableViewDataSource {
                     let urlString = theLocation[0].photo
                     if let url = URL(string: urlString) {
                         downloadImageFromFirestorage(url: url, cell: cell, indexPath: indexPath)
-                    }} }
-            
-            return cell} 
+                    }
+                }
+            }
+            self.activityIndicatorView.stopAnimating()
+            self.blurEffectView.removeFromSuperview()
+            self.activityIndicatorView.removeFromSuperview()
+            return cell}
     }
     
     func downloadImageFromFirestorage(url: URL, cell: SearchMemoriesCell, indexPath: IndexPath) {

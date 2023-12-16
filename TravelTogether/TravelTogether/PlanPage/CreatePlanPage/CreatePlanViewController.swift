@@ -17,7 +17,7 @@ class CreatePlanViewController: UIViewController {
     var endDate: Date?
     var newTravelPlan = TravelPlan(id: "", planName: "", destination: "", startDate: Date(), endDate: Date(), days: [])
     
-    @IBOutlet weak var planNameLabel: UILabel! 
+    @IBOutlet weak var planNameLabel: UILabel!
     @IBOutlet weak var planNameTextField: UITextField!
     @IBOutlet weak var saveButton: UIButton! {
         didSet {
@@ -60,33 +60,35 @@ class CreatePlanViewController: UIViewController {
     }
     
     @IBAction func saveButtonTapped(_ sender: Any) {
-    //    let emptyDay = TravelDay(locations: [])
-        if let planName = planNameTextField.text {
-            newTravelPlan = TravelPlan(
-                id: "",
-                planName: planName,
-                destination: "Destination",
-                startDate: startDate ?? Date(),
-                endDate: endDate ?? Date(),
-                days: [],
-                user: Auth.auth().currentUser?.displayName,
-                userPhoto: Auth.auth().currentUser?.photoURL?.absoluteString,
-                userId: Auth.auth().currentUser?.uid
-            )
-        }
-        
-        let firestoreManagerForPost = FirestoreManagerForPost()
-        firestoreManagerForPost.delegate = self
-        firestoreManagerForPost.postTravelPlan(travelPlan: newTravelPlan) { error in
-            if let error = error {
-                print("Error posting travel plan: \(error)")
+        //    let emptyDay = TravelDay(locations: [])
+        let firestore = FirestoreManagerFetchUser()
+        firestore.fetchUserInfo { userData, error  in
+            if error != nil {
+                print("Error fetching one plan: \(String(describing: error))")
             } else {
-                print("Travel plan posted successfully!")
+                self.newTravelPlan.user = userData?.name
+                self.newTravelPlan.userPhoto = userData?.photo
+                self.newTravelPlan.userId = userData?.id
+                //            }
+                //        }
+                if let planName = self.planNameTextField.text {
+                    self.newTravelPlan.planName = planName
+                    self.newTravelPlan.startDate = self.startDate ?? Date()
+                    self.newTravelPlan.endDate = self.endDate ?? Date()
+                }
+                print("newTravelPlan\(self.newTravelPlan)")
+                let firestoreManagerForPost = FirestoreManagerForPost()
+                firestoreManagerForPost.delegate = self
+                firestoreManagerForPost.postTravelPlan(travelPlan: self.newTravelPlan) { error in
+                    if let error = error {
+                        print("Error posting travel plan: \(error)")
+                    } else {
+                        print("Travel plan posted successfully!")
+                    }
+                }
+                self.navigationController?.popViewController(animated: true)
             }
-        }
-        navigationController?.popViewController(animated: true)
-    }
-    
+        }}
 }
 
 extension CreatePlanViewController: FirestoreManagerForPostDelegate {

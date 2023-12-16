@@ -79,9 +79,9 @@ class FirestoreManagerForOne {
         }
     }
     
-    func fetchOneTravelPlanFromFavorite(userId: String, byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
+    func fetchOneTravelPlanFromFavorite(dbcollection: String, userId: String, byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
         let database = Firestore.firestore()
-        let travelPlanRef = database.collection("UserInfo").document(userId).collection("FavoritePlan").document(planId)
+        let travelPlanRef = database.collection("UserInfo").document(userId).collection(dbcollection).document(planId)
 
         travelPlanRef.addSnapshotListener { document, error in
             if let error = error {

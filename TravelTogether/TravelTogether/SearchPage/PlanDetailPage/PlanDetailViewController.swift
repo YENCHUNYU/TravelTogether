@@ -70,10 +70,20 @@ class PlanDetailViewController: UIViewController {
 //                    print("One memory not found.")
 //                }
 //            }
+            let firestore = FirestoreManagerFetchUser()
+            firestore.fetchUserInfo{ userData, error  in
+                if error != nil {
+                    print("Error fetching one plan: \(String(describing: error))")
+                } else {
+                    self.onePlan.user = userData?.name
+                    self.onePlan.userPhoto = userData?.photo
+                    self.onePlan.userId = userData?.id
+                }
+            }
             let firestorePost = FirestoreManagerForPost()
-            self.onePlan.user = Auth.auth().currentUser?.displayName
-            self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-            self.onePlan.userId = Auth.auth().currentUser?.uid
+//            self.onePlan.user = Auth.auth().currentUser?.displayName
+//            self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
+//            self.onePlan.userId = Auth.auth().currentUser?.uid
             firestorePost.postFullPlan(plan: self.onePlan) { error in
                 if let error = error {
                     print("Error fetching one plan: \(error)")
@@ -234,7 +244,7 @@ class PlanDetailViewController: UIViewController {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
-        if isFromFavorite == false {
+        if isFromFavorite == false && isFromProfile == false {
             let firestoreManagerForOne = FirestoreManagerForOne()
             //        firestoreManagerForOne.delegate = self
             firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, error) in
@@ -255,14 +265,23 @@ class PlanDetailViewController: UIViewController {
                     self.headerView.onePlan = self.onePlan
                     self.headerView.collectionView.reloadData()
                     self.tableView.reloadData()
+                    let allDaysHaveNoLocations = self.onePlan.days.allSatisfy { $0.locations.isEmpty }
+
+                        if allDaysHaveNoLocations {
+                            self.activityIndicatorView.stopAnimating()
+                            self.blurEffectView.removeFromSuperview()
+                            self.activityIndicatorView.removeFromSuperview()
+                        }
                 } else {
                     print("One travel plan not found.")
                 }
             }} else {
+                dbCollection = isFromFavorite ? "FavoritePlan" : "TravelPlan"
+                dbCollection = isFromProfile ? "TravelPlan" : "FavoritePlan"
                 let firestoreManagerForOne = FirestoreManagerForOne()
                 //        firestoreManagerForOne.delegate = self
                 userId = Auth.auth().currentUser?.uid ?? ""
-                firestoreManagerForOne.fetchOneTravelPlanFromFavorite(userId: userId, byId: travelPlanId) { (travelPlan, error) in
+                firestoreManagerForOne.fetchOneTravelPlanFromFavorite(dbcollection: dbCollection, userId: userId, byId: travelPlanId) { (travelPlan, error) in
                     if let error = error {
                         print("Error fetching one travel plan: \(error)")
                     } else if let travelPlan = travelPlan {
@@ -280,6 +299,13 @@ class PlanDetailViewController: UIViewController {
                         self.headerView.onePlan = self.onePlan
                         self.headerView.collectionView.reloadData()
                         self.tableView.reloadData()
+                        let allDaysHaveNoLocations = self.onePlan.days.allSatisfy { $0.locations.isEmpty }
+
+                            if allDaysHaveNoLocations {
+                                self.activityIndicatorView.stopAnimating()
+                                self.blurEffectView.removeFromSuperview()
+                                self.activityIndicatorView.removeFromSuperview()
+                            }
                     } else {
                         print("One travel plan not found.")
                     }
@@ -326,9 +352,7 @@ extension PlanDetailViewController: UITableViewDataSource {
                     if cell.currentImageUrl == urlString {
                         if let image = image {
                             cell.locationImageView.image = image
-                            self.activityIndicatorView.stopAnimating()
-                            self.blurEffectView.removeFromSuperview()
-                            self.activityIndicatorView.removeFromSuperview()
+                            
                         } else {
                             cell.locationImageView.image = UIImage(named: "Image_Placeholder")
                         }
@@ -336,6 +360,9 @@ extension PlanDetailViewController: UITableViewDataSource {
                 }
             }
         }
+        self.activityIndicatorView.stopAnimating()
+        self.blurEffectView.removeFromSuperview()
+        self.activityIndicatorView.removeFromSuperview()
         return cell
     }
     

@@ -90,13 +90,7 @@ class EditPlanViewController: UIViewController {
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
 
-        let allDaysHaveNoLocations = onePlan.days.allSatisfy { $0.locations.isEmpty }
-
-            if allDaysHaveNoLocations {
-                self.activityIndicatorView.stopAnimating()
-                self.blurEffectView.removeFromSuperview()
-                self.activityIndicatorView.removeFromSuperview()
-            }
+        
         
         let firestoreClearUser = FirestoreManagerForPostLocation()
         firestoreClearUser.delegate = self
@@ -115,6 +109,13 @@ class EditPlanViewController: UIViewController {
             } else if let travelPlan = travelPlan {
                 self.onePlan = travelPlan
                 self.tableView.reloadData()
+                let allDaysHaveNoLocations = self.onePlan.days.allSatisfy { $0.locations.isEmpty }
+
+                    if allDaysHaveNoLocations {
+                        self.activityIndicatorView.stopAnimating()
+                        self.blurEffectView.removeFromSuperview()
+                        self.activityIndicatorView.removeFromSuperview()
+                    }
 //               self.headerView.collectionView.reloadData()
             } else {
                 print("One travel plan not found.")

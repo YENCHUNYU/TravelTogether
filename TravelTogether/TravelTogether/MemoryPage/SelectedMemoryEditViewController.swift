@@ -114,9 +114,19 @@ class SelectedMemoryEditViewController: UIViewController {
     @objc func rightButtonTapped() {
         if dbCollection == "Memory" {
             let firestoreManagerForPost = FirestoreManagerMemoryPost()
-            self.onePlan.user = Auth.auth().currentUser?.displayName
-            self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-            self.onePlan.userId = Auth.auth().currentUser?.uid
+            let firestore = FirestoreManagerFetchUser()
+            firestore.fetchUserInfo{ userData, error  in
+                if error != nil {
+                    print("Error fetching one plan: \(String(describing: error))")
+                } else {
+                    self.onePlan.user = userData?.name
+                    self.onePlan.userPhoto = userData?.photo
+                    self.onePlan.userId = userData?.id
+                }
+            }
+//            self.onePlan.user = Auth.auth().currentUser?.displayName
+//            self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
+//            self.onePlan.userId = Auth.auth().currentUser?.uid
             firestoreManagerForPost.updateMemory(dbcollection: dbCollection, memory: self.onePlan, memoryId: memoryId) { error in
                 if error != nil {
                     print("Failed to post Memory")
@@ -133,9 +143,19 @@ class SelectedMemoryEditViewController: UIViewController {
                 }
                 updateorPostVC.updateButtonTapped = {
                     let firestoreManagerForPost = FirestoreManagerMemoryPost()
-                    self.onePlan.user = Auth.auth().currentUser?.displayName
-                    self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-                    self.onePlan.userId = Auth.auth().currentUser?.uid
+                    let firestore = FirestoreManagerFetchUser()
+                    firestore.fetchUserInfo{ userData, error  in
+                        if error != nil {
+                            print("Error fetching one plan: \(String(describing: error))")
+                        } else {
+                            self.onePlan.user = userData?.name
+                            self.onePlan.userPhoto = userData?.photo
+                            self.onePlan.userId = userData?.id
+                        }
+                    }
+//                    self.onePlan.user = Auth.auth().currentUser?.displayName
+//                    self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
+//                    self.onePlan.userId = Auth.auth().currentUser?.uid
                     firestoreManagerForPost.updateMemory(dbcollection: self.dbCollection, memory: self.onePlan, memoryId: self.memoryId) { error in
                         if error != nil {
                             print("Failed to post Memory")

@@ -20,7 +20,7 @@ class LoginViewController: UIViewController {
     let user = Auth.auth().currentUser
     // Unhashed nonce.
     fileprivate var currentNonce: String?
-    
+    var newProfile: UserInfo?
     
     @IBOutlet weak var stackView: UIStackView!
     
@@ -185,7 +185,7 @@ class LoginViewController: UIViewController {
     }
     
     func signInWithFirebase(_ credential: AuthCredential) {
-
+        
         Auth.auth().signIn(with: credential) { authResult, error in
             if let error = error {
                 self.showAlert(title: "Error", message: "登入失敗，請改由其他方式登入。")
@@ -198,13 +198,14 @@ class LoginViewController: UIViewController {
             LoginViewController.loginStatus = true
             
             if let user = authResult?.user {
-                let usersRef = self.database.collection("UserInfo").document(user.uid)
-                let userInfo = UserInfo(email: user.email ?? "", name: user.displayName ?? "User", id: user.uid, photo: user.photoURL?.absoluteString)
-                let usersData = userInfo.toDictionary()
-                usersRef.setData(usersData, merge: true)
-            }}
-      }
-
+                self.retrieveExistingUserProfile { existingGoogleUserProfile in
+                    let usersRef = self.database.collection("UserInfo").document(user.uid)
+                    let userInfo = UserInfo(email: user.email ?? "", name: user.displayName ?? "User", id: user.uid, photo: user.photoURL?.absoluteString)
+                    let usersData = existingGoogleUserProfile?.toDictionary()
+                    usersRef.setData(usersData ?? userInfo.toDictionary(), merge: true)
+                }}
+        }
+    }
     @IBAction func doneButtonTapped(_ sender: Any) {
         
         let emailText = emailTextField.text ?? ""
@@ -292,54 +293,6 @@ class LoginViewController: UIViewController {
        }
 }
 
-//extension LoginViewController {
-//    private func randomNonceString(length: Int = 32) -> String {
-//      precondition(length > 0)
-//      var randomBytes = [UInt8](repeating: 0, count: length)
-//      let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
-//      if errorCode != errSecSuccess {
-//        fatalError(
-//          "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
-//        )
-//      }
-//
-//      let charset: [Character] =
-//        Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
-//
-//      let nonce = randomBytes.map { byte in
-//        // Pick a random character from the set, wrapping around if needed.
-//        charset[Int(byte) % charset.count]
-//      }
-//
-//      return String(nonce)
-//    }
-//    
-//    @available(iOS 13, *)
-//    private func sha256(_ input: String) -> String {
-//      let inputData = Data(input.utf8)
-//      let hashedData = SHA256.hash(data: inputData)
-//      let hashString = hashedData.compactMap {
-//        String(format: "%02x", $0)
-//      }.joined()
-//
-//      return hashString
-//    }
-//
-//    @available(iOS 13, *)
-//    func startSignInWithAppleFlow() {
-//      let nonce = randomNonceString()
-//      currentNonce = nonce
-//      let appleIDProvider = ASAuthorizationAppleIDProvider()
-//      let request = appleIDProvider.createRequest()
-//      request.requestedScopes = [.fullName, .email]
-//      request.nonce = sha256(nonce)
-//
-//      let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-//      authorizationController.delegate = self
-//      authorizationController.presentationContextProvider = self
-//      authorizationController.performRequests()
-//    }
-//}
 extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
         
     /// - Parameter controller: _
@@ -350,60 +303,116 @@ extension LoginViewController: ASAuthorizationControllerPresentationContextProvi
 
 @available(iOS 13.0, *)
 extension LoginViewController: ASAuthorizationControllerDelegate {
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        retrieveExistingUserProfile { existingUserProfile in
+            if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+                guard let nonce = self.currentNonce else {
+                    fatalError("Invalid state: A login callback was received, but no login request was sent.")
+                }
+                guard let appleIDToken = appleIDCredential.identityToken else {
+                    print("Unable to fetch identity token")
+                    return
+                }
+                guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                    print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                    return
+                }
+                
+                // Initialize a Firebase credential, including the user's full name.
+                let credential = OAuthProvider.appleCredential(
+                    withIDToken: idTokenString,
+                    rawNonce: nonce,
+                    fullName: appleIDCredential.fullName
+                )
+                
+                print("user: \(appleIDCredential.user)")
+                print("fullName: \(appleIDCredential.fullName?.description ?? "N/A")")
+                print("Email: \(appleIDCredential.email ?? "N/A")")
+                print("realUserStatus: \(appleIDCredential.realUserStatus)")
+                
+                Auth.auth().signIn(with: credential) { authResult, error in
+                    if let error = error {
+                        self.showAlert(title: "Error", message: "登入失敗。")
+                        print("Firebase sign-in error: \(error.localizedDescription)")
+                        return
+                    }
+                    
+                    self.showAlert(title: "Success", message: "登入成功！")
+                    print("User signed in with Firebase")
+                    LoginViewController.loginStatus = true
+                    
+                    if let user = authResult?.user {
+                        self.retrieveExistingUserProfile { existingGoogleUserProfile in
+                            // Merge the profiles
+//                            self.handleMergeUserProfiles(existingUserProfile: existingGoogleUserProfile)
+//                            
+                            let usersRef = self.database.collection("UserInfo").document(user.uid)
+                            let userInfo = UserInfo(
+                                email: user.email ?? "",
+                                name: appleIDCredential.fullName?.givenName ?? "",
+                                id: user.uid,
+                                photo: user.photoURL?.absoluteString
+                            )
+                            let usersData = existingGoogleUserProfile?.toDictionary()
+                            usersRef.setData(usersData ?? userInfo.toDictionary())
+                        }
+                    }
+                }
+            }
+        }
+    }
+    func retrieveExistingUserProfile(completion: @escaping (UserInfo?) -> Void) {
+        guard let currentUser = Auth.auth().currentUser else {
+            completion(nil)
+            return
+        }
 
-  func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-      if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-          guard let nonce = currentNonce else {
-              fatalError("Invalid state: A login callback was received, but no login request was sent.")
-          }
-          guard let appleIDToken = appleIDCredential.identityToken else {
-              print("Unable to fetch identity token")
-              return
-          }
-          guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-              print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
-              return
-          }
+        // Retrieve the user profile information from your database (Firestore, Realtime Database, etc.)
+        let usersRef = Firestore.firestore().collection("UserInfo").document(currentUser.uid)
+        
+        usersRef.getDocument { document, error in
+            guard let document = document, document.exists, let data = document.data() else {
+                completion(nil)
+                return
+            }
 
-          // Initialize a Firebase credential, including the user's full name.
-          let credential = OAuthProvider.appleCredential(
-              withIDToken: idTokenString,
-              rawNonce: nonce,
-              fullName: appleIDCredential.fullName
-          )
+            let existingUserProfile = UserInfo(email: data["email"] as? String ?? "",
+                                               name: data["name"] as? String ?? "",
+                                               id: data["id"] as? String ?? "",
+                                               photo: data["photo"] as? String ?? "")
+            print("existingUserProfile\(existingUserProfile)")
+            completion(existingUserProfile)
+        }
+    }
+    
+    func handleMergeUserProfiles(existingUserProfile: UserInfo?) {
+        // Merge relevant information from existingUserProfile to newProfile
+        // For example, preserve display name and photo URL if they are empty in newProfile
+        
+        if newProfile?.name != existingUserProfile?.name {
+            newProfile?.name = existingUserProfile?.name ?? ""
+           }
 
-          print("user: \(appleIDCredential.user)")
-          print("fullName: \(appleIDCredential.fullName?.description ?? "N/A")")
-          print("Email: \(appleIDCredential.email ?? "N/A")")
-          print("realUserStatus: \(appleIDCredential.realUserStatus)")
+        if newProfile?.photo != existingUserProfile?.photo {
+            newProfile?.photo = existingUserProfile?.photo
+           }
 
-          Auth.auth().signIn(with: credential) { authResult, error in
-              if let error = error {
-                  self.showAlert(title: "Error", message: "登入失敗。")
-                  print("Firebase sign-in error: \(error.localizedDescription)")
-                  return
-              }
 
-              self.showAlert(title: "Success", message: "登入成功！")
-              print("User signed in with Firebase")
-              LoginViewController.loginStatus = true
+        // Update the user profile in your database with the merged information
+        updateProfileInDatabase((newProfile ?? UserInfo(email: "", name: "", id: "")))
+    }
 
-              if let user = authResult?.user {
-                  let usersRef = self.database.collection("UserInfo").document(user.uid)
-                  let userInfo = UserInfo(
-                    email: user.email ?? "",
-                    name: appleIDCredential.fullName?.givenName ?? "",
-                      id: user.uid,
-                      photo: user.photoURL?.absoluteString
-                  )
-                  let usersData = userInfo.toDictionary()
-                  usersRef.setData(usersData)
-              }
-          }
-      }
+    func updateProfileInDatabase(_ userProfile: UserInfo) {
+        guard let currentUser = Auth.auth().currentUser else {
+            return
+        }
 
-  }
-   
+        let usersRef = Firestore.firestore().collection("UserInfo").document(currentUser.uid)
+        let userData = userProfile.toDictionary()
+        usersRef.setData(userData, merge: true)
+    }
+  
         func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
             // 登入失敗，處理 Error
             switch error {
@@ -416,26 +425,26 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
             case ASAuthorizationError.notHandled:
                 showAlert(title: "授權請求未處理", message: "")
             case ASAuthorizationError.unknown:
-                showAlert(title: "授權失敗，原因不明", message: "")
+                showAlert(title: "已授權，請再次登入", message: "")
             default:
                 break
             }
         }
 
-    func reauth(id appleIdToken: String, raw rawNonce: String) {
-        // Initialize a fresh Apple credential with Firebase.
-        let credential = OAuthProvider.credential(
-          withProviderID: "apple.com",
-          idToken: appleIdToken,
-          rawNonce: rawNonce
-        )
-        // Reauthenticate current Apple user with fresh Apple credential.
-        Auth.auth().currentUser?.reauthenticate(with: credential) { (authResult, error) in
-          guard error != nil else { return }
-          // Apple user successfully re-authenticated.
-          // ...
-        }
-    }
+//    func reauth(id appleIdToken: String, raw rawNonce: String) {
+//        // Initialize a fresh Apple credential with Firebase.
+//        let credential = OAuthProvider.credential(
+//          withProviderID: "apple.com",
+//          idToken: appleIdToken,
+//          rawNonce: rawNonce
+//        )
+//        // Reauthenticate current Apple user with fresh Apple credential.
+//        Auth.auth().currentUser?.reauthenticate(with: credential) { (authResult, error) in
+//          guard error != nil else { return }
+//          // Apple user successfully re-authenticated.
+//          // ...
+//        }
+//    }
     
 }
 extension LoginViewController {

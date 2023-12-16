@@ -117,10 +117,20 @@ class EditMemoryViewController: UIViewController {
             }
             
             draftorPostVC.toSaveButtonTapped = {
+                let firestore = FirestoreManagerFetchUser()
+                firestore.fetchUserInfo{ userData, error  in
+                    if error != nil {
+                        print("Error fetching one plan: \(String(describing: error))")
+                    } else {
+                        self.onePlan.user = userData?.name
+                        self.onePlan.userPhoto = userData?.photo
+                        self.onePlan.userId = userData?.id
+                    }
+                }
                 let firestoreManagerForPost = FirestoreManagerMemoryPost()
-                self.onePlan.user = Auth.auth().currentUser?.displayName
-                self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-                self.onePlan.userId = Auth.auth().currentUser?.uid
+//                self.onePlan.user = Auth.auth().currentUser?.displayName
+//                self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
+//                self.onePlan.userId = Auth.auth().currentUser?.uid
                         firestoreManagerForPost.postMemoryDraft(memory: self.onePlan) { error in
                                 if error != nil {
                                     print("Failed to post MemoryDraft")

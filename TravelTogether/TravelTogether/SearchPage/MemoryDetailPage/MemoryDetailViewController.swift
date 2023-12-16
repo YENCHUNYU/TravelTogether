@@ -61,11 +61,20 @@ class MemoryDetailViewController: UIViewController {
                 present(loginNavController, animated: true, completion: nil)
             }
         } else {
-
+            let firestore = FirestoreManagerFetchUser()
+            firestore.fetchUserInfo{ userData, error  in
+                if error != nil {
+                    print("Error fetching one plan: \(error)")
+                } else {
+                    self.onePlan.user = userData?.name
+                    self.onePlan.userPhoto = userData?.photo
+                    self.onePlan.userId = userData?.id
+                }
+            }
             let firestorePost = FirestoreManagerForPost()
-            self.onePlan.user = Auth.auth().currentUser?.displayName
-            self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-            self.onePlan.userId = Auth.auth().currentUser?.uid
+//            self.onePlan.user = Auth.auth().currentUser?.displayName
+//            self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
+//            self.onePlan.userId = Auth.auth().currentUser?.uid
             firestorePost.postFullPlan(plan: self.onePlan) { error in
                 if let error = error {
                     print("Error fetching one plan: \(error)")

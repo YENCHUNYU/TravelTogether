@@ -65,9 +65,19 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
     @objc func rightButtonTapped() {
         let firestoreManagerForPost = FirestoreManagerMemoryPost()
 //        firestoreManagerForPost.delegate = self
-        onePlan.user = Auth.auth().currentUser?.displayName
-        onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-        onePlan.userId = Auth.auth().currentUser?.uid
+        let firestore = FirestoreManagerFetchUser()
+        firestore.fetchUserInfo{ userData, error  in
+            if error != nil {
+                print("Error fetching one plan: \(String(describing: error))")
+            } else {
+                self.onePlan.user = userData?.name
+                self.onePlan.userPhoto = userData?.photo
+                self.onePlan.userId = userData?.id
+            }
+        }
+//        onePlan.user = Auth.auth().currentUser?.displayName
+//        onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
+//        onePlan.userId = Auth.auth().currentUser?.uid
                 firestoreManagerForPost.postMemory(memory: self.onePlan) { error in
                         if error != nil {
                             print("Failed to post TravelPlan")
