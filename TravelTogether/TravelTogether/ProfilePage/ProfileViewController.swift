@@ -118,21 +118,39 @@ class ProfileViewController: UIViewController {
     
     @objc func rightButtonTapped() {
         if let settingVC = storyboard?.instantiateViewController(withIdentifier: "SettingViewController") as? SettingViewController {
-            // Present the login view controller within a navigation controller
             let settingNavController = UINavigationController(rootViewController: settingVC)
             present(settingNavController, animated: true, completion: nil)
+            
+            settingVC.signOutButtonTap = { [weak self] in
+                if let tabBarController = self?.tabBarController {
+                    tabBarController.selectedIndex = 0
+                    self?.dismiss(animated: true)
+                }
+            }
         }
-        
     }
     
-    func showAlert(title: String, message: String) {
+//    func showAlert(title: String, message: String) {
+//        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+//        let action = UIAlertAction(title: "OK", style: .default) { [weak self] action in
+//            
+//        }
+//        alert.addAction(action)
+//        present(alert, animated: true)
+//        
+//    }
+    func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default) { [weak self] action in
-            
-        }
-        alert.addAction(action)
-        present(alert, animated: true)
         
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        alert.addAction(cancelAction)
+        
+        let okAction = UIAlertAction(title: "確定", style: .default) { [weak self] action in
+            completion?()
+        }
+        alert.addAction(okAction)
+        
+        present(alert, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {

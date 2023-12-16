@@ -21,6 +21,9 @@ class LoginViewController: UIViewController {
     // Unhashed nonce.
     fileprivate var currentNonce: String?
     
+    
+    @IBOutlet weak var stackView: UIStackView!
+    
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     @IBOutlet weak var emailLabel: UILabel! {
@@ -97,12 +100,15 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         // 將使用者進入畫面預設成select log-in
         segmentedControl.selectedSegmentIndex = 0
-        nameLabel.isEnabled = false
-        nameTextField.isEnabled = false
-        nameLabel.textColor = UIColor.lightGray
-        nameTextField.backgroundColor = UIColor(named: "lightGreen")
+        stackView.isHidden = true
+        doneButton.isHidden = true
+        
+//        nameLabel.isEnabled = false
+//        nameTextField.isEnabled = false
+//        nameLabel.textColor = UIColor.lightGray
+//        nameTextField.backgroundColor = UIColor(named: "lightGreen")
 
-        let font = UIFont.systemFont(ofSize: 16)
+        let font = UIFont.systemFont(ofSize: 16, weight: .light)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)
         
        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
@@ -122,13 +128,26 @@ class LoginViewController: UIViewController {
     
     @IBAction func changeMode(_ sender: UISegmentedControl) {
         if sender.selectedSegmentIndex == 0 {
+            appleSigninButton.isHidden = false
+            googleSigninButton.isHidden = false
+            stackView.isHidden = true
+            doneButton.isHidden = true
+        } else if sender.selectedSegmentIndex == 1 {
+            appleSigninButton.isHidden = true
+            googleSigninButton.isHidden = true
+            stackView.isHidden = false
+            doneButton.isHidden = false
             // select log-in: 無法輸入、灰字、灰框
             nameLabel.isEnabled = false
             nameTextField.isEnabled = false
             nameLabel.textColor = UIColor.lightGray
             nameTextField.backgroundColor = UIColor(named: "lightGreen")
         } else {
+            appleSigninButton.isHidden = true
+            googleSigninButton.isHidden = true
             // select sign-up: 可輸入
+            stackView.isHidden = false
+            doneButton.isHidden = false
             nameLabel.isEnabled = true
             nameTextField.isEnabled = true
             nameLabel.textColor = UIColor.black
@@ -193,7 +212,7 @@ class LoginViewController: UIViewController {
         let nameText = nameTextField.text ?? ""
         
         // select log-in
-        if segmentedControl.selectedSegmentIndex == 0 {
+        if segmentedControl.selectedSegmentIndex == 1 {
             Auth.auth().signIn(withEmail: emailText, password: passwordText) { result, error in
                 guard error == nil else {
                     self.showAlert(title: "Error", message: "登入失敗")
@@ -224,8 +243,17 @@ class LoginViewController: UIViewController {
                         self.showAlert(title: "Error", message: "請輸入暱稱")
                         
                     } else {
-                        self.showAlert(title: "Success", message: "註冊成功！請前往登入畫面並輸入登入資訊。")
+//                        self.showAlert(title: "Success", message: "註冊成功！請前往登入畫面並輸入登入資訊。")
                         self.addData()
+                        Auth.auth().signIn(withEmail: emailText, password: passwordText) { result, error in
+                            guard error == nil else {
+                                self.showAlert(title: "Error", message: "登入失敗")
+                                  return
+                               }
+                            self.showAlert(title: "Success", message: "註冊並登入成功!")
+                            LoginViewController.loginStatus = true
+            //                self.dismiss(animated: true)
+                    }
                     }
                 }}}
     }
@@ -458,191 +486,3 @@ extension LoginViewController {
       authorizationController.performRequests()
     }
 }
-
-//@available(iOS 13.0, *)
-//extension LoginViewController: ASAuthorizationControllerDelegate {
-//
-//  func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-//    if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-//      guard let nonce = currentNonce else {
-//        fatalError("Invalid state: A login callback was received, but no login request was sent.")
-//      }
-//      guard let appleIDToken = appleIDCredential.identityToken else {
-//        print("Unable to fetch identity token")
-//        return
-//      }
-//      guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-//        print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
-//        return
-//      }
-//      // Initialize a Firebase credential, including the user's full name.
-//      let credential = OAuthProvider.appleCredential(withIDToken: idTokenString,
-//                                                        rawNonce: nonce,
-//                                                        fullName: appleIDCredential.fullName)
-//        
-//        print("user: \(appleIDCredential.user)")
-//         print("fullName: \(appleIDCredential.fullName?.description ?? "N/A")")
-//         print("Email: \(appleIDCredential.email ?? "N/A")")
-//         print("realUserStatus: \(appleIDCredential.realUserStatus)")
-//      // Sign in with Firebase.
-//      Auth.auth().signIn(with: credential) { (authResult, error) in
-//          if (error != nil) {
-//          // Error. If error.code == .MissingOrInvalidNonce, make sure
-//          // you're sending the SHA256-hashed nonce as a hex string with
-//          // your request to Apple.
-//              print(error?.localizedDescription)
-//          return
-//        }
-//        // User is signed in to Firebase with Apple.
-//        // ...
-//      }
-//    }
-//  }
-//
-//  func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-//    // Handle error.
-//    print("Sign in with Apple errored: \(error)")
-//  }
-//
-//}
-
-//extension LoginViewController {
-//    private func randomNonceString(length: Int = 32) -> String {
-//        precondition(length > 0)
-//        let charset: Array<Character> = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
-//        var result = ""
-//        var remainingLength = length
-//
-//        while(remainingLength > 0) {
-//            let randoms: [UInt8] = (0 ..< 16).map { _ in
-//                var random: UInt8 = 0
-//                let errorCode = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
-//                if (errorCode != errSecSuccess) {
-//                    fatalError("Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)")
-//                }
-//                return random
-//            }
-//
-//            randoms.forEach { random in
-//                if (remainingLength == 0) {
-//                    return
-//                }
-//
-//                if (random < charset.count) {
-//                    result.append(charset[Int(random)])
-//                    remainingLength -= 1
-//                }
-//            }
-//        }
-//        return result
-//    }
-//
-//    private func sha256(_ input: String) -> String {
-//        let inputData = Data(input.utf8)
-//        let hashedData = SHA256.hash(data: inputData)
-//        let hashString = hashedData.compactMap {
-//            return String(format: "%02x", $0)
-//        }.joined()
-//        return hashString
-//    }
-//}
-//
-//extension LoginViewController: ASAuthorizationControllerDelegate {
-//    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-//        // 登入成功
-//        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-//            
-//            print("user: \(appleIDCredential.user)")
-//           print("fullName: \(String(describing: appleIDCredential.fullName))")
-//           print("Email: \(String(describing: appleIDCredential.email))")
-//           print("realUserStatus: \(String(describing: appleIDCredential.realUserStatus))")
-//            
-//            guard let nonce = currentNonce else {
-//                fatalError("Invalid state: A login callback was received, but no login request was sent.")
-//            }
-//            guard let appleIDToken = appleIDCredential.identityToken else {
-//                CustomFunc.customAlert(title: "", message: "Unable to fetch identity token", vc: self, actionHandler: nil)
-//                return
-//            }
-//            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-//                CustomFunc.customAlert(title: "", message: "Unable to serialize token string from data\n\(appleIDToken.debugDescription)", vc: self, actionHandler: nil)
-//                return
-//            }
-//            // 產生 Apple ID 登入的 Credential
-//            let credential = OAuthProvider.credential(withProviderID: "apple.com", idToken: idTokenString, rawNonce: nonce)
-//            // 與 Firebase Auth 進行串接
-//            firebaseSignInWithApple(credential: credential)
-//        }
-//    }
-//    
-//    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-//        // 登入失敗，處理 Error
-//        switch error {
-//        case ASAuthorizationError.canceled:
-//            CustomFunc.customAlert(title: "使用者取消登入", message: "", vc: self, actionHandler: nil)
-//            break
-//        case ASAuthorizationError.failed:
-//            CustomFunc.customAlert(title: "授權請求失敗", message: "", vc: self, actionHandler: nil)
-//            break
-//        case ASAuthorizationError.invalidResponse:
-//            CustomFunc.customAlert(title: "授權請求無回應", message: "", vc: self, actionHandler: nil)
-//            break
-//        case ASAuthorizationError.notHandled:
-//            CustomFunc.customAlert(title: "授權請求未處理", message: "", vc: self, actionHandler: nil)
-//            break
-//        case ASAuthorizationError.unknown:
-//            CustomFunc.customAlert(title: "授權失敗，原因不知", message: "", vc: self, actionHandler: nil)
-//            break
-//        default:
-//            break
-//        }
-//    }
-//}
-//extension LoginViewController {
-//    // MARK: - 透過 Credential 與 Firebase Auth 串接
-//    func firebaseSignInWithApple(credential: AuthCredential) {
-//        Auth.auth().signIn(with: credential) { authResult, error in
-//            guard error == nil else {
-//                CustomFunc.customAlert(title: "", message: "\(String(describing: error!.localizedDescription))", vc: self, actionHandler: nil)
-//                return
-//            }
-//            CustomFunc.customAlert(title: "登入成功！", message: "", vc: self, actionHandler: self.getFirebaseUserInfo)
-//            LoginViewController.loginStatus = true
-//            self.dismiss(animated: true)
-//        }
-//    }
-//    
-//    // MARK: - Firebase 取得登入使用者的資訊
-//    func getFirebaseUserInfo() {
-//        let currentUser = Auth.auth().currentUser
-//        guard let user = currentUser else {
-//            CustomFunc.customAlert(title: "無法取得使用者資料！", message: "", vc: self, actionHandler: nil)
-//            return
-//        }
-//        let uid = user.uid
-//        let email = user.email
-//        CustomFunc.customAlert(title: "使用者資訊", message: "UID：\(uid)\nEmail：\(email!)", vc: self, actionHandler: nil)
-//       
-//            let usersRef = self.database.collection("UserInfo").document(user.uid)
-//            let userInfo = UserInfo(email: user.email ?? "", name: user.displayName ?? "User", id: user.uid, photo: user.photoURL?.absoluteString)
-//            let usersData = userInfo.toDictionary()
-//            usersRef.setData(usersData, merge: true)
-//        
-//        
-//    }
-//}
-//class CustomFunc {
-//    static func customAlert(title: String, message: String, vc: UIViewController, actionHandler: (() -> Void)?) {
-//        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-//
-//        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-//            // Perform any action specified in the handler
-//            actionHandler?()
-//        }
-//
-//        alertController.addAction(okAction)
-//
-//        // Present the alert
-//        vc.present(alertController, animated: true, completion: nil)
-//    }
-//}

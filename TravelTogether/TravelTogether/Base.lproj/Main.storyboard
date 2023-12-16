@@ -1371,6 +1371,7 @@
                         <segue destination="X0i-YR-ofD" kind="show" identifier="goToSettings" id="XAW-rf-9rc"/>
                         <segue destination="QZi-MT-SaE" kind="show" identifier="ProfileToMemory" id="Zww-hD-bL6"/>
                         <segue destination="Rfc-QS-3Zr" kind="show" identifier="ProfileToPlan" id="bXa-yj-gCI"/>
+                        <segue destination="eac-h6-hsR" kind="show" identifier="signOut" id="qMO-0e-wEY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4pm-fG-RQV" sceneMemberID="firstResponder"/>
@@ -2079,12 +2080,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="fI5-ac-IRe">
-                                <rect key="frame" x="126.66666666666669" y="89" width="140" height="32"/>
+                                <rect key="frame" x="87.666666666666686" y="89" width="218" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="OvY-um-dXW"/>
                                 </constraints>
                                 <segments>
-                                    <segment title="登入"/>
+                                    <segment title="快速登入"/>
+                                    <segment title="一般登入"/>
                                     <segment title="註冊"/>
                                 </segments>
                                 <connections>
@@ -2183,22 +2185,8 @@
                                     <action selector="closeButtonTapped:" destination="YeD-4f-5zB" eventType="touchUpInside" id="4zg-lH-5Bz"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5B6-dF-M0h">
-                                <rect key="frame" x="30" y="341" width="333" height="1"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="1" id="6Ua-Rs-Kqu"/>
-                                </constraints>
-                            </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  選擇其他登入方式  " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xv5-cJ-xT2">
-                                <rect key="frame" x="127.33333333333333" y="332.33333333333331" width="138.66666666666669" height="18"/>
-                                <color key="backgroundColor" name="darkGreen"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <color key="textColor" name="yellowGreen"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hlk-3J-RNw">
-                                <rect key="frame" x="50" y="365.33333333333331" width="293" height="38"/>
+                                <rect key="frame" x="50" y="155" width="293" height="38"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="38" id="mF0-WE-Uhp"/>
@@ -2213,7 +2201,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eA7-mG-7jQ">
-                                <rect key="frame" x="50" y="411.33333333333331" width="293" height="38"/>
+                                <rect key="frame" x="50" y="208" width="293" height="38"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="38" id="nXY-Zg-d5A"/>
@@ -2231,9 +2219,8 @@
                         <viewLayoutGuide key="safeArea" id="ihW-wD-ygf"/>
                         <color key="backgroundColor" name="darkGreen"/>
                         <constraints>
+                            <constraint firstItem="Hlk-3J-RNw" firstAttribute="top" secondItem="fI5-ac-IRe" secondAttribute="bottom" constant="35" id="0us-6d-Pay"/>
                             <constraint firstItem="fI5-ac-IRe" firstAttribute="centerX" secondItem="ihW-wD-ygf" secondAttribute="centerX" id="16x-Br-HWH"/>
-                            <constraint firstItem="5B6-dF-M0h" firstAttribute="leading" secondItem="ihW-wD-ygf" secondAttribute="leading" constant="30" id="1qx-yD-Ufh"/>
-                            <constraint firstItem="ihW-wD-ygf" firstAttribute="trailing" secondItem="5B6-dF-M0h" secondAttribute="trailing" constant="30" id="4sT-bf-BWg"/>
                             <constraint firstItem="ihW-wD-ygf" firstAttribute="trailing" secondItem="eA7-mG-7jQ" secondAttribute="trailing" constant="50" id="Ahv-dQ-b5j"/>
                             <constraint firstItem="ihW-wD-ygf" firstAttribute="trailing" secondItem="Hlk-3J-RNw" secondAttribute="trailing" constant="50" id="C8P-pK-LWs"/>
                             <constraint firstItem="ihW-wD-ygf" firstAttribute="trailing" secondItem="eM1-5R-k4X" secondAttribute="trailing" constant="155" id="G8F-9t-tom"/>
@@ -2241,17 +2228,13 @@
                             <constraint firstItem="eM1-5R-k4X" firstAttribute="leading" secondItem="ihW-wD-ygf" secondAttribute="leading" constant="155" id="LU7-pm-feW"/>
                             <constraint firstItem="VPf-dV-pHq" firstAttribute="top" secondItem="fI5-ac-IRe" secondAttribute="bottom" constant="20" id="M4q-7a-b5a"/>
                             <constraint firstItem="eM1-5R-k4X" firstAttribute="top" secondItem="VPf-dV-pHq" secondAttribute="bottom" constant="10" id="ORF-tC-RmY"/>
-                            <constraint firstItem="xv5-cJ-xT2" firstAttribute="top" secondItem="eM1-5R-k4X" secondAttribute="bottom" constant="15" id="U9O-jE-J19"/>
-                            <constraint firstItem="xv5-cJ-xT2" firstAttribute="centerX" secondItem="ihW-wD-ygf" secondAttribute="centerX" id="VAw-Yb-SGP"/>
                             <constraint firstItem="ihW-wD-ygf" firstAttribute="top" secondItem="jl9-pA-caw" secondAttribute="top" id="VX8-oQ-ctD"/>
                             <constraint firstItem="ihW-wD-ygf" firstAttribute="trailing" secondItem="VPf-dV-pHq" secondAttribute="trailing" constant="30" id="XnI-wc-qLt"/>
                             <constraint firstItem="VPf-dV-pHq" firstAttribute="leading" secondItem="ihW-wD-ygf" secondAttribute="leading" constant="30" id="fYo-qd-MHT"/>
-                            <constraint firstItem="5B6-dF-M0h" firstAttribute="centerY" secondItem="xv5-cJ-xT2" secondAttribute="centerY" id="hDl-sW-cCp"/>
                             <constraint firstItem="jl9-pA-caw" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="ihW-wD-ygf" secondAttribute="leading" constant="20" id="itk-oP-YJX"/>
                             <constraint firstItem="fI5-ac-IRe" firstAttribute="top" secondItem="ihW-wD-ygf" secondAttribute="top" constant="30" id="k8L-S6-kMz"/>
-                            <constraint firstItem="eA7-mG-7jQ" firstAttribute="top" secondItem="Hlk-3J-RNw" secondAttribute="bottom" constant="8" id="kOg-nD-2If"/>
+                            <constraint firstItem="eA7-mG-7jQ" firstAttribute="top" secondItem="Hlk-3J-RNw" secondAttribute="bottom" constant="15" id="kOg-nD-2If"/>
                             <constraint firstItem="Hlk-3J-RNw" firstAttribute="leading" secondItem="ihW-wD-ygf" secondAttribute="leading" constant="50" id="oWf-eV-oSS"/>
-                            <constraint firstItem="Hlk-3J-RNw" firstAttribute="top" secondItem="xv5-cJ-xT2" secondAttribute="bottom" constant="15" id="pJP-wp-ylg"/>
                             <constraint firstItem="ihW-wD-ygf" firstAttribute="trailing" secondItem="jl9-pA-caw" secondAttribute="trailing" id="rJ2-cx-dzS"/>
                         </constraints>
                     </view>
@@ -2267,6 +2250,7 @@
                         <outlet property="passwordLabel" destination="oZ0-zO-Cl7" id="TBf-Hq-Ihc"/>
                         <outlet property="passwordTextField" destination="cAS-pG-X6J" id="3FP-pN-uc5"/>
                         <outlet property="segmentedControl" destination="fI5-ac-IRe" id="VMd-jk-aFC"/>
+                        <outlet property="stackView" destination="VPf-dV-pHq" id="GsU-jQ-3M3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n0l-u7-E1p" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2603,6 +2587,7 @@
         <segue reference="fOh-e2-FVh"/>
         <segue reference="HNF-ZE-dku"/>
         <segue reference="jsr-wJ-nje"/>
+        <segue reference="qMO-0e-wEY"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Icons_24px_Close拷貝" width="24" height="24"/>

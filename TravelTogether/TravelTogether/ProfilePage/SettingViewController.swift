@@ -12,6 +12,7 @@ import CryptoKit
 
 class SettingViewController: UIViewController, ASAuthorizationControllerDelegate {
 //    fileprivate var currentNonce: String?
+    var signOutButtonTap: (() -> Void)?
     @IBOutlet weak var closeButton: UIButton!
     @IBOutlet weak var manageAccountLabel: UILabel!
     @IBOutlet weak var signOutButton: UIButton! {
@@ -33,15 +34,21 @@ class SettingViewController: UIViewController, ASAuthorizationControllerDelegate
     }
     
     @IBAction func signOutButtonTapped(_ sender: Any) {
+        
         let firebaseAuth = Auth.auth()
-        do {
-            try firebaseAuth.signOut()
-            LoginViewController.loginStatus = false
-            self.showAlert(title: "Success", message: "已登出帳戶")
-        } catch let signOutError as NSError {
-            print("Error signing out", signOutError)
-        }
-    }
+           do {
+               self.showAlert(title: "登出帳戶", message: "是否確定要登出帳戶？", completion: {
+                   LoginViewController.loginStatus = false
+                   self.showAlert(title: "Success", message: "已登出帳戶", completion: {
+                       try? firebaseAuth.signOut()
+                       self.dismiss(animated: true)
+                       self.signOutButtonTap?()
+                   })
+               })
+           } catch let signOutError as NSError {
+               print("Error signing out", signOutError)
+           }
+       }
     
     @IBAction func deleteAccountButtonTapped(_ sender: Any) {
         let user = Auth.auth().currentUser
@@ -75,7 +82,20 @@ class SettingViewController: UIViewController, ASAuthorizationControllerDelegate
         view.frame = CGRect(x: 0, y: (UIScreen.main.bounds.height) - 500,
                             width: UIScreen.main.bounds.width, height: 500 )
     }
-    
+    func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        alert.addAction(cancelAction)
+        
+        let okAction = UIAlertAction(title: "確定", style: .default) { [weak self] action in
+            completion?()
+        }
+        alert.addAction(okAction)
+        
+        present(alert, animated: true)
+    }
+
     func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default) { [weak self] action in
@@ -86,109 +106,3 @@ class SettingViewController: UIViewController, ASAuthorizationControllerDelegate
         
     }
 }
-//    private func deleteCurrentUser() {
-//      do {
-//        let nonce = try CryptoUtils.randomNonceString()
-//        currentNonce = nonce
-//        let appleIDProvider = ASAuthorizationAppleIDProvider()
-//        let request = appleIDProvider.createRequest()
-//        request.requestedScopes = [.fullName, .email]
-//        request.nonce = CryptoUtils.sha256(nonce)
-//
-//        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-//        authorizationController.delegate = self
-//        authorizationController.presentationContextProvider = self
-//        authorizationController.performRequests()
-//          let user = Auth.auth().currentUser
-//
-//          user?.delete { error in
-//            if let error = error {
-//                print("error.")
-//            } else {
-//              print("Account deleted.")
-//                LoginViewController.loginStatus = false
-//            }
-//          }
-//      } catch {
-//        // In the unlikely case that nonce generation fails, show error view.
-////        displayError(error)
-//      }
-//    }
-//    
-//    func authorizationController(controller: ASAuthorizationController,
-//                                 didCompleteWithAuthorization authorization: ASAuthorization) {
-//      guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential
-//      else {
-//        print("Unable to retrieve AppleIDCredential")
-//        return
-//      }
-//
-//      guard let _ = currentNonce else {
-//        fatalError("Invalid state: A login callback was received, but no login request was sent.")
-//      }
-//
-//      guard let appleAuthCode = appleIDCredential.authorizationCode else {
-//        print("Unable to fetch authorization code")
-//        return
-//      }
-//
-//      guard let authCodeString = String(data: appleAuthCode, encoding: .utf8) else {
-//        print("Unable to serialize auth code string from data: \(appleAuthCode.debugDescription)")
-//        return
-//      }
-//
-//      Task {
-//        do {
-//          try await Auth.auth().revokeToken(withAuthorizationCode: authCodeString)
-//          try await Auth.auth().currentUser?.delete()
-////          self.updateUI()
-//        } catch {
-////          self.displayError(error)
-//        }
-//      }
-//    }
-//
-//
-//}
-//
-//extension SettingViewController: ASAuthorizationControllerPresentationContextProviding {
-//        
-//    /// - Parameter controller: _
-//    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-//           return self.view.window!
-//    }
-//}
-//
-//class CryptoUtils {
-//    static func randomNonceString(length: Int = 32) throws -> String {
-//      precondition(length > 0)
-//      var randomBytes = [UInt8](repeating: 0, count: length)
-//      let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
-//      if errorCode != errSecSuccess {
-//        fatalError(
-//          "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
-//        )
-//      }
-//
-//      let charset: [Character] =
-//        Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
-//
-//      let nonce = randomBytes.map { byte in
-//        // Pick a random character from the set, wrapping around if needed.
-//        charset[Int(byte) % charset.count]
-//      }
-//
-//      return String(nonce)
-//    }
-//
-//    @available(iOS 13, *)
-//   static func sha256(_ input: String) -> String {
-//      let inputData = Data(input.utf8)
-//      let hashedData = SHA256.hash(data: inputData)
-//      let hashString = hashedData.compactMap {
-//        String(format: "%02x", $0)
-//      }.joined()
-//
-//      return hashString
-//    }
-//}
