@@ -11,11 +11,12 @@ import MobileCoreServices
 import UniformTypeIdentifiers
 import FirebaseAuth
 import NVActivityIndicatorView
+import SwiftEntryKit
 
 class EditPlanViewController: UIViewController {
-
+    
     @IBOutlet weak var tableView: UITableView!
-
+    
     var onePlan: TravelPlan = TravelPlan(
         id: "", planName: "",
         destination: "",
@@ -26,15 +27,58 @@ class EditPlanViewController: UIViewController {
     var days: [String] = ["第1天", "＋"]
     let headerView = EditPlanHeaderView(reuseIdentifier: "EditPlanHeaderView")
     let activityIndicatorView = NVActivityIndicatorView(
-            frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
-                  type: .ballBeat,
-                  color: UIColor(named: "darkGreen") ?? .white,
-                  padding: 0
-              )
+        frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
+        type: .ballBeat,
+        color: UIColor(named: "darkGreen") ?? .white,
+        padding: 0
+    )
     var blurEffectView: UIVisualEffectView!
+    
+    lazy var inviteUserButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UIColor(named: "darkGreen")
+        button.layer.cornerRadius = 25
+        button.setImage(UIImage(systemName: "person.2.fill"), for: .normal)
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        button.addTarget(self, action: #selector(inviteButtonTapped), for: .touchUpInside)
+        button.imageView?.contentMode = .scaleAspectFill
+        button.tintColor = .white
+        return button
+    }()
+    
+    @objc func inviteButtonTapped() {
+        let title = "傳送連結邀請"
+        let message = "用戶點擊連結並登入即可共同編輯此行程"
+        let urlScheme = "https://traveltogether.page.link/test1"
+        showAlert(title: title, message: message, completion: {
+            let activityVC = UIActivityViewController(activityItems: [urlScheme], applicationActivities: nil)
+//                self.present(activityVC, animated: true, completion: nil)
+            activityVC.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
+                    // 如果錯誤存在，跳出錯誤視窗並顯示給使用者。
+                    if error != nil {
+                        self.showAlert(title: "錯誤", message: "無法傳送連結")
+                        return
+                    }
+                                                         
+                    // 如果發送成功，跳出提示視窗顯示成功。
+                    if completed {
+                        self.showAlert(title: "成功", message: "已傳送連結！")
+                    }
+
+                }
+
+                self.present(activityVC, animated: true, completion: nil)
+        
+        })
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(inviteUserButton)
+        setUpButton()
         let blurEffect = UIBlurEffect(style: .light)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = view.bounds
@@ -68,12 +112,12 @@ class EditPlanViewController: UIViewController {
                 self.onePlan = travelPlan
                 let counts = self.onePlan.days.count
                 let originalCount = self.days.count
-                    if counts >= originalCount {
-                        for _ in originalCount...counts {
-                            let number = self.days.count
-                            self.days.insert("第\(number)天", at: number - 1)
-                        }
+                if counts >= originalCount {
+                    for _ in originalCount...counts {
+                        let number = self.days.count
+                        self.days.insert("第\(number)天", at: number - 1)
                     }
+                }
                 self.headerView.days = self.days
                 self.headerView.onePlan = self.onePlan
                 self.headerView.collectionView.reloadData()
@@ -81,6 +125,23 @@ class EditPlanViewController: UIViewController {
                 print("One travel plan not found.")
             }
         }
+    }
+    func setUpButton() {
+        inviteUserButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
+        inviteUserButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
+    }
+    
+    func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
+        alert.addAction(cancelAction)
+        
+        let okAction = UIAlertAction(title: "確定", style: .default) { [weak self] action in
+            completion?()
+        }
+        alert.addAction(okAction)
+        present(alert, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -122,6 +183,8 @@ class EditPlanViewController: UIViewController {
             }
         }
     }
+    
+    
 }
 
 extension EditPlanViewController: UITableViewDataSource {

@@ -141,12 +141,12 @@ extension MapViewController: CLLocationManagerDelegate {
       return
     }
 
-//    mapView.camera = GMSCameraPosition(
-//      target: location.coordinate,
-//      zoom: 15,
-//      bearing: 0,
-//      viewingAngle: 0)
-//    mapView.isUserInteractionEnabled = true
+    mapView.camera = GMSCameraPosition(
+      target: location.coordinate,
+      zoom: 15,
+      bearing: 0,
+      viewingAngle: 0)
+    mapView.isUserInteractionEnabled = true
 
   }
 
@@ -189,14 +189,15 @@ extension MapViewController: MapListViewControllerDelegate {
         mapInfoView.isHidden = false
         searchVC.searchBar.resignFirstResponder()
         mapView.clear()
-        
+        let searchText = searchVC.searchBar.text
+        searchVC.isActive = false
         let marker = GMSMarker()
         marker.position = coordinates
         marker.map = mapView
         
         let camera = GMSCameraPosition.camera(withTarget: coordinates, zoom: 15.0)
         mapView.animate(to: camera)
-     
+        searchVC.searchBar.text = searchText
         placeNameLabel.text = placesData[indexPath.row].name
         addressLabel.text = placesData[indexPath.row].address
         GooglePlacesManager.shared.fetchMapPhoto(for: placesData[indexPath.row].identifier) { result in

@@ -205,19 +205,27 @@ class MemoryDetailViewController: UIViewController {
     }
     
     func swiftEntryKit(titleText: String, descriptText: String, imageString: String) {
-        // Generate top floating entry and set some properties
         var attributes = EKAttributes.topFloat
-//        attributes.entryBackground = .gradient(gradient: .init(colors: [EKColor(.red), EKColor(.green)], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
         attributes.entryBackground = .color(color: EKColor(UIColor(named: "darkGreen") ?? .white))
-        attributes.popBehavior = .animated(animation: .init(translate: .init(duration: 5), scale: .init(from: 1, to: 0.7, duration: 0.7)))
+        attributes.popBehavior = .animated(
+            animation: .init(translate: .init(duration: 5),
+            scale: .init(from: 1, to: 0.7, duration: 0.7)))
         attributes.shadow = .active(with: .init(color: .black, opacity: 0.5, radius: 10, offset: .zero))
         attributes.statusBar = .dark
         attributes.scroll = .enabled(swipeable: true, pullbackAnimation: .jolt)
-        attributes.positionConstraints.maxSize = .init(width: .constant(value: UIScreen.main.bounds.width - 40), height: .intrinsic)
+        attributes.positionConstraints.maxSize = .init(
+            width: .constant(value: UIScreen.main.bounds.width - 40),
+            height: .intrinsic)
 
-        let title = EKProperty.LabelContent(text: titleText, style: .init(font: UIFont.systemFont(ofSize: 14, weight: .light), color: .white))
-        let description = EKProperty.LabelContent(text: descriptText, style: .init(font: UIFont.systemFont(ofSize: 12, weight: .light), color: EKColor(UIColor(named: "yellowGreen") ?? .white) ))
-        var image = EKProperty.ImageContent(image: UIImage(systemName: imageString) ?? UIImage(), size: CGSize(width: 35, height: 35))
+        let title = EKProperty.LabelContent(
+            text: titleText, style: .init(font: UIFont.systemFont(ofSize: 14, weight: .light),
+            color: .white))
+        let description = EKProperty.LabelContent(
+            text: descriptText, style: .init(font: UIFont.systemFont(ofSize: 12, weight: .light),
+            color: EKColor(UIColor(named: "yellowGreen") ?? .white) ))
+        var image = EKProperty.ImageContent(
+            image: UIImage(systemName: imageString) ?? UIImage(),
+            size: CGSize(width: 35, height: 35))
         image.tint = .white
         let simpleMessage = EKSimpleMessage(image: image, title: title, description: description)
         let notificationMessage = EKNotificationMessage(simpleMessage: simpleMessage)

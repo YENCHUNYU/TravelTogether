@@ -111,7 +111,11 @@ class PlanViewController: UIViewController {
 
 extension PlanViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        plans.count
+        if planIndex == 0 {
+          return  plans.count
+        } else {
+           return 0
+            }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
