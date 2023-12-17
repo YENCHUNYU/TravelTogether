@@ -215,9 +215,9 @@ extension PlanViewController: UITableViewDataSource {
 extension PlanViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if planIndex == 0 {
-           return 280
+           return 300
         } else {
-            return 280
+            return 300
         }
     }
     

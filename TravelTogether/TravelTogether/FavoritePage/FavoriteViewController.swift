@@ -161,6 +161,9 @@ extension FavoriteViewController: UITableViewDataSource {
                         downloadImages(cell: cell, indexPath: indexPath, url: url )
                     }}
             }
+            self.activityIndicatorView.stopAnimating()
+            self.blurEffectView.removeFromSuperview()
+            self.activityIndicatorView.removeFromSuperview()
             return cell}
     }
     
