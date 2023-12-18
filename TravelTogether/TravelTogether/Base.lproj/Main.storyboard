@@ -875,7 +875,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s01-Dm-gG1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="540" y="2675"/>
+            <point key="canvasLocation" x="359" y="2754"/>
         </scene>
         <!--我的回憶-->
         <scene sceneID="cN8-xe-Dy7">
@@ -1717,7 +1717,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B4c-Zb-axl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1373" y="2698"/>
+            <point key="canvasLocation" x="1080" y="2784"/>
         </scene>
         <!--Save As Draftor Post View Controller-->
         <scene sceneID="41U-oR-hOu">
@@ -2584,7 +2584,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="bXa-yj-gCI"/>
         <segue reference="Zww-hD-bL6"/>
-        <segue reference="fOh-e2-FVh"/>
+        <segue reference="aTg-C3-CtN"/>
         <segue reference="HNF-ZE-dku"/>
         <segue reference="jsr-wJ-nje"/>
         <segue reference="qMO-0e-wEY"/>

@@ -18,7 +18,11 @@ class ImageCollectionViewCell: UICollectionViewCell {
 }
 
 class AddPhotoCell: UICollectionViewCell {
-    @IBOutlet weak var addNewPhotoButton: UIButton!
+    @IBOutlet weak var addNewPhotoButton: UIButton! {
+        didSet {
+            addNewPhotoButton.titleLabel?.text = ""
+        }
+    }
     
     @IBOutlet weak var addView: UIView! {
         didSet {
