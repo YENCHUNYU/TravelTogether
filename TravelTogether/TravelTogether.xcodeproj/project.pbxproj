@@ -81,6 +81,7 @@
 		52B41BB52B22DF4400B28225 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 52B41BB42B22DF4400B28225 /* GoogleService-Info.plist */; };
 		52B41BB82B232D4200B28225 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 52B41BB72B232D4200B28225 /* Kingfisher */; };
 		52CD52202B0E406100CA7352 /* FirestoreForPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CD521F2B0E406100CA7352 /* FirestoreForPost.swift */; };
+		52D7D16B2B300CC000DBEC7A /* FirestoreManagerTogether.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D7D16A2B300CC000DBEC7A /* FirestoreManagerTogether.swift */; };
 		52DF40EE2B218FBC005F60FD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DF40ED2B218FBC005F60FD /* LoginViewController.swift */; };
 		52E0F95A2B0EE64A00D23AFE /* FirestoreForPostLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E0F9592B0EE64A00D23AFE /* FirestoreForPostLocation.swift */; };
 		52E0F95C2B0F2F3B00D23AFE /* FirebaseStorageUploadPhotos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E0F95B2B0F2F3B00D23AFE /* FirebaseStorageUploadPhotos.swift */; };
@@ -190,6 +191,7 @@
 		52ABB13D2B1E1737005D690E /* FirestoreFetchMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreFetchMemory.swift; sourceTree = "<group>"; };
 		52B41BB42B22DF4400B28225 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		52CD521F2B0E406100CA7352 /* FirestoreForPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreForPost.swift; sourceTree = "<group>"; };
+		52D7D16A2B300CC000DBEC7A /* FirestoreManagerTogether.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManagerTogether.swift; sourceTree = "<group>"; };
 		52DF40ED2B218FBC005F60FD /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		52E0F9592B0EE64A00D23AFE /* FirestoreForPostLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreForPostLocation.swift; sourceTree = "<group>"; };
 		52E0F95B2B0F2F3B00D23AFE /* FirebaseStorageUploadPhotos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageUploadPhotos.swift; sourceTree = "<group>"; };
@@ -290,6 +292,7 @@
 				525E7CBA2B19F0AD0057C5EE /* FirestoreForPostMemory.swift */,
 				52ABB13D2B1E1737005D690E /* FirestoreFetchMemory.swift */,
 				529781BE2B25A0C100F53476 /* FirestorePostFavorite.swift */,
+				52D7D16A2B300CC000DBEC7A /* FirestoreManagerTogether.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -763,6 +766,7 @@
 				52DF40EE2B218FBC005F60FD /* LoginViewController.swift in Sources */,
 				52CD52202B0E406100CA7352 /* FirestoreForPost.swift in Sources */,
 				52783CCA2B033EE20067A334 /* MyPlanCell.swift in Sources */,
+				52D7D16B2B300CC000DBEC7A /* FirestoreManagerTogether.swift in Sources */,
 				525E7CBB2B19F0AD0057C5EE /* FirestoreForPostMemory.swift in Sources */,
 				527941C62B27004800EE9A9B /* SettingViewController.swift in Sources */,
 				52E70D852B0107F100440D4C /* AppDelegate.swift in Sources */,

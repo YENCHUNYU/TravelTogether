@@ -26,6 +26,8 @@ class PlanViewController: UIViewController {
                   padding: 0
               )
     var blurEffectView: UIVisualEffectView!
+    var linkPlanId = ""
+    var linkUserId = ""
     lazy var addButton: UIButton = {
         let add = UIButton()
         add.translatesAutoresizingMaskIntoConstraints = false
@@ -44,8 +46,26 @@ class PlanViewController: UIViewController {
         performSegue(withIdentifier: "goToCreate", sender: self)  
     }
     
+    func linkToEdit() {
+        performSegue(withIdentifier: "goToEdit", sender: self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let userId = UserDefaults.standard.string(forKey: "userId"),
+           let planId = UserDefaults.standard.string(forKey: "planId") {
+            // 在這裡使用 userId 和 planId 進行相應的處理
+            print("userId: \(userId), planId: \(planId)")}
+//
+//            // 如果需要，你可以在這裡執行導航到 EditPlanViewController 的相關邏輯
+//            let editPlanViewController = EditPlanViewController()// 初始化你的 EditPlanViewController
+//            editPlanViewController.userId = userId
+//            editPlanViewController.travelPlanId = planId
+//            navigationController?.pushViewController(editPlanViewController, animated: true)
+//            
+//        }
+        
+        
         let blurEffect = UIBlurEffect(style: .light)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = view.bounds
@@ -79,6 +99,18 @@ class PlanViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if let userId = UserDefaults.standard.string(forKey: "userId"),
+           let planId = UserDefaults.standard.string(forKey: "planId") {
+            // 在這裡使用 userId 和 planId 進行相應的處理
+            print("userId: \(userId), planId: \(planId)")}
+//            
+//            // 如果需要，你可以在這裡執行導航到 EditPlanViewController 的相關邏輯
+//            let editPlanViewController = EditPlanViewController()// 初始化你的 EditPlanViewController
+//            editPlanViewController.userId = userId
+//            editPlanViewController.travelPlanId = planId
+//            navigationController?.pushViewController(editPlanViewController, animated: true)
+//            
+//        }
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
@@ -202,7 +234,16 @@ extension PlanViewController: UITableViewDataSource {
             guard let destinationVC = segue.destination
                     as? EditPlanViewController else { fatalError("Can not create EditPlanViewController") }
             destinationVC.travelPlanId = plans[indexPath.row].id 
+            destinationVC.userId = Auth.auth().currentUser?.uid ?? ""
+            print("destinationVC.userId\(destinationVC.userId)")
                }
+//        if segue.identifier == "goToEdit" {
+//            guard let destinationVC = segue.destination
+//                    as? EditPlanViewController else { fatalError("Can not create EditPlanViewController") }
+//            destinationVC.travelPlanId = linkPlanId
+//            destinationVC.userId = linkUserId
+//            print("destinationVC.userId\(linkUserId)")
+//               }
     }
     
     func tableView(

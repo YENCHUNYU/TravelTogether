@@ -77,7 +77,7 @@ class FirestoreManager {
             }
         }
     }
-    // 新
+    // searchPage
     func fetchAllTravelPlans(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
         let database = Firestore.firestore()
         

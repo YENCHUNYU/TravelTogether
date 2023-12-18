@@ -1500,6 +1500,36 @@
             </objects>
             <point key="canvasLocation" x="2477" y="1225"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="6om-as-0Tb">
+            <objects>
+                <viewController id="CjV-2h-omi" customClass="ViewController" customModule="TravelTogether" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="RY8-fV-S66">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="KJ4-cn-hc4">
+                                <rect key="frame" x="87" y="477" width="240" height="128"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="k1d-bi-lky"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="k1d-bi-lky" firstAttribute="trailing" secondItem="KJ4-cn-hc4" secondAttribute="trailing" constant="87" id="61L-Ja-4Ql"/>
+                            <constraint firstItem="KJ4-cn-hc4" firstAttribute="top" secondItem="k1d-bi-lky" secondAttribute="top" constant="433" id="Lyb-iM-0fe"/>
+                            <constraint firstItem="KJ4-cn-hc4" firstAttribute="leading" secondItem="k1d-bi-lky" secondAttribute="leading" constant="87" id="R7n-f1-jWd"/>
+                            <constraint firstItem="k1d-bi-lky" firstAttribute="bottom" secondItem="KJ4-cn-hc4" secondAttribute="bottom" constant="257" id="XKE-5h-fGF"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="KJ4-cn-hc4" id="Kx0-or-qjh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="R5M-bC-9HP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3375" y="1275"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="XbS-w6-nDn">
             <objects>
@@ -2582,12 +2612,12 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="bXa-yj-gCI"/>
-        <segue reference="Zww-hD-bL6"/>
+        <segue reference="uKr-hy-xv3"/>
+        <segue reference="VQK-Ip-Ga7"/>
         <segue reference="aTg-C3-CtN"/>
         <segue reference="HNF-ZE-dku"/>
         <segue reference="jsr-wJ-nje"/>
-        <segue reference="qMO-0e-wEY"/>
+        <segue reference="SGR-Ky-BdU"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Icons_24px_Close拷貝" width="24" height="24"/>

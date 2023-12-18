@@ -19,7 +19,7 @@
 			<string>Bundle ID</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>test1.link.page.traveltogether</string>
+				<string>test1/link.page.traveltogether</string>
 			</array>
 		</dict>
 	</array>

@@ -156,7 +156,7 @@ class PlanDetailViewController: UIViewController {
         if isFromFavorite == false && isFromProfile == false {
             // isFromSearch
             let firestoreManagerForOne = FirestoreManagerForOne()
-            firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, error) in
+            firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, ref, error) in
                 if let error = error {
                     print("Error fetching one travel plan: \(error)")
                 } else if let travelPlan = travelPlan {
@@ -186,7 +186,7 @@ class PlanDetailViewController: UIViewController {
                 let firestoreManagerForOne = FirestoreManagerForOne()
                 //        firestoreManagerForOne.delegate = self
                 userId = Auth.auth().currentUser?.uid ?? ""
-                firestoreManagerForOne.fetchOneTravelPlan(dbCollection: dbCollection, userId: userId, byId: travelPlanId) { (travelPlan, error) in
+                firestoreManagerForOne.fetchOneTravelPlan(dbCollection: dbCollection, userId: userId, byId: travelPlanId) { (travelPlan, ref, error) in
                     if let error = error {
                         print("Error fetching one travel plan: \(error)")
                     } else if let travelPlan = travelPlan {
@@ -247,7 +247,7 @@ class PlanDetailViewController: UIViewController {
         if isFromFavorite == false && isFromProfile == false {
             let firestoreManagerForOne = FirestoreManagerForOne()
             //        firestoreManagerForOne.delegate = self
-            firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, error) in
+            firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, ref, error) in
                 if let error = error {
                     print("Error fetching one travel plan: \(error)")
                 } else if let travelPlan = travelPlan {
