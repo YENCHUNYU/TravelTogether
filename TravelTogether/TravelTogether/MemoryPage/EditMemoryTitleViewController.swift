@@ -63,35 +63,6 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
     }
     
     @objc func rightButtonTapped() {
-        let firestoreManagerForPost = FirestoreManagerMemoryPost()
-//        firestoreManagerForPost.delegate = self
-        let firestore = FirestoreManagerFetchUser()
-        firestore.fetchUserInfo{ userData, error  in
-            if error != nil {
-                print("Error fetching one plan: \(String(describing: error))")
-            } else {
-                self.onePlan.user = userData?.name
-                self.onePlan.userPhoto = userData?.photo
-                self.onePlan.userId = userData?.id
-            }
-        }
-//        onePlan.user = Auth.auth().currentUser?.displayName
-//        onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-//        onePlan.userId = Auth.auth().currentUser?.uid
-                firestoreManagerForPost.postMemory(memory: self.onePlan) { error in
-                        if error != nil {
-                            print("Failed to post TravelPlan")
-                        } else {
-                            print("Posted TravelPlan successfully!")}
-                }
-           
-                if let navigationController = self.navigationController {
-                 let viewControllers = navigationController.viewControllers
-                 if viewControllers.count == 4 {
-                     let targetViewController = viewControllers[viewControllers.count - 4]
-                     navigationController.popToViewController(targetViewController, animated: true)
-                                 }
-                             }
         
         if isFromDraft == true {
             // draft edit and complete
@@ -114,8 +85,35 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
                     print("Draft deleted successfully.")
                 }
             }
-        }      
+        } else {
+            let firestoreManagerForPost = FirestoreManagerMemoryPost()
+    //        firestoreManagerForPost.delegate = self
+            let firestore = FirestoreManagerFetchUser()
+            firestore.fetchUserInfo { userData, error  in
+                if error != nil {
+                    print("Error fetching one plan: \(String(describing: error))")
+                } else {
+                    self.onePlan.user = userData?.name
+                    self.onePlan.userPhoto = userData?.photo
+                    self.onePlan.userId = userData?.id
+                }
+                firestoreManagerForPost.postMemory(memory: self.onePlan) { error in
+                    if error != nil {
+                        print("Failed to post TravelPlan")
+                    } else {
+                        print("Posted TravelPlan successfully!")}
+                }
+                
+                if let navigationController = self.navigationController {
+                    let viewControllers = navigationController.viewControllers
+                    if viewControllers.count == 4 {
+                        let targetViewController = viewControllers[viewControllers.count - 4]
+                        navigationController.popToViewController(targetViewController, animated: true)
+                    }
+                }
             }
+        }
+}
     
     @objc func imageViewTapped() {
             let imagePicker = UIImagePickerController()
