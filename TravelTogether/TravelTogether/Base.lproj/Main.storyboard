@@ -1323,8 +1323,8 @@
                                                 <constraint firstItem="R6J-3m-We5" firstAttribute="leading" secondItem="xA2-8a-BZ4" secondAttribute="leading" constant="15" id="FNe-nI-FsS"/>
                                                 <constraint firstItem="R6J-3m-We5" firstAttribute="baseline" secondItem="AuO-b5-j7R" secondAttribute="firstBaseline" constant="15" id="H5M-8c-SCs"/>
                                                 <constraint firstItem="AuO-b5-j7R" firstAttribute="leading" secondItem="xA2-8a-BZ4" secondAttribute="leading" constant="25" id="MCy-Pg-npV"/>
+                                                <constraint firstItem="TUS-fv-q04" firstAttribute="trailing" secondItem="R6J-3m-We5" secondAttribute="trailing" id="NAa-ZB-JgZ"/>
                                                 <constraint firstItem="R6J-3m-We5" firstAttribute="top" secondItem="xA2-8a-BZ4" secondAttribute="top" constant="5" id="q0u-Wm-chC"/>
-                                                <constraint firstAttribute="trailing" secondItem="TUS-fv-q04" secondAttribute="trailing" constant="15" id="yOq-2o-9aF"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>

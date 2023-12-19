@@ -58,7 +58,11 @@ class LoginViewController: UIViewController {
             doneButton.layer.cornerRadius = 8
         }
     }
-    @IBOutlet weak var closeButton: UIButton!
+    @IBOutlet weak var closeButton: UIButton! {
+        didSet {
+            closeButton.setTitle("", for: .normal)
+        }
+    }
     
     @IBOutlet weak var googleSigninButton: GIDSignInButton! {
         didSet {

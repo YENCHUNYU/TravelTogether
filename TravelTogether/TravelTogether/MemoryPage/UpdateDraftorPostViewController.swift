@@ -10,7 +10,11 @@ import UIKit
 class UpdateDraftorPostViewController: UIViewController {
     var updateButtonTapped: (() -> Void)?
     var postButtonTapped: (() -> Void)?
-    @IBOutlet weak var closeButton: UIButton!
+    @IBOutlet weak var closeButton: UIButton! {
+        didSet {
+            closeButton.setTitle("", for: .normal)
+        }
+    }
     @IBOutlet weak var updateDraftButton: UIButton! {
         didSet {
             updateDraftButton.layer.cornerRadius = 8

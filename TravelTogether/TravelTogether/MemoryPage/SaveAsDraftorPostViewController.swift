@@ -15,7 +15,11 @@ class SaveAsDraftorPostViewController: UIViewController {
         destination: "",
         startDate: Date(), endDate: Date(), days: [], coverPhoto: "")
     
-    @IBOutlet weak var closeButton: UIButton!
+    @IBOutlet weak var closeButton: UIButton! {
+        didSet {
+            closeButton.setTitle("", for: .normal)
+        }
+    }
     @IBOutlet weak var saveAsDraftButton: UIButton! {
         didSet {
             saveAsDraftButton.layer.cornerRadius = 8

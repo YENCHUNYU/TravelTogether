@@ -13,7 +13,11 @@ import CryptoKit
 class SettingViewController: UIViewController, ASAuthorizationControllerDelegate {
 //    fileprivate var currentNonce: String?
     var signOutButtonTap: (() -> Void)?
-    @IBOutlet weak var closeButton: UIButton!
+    @IBOutlet weak var closeButton: UIButton! {
+        didSet {
+            closeButton.setTitle("", for: .normal)
+        }
+    }
     @IBOutlet weak var manageAccountLabel: UILabel!
     @IBOutlet weak var signOutButton: UIButton! {
         didSet {
@@ -73,7 +77,7 @@ class SettingViewController: UIViewController, ASAuthorizationControllerDelegate
     }
     
     @IBAction func contactButtonTapped(_ sender: Any) {
-        self.showAlert(title: "開發者聯絡資訊", message: "請以此電子信箱聯繫開發者：jenny98417rib@gmail.com")
+        self.showAlert(title: "開發者聯絡資訊", message: "請寄送郵件至此開發者電子信箱：jenny98417rib@gmail.com，謝謝！")
     }
     
     @IBAction func closeButtonTapped(_ sender: Any) {

@@ -52,6 +52,7 @@ class SearchViewController: UIViewController {
               padding: 0
           )
     var blurEffectView: UIVisualEffectView!
+    let headerView = SearchHeaderView(reuseIdentifier: "SearchHeaderView")
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -62,7 +63,7 @@ class SearchViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: "SearchHeaderView")
-        let headerView = SearchHeaderView(reuseIdentifier: "SearchHeaderView")
+        
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
         headerView.delegate = self
         headerView.backgroundColor = UIColor(named: "yellowGreen")
@@ -132,7 +133,7 @@ class SearchViewController: UIViewController {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
-       
+        headerView.backgroundColor = UIColor(named: "yellowGreen")
 //        if searchIndex == 1 {
             let firestoreManager = FirestoreManager()
             firestoreManager.delegate = self
