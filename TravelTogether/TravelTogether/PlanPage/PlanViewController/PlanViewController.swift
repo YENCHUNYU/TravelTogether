@@ -52,20 +52,7 @@ class PlanViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let userId = UserDefaults.standard.string(forKey: "userId"),
-           let planId = UserDefaults.standard.string(forKey: "planId") {
-            // 在這裡使用 userId 和 planId 進行相應的處理
-            print("userId: \(userId), planId: \(planId)")}
-//
-//            // 如果需要，你可以在這裡執行導航到 EditPlanViewController 的相關邏輯
-//            let editPlanViewController = EditPlanViewController()// 初始化你的 EditPlanViewController
-//            editPlanViewController.userId = userId
-//            editPlanViewController.travelPlanId = planId
-//            navigationController?.pushViewController(editPlanViewController, animated: true)
-//            
-//        }
-        
-        
+     
         let blurEffect = UIBlurEffect(style: .light)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = view.bounds
@@ -99,18 +86,7 @@ class PlanViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if let userId = UserDefaults.standard.string(forKey: "userId"),
-           let planId = UserDefaults.standard.string(forKey: "planId") {
-            // 在這裡使用 userId 和 planId 進行相應的處理
-            print("userId: \(userId), planId: \(planId)")}
-//            
-//            // 如果需要，你可以在這裡執行導航到 EditPlanViewController 的相關邏輯
-//            let editPlanViewController = EditPlanViewController()// 初始化你的 EditPlanViewController
-//            editPlanViewController.userId = userId
-//            editPlanViewController.travelPlanId = planId
-//            navigationController?.pushViewController(editPlanViewController, animated: true)
-//            
-//        }
+
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()

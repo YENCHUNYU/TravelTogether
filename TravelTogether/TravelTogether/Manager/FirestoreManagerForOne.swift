@@ -16,18 +16,18 @@ class FirestoreManagerForOne {
     
     var delegate: FirestoreManagerForOneDelegate?
     
-    func fetchOneTravelPlan(dbCollection: String, userId: String, byId planId: String, completion: @escaping (TravelPlan?, DocumentReference?, Error?) -> Void) {
+    func fetchOneTravelPlan(dbCollection: String, userId: String, byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
         let database = Firestore.firestore()
         let travelPlanRef = database.collection("UserInfo").document(userId).collection(dbCollection).document(planId)
 
         travelPlanRef.addSnapshotListener { document, error in
             if let error = error {
                 print("Error getting document: \(error)")
-                completion(nil, nil, error)
+                completion(nil, error)
             } else {
                 do {
                     guard let document = document, document.exists else {
-                        completion(nil, nil, nil)
+                        completion(nil, nil)
                         return
                     }
 
@@ -72,7 +72,7 @@ class FirestoreManagerForOne {
                         userPhoto: data?["userPhoto"] as? String ?? "",
                         userId: data?["userId"] as? String ?? ""
                     )
-                    completion(travelPlan, travelPlanRef, nil)
+                    completion(travelPlan, nil)
                     self.delegate?.manager(self, didGet: travelPlan)
                 }
             }

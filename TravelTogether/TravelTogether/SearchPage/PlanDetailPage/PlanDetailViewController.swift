@@ -58,18 +58,7 @@ class PlanDetailViewController: UIViewController {
                 present(loginNavController, animated: true, completion: nil)
             }
         } else {
-//            let firestoreFetch = FirestoreManagerForOne()
-//            firestoreFetch.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (memory, error) in
-//                if let error = error {
-//                    print("Error fetching one memory: \(error)")
-//                } else if let memory = memory {
-//                    print("Fetched one memory: \(memory)")
-//                    self.onePlan = memory
-//                    self.tableView.reloadData()
-//                } else {
-//                    print("One memory not found.")
-//                }
-//            }
+
             let firestore = FirestoreManagerFetchUser()
             firestore.fetchUserInfo{ userData, error  in
                 if error != nil {
@@ -81,9 +70,7 @@ class PlanDetailViewController: UIViewController {
                 }
             }
             let firestorePost = FirestoreManagerForPost()
-//            self.onePlan.user = Auth.auth().currentUser?.displayName
-//            self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-//            self.onePlan.userId = Auth.auth().currentUser?.uid
+
             firestorePost.postFullPlan(plan: self.onePlan) { error in
                 if let error = error {
                     print("Error fetching one plan: \(error)")
@@ -156,7 +143,7 @@ class PlanDetailViewController: UIViewController {
         if isFromFavorite == false && isFromProfile == false {
             // isFromSearch
             let firestoreManagerForOne = FirestoreManagerForOne()
-            firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, ref, error) in
+            firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, error) in
                 if let error = error {
                     print("Error fetching one travel plan: \(error)")
                 } else if let travelPlan = travelPlan {
@@ -186,7 +173,7 @@ class PlanDetailViewController: UIViewController {
                 let firestoreManagerForOne = FirestoreManagerForOne()
                 //        firestoreManagerForOne.delegate = self
                 userId = Auth.auth().currentUser?.uid ?? ""
-                firestoreManagerForOne.fetchOneTravelPlan(dbCollection: dbCollection, userId: userId, byId: travelPlanId) { (travelPlan, ref, error) in
+                firestoreManagerForOne.fetchOneTravelPlan(dbCollection: dbCollection, userId: userId, byId: travelPlanId) { (travelPlan, error) in
                     if let error = error {
                         print("Error fetching one travel plan: \(error)")
                     } else if let travelPlan = travelPlan {
@@ -247,7 +234,7 @@ class PlanDetailViewController: UIViewController {
         if isFromFavorite == false && isFromProfile == false {
             let firestoreManagerForOne = FirestoreManagerForOne()
             //        firestoreManagerForOne.delegate = self
-            firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, ref, error) in
+            firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, error) in
                 if let error = error {
                     print("Error fetching one travel plan: \(error)")
                 } else if let travelPlan = travelPlan {

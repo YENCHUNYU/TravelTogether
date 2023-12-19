@@ -21,7 +21,7 @@ class EditPlanViewController: UIViewController {
         id: "", planName: "",
         destination: "",
         startDate: Date(), endDate: Date(), days: [])
-    var travelPlanId = ""
+//    var travelPlanId = "6PGNVZ0ZNZwgyBi9EcPW"
     var dayCounts = 1
     var selectedSectionForAddLocation = 0 // 新增景點
     var days: [String] = ["第1天", "＋"]
@@ -34,8 +34,17 @@ class EditPlanViewController: UIViewController {
     )
     var blurEffectView: UIVisualEffectView!
 //    var togetherDocref: Any?
-    var userId = ""
-    
+//    var userId = "5ZpUJ6ySMnTNY48ChD6YGXEF89j2"
+    var userId: String = ""
+    var travelPlanId: String = ""
+
+        // ... other properties and methods ...
+
+        func setProperties(userId: String, planId: String, completion: @escaping () -> Void) {
+            self.userId = userId
+            self.travelPlanId = planId
+            completion()
+        }
     lazy var inviteUserButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -54,12 +63,13 @@ class EditPlanViewController: UIViewController {
         
         let title = "傳送連結邀請"
         let message = "用戶點擊連結並登入即可共同編輯此行程"
-        let urlScheme = "https://traveltogether.page.link/test1"
+//        let urlScheme = "https://traveltogether.page.link/test1"
                 
-        let dynamicLinkURL = "https://traveltogether.page.link/test1?userId=\(String(describing: self.onePlan.userId ?? ""))&planId=\(self.travelPlanId)"
+//        let dynamicLinkURL = "https://traveltogether.page.link/test1?userId=\(String(describing: self.onePlan.userId ?? ""))&planId=\(self.travelPlanId)"
+        let urlScheme = "traveltogether://userId/\(String(describing: self.onePlan.userId ?? ""))/planId/\(self.travelPlanId)"
 
         showAlert(title: title, message: message, completion: {
-            let activityVC = UIActivityViewController(activityItems: [dynamicLinkURL], applicationActivities: nil)
+            let activityVC = UIActivityViewController(activityItems: [urlScheme], applicationActivities: nil)
 //                self.present(activityVC, animated: true, completion: nil)
             activityVC.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
                     // 如果錯誤存在，跳出錯誤視窗並顯示給使用者。
@@ -139,7 +149,7 @@ class EditPlanViewController: UIViewController {
         
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, ref, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -200,7 +210,7 @@ class EditPlanViewController: UIViewController {
 //        }
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId)  { (travelPlan, ref, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId)  { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -422,7 +432,7 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
     func reloadNewData() {
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId)  { (travelPlan, ref, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId)  { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -459,7 +469,7 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
             }
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, ref, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {

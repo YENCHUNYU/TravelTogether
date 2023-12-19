@@ -19,7 +19,17 @@
 			<string>Bundle ID</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>test1/link.page.traveltogether</string>
+				<string>traveltogethero</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.traveltogether</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>traveltogether</string>
 			</array>
 		</dict>
 	</array>
