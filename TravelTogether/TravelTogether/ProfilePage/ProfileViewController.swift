@@ -19,6 +19,7 @@ class ProfileViewController: UIViewController {
         didSet {
             userImageView.layer.cornerRadius = 45
             userImageView.clipsToBounds = true
+            userImageView.contentMode = .scaleAspectFill
         }
     }
     @IBOutlet weak var userNameLabel: UILabel!

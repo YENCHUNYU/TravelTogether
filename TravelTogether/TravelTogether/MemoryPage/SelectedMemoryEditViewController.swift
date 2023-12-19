@@ -353,7 +353,6 @@ extension SelectedMemoryEditViewController: UICollectionViewDataSource,
    }
     
     @objc func imageButtonTapped(_ sender: UIButton) {
-        // Get the indexPath from the button's position
         let point = sender.convert(CGPoint.zero, to: tableView)
         if let indexPath = tableView.indexPathForRow(at: point) {
             showImagePicker(forIndexPath: indexPath)
