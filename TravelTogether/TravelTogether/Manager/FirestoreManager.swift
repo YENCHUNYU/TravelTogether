@@ -16,7 +16,7 @@ protocol FirestoreManagerDelegate: AnyObject {
 class FirestoreManager {
     
     var delegate: FirestoreManagerDelegate?
-
+    
     func fetchTravelPlans(userId: String, completion: @escaping ([TravelPlan]?, Error?) -> Void) {
         let database = Firestore.firestore()
         
@@ -77,6 +77,38 @@ class FirestoreManager {
             }
         }
     }
+    // PlanViewController
+    func fetchMyTravelPlans(userId: String, completion: @escaping ([TravelPlan]?, Error?) -> Void) async {
+        let database = Firestore.firestore()
+        let travelPlansRef = database.collection("UserInfo").document(userId).collection("TravelPlan")
+        let orderedQuery = travelPlansRef.order(by: "startDate", descending: false)
+        do {
+            let querySnapshot = try await orderedQuery.getDocuments()
+            var travelPlans: [TravelPlan] = []
+            for _ in querySnapshot.documents {
+                let travelPlanDocuments = try await travelPlansRef.getDocuments()
+                for planDocument in travelPlanDocuments.documents {
+                    do {
+                        var plan = try await planDocument.reference.getDocument(as: TravelPlan.self)
+                        plan.id = planDocument.documentID
+                        print("plan: \(plan)")
+                        travelPlans.append(plan)
+                    } catch {
+                        print("Error decoding city: \(error)")
+                    }
+                }
+            }
+            DispatchQueue.main.async { [travelPlans] in
+                completion(travelPlans, nil)
+            }
+        } catch {
+            print("Error getting documents: \(error)")
+            DispatchQueue.main.async {
+                completion(nil, error)
+            }
+        }
+    }
+
     // searchPage
     func fetchAllTravelPlans(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
         let database = Firestore.firestore()

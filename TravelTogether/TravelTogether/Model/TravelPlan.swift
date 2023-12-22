@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseFirestore
 
-struct TravelPlan {
+struct TravelPlan: Codable {
     var id: String
     var planName: String
     var destination: String
@@ -36,7 +36,7 @@ struct TravelPlan {
     }
 }
 
-struct TravelDay {
+struct TravelDay: Codable  {
     var locations: [Location]
     
     var dictionary: [String: Any] {
@@ -46,7 +46,7 @@ struct TravelDay {
     }
 }
 
-struct Location {
+struct Location: Codable  {
     var name: String
     var photo: String
     var address: String

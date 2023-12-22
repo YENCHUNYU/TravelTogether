@@ -28,6 +28,7 @@ class PlanViewController: UIViewController {
     var blurEffectView: UIVisualEffectView!
     var linkPlanId = ""
     var linkUserId = ""
+    var planId = ""
     lazy var addButton: UIButton = {
         let add = UIButton()
         add.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +42,7 @@ class PlanViewController: UIViewController {
         add.addTarget(self, action: #selector(createPlan), for: .touchUpInside)
         return add
     }()
-    
+    let headerView = PlanHeaderView(reuseIdentifier: "PlanHeaderView")
     @objc func createPlan() {
         performSegue(withIdentifier: "goToCreate", sender: self)  
     }
@@ -52,67 +53,67 @@ class PlanViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-     
         let blurEffect = UIBlurEffect(style: .light)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = view.bounds
         tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.delegate = self
-        let headerView = PlanHeaderView(reuseIdentifier: "PlanHeaderView")
-        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
-        headerView.delegate = self
-        headerView.backgroundColor = UIColor(named: "yellowGreen")
+        setUpHeaderView()
         tableView.tableHeaderView = headerView
         view.addSubview(addButton)
         setUpButton()
+        Task {
+            await fetchMyPlans()
+        }
+    }
+    
+    func setUpHeaderView() {
+        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
+        headerView.delegate = self
+        headerView.backgroundColor = UIColor(named: "yellowGreen")
+    }
 
+    func fetchMyPlans() async {
         let firestoreManager = FirestoreManager()
-        firestoreManager.delegate = self
-        firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
+        await firestoreManager.fetchMyTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
             if let error = error {
                 print("Error fetching travel plans: \(error)")
             } else {
-                // Handle the retrieved travel plans
-                print("Fetched travel plans: \(travelPlans ?? [])")
+                print("Fetched travel plan: \(travelPlans ?? [])")
                 self.plans = travelPlans ?? []
                 self.tableView.reloadData()
             }
         }
     }
+
     func setUpButton() {
         addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
         addButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-
+    func addLoadingView() {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
-        
-        let firestoreManager = FirestoreManager()
-        firestoreManager.delegate = self
-        firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
-            if let error = error {
-                print("Error fetching travel plans: \(error)")
-            } else {
-                // Handle the retrieved travel plans
-                print("Fetched travel plans: \(travelPlans ?? [])")
-                self.plans = travelPlans ?? []
-                self.tableView.reloadData()
-                if self.plans.isEmpty && self.planIndex == 0 {
-                    self.activityIndicatorView.stopAnimating()
-                    self.blurEffectView.removeFromSuperview()
-                    self.activityIndicatorView.removeFromSuperview()
-                }
-                
+    }
+    
+    func removeLoadingView() {
+        self.activityIndicatorView.stopAnimating()
+        self.blurEffectView.removeFromSuperview()
+        self.activityIndicatorView.removeFromSuperview()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        addLoadingView()
+        Task {
+            await fetchMyPlans()
+            if self.plans.isEmpty && self.planIndex == 0 {
+                removeLoadingView()
             }
         }
         if togetherPlans.isEmpty && planIndex == 1 {
-            self.activityIndicatorView.stopAnimating()
-            self.blurEffectView.removeFromSuperview()
-            self.activityIndicatorView.removeFromSuperview()
+            removeLoadingView()
         }
     }
 }
@@ -120,57 +121,17 @@ class PlanViewController: UIViewController {
 extension PlanViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if planIndex == 0 {
-          return  plans.count
+          return plans.count
         } else {
-           return 0
+            return togetherPlans.count
             }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if planIndex == 0 {
-            
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlanCell", for: indexPath) as? MyPlanCell
             else { fatalError("Could not create PlanCell") }
-            cell.planImageView.image = nil
-            cell.planNameLabel.text = plans[indexPath.row].planName
-            let start = changeDateFormat(date: "\(plans[indexPath.row].startDate)")
-            let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
-            cell.planDateLabel.text = "\(start)-\(end)"
-
-            let daysData = plans[indexPath.row].days
-            if daysData.isEmpty == false {
-                let locationData = daysData[0]
-                let theLocation = locationData.locations
-                if theLocation.isEmpty == false {
-                    let urlString = theLocation[0].photo
-                    if let url = URL(string: urlString) {
-                        
-                        let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-                        firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-                            DispatchQueue.main.async {
-                                if let image = image {
-                                    cell.planImageView.image = image
-                                    cell.planNameLabel.text = self.plans[indexPath.row].planName
-                                    
-                                } else {
-                                    cell.planImageView.image = UIImage(named: "Image_Placeholder")
-                                }
-                                
-                            }
-                        }
-                    } else {
-                        cell.planImageView.image = UIImage(named: "Image_Placeholder")
-                    }
-                } else {
-                    cell.planImageView.image = UIImage(named: "Image_Placeholder")
-                }
-                self.activityIndicatorView.stopAnimating()
-                self.blurEffectView.removeFromSuperview()
-                self.activityIndicatorView.removeFromSuperview()
-            }
-            
-            
-            return cell
+           return setUpCell(indexPath: indexPath, cell: cell, plans: plans)
         } else {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "TogetherPlanCell",
@@ -182,6 +143,46 @@ extension PlanViewController: UITableViewDataSource {
                    }
             return cell
         }
+    }
+    
+    func setUpCell(indexPath: IndexPath, cell: MyPlanCell, plans: [TravelPlan]) -> UITableViewCell {
+        cell.planImageView.image = nil
+        cell.planNameLabel.text = plans[indexPath.row].planName
+        let start = changeDateFormat(date: "\(plans[indexPath.row].startDate)")
+        let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
+        cell.planDateLabel.text = "\(start)-\(end)"
+        let daysData = plans[indexPath.row].days
+        if daysData.isEmpty == false {
+            let locationData = daysData[0]
+            let theLocation = locationData.locations
+            if theLocation.isEmpty == false {
+                let urlString = theLocation[0].photo
+                if let url = URL(string: urlString) {
+                    
+                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
+                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
+                        DispatchQueue.main.async {
+                            if let image = image {
+                                cell.planImageView.image = image
+                                cell.planNameLabel.text = self.plans[indexPath.row].planName
+                                
+                            } else {
+                                cell.planImageView.image = UIImage(named: "Image_Placeholder")
+                            }
+                            
+                        }
+                    }
+                } else {
+                    cell.planImageView.image = UIImage(named: "Image_Placeholder")
+                }
+            } else {
+                cell.planImageView.image = UIImage(named: "Image_Placeholder")
+            }
+            self.activityIndicatorView.stopAnimating()
+            self.blurEffectView.removeFromSuperview()
+            self.activityIndicatorView.removeFromSuperview()
+        }
+        return cell
     }
     
     func changeDateFormat(date: String) -> String {
@@ -202,16 +203,19 @@ extension PlanViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if planIndex == 0 {
+          planId = plans[indexPath.row].id
+        }
         performSegue(withIdentifier: "goToEdit", sender: indexPath)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToEdit", let indexPath = sender as? IndexPath {
+        if segue.identifier == "goToEdit" {
             guard let destinationVC = segue.destination
                     as? EditPlanViewController else { fatalError("Can not create EditPlanViewController") }
-            destinationVC.travelPlanId = plans[indexPath.row].id 
+            destinationVC.travelPlanId = planId
             destinationVC.userId = Auth.auth().currentUser?.uid ?? ""
-            print("destinationVC.userId\(destinationVC.userId)")
+            print("destinationVC.travelPlanId\(destinationVC.travelPlanId)")
                }
 //        if segue.identifier == "goToEdit" {
 //            guard let destinationVC = segue.destination

@@ -56,6 +56,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                         if let editVC = storyboard.instantiateViewController(withIdentifier: "EditPlanViewController") as? EditPlanViewController {
                             editVC.userId = userId
                             editVC.travelPlanId = planId
+                            editVC.url = url.absoluteString
                             selectedViewController.pushViewController(editVC, animated: true)
                         }
                     }

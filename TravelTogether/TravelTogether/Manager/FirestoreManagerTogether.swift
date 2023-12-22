@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseFirestore
+import FirebaseAuth
 
 class FirestoreTogether {
     func fetchThroughRef(ref: DocumentReference, completion: @escaping (TravelPlan?, Error?) -> Void) {
@@ -71,39 +72,37 @@ class FirestoreTogether {
         }
     }
     
-   //沒用到
-    func postFullPlan(plan: TravelPlan, completion: @escaping (String?, Error?) -> Void) {
+    func postFullPlan(planRef: DocumentReference, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let planRef = database.collection("TogetherPlan")
-        let planDay = plan.days
-        var dayDictionary: [[String: Any]] = []
-        
-        for day in planDay {
-            var updatedDay = day.dictionary
-            var locationDic: [[String: Any]] = []
-            for location in day.locations {
-                let updatedLocation = location.dictionary
-                locationDic.append(updatedLocation)
+        let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+
+        userRef.getDocument { document, error in
+            if let error = error {
+                print("Error getting document for updating locations order: \(error)")
+                completion(error)
+            } else {
+                if let data = document?.data() {
+                    var userInfo = UserInfo(
+                        email: data["email"] as? String ?? "",
+                        name: data["name"] as? String ?? "",
+                        id: data["id"] as? String ?? "",
+                        photo: data["photo"] as? String ?? "",
+                        ref: data["ref"] as? [DocumentReference] ?? []
+                    )
+
+                    userInfo.ref?.append(planRef)
+                    completion(nil)
+
+                    userRef.setData(userInfo.toDictionary(), merge: true)
+                } else {
+                    print("Document does not exist for user with ID")
+                    completion(error)
+                }
             }
-            
-            updatedDay["locations"] = locationDic
-            dayDictionary.append(updatedDay)
         }
-        var planData = plan.dictionary
-        planData["days"] = dayDictionary
-        print("planData\(planData)")
-//        planRef.addDocument(data: planData) { error in
-//            if let error = error {
-//                print("Error adding document: \(error)")
-//                completion(error)
-//            } else {
-//                print("planData\(planData)")
-////                completion(nil)
-                let documentID = planRef.addDocument(data: planData).documentID
-//                print("docID\(documentID)")
-                completion(documentID, nil)
-//            }
-//        }
+    }
+
+        
     }
  //沒用到
     func fetchAllTogetherPlans(userId: String, completion: @escaping ([TravelPlan]?, Error?) -> Void) {
@@ -230,4 +229,3 @@ class FirestoreTogether {
             }
         }
     }
-}

@@ -143,6 +143,7 @@ class PlanDetailViewController: UIViewController {
         if isFromFavorite == false && isFromProfile == false {
             // isFromSearch
             let firestoreManagerForOne = FirestoreManagerForOne()
+            userId = Auth.auth().currentUser?.uid ?? ""
             firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, error) in
                 if let error = error {
                     print("Error fetching one travel plan: \(error)")
@@ -233,6 +234,7 @@ class PlanDetailViewController: UIViewController {
         activityIndicatorView.startAnimating()
         if isFromFavorite == false && isFromProfile == false {
             let firestoreManagerForOne = FirestoreManagerForOne()
+            userId = Auth.auth().currentUser?.uid ?? ""
             //        firestoreManagerForOne.delegate = self
             firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, error) in
                 if let error = error {

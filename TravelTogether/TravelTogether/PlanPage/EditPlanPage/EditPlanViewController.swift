@@ -37,6 +37,7 @@ class EditPlanViewController: UIViewController {
 //    var userId = "5ZpUJ6ySMnTNY48ChD6YGXEF89j2"
     var userId: String = ""
     var travelPlanId: String = ""
+    var url = ""
 
         // ... other properties and methods ...
 
@@ -66,7 +67,7 @@ class EditPlanViewController: UIViewController {
 //        let urlScheme = "https://traveltogether.page.link/test1"
                 
 //        let dynamicLinkURL = "https://traveltogether.page.link/test1?userId=\(String(describing: self.onePlan.userId ?? ""))&planId=\(self.travelPlanId)"
-        let urlScheme = "traveltogether://userId/\(String(describing: self.onePlan.userId ?? ""))/planId/\(self.travelPlanId)"
+        let urlScheme = "traveltogether://userId/\(String(describing: Auth.auth().currentUser?.uid ?? ""))/planId/\(self.travelPlanId)"
 
         showAlert(title: title, message: message, completion: {
             let activityVC = UIActivityViewController(activityItems: [urlScheme], applicationActivities: nil)
@@ -80,42 +81,12 @@ class EditPlanViewController: UIViewController {
                                                          
                     // 如果發送成功，跳出提示視窗顯示成功。
                     if completed {
-
-
                         self.showAlert(title: "成功", message: "已傳送連結！")
-                        // 等等要用
-//                        let planRef = Firestore.firestore().collection("UserInfo").document(self.onePlan.userId ?? "").collection("TravelPlan").document(self.travelPlanId)
-//                        let firestoreFetch = FirestoreTogether()
-//                        firestoreFetch.fetchThroughRef(ref: planRef) { travelPlan, error in
-//                            if let error = error {
-//                                print("Error fetching one travel plan: \(error)")
-//                            } else if let travelPlan = travelPlan {
-//                                print("Fetched one travel plan: \(travelPlan)")
-//                                self.onePlan = travelPlan
-//                                print("refplan\(self.onePlan)")
-//                                let counts = self.onePlan.days.count
-//                                let originalCount = self.days.count
-//                                if counts >= originalCount {
-//                                    for _ in originalCount...counts {
-//                                        let number = self.days.count
-//                                        self.days.insert("第\(number)天", at: number - 1)
-//                                    }
-//                                }
-//                                self.headerView.days = self.days
-//                                self.headerView.onePlan = self.onePlan
-//                                self.headerView.collectionView.reloadData()
-//                            } else {
-//                                print("One travel plan not found.")
-//                            }
-//                            
-//                        }
-                        
                     }
-
                 }
 
                 self.present(activityVC, animated: true, completion: nil)
-        
+
         })
         
     }
@@ -171,6 +142,18 @@ class EditPlanViewController: UIViewController {
                 print("One travel plan not found.")
             }
         }
+        if url != "" {
+            let planRef = Firestore.firestore().collection("UserInfo").document(self.userId).collection("TravelPlan").document(self.travelPlanId)
+            let firestoreRef = FirestoreTogether()
+            firestoreRef.postFullPlan(planRef: planRef) { error  in
+                if error != nil {
+                    print("Failed to post planRef")
+                } else {
+                   print("Post planRef successfully!")
+                }
+                
+            }
+        }
     }
     func setUpButton() {
         inviteUserButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
@@ -210,7 +193,7 @@ class EditPlanViewController: UIViewController {
 //        }
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId)  { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -277,11 +260,12 @@ extension EditPlanViewController: UITableViewDataSource {
                         } else {
                             cell.locationImageView.image = UIImage(named: "Image_Placeholder")
                         }
-                        self.activityIndicatorView.stopAnimating()
-                        self.blurEffectView.removeFromSuperview()
-                        self.activityIndicatorView.removeFromSuperview()
+                        
                     }
                 }
+                self.activityIndicatorView.stopAnimating()
+                self.blurEffectView.removeFromSuperview()
+                self.activityIndicatorView.removeFromSuperview()
             }
         } else {
             self.activityIndicatorView.stopAnimating()
