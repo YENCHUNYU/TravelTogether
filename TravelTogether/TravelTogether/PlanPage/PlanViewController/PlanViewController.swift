@@ -21,9 +21,9 @@ class PlanViewController: UIViewController {
     var spotsData: [[String: Any]] = []
     let activityIndicatorView = NVActivityIndicatorView(
             frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
-                  type: .ballBeat,
-                  color: UIColor(named: "darkGreen") ?? .white,
-                  padding: 0
+            type: .ballBeat,
+            color: UIColor(named: "darkGreen") ?? .white,
+            padding: 0
               )
     var blurEffectView: UIVisualEffectView!
     var linkPlanId = ""
@@ -131,16 +131,12 @@ extension PlanViewController: UITableViewDataSource {
         if planIndex == 0 {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlanCell", for: indexPath) as? MyPlanCell
             else { fatalError("Could not create PlanCell") }
-           return setUpCell(indexPath: indexPath, cell: cell, plans: plans)
+            return setUpCell(indexPath: indexPath, cell: cell, plans: plans)
         } else {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "TogetherPlanCell",
                 for: indexPath) as? TogetherPlanCell
             else { fatalError("Could not create TogetherPlanCell") }
-            
-            if let image = UIImage(named: "日本") {
-                cell.planImageView.image = image
-                   }
             return cell
         }
     }
@@ -152,37 +148,41 @@ extension PlanViewController: UITableViewDataSource {
         let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
         cell.planDateLabel.text = "\(start)-\(end)"
         let daysData = plans[indexPath.row].days
-        if daysData.isEmpty == false {
-            let locationData = daysData[0]
-            let theLocation = locationData.locations
-            if theLocation.isEmpty == false {
-                let urlString = theLocation[0].photo
-                if let url = URL(string: urlString) {
-                    
-                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-                        DispatchQueue.main.async {
-                            if let image = image {
-                                cell.planImageView.image = image
-                                cell.planNameLabel.text = self.plans[indexPath.row].planName
-                                
-                            } else {
-                                cell.planImageView.image = UIImage(named: "Image_Placeholder")
-                            }
-                            
-                        }
-                    }
-                } else {
-                    cell.planImageView.image = UIImage(named: "Image_Placeholder")
-                }
-            } else {
-                cell.planImageView.image = UIImage(named: "Image_Placeholder")
-            }
-            self.activityIndicatorView.stopAnimating()
-            self.blurEffectView.removeFromSuperview()
-            self.activityIndicatorView.removeFromSuperview()
+        guard daysData.isEmpty == false else {
+            removeLoadingView()
+            return cell
         }
+        let locationData = daysData[0]
+        let theLocation = locationData.locations
+        guard theLocation.isEmpty == false else {
+            cell.planImageView.image = UIImage(named: "Image_Placeholder")
+            removeLoadingView()
+            return cell
+        }
+        let urlString = theLocation[0].photo
+        guard let url = URL(string: urlString) else {
+            cell.planImageView.image = UIImage(named: "Image_Placeholder")
+            removeLoadingView()
+            return cell
+        }
+        downloadPhoto(url: url, cell: cell, indexPath: indexPath)
         return cell
+    }
+    
+    func downloadPhoto(url: URL, cell: MyPlanCell, indexPath: IndexPath) {
+        let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
+        firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
+            DispatchQueue.main.async {
+                guard let image = image else {
+                    cell.planImageView.image = UIImage(named: "Image_Placeholder")
+                    self.removeLoadingView()
+                    return
+                }
+                    cell.planImageView.image = image
+                    cell.planNameLabel.text = self.plans[indexPath.row].planName
+                self.removeLoadingView()
+           }
+        }
     }
     
     func changeDateFormat(date: String) -> String {
@@ -217,13 +217,6 @@ extension PlanViewController: UITableViewDataSource {
             destinationVC.userId = Auth.auth().currentUser?.uid ?? ""
             print("destinationVC.travelPlanId\(destinationVC.travelPlanId)")
                }
-//        if segue.identifier == "goToEdit" {
-//            guard let destinationVC = segue.destination
-//                    as? EditPlanViewController else { fatalError("Can not create EditPlanViewController") }
-//            destinationVC.travelPlanId = linkPlanId
-//            destinationVC.userId = linkUserId
-//            print("destinationVC.userId\(linkUserId)")
-//               }
     }
     
     func tableView(
@@ -247,22 +240,16 @@ extension PlanViewController: UITableViewDelegate {
         commit editingStyle: UITableViewCell.EditingStyle,
         forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            if indexPath.row < plans.count {
-               
-                let firestoreManager = FirestoreManager()
-                firestoreManager.deleteTravelPlan(withID: plans[indexPath.row].id) { error in
-                    if let error = error {
-                        print("Failed to delete travel plan: \(error)")
-                    } else {
-                        print("Travel plan deleted successfully.")
-                        self.plans.remove(at: indexPath.row)
-                        tableView.deleteRows(at: [indexPath], with: .fade)
-                    }
+            let firestoreManager = FirestoreManager()
+            firestoreManager.deleteTravelPlan(withID: plans[indexPath.row].id) { error in
+                if let error = error {
+                    print("Failed to delete travel plan: \(error)")
+                } else {
+                    print("Travel plan deleted successfully.")
+                    self.plans.remove(at: indexPath.row)
+                    tableView.deleteRows(at: [indexPath], with: .fade)
                 }
-                
-                   } else {
-                       print("Index out of range. indexPath.row: \(indexPath.row), plans count: \(plans.count)")
-                   }
+            }
         }
     }
 }
@@ -270,30 +257,13 @@ extension PlanViewController: UITableViewDelegate {
 extension PlanViewController: PlanHeaderViewDelegate {
     func change(to index: Int) {
         planIndex = index
-        view.addSubview(blurEffectView)
-        view.addSubview(activityIndicatorView)
-        activityIndicatorView.startAnimating()
+        addLoadingView()
         tableView.reloadData()
         if plans.isEmpty && planIndex == 0 {
-            self.activityIndicatorView.stopAnimating()
-            self.blurEffectView.removeFromSuperview()
-            self.activityIndicatorView.removeFromSuperview()
+            removeLoadingView()
         }
         if togetherPlans.isEmpty && planIndex == 1 {
-            self.activityIndicatorView.stopAnimating()
-            self.blurEffectView.removeFromSuperview()
-            self.activityIndicatorView.removeFromSuperview()
+            removeLoadingView()
         }
-    }
-}
-
-extension PlanViewController: FirestoreManagerDelegate {
-    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan]) {
-        plans = firestoreData
-    }
-}
-
-extension PlanViewController: FirebaseStorageManagerDownloadDelegate {
-    func manager(_ manager: FirebaseStorageManagerDownloadPhotos) {
     }
 }

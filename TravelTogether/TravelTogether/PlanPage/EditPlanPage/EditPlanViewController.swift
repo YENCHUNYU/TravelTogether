@@ -260,7 +260,6 @@ extension EditPlanViewController: UITableViewDataSource {
                         } else {
                             cell.locationImageView.image = UIImage(named: "Image_Placeholder")
                         }
-                        
                     }
                 }
                 self.activityIndicatorView.stopAnimating()
@@ -511,7 +510,6 @@ extension EditPlanViewController: UITableViewDropDelegate {
                             if error != nil {
                                 print("Failed to fetch userInfo")
                             } else {
-                                locations[destinationIndexPath.row].user = " \(String(describing: userData?.name ?? ""))已編輯 "
                                 let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
                                 firestoreMangerPostLocation.updateLocationsOrder(
                                     travelPlanId: self.travelPlanId,

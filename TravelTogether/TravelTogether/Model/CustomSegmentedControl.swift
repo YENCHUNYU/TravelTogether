@@ -12,8 +12,8 @@ protocol CustomSegmentedControlDelegate: AnyObject {
 }
 
 class CustomSegmentedControl: UIView {
-    private var buttonTitles: [String]!
-    private var buttons: [UIButton]!
+    var buttonTitles: [String]!
+    var buttons: [UIButton]!
     private var selectorView: UIView!
     
     var textColor = UIColor(named: "darkGreen")
@@ -94,10 +94,10 @@ extension CustomSegmentedControl {
         addSubview(selectorView)
     }
     
-    private func createButton() {
+    func createButton() {
         buttons = [UIButton]()
-        buttons.removeAll()
-        subviews.forEach({$0.removeFromSuperview()})
+//        buttons.removeAll()
+//        subviews.forEach({$0.removeFromSuperview()})
         for buttonTitle in buttonTitles {
             let button = UIButton(type: .system)
             button.setTitle(buttonTitle, for: .normal)

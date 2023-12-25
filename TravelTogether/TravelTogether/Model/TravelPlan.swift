@@ -36,7 +36,7 @@ struct TravelPlan: Codable {
     }
 }
 
-struct TravelDay: Codable  {
+struct TravelDay: Codable {
     var locations: [Location]
     
     var dictionary: [String: Any] {
@@ -46,11 +46,10 @@ struct TravelDay: Codable  {
     }
 }
 
-struct Location: Codable  {
+struct Location: Codable {
     var name: String
     var photo: String
     var address: String
-    var user: String?
     var memoryPhotos: [String]?
     var article: String?
     
@@ -59,7 +58,6 @@ struct Location: Codable  {
             "name": name,
             "photo": photo,
             "address": address,
-            "user": user ?? "",
             "memoryPhotos": memoryPhotos ?? [],
             "article": article ?? ""
         ]

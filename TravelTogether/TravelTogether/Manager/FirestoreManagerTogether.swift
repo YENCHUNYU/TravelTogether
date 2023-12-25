@@ -45,8 +45,7 @@ class FirestoreTogether {
                             let location = Location(
                                 name: locationData["name"] as? String ?? "",
                                 photo: locationData["photo"] as? String ?? "",
-                                address: locationData["address"] as? String ?? "",
-                                user: locationData["user"] as? String ?? ""
+                                address: locationData["address"] as? String ?? ""
                             )
                             locations.append(location)
                         }
@@ -203,8 +202,7 @@ class FirestoreTogether {
                             let location = Location(
                                 name: locationData["name"] as? String ?? "",
                                 photo: locationData["photo"] as? String ?? "",
-                                address: locationData["address"] as? String ?? "",
-                                user: locationData["user"] as? String ?? ""
+                                address: locationData["address"] as? String ?? ""
                             )
                             locations.append(location)
                         }

@@ -249,7 +249,6 @@ class FirestoreManagerFetchMemory {
                                 name: locationData["name"] as? String ?? "",
                                 photo: locationData["photo"] as? String ?? "",
                                 address: locationData["address"] as? String ?? "",
-                                user: locationData["user"] as? String ?? "",
                                 memoryPhotos: locationData["memoryPhotos"] as? [String] ?? [], 
                                 article: locationData["article"] as? String ?? ""
                             )
@@ -309,7 +308,6 @@ class FirestoreManagerFetchMemory {
                                 name: locationData["name"] as? String ?? "",
                                 photo: locationData["photo"] as? String ?? "",
                                 address: locationData["address"] as? String ?? "",
-                                user: locationData["user"] as? String ?? "",
                                 memoryPhotos: locationData["memoryPhotos"] as? [String] ?? [],
                                 article: locationData["article"] as? String ?? ""
                             )
@@ -372,7 +370,6 @@ class FirestoreManagerFetchMemory {
                                 name: locationData["name"] as? String ?? "",
                                 photo: locationData["photo"] as? String ?? "",
                                 address: locationData["address"] as? String ?? "",
-                                user: locationData["user"] as? String ?? "",
                                 memoryPhotos: locationData["memoryPhotos"] as? [String] ?? [],
                                 article: locationData["article"] as? String ?? ""
                             )
