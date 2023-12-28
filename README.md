@@ -1,11 +1,10 @@
 # TravelTogether
 ## Introduction   
 TravelTogether is a platform designed for travel enthusiasts and aims to provide users with a convenient way to plan and share travel itineraries.
-## Table of Contents
-#### [Requirements](#Requirements)
-#### [Installation](#Installation)
-#### [Features](#Features)
+## Features
  - [Explore Users' Memories and Plans](#explore-users-memories-and-plans)
+ - [Plan a Trip](#TripPlanning)
+ - [Record and Share Travel Memories](#RecordandShareTravelMemories)
 
 ## <a name="Requirements"></a>Requirements
 Minimun iOS version: 15
@@ -18,7 +17,7 @@ or search "TravelTogether" in App Store.
 
 ## <a name="Features"></a>Features
 
-### <a name="Explore Users' Memories and Plans"></a>explore-users-memories-and-plans
+### <a name="explore-users-memories-and-plans"></a>Explore Users' Memories and Plans
 
 ![ExploreMemories.gif](./READMEgif/ExploreMemories.gif)
 
@@ -26,7 +25,7 @@ or search "TravelTogether" in App Store.
 - Click the like button to save them to their favorites.
 - Click the copy button to copy the user's travel plan.
 
-### <a name="2. Trip Planning"></a>2. Trip Planning
+### <a name="TripPlanning"></a>Plan a Trip
 
 ![EditPlan.gif](./READMEgif/EditPlan.gif)
 
@@ -34,7 +33,7 @@ or search "TravelTogether" in App Store.
 - Able to add a new day, new location in a trip.
 - Able to drag and drop a specific location to change locations' order.
 
-### <a name="3. Record and Share Travel Memoriesg"></a>3. Record and Share Travel Memories
+### <a name="RecordandShareTravelMemories"></a>Record and Share Travel Memories
 ![MemoryDraft.gif](./READMEgif/MemoryDraft.gif)
 
 - Create new travel memories based on existing travel plans and save as a draft.
