@@ -32,6 +32,8 @@ class CustomSegmentedControlTests: XCTestCase {
                 buttonTitles[index], "Button title should match the expected title")
             XCTAssertEqual(button.allTargets.count, 1, "Button should have one target")
         }
-        XCTAssertEqual(segmentedControl.buttons[0].titleColor(for: .normal), segmentedControl.selectorTextColor, "First button text color should match the selected color")
+        XCTAssertEqual(
+            segmentedControl.buttons[0].titleColor(for: .normal),
+            segmentedControl.selectorTextColor, "First button text color should match the selected color")
     }
 }

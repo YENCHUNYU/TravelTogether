@@ -301,7 +301,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V7H-c5-N37" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-236" y="2187"/>
+            <point key="canvasLocation" x="-917" y="1953"/>
         </scene>
         <!--我的行程-->
         <scene sceneID="rgr-Hc-Hyi">
@@ -433,91 +433,6 @@
                                             <outlet property="userNameLabel" destination="7lo-8G-FKe" id="OOV-e5-HtZ"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="SpotCell" rowHeight="300" id="MkI-YG-PUC" customClass="SpotCell" customModule="TravelTogether" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="380" width="414" height="300"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="MkI-YG-PUC" id="ZrA-2l-gB3">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="300"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Image_Placeholder" translatesAutoresizingMaskIntoConstraints="NO" id="FM1-ql-VyB">
-                                                    <rect key="frame" x="20" y="10" width="374" height="210.33333333333334"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" secondItem="FM1-ql-VyB" secondAttribute="height" multiplier="16:9" id="hCh-XS-xsr"/>
-                                                    </constraints>
-                                                </imageView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3KX-EB-TNw">
-                                                    <rect key="frame" x="85.666666666666671" y="245.33333333333337" width="82.000000000000014" height="35"/>
-                                                    <color key="tintColor" systemColor="labelColor"/>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="heart" catalog="system" title="收藏">
-                                                        <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
-                                                    </buttonConfiguration>
-                                                    <connections>
-                                                        <action selector="favoriteButtonTapped:" destination="MkI-YG-PUC" eventType="touchUpInside" id="icC-ev-gcA"/>
-                                                    </connections>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jiN-G2-2NZ">
-                                                    <rect key="frame" x="20" y="245.33333333333334" width="64.666666666666671" height="34.333333333333343"/>
-                                                    <color key="tintColor" systemColor="labelColor"/>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" image="hand.thumbsup" catalog="system" title="讚">
-                                                        <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
-                                                    </buttonConfiguration>
-                                                    <connections>
-                                                        <action selector="thumbUpButtonTapped:" destination="MkI-YG-PUC" eventType="touchUpInside" id="mig-W2-xLT"/>
-                                                    </connections>
-                                                </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10個讚" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qci-bh-ivi">
-                                                    <rect key="frame" x="29.999999999999996" y="284.66666666666669" width="57.666666666666657" height="15"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10個收藏" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mao-qy-ocG">
-                                                    <rect key="frame" x="95.666666666666657" y="285.33333333333331" width="298.33333333333337" height="15"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gqZ-MA-87I">
-                                                    <rect key="frame" x="20.000000000000004" y="225.33333333333334" width="41.333333333333343" height="20.333333333333343"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" name="yellowGreen"/>
-                                            <constraints>
-                                                <constraint firstItem="Qci-bh-ivi" firstAttribute="leading" secondItem="jiN-G2-2NZ" secondAttribute="leading" constant="10" id="3jO-z2-XFX"/>
-                                                <constraint firstItem="Mao-qy-ocG" firstAttribute="top" secondItem="3KX-EB-TNw" secondAttribute="bottom" constant="5" id="8W7-jX-O8D"/>
-                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="gqZ-MA-87I" secondAttribute="trailing" constant="20" id="9pj-3B-dLs"/>
-                                                <constraint firstItem="jiN-G2-2NZ" firstAttribute="leading" secondItem="ZrA-2l-gB3" secondAttribute="leading" constant="20" id="Ah1-qw-fK7"/>
-                                                <constraint firstItem="3KX-EB-TNw" firstAttribute="leading" secondItem="jiN-G2-2NZ" secondAttribute="trailing" constant="1" id="BCm-oK-ZIQ"/>
-                                                <constraint firstItem="FM1-ql-VyB" firstAttribute="leading" secondItem="ZrA-2l-gB3" secondAttribute="leading" constant="20" id="E5h-TL-euv"/>
-                                                <constraint firstItem="gqZ-MA-87I" firstAttribute="leading" secondItem="ZrA-2l-gB3" secondAttribute="leading" constant="20" id="JYq-rg-WHR"/>
-                                                <constraint firstAttribute="trailing" relation="lessThanOrEqual" secondItem="Mao-qy-ocG" secondAttribute="trailing" constant="20" symbolic="YES" id="Jcw-1a-ZiD"/>
-                                                <constraint firstItem="gqZ-MA-87I" firstAttribute="top" secondItem="FM1-ql-VyB" secondAttribute="bottom" constant="5" id="OMc-5c-0J2"/>
-                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="3KX-EB-TNw" secondAttribute="trailing" constant="20" symbolic="YES" id="VRQ-FR-Klb"/>
-                                                <constraint firstItem="FM1-ql-VyB" firstAttribute="top" secondItem="ZrA-2l-gB3" secondAttribute="top" constant="10" id="bz2-XH-fKb"/>
-                                                <constraint firstItem="Qci-bh-ivi" firstAttribute="top" secondItem="jiN-G2-2NZ" secondAttribute="bottom" constant="5" id="c43-Vj-D89"/>
-                                                <constraint firstAttribute="trailing" secondItem="FM1-ql-VyB" secondAttribute="trailing" constant="20" id="fuP-HS-MQg"/>
-                                                <constraint firstItem="Mao-qy-ocG" firstAttribute="leading" secondItem="Qci-bh-ivi" secondAttribute="trailing" constant="8" symbolic="YES" id="scg-6z-CDo"/>
-                                                <constraint firstItem="3KX-EB-TNw" firstAttribute="top" secondItem="FM1-ql-VyB" secondAttribute="bottom" constant="25" id="tc3-PW-1dc"/>
-                                                <constraint firstItem="Mao-qy-ocG" firstAttribute="leading" secondItem="3KX-EB-TNw" secondAttribute="leading" constant="10" id="vCf-y2-qj5"/>
-                                                <constraint firstItem="jiN-G2-2NZ" firstAttribute="top" secondItem="FM1-ql-VyB" secondAttribute="bottom" constant="25" id="xOc-PZ-gH3"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                        <color key="backgroundColor" name="yellowGreen"/>
-                                        <connections>
-                                            <outlet property="favoriteButton" destination="3KX-EB-TNw" id="3Xp-Fr-UUb"/>
-                                            <outlet property="favoriteCountsLabel" destination="Mao-qy-ocG" id="QWo-g7-lm8"/>
-                                            <outlet property="spotImageView" destination="FM1-ql-VyB" id="uLj-mV-3tl"/>
-                                            <outlet property="spotNameLabel" destination="gqZ-MA-87I" id="TiE-oz-EC3"/>
-                                            <outlet property="thumbsUpButton" destination="jiN-G2-2NZ" id="RPG-Lh-5cI"/>
-                                            <outlet property="thumbsUpCountsLabel" destination="Qci-bh-ivi" id="RED-ZG-aN0"/>
-                                        </connections>
-                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>
@@ -541,7 +456,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s4O-a4-Rwa" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1941" y="1225"/>
+            <point key="canvasLocation" x="-1154" y="1224"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="BOm-zt-4go">
@@ -574,63 +489,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FzH-th-Ibi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-938" y="2487"/>
-        </scene>
-        <!--Map Info View Controller-->
-        <scene sceneID="zGB-Re-HNP">
-            <objects>
-                <viewController storyboardIdentifier="MapInfoViewController" id="M2B-0j-91P" customClass="MapInfoViewController" customModule="TravelTogether" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="k1d-cl-hrb">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fMp-YY-uAZ">
-                                <rect key="frame" x="20" y="64" width="48" height="24"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y6Y-1M-JQd">
-                                <rect key="frame" x="269" y="54" width="125" height="35"/>
-                                <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="加入行程"/>
-                                <connections>
-                                    <action selector="addToPlanButtonTapped:" destination="M2B-0j-91P" eventType="touchUpInside" id="22P-Kg-R6Y"/>
-                                </connections>
-                            </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Z8q-c8-CKc">
-                                <rect key="frame" x="20" y="103" width="350" height="197"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="350" id="9uV-sz-c8E"/>
-                                    <constraint firstAttribute="width" secondItem="Z8q-c8-CKc" secondAttribute="height" multiplier="16:9" id="zaj-Vx-pgq"/>
-                                </constraints>
-                            </imageView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="kMW-9Y-LW5"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="Z8q-c8-CKc" firstAttribute="top" secondItem="fMp-YY-uAZ" secondAttribute="bottom" constant="15" id="AC4-90-8mN"/>
-                            <constraint firstItem="fMp-YY-uAZ" firstAttribute="top" secondItem="kMW-9Y-LW5" secondAttribute="top" constant="20" id="BXX-FO-rTc"/>
-                            <constraint firstItem="kMW-9Y-LW5" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fMp-YY-uAZ" secondAttribute="trailing" constant="20" id="CnK-Am-MAa"/>
-                            <constraint firstItem="Z8q-c8-CKc" firstAttribute="leading" secondItem="kMW-9Y-LW5" secondAttribute="leading" constant="20" id="XmD-gm-5Bz"/>
-                            <constraint firstItem="y6Y-1M-JQd" firstAttribute="leading" secondItem="kMW-9Y-LW5" secondAttribute="leading" constant="269" id="ZCx-SF-25x"/>
-                            <constraint firstItem="kMW-9Y-LW5" firstAttribute="trailing" secondItem="y6Y-1M-JQd" secondAttribute="trailing" constant="20" id="cou-bJ-oIJ"/>
-                            <constraint firstItem="fMp-YY-uAZ" firstAttribute="leading" secondItem="kMW-9Y-LW5" secondAttribute="leading" constant="20" id="dZe-mw-0lt"/>
-                            <constraint firstItem="y6Y-1M-JQd" firstAttribute="top" secondItem="kMW-9Y-LW5" secondAttribute="top" constant="10" id="uXP-wM-1cM"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="mcB-04-pWT"/>
-                    <connections>
-                        <outlet property="addToPlanButton" destination="y6Y-1M-JQd" id="n5Y-H9-vwc"/>
-                        <outlet property="placeImageView" destination="Z8q-c8-CKc" id="TVC-xi-xhu"/>
-                        <outlet property="placeNameLabel" destination="fMp-YY-uAZ" id="4DA-h2-O0a"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="mCw-b8-YPb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2822" y="3623"/>
+            <point key="canvasLocation" x="-1670" y="1953"/>
         </scene>
         <!--Maps List View Controller-->
         <scene sceneID="y87-R2-vUY">
@@ -646,7 +505,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e1C-O3-TcI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1940" y="3303"/>
+            <point key="canvasLocation" x="-2057" y="2682"/>
         </scene>
         <!--Add To Plan List View Controller-->
         <scene sceneID="tm2-dJ-Mrz">
@@ -716,7 +575,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ot3-pS-OxO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-329" y="2862"/>
+            <point key="canvasLocation" x="-619" y="2650"/>
         </scene>
         <!--Select Date View Controller-->
         <scene sceneID="2Dd-kc-rMQ">
@@ -774,7 +633,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wEx-Ql-59d" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-329" y="3594"/>
+            <point key="canvasLocation" x="151" y="2650"/>
         </scene>
         <!--Create Plan View Controller-->
         <scene sceneID="fOw-59-ooz">
@@ -875,7 +734,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s01-Dm-gG1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="359" y="2754"/>
+            <point key="canvasLocation" x="152" y="1953"/>
         </scene>
         <!--我的回憶-->
         <scene sceneID="cN8-xe-Dy7">
@@ -1049,7 +908,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DTj-50-rAP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="834" y="2084"/>
+            <point key="canvasLocation" x="800" y="1953"/>
         </scene>
         <!--收藏-->
         <scene sceneID="UB1-hR-mod">
@@ -1225,7 +1084,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ut5-Sa-9zE" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-885" y="1225"/>
+            <point key="canvasLocation" x="-368" y="1225"/>
         </scene>
         <!--個人頁-->
         <scene sceneID="xJc-AE-2Q2">
@@ -1500,36 +1359,6 @@
             </objects>
             <point key="canvasLocation" x="2477" y="1225"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="6om-as-0Tb">
-            <objects>
-                <viewController id="CjV-2h-omi" customClass="ViewController" customModule="TravelTogether" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="RY8-fV-S66">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="KJ4-cn-hc4">
-                                <rect key="frame" x="87" y="477" width="240" height="128"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </tableView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="k1d-bi-lky"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="k1d-bi-lky" firstAttribute="trailing" secondItem="KJ4-cn-hc4" secondAttribute="trailing" constant="87" id="61L-Ja-4Ql"/>
-                            <constraint firstItem="KJ4-cn-hc4" firstAttribute="top" secondItem="k1d-bi-lky" secondAttribute="top" constant="433" id="Lyb-iM-0fe"/>
-                            <constraint firstItem="KJ4-cn-hc4" firstAttribute="leading" secondItem="k1d-bi-lky" secondAttribute="leading" constant="87" id="R7n-f1-jWd"/>
-                            <constraint firstItem="k1d-bi-lky" firstAttribute="bottom" secondItem="KJ4-cn-hc4" secondAttribute="bottom" constant="257" id="XKE-5h-fGF"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="tableView" destination="KJ4-cn-hc4" id="Kx0-or-qjh"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="R5M-bC-9HP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3375" y="1275"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="XbS-w6-nDn">
             <objects>
@@ -1547,7 +1376,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jYJ-UZ-NXE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1227" y="3303"/>
+            <point key="canvasLocation" x="-1371" y="2682"/>
         </scene>
         <!--編輯旅遊回憶-->
         <scene sceneID="hbz-qO-u3E">
@@ -1747,7 +1576,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="B4c-Zb-axl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1080" y="2784"/>
+            <point key="canvasLocation" x="800" y="2650"/>
         </scene>
         <!--Save As Draftor Post View Controller-->
         <scene sceneID="41U-oR-hOu">
@@ -1821,7 +1650,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nUt-ZE-gAv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1372" y="3377"/>
+            <point key="canvasLocation" x="2130" y="2650"/>
         </scene>
         <!--Edit Memory Title View Controller-->
         <scene sceneID="YLu-LU-pi2">
@@ -1899,7 +1728,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="T6k-BY-9yB" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2190" y="2698"/>
+            <point key="canvasLocation" x="1429" y="2650"/>
         </scene>
         <!--編輯旅遊回憶-->
         <scene sceneID="Y5Q-a0-pvF">
@@ -2099,7 +1928,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oir-QL-mqw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1682" y="2161"/>
+            <point key="canvasLocation" x="1429" y="1953"/>
         </scene>
         <!--Login View Controller-->
         <scene sceneID="eB2-Qc-qFS">
@@ -2321,7 +2150,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="台北車站" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cai-vt-gSp">
-                                                    <rect key="frame" x="70" y="11" width="90.333333333333314" height="21"/>
+                                                    <rect key="frame" x="70" y="11" width="69.333333333333314" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -2387,7 +2216,7 @@
                                                 <constraint firstItem="Yxz-c7-kOk" firstAttribute="top" secondItem="jMO-l8-IzX" secondAttribute="top" constant="242" id="dxx-JJ-Qfu"/>
                                                 <constraint firstItem="bDy-XX-wPR" firstAttribute="top" secondItem="jMO-l8-IzX" secondAttribute="top" constant="10" id="hAA-Hg-Kid"/>
                                                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="kre-6G-JDc" secondAttribute="trailing" constant="20" id="mXJ-fS-T82"/>
-                                                <constraint firstAttribute="trailing" secondItem="cai-vt-gSp" secondAttribute="trailing" constant="253.66666666666674" id="oTS-CT-8j4"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="cai-vt-gSp" secondAttribute="trailing" constant="20" id="oTS-CT-8j4"/>
                                                 <constraint firstAttribute="trailing" secondItem="bkw-tc-fBx" secondAttribute="trailing" constant="20" id="rcF-Si-SAd"/>
                                                 <constraint firstItem="Yxz-c7-kOk" firstAttribute="leading" secondItem="jMO-l8-IzX" secondAttribute="leading" constant="20" id="uTZ-ch-nx0"/>
                                             </constraints>
@@ -2420,7 +2249,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u32-Fp-zWT" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1698" y="2110"/>
+            <point key="canvasLocation" x="-2325" y="1953"/>
         </scene>
         <!--Plan Detail View Controller-->
         <scene sceneID="964-Bz-JbY">
@@ -2534,7 +2363,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="erd-b4-MYr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2486" y="2110"/>
+            <point key="canvasLocation" x="-3026" y="1953"/>
         </scene>
         <!--Update Draftor Post View Controller-->
         <scene sceneID="tqp-D6-RUq">
@@ -2608,15 +2437,15 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M6W-Zp-807" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2544" y="1965"/>
+            <point key="canvasLocation" x="3138" y="1225"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="bXa-yj-gCI"/>
-        <segue reference="Zww-hD-bL6"/>
+        <segue reference="uKr-hy-xv3"/>
+        <segue reference="VQK-Ip-Ga7"/>
         <segue reference="aTg-C3-CtN"/>
-        <segue reference="YW6-3X-aMv"/>
-        <segue reference="jsr-wJ-nje"/>
+        <segue reference="HNF-ZE-dku"/>
+        <segue reference="YPG-wh-Qv6"/>
         <segue reference="qMO-0e-wEY"/>
     </inferredMetricsTieBreakers>
     <resources>

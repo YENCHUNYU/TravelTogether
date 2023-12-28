@@ -66,7 +66,6 @@ class SettingViewController: UIViewController, ASAuthorizationControllerDelegate
                     } else {
                         print("Account deleted.")
                         LoginViewController.loginStatus = false
-//                        try? Auth.auth().signOut()
                     }
                 }
                 self.dismiss(animated: true)

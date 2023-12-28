@@ -14,6 +14,7 @@ import NVActivityIndicatorView
 class PlanViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView! 
+    var viewModel = PlanViewModel()
     
     var planIndex = 0
     var plans: [TravelPlan] = []
@@ -26,8 +27,6 @@ class PlanViewController: UIViewController {
             padding: 0
               )
     var blurEffectView: UIVisualEffectView!
-    var linkPlanId = ""
-    var linkUserId = ""
     var planId = ""
     lazy var addButton: UIButton = {
         let add = UIButton()
@@ -73,19 +72,19 @@ class PlanViewController: UIViewController {
         headerView.delegate = self
         headerView.backgroundColor = UIColor(named: "yellowGreen")
     }
-
+    
     func fetchMyPlans() async {
-        let firestoreManager = FirestoreManager()
-        await firestoreManager.fetchMyTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
-            if let error = error {
-                print("Error fetching travel plans: \(error)")
-            } else {
-                print("Fetched travel plan: \(travelPlans ?? [])")
-                self.plans = travelPlans ?? []
-                self.tableView.reloadData()
+            let firestoreManager = FirestoreManager()
+            await firestoreManager.fetchMyTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
+                if let error = error {
+                    print("Error fetching travel plans: \(error)")
+                } else {
+                    print("Fetched travel plan: \(travelPlans ?? [])")
+                    self.plans = travelPlans ?? []
+                    self.tableView.reloadData()
+                }
             }
         }
-    }
 
     func setUpButton() {
         addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true

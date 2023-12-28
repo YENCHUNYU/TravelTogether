@@ -64,15 +64,32 @@ class SearchViewController: UIViewController {
         tableView.delegate = self
         tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: "SearchHeaderView")
         
-        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
-        headerView.delegate = self
-        headerView.backgroundColor = UIColor(named: "yellowGreen")
+        setUpHeaderView()
         tableView.tableHeaderView = headerView
         view.addSubview(searchButton)
         setUpButton()
         self.tabBarController?.delegate = self
+        fetchPlans()
+        fetchMemories()
+        LoginViewController.loginStatus = setUpLoginStatus()
+    }
+    
+    func setUpLoginStatus() -> Bool {
+        if Auth.auth().currentUser != nil {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func setUpHeaderView() {
+        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
+        headerView.delegate = self
+        headerView.backgroundColor = UIColor(named: "yellowGreen")
+    }
+    
+    func fetchPlans() {
         let firestoreManager = FirestoreManager()
-        firestoreManager.delegate = self
         firestoreManager.fetchAllTravelPlans { (travelPlans, error) in
             if let error = error {
                 print("Error fetching travel plans: \(error)")
@@ -82,7 +99,9 @@ class SearchViewController: UIViewController {
                 self.tableView.reloadData()
             }
         }
-        
+    }
+    
+    func fetchMemories() {
         let firestoreFetchMemory = FirestoreManagerFetchMemory()
         firestoreFetchMemory.fetchAllMemories { (travelPlans, error) in
             if let error = error {
@@ -93,94 +112,67 @@ class SearchViewController: UIViewController {
                 self.tableView.reloadData()
             }
         }
-        
-        if Auth.auth().currentUser != nil {
-            LoginViewController.loginStatus = true
-        } else {
-            LoginViewController.loginStatus = false
-        }
     }
-    
+ 
     func setUpButton() {
         searchButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
         searchButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToMapFromSearch" {
-  
+        guard let identifier = segue.identifier else {
+            return
+        }
+
+        switch identifier {
+        case "goToMapFromSearch":
             if let destinationVC = segue.destination as? MapViewController {
                 destinationVC.isFromSearch = true
             }
-        }
-        if segue.identifier == "MemoryDetail" {
+        case "MemoryDetail":
             if let destinationVC = segue.destination as? MemoryDetailViewController {
                 destinationVC.memoryId = self.memoryId
                 print("self.memoryId\(self.memoryId)")
                 destinationVC.userId = self.userId
                 print("userid@\(destinationVC.userId)")
             }
-        }
-        if segue.identifier == "PlanDetail" {
+        case "PlanDetail":
             if let destinationVC = segue.destination as? PlanDetailViewController {
                 destinationVC.travelPlanId = self.planId
                 destinationVC.userId = self.userId
             }
+        default:
+            break
         }
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
+    func addLoadingView() {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
-        headerView.backgroundColor = UIColor(named: "yellowGreen")
-//        if searchIndex == 1 {
-            let firestoreManager = FirestoreManager()
-            firestoreManager.delegate = self
-            firestoreManager.fetchAllTravelPlans { (travelPlans, error) in
-                if let error = error {
-                    print("Error fetching travel plans: \(error)")
-                } else {
-                    print("Fetched travel plans: \(travelPlans ?? [])")
-                    self.plans = travelPlans ?? []
-                    self.tableView.reloadData()
-                }
-                if self.plans.isEmpty && self.searchIndex == 1 {
-                    self.activityIndicatorView.stopAnimating()
-                    self.blurEffectView.removeFromSuperview()
-                    self.activityIndicatorView.removeFromSuperview()
-                }
-            }
-            
-//        } else if searchIndex == 0 {
-            let firestoreFetchMemory = FirestoreManagerFetchMemory()
-            firestoreFetchMemory.fetchAllMemories { (travelPlans, error) in
-                if let error = error {
-                    print("Error fetching memories: \(error)")
-                } else {
-                    print("Fetched memories: \(travelPlans ?? [])")
-                    self.memories = travelPlans ?? []
-                    self.tableView.reloadData()
-                }
-                if self.memories.isEmpty && self.searchIndex == 0 {
-                    self.activityIndicatorView.stopAnimating()
-                    self.blurEffectView.removeFromSuperview()
-                    self.activityIndicatorView.removeFromSuperview()
-                }
-            }
-     //   }
+    }
+    
+    func removeLoadingView() {
+        self.activityIndicatorView.stopAnimating()
+        self.blurEffectView.removeFromSuperview()
+        self.activityIndicatorView.removeFromSuperview()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        addLoadingView()
+        fetchPlans()
+        if self.plans.isEmpty && self.searchIndex == 1 {
+            removeLoadingView()
+        }
+        fetchMemories()
+        if self.memories.isEmpty && self.searchIndex == 0 {
+            removeLoadingView()
+        }
     }
 }
 
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchIndex == 0 {
-            return memories.count
-        } else if searchIndex == 1 {
-            return plans.count
-        } else {
-            return 1
-        }
+        return searchIndex == 0 ? memories.count: plans.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -188,52 +180,75 @@ extension SearchViewController: UITableViewDataSource {
             withIdentifier: "SearchMemoriesCell",
             for: indexPath) as? SearchMemoriesCell
         else { fatalError("Could not create SearchMemoriesCell") }
-//        let currentIndexPath = indexPath
         if searchIndex == 0 {
-// userinfo
-            let taskIdentifier = UUID().uuidString
-            cell.taskIdentifier = taskIdentifier
-            cell.userNameLabel.text = memories[indexPath.row].user
-            cell.userImageView.kf.setImage(with: URL(string: memories[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
-            cell.memoryNameLabel.text = memories[indexPath.row].planName
-            let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
-            let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
-            cell.dateLabel.text = "\(start)-\(end)"
-            if memories.isEmpty == false {
-                let urlString = memories[indexPath.row].coverPhoto ?? ""
-                if !urlString.isEmpty, let url = URL(string: urlString) {
-                    downloadImageFromFirestorage(url: url, cell: cell, indexPath: indexPath)
-                } else {
-                    
-                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                    self.activityIndicatorView.stopAnimating()
-                    self.blurEffectView.removeFromSuperview()
-                    self.activityIndicatorView.removeFromSuperview()
-                }
-            }
-            return cell
+            return setUpCellForMemories(indexPath: indexPath, cell: cell, plans: memories)
         } else {
-            cell.userNameLabel.text = plans[indexPath.row].user
-            cell.userImageView.kf.setImage(with: URL(string: plans[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
-            cell.memoryNameLabel.text = plans[indexPath.row].planName
-            let start = self.changeDateFormat(date: "\(self.plans[indexPath.row].startDate)")
-            let end = self.changeDateFormat(date: "\(self.plans[indexPath.row].endDate)")
-            cell.dateLabel.text = "\(start)-\(end)"
-            let daysData = plans[indexPath.row].days
-            if daysData.isEmpty == false {
-                let locationData = daysData[0]
-                let theLocation = locationData.locations
-                if theLocation.isEmpty == false {
-                    let urlString = theLocation[0].photo
-                    if let url = URL(string: urlString) {
-                        downloadImageFromFirestorage(url: url, cell: cell, indexPath: indexPath)
-                    }
-                }
-            }
-            self.activityIndicatorView.stopAnimating()
-            self.blurEffectView.removeFromSuperview()
-            self.activityIndicatorView.removeFromSuperview()
-            return cell}
+            return setUpCellForPlans(indexPath: indexPath, cell: cell, plans: plans)
+        }
+    }
+    
+    func setUpCellForMemories(indexPath: IndexPath, cell: SearchMemoriesCell, plans: [TravelPlan]) -> UITableViewCell {
+        let taskIdentifier = UUID().uuidString
+        cell.taskIdentifier = taskIdentifier
+        cell.userNameLabel.text = memories[indexPath.row].user
+        cell.userImageView.kf.setImage(with: URL(string: memories[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
+        cell.memoryNameLabel.text = memories[indexPath.row].planName
+        cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+        let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
+        let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
+        cell.dateLabel.text = "\(start)-\(end)"
+        setUpImagesForMemories(indexPath: indexPath, cell: cell)
+        return cell
+    }
+    func setUpImagesForMemories(indexPath: IndexPath, cell: SearchMemoriesCell) {
+        guard memories.isEmpty == false else {
+            cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+            removeLoadingView()
+            return
+        }
+        let urlString = memories[indexPath.row].coverPhoto ?? ""
+        guard !urlString.isEmpty, let url = URL(string: urlString) else {
+            cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+            removeLoadingView()
+            return
+        }
+        downloadImageFromFirestorage(url: url, cell: cell, indexPath: indexPath)
+    }
+    
+    func setUpCellForPlans(indexPath: IndexPath, cell: SearchMemoriesCell, plans: [TravelPlan]) -> UITableViewCell {
+        cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+        cell.userNameLabel.text = plans[indexPath.row].user
+        cell.userImageView.kf.setImage(with: URL(string: plans[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
+        cell.memoryNameLabel.text = plans[indexPath.row].planName
+        let start = self.changeDateFormat(date: "\(self.plans[indexPath.row].startDate)")
+        let end = self.changeDateFormat(date: "\(self.plans[indexPath.row].endDate)")
+        cell.dateLabel.text = "\(start)-\(end)"
+        setUpImageForPlans(indexPath: indexPath, cell: cell)
+        return cell
+    }
+    
+    func setUpImageForPlans(indexPath: IndexPath, cell: SearchMemoriesCell) {
+        let daysData = plans[indexPath.row].days
+        guard daysData.isEmpty == false else {
+            cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+            removeLoadingView()
+            return
+        }
+        let locationData = daysData[0]
+        let theLocation = locationData.locations
+        guard theLocation.isEmpty == false else {
+            cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+            removeLoadingView()
+            return
+        }
+        let urlString = theLocation[0].photo
+        guard let url = URL(string: urlString) else {
+            cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+            removeLoadingView()
+            return
+        }
+        downloadImageFromFirestorage(url: url, cell: cell, indexPath: indexPath)
+        removeLoadingView()
     }
     
     func downloadImageFromFirestorage(url: URL, cell: SearchMemoriesCell, indexPath: IndexPath) {
@@ -244,22 +259,22 @@ extension SearchViewController: UITableViewDataSource {
         firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
             DispatchQueue.main.async {
                 guard cell.taskIdentifier == taskIdentifier else {
-                               return
-                           }
+                    return
+                }
                 if let image = image {
                     cell.memoryImageView.image = image
                 } else {
                     cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                 }
-                self.activityIndicatorView.stopAnimating()
-                self.blurEffectView.removeFromSuperview()
-                self.activityIndicatorView.removeFromSuperview()
-            }}}
+                self.removeLoadingView()
+            }
+        }
+    }
     
     func changeDateFormat(date: String) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // Set the locale to handle the date format
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
 
         if let date = dateFormatter.date(from: date) {
             let outputFormatter = DateFormatter()
@@ -283,9 +298,7 @@ extension SearchViewController: UITableViewDataSource {
             userId = plans[indexPath.row].userId ?? ""
             performSegue(withIdentifier: "PlanDetail", sender: self)
         }
-        
     }
-    
 }
 
 extension SearchViewController: UITableViewDelegate {
@@ -297,27 +310,13 @@ extension SearchViewController: UITableViewDelegate {
 extension SearchViewController: SearchHeaderViewDelegate {
     func change(to index: Int) {
         searchIndex = index
-        view.addSubview(blurEffectView)
-        view.addSubview(activityIndicatorView)
-        activityIndicatorView.startAnimating()
-        
+        addLoadingView()
         tableView.reloadData()
         if plans.isEmpty && searchIndex == 1 {
-            self.activityIndicatorView.stopAnimating()
-            self.blurEffectView.removeFromSuperview()
-            self.activityIndicatorView.removeFromSuperview()
+            removeLoadingView()
+        } else if memories.isEmpty && searchIndex == 0 {
+            removeLoadingView()
         }
-        if memories.isEmpty && searchIndex == 0 {
-            self.activityIndicatorView.stopAnimating()
-            self.blurEffectView.removeFromSuperview()
-            self.activityIndicatorView.removeFromSuperview()
-        }
-    }
-}
-
-extension SearchViewController: FirestoreManagerDelegate {
-    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan]) {
-        plans = firestoreData
     }
 }
 
@@ -342,18 +341,17 @@ extension SearchViewController {
 
 extension SearchViewController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        if !LoginViewController.loginStatus {
-            if viewController.tabBarItem.tag > 0 {
-                if let loginVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController {
-                    // Present the login view controller within a navigation controller
-                    let loginNavController = UINavigationController(rootViewController: loginVC)
-                    present(loginNavController, animated: true, completion: nil)
-                    return false
-                }
-            }
-            return false
-        } else {
+        guard !LoginViewController.loginStatus else { // 登入中 return true
             return true
         }
+        guard viewController.tabBarItem.tag > 0 else { // 未登入 且點擊tag>0
+            return false
+        }
+        guard let loginVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController else {
+            return false
+        }
+        let loginNavController = UINavigationController(rootViewController: loginVC)
+        present(loginNavController, animated: true, completion: nil)
+        return false
     }
 }

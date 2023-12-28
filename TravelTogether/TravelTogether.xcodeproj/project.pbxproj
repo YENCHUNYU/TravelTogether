@@ -19,6 +19,7 @@
 		5229F8D32B39236F009977FF /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5229F8D22B39236F009977FF /* XCTest.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5229F8E12B39276F009977FF /* DateConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5229F8CF2B37310B009977FF /* DateConversionTests.swift */; };
 		5229F8E82B39536E009977FF /* CustomSegmentedControlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5229F8E22B392C6E009977FF /* CustomSegmentedControlTests.swift */; };
+		5229F8EA2B399A15009977FF /* PlanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5229F8E92B399A15009977FF /* PlanViewModel.swift */; };
 		523243A02B0871020078200C /* EditPlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5232439F2B0871020078200C /* EditPlanViewController.swift */; };
 		523243A22B0871710078200C /* EditPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A12B0871710078200C /* EditPlanCell.swift */; };
 		523243A42B0879F30078200C /* EditPlanHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A32B0879F30078200C /* EditPlanHeaderView.swift */; };
@@ -40,7 +41,6 @@
 		525E7CB52B1987780057C5EE /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525E7CB42B1987780057C5EE /* ImageCollectionViewCell.swift */; };
 		525E7CBB2B19F0AD0057C5EE /* FirestoreForPostMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 525E7CBA2B19F0AD0057C5EE /* FirestoreForPostMemory.swift */; };
 		526005222B1AE14100F37E84 /* EditMemoryTitleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526005212B1AE14100F37E84 /* EditMemoryTitleViewController.swift */; };
-		52783CC32B031B650067A334 /* SpotTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC22B031B650067A334 /* SpotTableViewCell.swift */; };
 		52783CC82B033B260067A334 /* PlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC72B033B260067A334 /* PlanViewController.swift */; };
 		52783CCA2B033EE20067A334 /* MyPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CC92B033EE20067A334 /* MyPlanCell.swift */; };
 		52783CCC2B03409E0067A334 /* PlanHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CCB2B03409E0067A334 /* PlanHeaderView.swift */; };
@@ -148,6 +148,7 @@
 		5229F8D22B39236F009977FF /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		5229F8D82B3924DA009977FF /* TravelTogetherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TravelTogetherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5229F8E22B392C6E009977FF /* CustomSegmentedControlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentedControlTests.swift; sourceTree = "<group>"; };
+		5229F8E92B399A15009977FF /* PlanViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanViewModel.swift; sourceTree = "<group>"; };
 		5232439F2B0871020078200C /* EditPlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanViewController.swift; sourceTree = "<group>"; };
 		523243A12B0871710078200C /* EditPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanCell.swift; sourceTree = "<group>"; };
 		523243A32B0879F30078200C /* EditPlanHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanHeaderView.swift; sourceTree = "<group>"; };
@@ -169,7 +170,6 @@
 		525E7CB42B1987780057C5EE /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		525E7CBA2B19F0AD0057C5EE /* FirestoreForPostMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreForPostMemory.swift; sourceTree = "<group>"; };
 		526005212B1AE14100F37E84 /* EditMemoryTitleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoryTitleViewController.swift; sourceTree = "<group>"; };
-		52783CC22B031B650067A334 /* SpotTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotTableViewCell.swift; sourceTree = "<group>"; };
 		52783CC72B033B260067A334 /* PlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanViewController.swift; sourceTree = "<group>"; };
 		52783CC92B033EE20067A334 /* MyPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPlanCell.swift; sourceTree = "<group>"; };
 		52783CCB2B03409E0067A334 /* PlanHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanHeaderView.swift; sourceTree = "<group>"; };
@@ -281,8 +281,8 @@
 		52292EFE2B01F3750083399E /* SearchPage */ = {
 			isa = PBXGroup;
 			children = (
-				52CD52222B0E47E900CA7352 /* AddToPlanPage */,
 				52CD52212B0E477100CA7352 /* SearchViewController */,
+				52CD52222B0E47E900CA7352 /* AddToPlanPage */,
 				52783CDF2B03C7480067A334 /* MemoryDetailPage */,
 				529781B92B2564B100F53476 /* PlanDetailPage */,
 				52783CE62B05C4AE0067A334 /* GoogleMapsViewController */,
@@ -420,7 +420,6 @@
 				52292EFF2B01F3930083399E /* SearchViewController.swift */,
 				52292F062B0216C90083399E /* SearchHeaderView.swift */,
 				52292F012B01F8E30083399E /* SearchMemoriesTableVIewCell.swift */,
-				52783CC22B031B650067A334 /* SpotTableViewCell.swift */,
 			);
 			path = SearchViewController;
 			sourceTree = "<group>";
@@ -454,6 +453,7 @@
 				52783CCB2B03409E0067A334 /* PlanHeaderView.swift */,
 				52783CC92B033EE20067A334 /* MyPlanCell.swift */,
 				52783CCD2B0345AC0067A334 /* TogetherPlanCell.swift */,
+				5229F8E92B399A15009977FF /* PlanViewModel.swift */,
 			);
 			path = PlanViewController;
 			sourceTree = "<group>";
@@ -791,6 +791,7 @@
 				52783CDE2B037B8E0067A334 /* MemoryDetailViewController.swift in Sources */,
 				524157002B149230005D41F6 /* EditPlanCollectionCell.swift in Sources */,
 				525E7CB52B1987780057C5EE /* ImageCollectionViewCell.swift in Sources */,
+				5229F8EA2B399A15009977FF /* PlanViewModel.swift in Sources */,
 				52292F072B0216C90083399E /* SearchHeaderView.swift in Sources */,
 				524C30F92B18A55600C5CEDC /* EditMemoryViewController.swift in Sources */,
 				52783CD12B034F6A0067A334 /* MemoryViewController.swift in Sources */,
@@ -813,7 +814,6 @@
 				52783CDA2B03612B0067A334 /* ProfileTableViewCell.swift in Sources */,
 				52783CCC2B03409E0067A334 /* PlanHeaderView.swift in Sources */,
 				52783CD32B0350AC0067A334 /* MemoryCell.swift in Sources */,
-				52783CC32B031B650067A334 /* SpotTableViewCell.swift in Sources */,
 				52E0F95E2B0F31FD00D23AFE /* FirebaseStorageManagerDownloadPhotos.swift in Sources */,
 				523243A02B0871020078200C /* EditPlanViewController.swift in Sources */,
 				5288CB0E2B0710EA00E089F9 /* MapInfoViewController.swift in Sources */,
@@ -1059,7 +1059,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = TravelTogether/TravelTogether.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 8MJLHJN65R;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -1075,7 +1075,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = YENCHUNYU.TravelTogether;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -1092,7 +1092,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = TravelTogether/TravelTogether.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8MJLHJN65R;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = TravelTogether/Info.plist;
@@ -1107,7 +1107,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = YENCHUNYU.TravelTogether;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
