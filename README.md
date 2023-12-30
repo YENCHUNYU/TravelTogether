@@ -20,7 +20,7 @@ or search "TravelTogether" in App Store.
 
 - Managed user accounts using [Firebase Authentication](https://firebase.google.com/docs/auth) and offered several login methods, including Native registration (email/password), Google, and Apple.
 
-<img src="./READMEgif/loginN.png" alt="loginN" width="200">  <img src="./READMEgif/loginWithAG.png" alt="loginAG" width="200">
+<img src="./READMEgif/loginN.png" alt="loginN" width="200">  <img src="./READMEgif/loginAG.png" alt="loginAG" width="200">
 
 - Retrieve and display geographical information by integrating [Google Maps SDK](https://developers.google.com/maps/documentation/ios-sdk/overview).
 
