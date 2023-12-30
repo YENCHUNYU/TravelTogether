@@ -58,7 +58,6 @@ class MemoryViewController: UIViewController {
         setUpButton()
         
         let firestoreFetchMemory = FirestoreManagerFetchMemory()
-//        firestoreFetchMemory.delegate = self
         firestoreFetchMemory.fetchMemories { (memories, error) in
             if let error = error {
                 print("Error fetching memories: \(error)")
@@ -84,7 +83,6 @@ class MemoryViewController: UIViewController {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
-//        if memoryIndex == 0 {
             let firestoreFetchMemory = FirestoreManagerFetchMemory()
             firestoreFetchMemory.fetchMemories { (memories, error) in
                 if let error = error {
@@ -100,8 +98,6 @@ class MemoryViewController: UIViewController {
                     }
                 }
             }
-//        } else if memoryIndex == 1 {
-//            let firestoreFetchMemory = FirestoreManagerFetchMemory()
             firestoreFetchMemory.fetchMemoryDrafts { (memories, error) in
                 if let error = error {
                     print("Error fetching memoryDrafts: \(error)")
@@ -116,7 +112,6 @@ class MemoryViewController: UIViewController {
                     }
                 }
             }
-//        }
     }
     func setUpButton() {
         addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
@@ -145,7 +140,6 @@ extension MemoryViewController: UITableViewDataSource {
             let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
             cell.memoryDateLabel.text = "\(start)-\(end)"
             cell.memoryImageView.image = nil
-//            if memories.isEmpty == false {
                 let urlString = memories[indexPath.row].coverPhoto ?? ""
                 if !urlString.isEmpty, let url = URL(string: urlString) {
                     downloadImageFromFirestorage(url: url, cell: cell, indexPath: indexPath)
@@ -157,10 +151,8 @@ extension MemoryViewController: UITableViewDataSource {
                     self.blurEffectView.removeFromSuperview()
                     self.activityIndicatorView.removeFromSuperview()
                 }
-//            }
             return cell
         } else {
-//            cell.memoryImageView.image = mockImage
             cell.memoryNameLabel.text = memoryDrafts[indexPath.row].planName
             let start = self.changeDateFormat(date: "\(self.memoryDrafts[indexPath.row].startDate)")
             let end = self.changeDateFormat(date: "\(self.memoryDrafts[indexPath.row].endDate)")
@@ -307,12 +299,31 @@ extension MemoryViewController: MemoryHeaderViewDelegate {
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
         memoryIndex = index
+        let firestoreFetchMemory = FirestoreManagerFetchMemory()
         if memoryIndex == 0 {
             dbCollection = "Memory"
+            firestoreFetchMemory.fetchMemories { (memories, error) in
+                if let error = error {
+                    print("Error fetching memories: \(error)")
+                } else {
+                    print("Fetched memories: \(memories ?? [])")
+                    self.memories = memories ?? []
+                    self.tableView.reloadData()
+                }
+            }
         } else {
             dbCollection = "MemoryDraft"
+            firestoreFetchMemory.fetchMemoryDrafts { (memories, error) in
+                if let error = error {
+                    print("Error fetching memoryDrafts: \(error)")
+                } else {
+                    print("Fetched memoryDrafts: \(memories ?? [])")
+                    self.memoryDrafts = memories ?? []
+                    self.tableView.reloadData()
+                }
+            }
         }
-        tableView.reloadData()
+        
         if memoryDrafts.isEmpty && memoryIndex == 1 {
             self.activityIndicatorView.stopAnimating()
             self.blurEffectView.removeFromSuperview()

@@ -159,7 +159,8 @@ extension FavoriteViewController: UITableViewDataSource {
                     let urlString = theLocation[0].photo
                     if let url = URL(string: urlString) {
                         downloadImages(cell: cell, indexPath: indexPath, url: url )
-                    }}
+                    }
+                }
             }
             self.activityIndicatorView.stopAnimating()
             self.blurEffectView.removeFromSuperview()

@@ -63,20 +63,25 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
     }
     
     @objc func rightButtonTapped() {
-        
+        let firestoreManagerForPost = FirestoreManagerMemoryPost()
+        let firestore = FirestoreManagerFetchUser()
+        firestore.fetchUserInfo { userData, error  in
+            if error != nil {
+                print("Error fetching one plan: \(String(describing: error))")
+            } else {
+                self.onePlan.user = userData?.name
+                self.onePlan.userPhoto = userData?.photo
+                self.onePlan.userId = userData?.id
+            }
+            firestoreManagerForPost.postMemory(memory: self.onePlan) { error in
+                if error != nil {
+                    print("Failed to post Memory")
+                } else {
+                    print("Posted Memory successfully!")}
+            }
+        }
         if isFromDraft == true {
             // draft edit and complete
-            if let navigationController = self.navigationController {
-             let viewControllers = navigationController.viewControllers
-             if viewControllers.count == 3 {
-                 if let targetViewController = viewControllers[viewControllers.count - 3] as? MemoryViewController {
-                    
-//                     targetViewController.viewWillAppear(true)
-                     navigationController.popToViewController(targetViewController, animated: true)
-                     
-                 }
-                             }
-                         }
             let firestoreManager = FirestoreManagerFetchMemory()
             firestoreManager.deleteMemory(dbcollection: "MemoryDraft", withID: onePlan.id) { error in
                 if let error = error {
@@ -85,31 +90,20 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
                     print("Draft deleted successfully.")
                 }
             }
-        } else {
-            let firestoreManagerForPost = FirestoreManagerMemoryPost()
-    //        firestoreManagerForPost.delegate = self
-            let firestore = FirestoreManagerFetchUser()
-            firestore.fetchUserInfo { userData, error  in
-                if error != nil {
-                    print("Error fetching one plan: \(String(describing: error))")
-                } else {
-                    self.onePlan.user = userData?.name
-                    self.onePlan.userPhoto = userData?.photo
-                    self.onePlan.userId = userData?.id
-                }
-                firestoreManagerForPost.postMemory(memory: self.onePlan) { error in
-                    if error != nil {
-                        print("Failed to post TravelPlan")
-                    } else {
-                        print("Posted TravelPlan successfully!")}
-                }
-                
-                if let navigationController = self.navigationController {
-                    let viewControllers = navigationController.viewControllers
-                    if viewControllers.count == 4 {
-                        let targetViewController = viewControllers[viewControllers.count - 4]
+            if let navigationController = self.navigationController {
+                let viewControllers = navigationController.viewControllers
+                if viewControllers.count == 3 {
+                    let targetViewController = viewControllers[viewControllers.count - 3]
                         navigationController.popToViewController(targetViewController, animated: true)
-                    }
+                }
+            }
+        } else {
+            // add a new memory and complete
+            if let navigationController = self.navigationController {
+                let viewControllers = navigationController.viewControllers
+                if viewControllers.count == 4 {
+                    let targetViewController = viewControllers[viewControllers.count - 4]
+                    navigationController.popToViewController(targetViewController, animated: true)
                 }
             }
         }

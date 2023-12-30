@@ -14,8 +14,6 @@ import NVActivityIndicatorView
 class PlanViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView! 
-    var viewModel = PlanViewModel()
-    
     var planIndex = 0
     var plans: [TravelPlan] = []
     var togetherPlans: [TravelPlan] = []

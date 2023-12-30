@@ -128,9 +128,6 @@ class EditMemoryViewController: UIViewController {
                     }
                 }
                 let firestoreManagerForPost = FirestoreManagerMemoryPost()
-//                self.onePlan.user = Auth.auth().currentUser?.displayName
-//                self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-//                self.onePlan.userId = Auth.auth().currentUser?.uid
                         firestoreManagerForPost.postMemoryDraft(memory: self.onePlan) { error in
                                 if error != nil {
                                     print("Failed to post MemoryDraft")
@@ -138,16 +135,14 @@ class EditMemoryViewController: UIViewController {
                                     print("Posted MemoryDraft successfully!")}
                         }
                 draftorPostVC.dismiss(animated: true)
-                        if let navigationController = self.navigationController {
-                         let viewControllers = navigationController.viewControllers
-                         if viewControllers.count >= 3 {
-                             if let targetViewController = viewControllers[viewControllers.count - 3] as? MemoryViewController {
-                                 navigationController.popToViewController(targetViewController, animated: true)
-                                 
-                             }
-                         }
-                                     }
-                
+                if let navigationController = self.navigationController {
+                    let viewControllers = navigationController.viewControllers
+                    if viewControllers.count >= 3 {
+                        if let targetViewController = viewControllers[viewControllers.count - 3] as? MemoryViewController {
+                            navigationController.popToViewController(targetViewController, animated: true)
+                        }
+                    }
+                } 
             }
             present(draftorPostVC, animated: true, completion: nil)
         }

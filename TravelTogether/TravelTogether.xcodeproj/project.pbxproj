@@ -19,7 +19,6 @@
 		5229F8D32B39236F009977FF /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5229F8D22B39236F009977FF /* XCTest.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		5229F8E12B39276F009977FF /* DateConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5229F8CF2B37310B009977FF /* DateConversionTests.swift */; };
 		5229F8E82B39536E009977FF /* CustomSegmentedControlTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5229F8E22B392C6E009977FF /* CustomSegmentedControlTests.swift */; };
-		5229F8EA2B399A15009977FF /* PlanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5229F8E92B399A15009977FF /* PlanViewModel.swift */; };
 		523243A02B0871020078200C /* EditPlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5232439F2B0871020078200C /* EditPlanViewController.swift */; };
 		523243A22B0871710078200C /* EditPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A12B0871710078200C /* EditPlanCell.swift */; };
 		523243A42B0879F30078200C /* EditPlanHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A32B0879F30078200C /* EditPlanHeaderView.swift */; };
@@ -148,7 +147,6 @@
 		5229F8D22B39236F009977FF /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		5229F8D82B3924DA009977FF /* TravelTogetherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TravelTogetherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5229F8E22B392C6E009977FF /* CustomSegmentedControlTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSegmentedControlTests.swift; sourceTree = "<group>"; };
-		5229F8E92B399A15009977FF /* PlanViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanViewModel.swift; sourceTree = "<group>"; };
 		5232439F2B0871020078200C /* EditPlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanViewController.swift; sourceTree = "<group>"; };
 		523243A12B0871710078200C /* EditPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanCell.swift; sourceTree = "<group>"; };
 		523243A32B0879F30078200C /* EditPlanHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanHeaderView.swift; sourceTree = "<group>"; };
@@ -453,7 +451,6 @@
 				52783CCB2B03409E0067A334 /* PlanHeaderView.swift */,
 				52783CC92B033EE20067A334 /* MyPlanCell.swift */,
 				52783CCD2B0345AC0067A334 /* TogetherPlanCell.swift */,
-				5229F8E92B399A15009977FF /* PlanViewModel.swift */,
 			);
 			path = PlanViewController;
 			sourceTree = "<group>";
@@ -791,7 +788,6 @@
 				52783CDE2B037B8E0067A334 /* MemoryDetailViewController.swift in Sources */,
 				524157002B149230005D41F6 /* EditPlanCollectionCell.swift in Sources */,
 				525E7CB52B1987780057C5EE /* ImageCollectionViewCell.swift in Sources */,
-				5229F8EA2B399A15009977FF /* PlanViewModel.swift in Sources */,
 				52292F072B0216C90083399E /* SearchHeaderView.swift in Sources */,
 				524C30F92B18A55600C5CEDC /* EditMemoryViewController.swift in Sources */,
 				52783CD12B034F6A0067A334 /* MemoryViewController.swift in Sources */,
