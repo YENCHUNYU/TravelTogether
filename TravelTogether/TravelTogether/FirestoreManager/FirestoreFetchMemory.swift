@@ -13,8 +13,8 @@ class FirestoreManagerFetchMemory {
   // 用戶個人
     func fetchMemories(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
         let database = Firestore.firestore()
-        
-        let memoriesRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("Memory")
+        let userDoc = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+        let memoriesRef = userDoc.collection("Memory")
         let orderedQuery = memoriesRef.order(by: "startDate", descending: false)
         orderedQuery.getDocuments { (querySnapshot, error) in
             
@@ -74,8 +74,8 @@ class FirestoreManagerFetchMemory {
     // 用戶個人
     func fetchMemoryDrafts(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
         let database = Firestore.firestore()
-        
-        let memoriesRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("MemoryDraft")
+        let userInfoRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+        let memoriesRef = userInfoRef.collection("MemoryDraft")
         let orderedQuery = memoriesRef.order(by: "startDate", descending: false)
         orderedQuery.getDocuments { (querySnapshot, error) in
             
@@ -135,33 +135,26 @@ class FirestoreManagerFetchMemory {
     
 // 搜尋頁
     func fetchAllMemories(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
-        let database = Firestore.firestore()
-        
+        let database = Firestore.firestore()    
         let memoriesRef = database.collectionGroup("Memory")
-//        let orderedQuery = memoriesRef.order(by: "startDate", descending: false)
         memoriesRef.getDocuments { (querySnapshot, error) in
-            
             if let error = error {
                 print("Error getting documents: \(error)")
                 completion(nil, error)
             } else {
                 var memories: [TravelPlan] = []
-                
                 for document in querySnapshot!.documents {
                     let data = document.data()
                     let startDate = (data["startDate"] as? Timestamp)?.dateValue() ?? Date()
                     let endDate = (data["endDate"] as? Timestamp)?.dateValue() ?? Date()
-                    
                     guard let daysArray = data["days"] as? [[String: Any]] else {
                         continue
                     }
-                   
                     var travelDays: [TravelDay] = []
                     for dayData in daysArray {
                         guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
                             continue
                         }
-                
                         var locations: [Location] = []
                         for locationData in locationsArray {
                             let location = Location(
@@ -173,11 +166,9 @@ class FirestoreManagerFetchMemory {
                             )
                             locations.append(location)
                         }
-                        
                         let travelDay = TravelDay(locations: locations)
                         travelDays.append(travelDay)
                     }
-                    
                     let travelPlan = TravelPlan(
                         id: document.documentID,
                         planName: data["planName"] as? String ?? "",
@@ -192,15 +183,13 @@ class FirestoreManagerFetchMemory {
                     )
                     memories.append(travelPlan)
                 }
-                
-                completion(memories, nil)
-            }
-        }
+                completion(memories, nil)  } }
     }
     
     func deleteMemory(dbcollection: String, withID memoryID: String, completion: @escaping (Error?) -> Void) {
            let database = Firestore.firestore()
-           let memoryRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection(dbcollection).document(memoryID)
+           let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+           let memoryRef = userRef.collection(dbcollection).document(memoryID)
 
         memoryRef.delete { error in
                if let error = error {
@@ -213,9 +202,12 @@ class FirestoreManagerFetchMemory {
            }
        }
    // 用戶個人
-    func fetchOneMemory(dbcollection: String, byId memoryId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
+    func fetchOneMemory(dbcollection: String, 
+                        byId memoryId: String,
+                        completion: @escaping (TravelPlan?, Error?) -> Void) {
         let database = Firestore.firestore()
-        let memoryRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection(dbcollection).document(memoryId)
+        let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+        let memoryRef = userRef.collection(dbcollection).document(memoryId)
 
         memoryRef.addSnapshotListener { document, error in
             if let error = error {
@@ -274,8 +266,8 @@ class FirestoreManagerFetchMemory {
     
     func fetchOneMemoryFromFavorite(byId memoryId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
         let database = Firestore.firestore()
-        let memoryRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("FavoriteMemory").document(memoryId)
-
+        let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+        let memoryRef = userRef.collection("FavoriteMemory").document(memoryId)
         memoryRef.addSnapshotListener { document, error in
             if let error = error {
                 print("Error getting document: \(error)")
@@ -284,24 +276,16 @@ class FirestoreManagerFetchMemory {
                 do {
                     guard let document = document, document.exists else {
                         completion(nil, nil)
-                        return
-                    }
-
+                        return}
                     let data = document.data()
                     let startDate = (data?["startDate"] as? Timestamp)?.dateValue() ?? Date()
                     let endDate = (data?["endDate"] as? Timestamp)?.dateValue() ?? Date()
-
                     guard let daysArray = data?["days"] as? [[String: Any]] else {
-                        return
-                    }
-
+                        return }
                     var travelDays: [TravelDay] = []
                     for dayData in daysArray {
-                    
                         guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
-                            return
-                        }
-
+                            return }
                         var locations: [Location] = []
                         for locationData in locationsArray {
                             let location = Location(
@@ -313,11 +297,9 @@ class FirestoreManagerFetchMemory {
                             )
                             locations.append(location)
                         }
-
                         let travelDay = TravelDay(locations: locations)
                         travelDays.append(travelDay)
                     }
-                    
                     let travelPlan = TravelPlan(
                         id: document.documentID,
                         planName: data?["planName"] as? String ?? "",
@@ -331,13 +313,14 @@ class FirestoreManagerFetchMemory {
                         userId: data?["userId"] as? String ?? ""
                     )
                     completion(travelPlan, nil)
-                } } }
-    }
+                } } } }
     
-    func fetchOneMemoryFromSearch(byId memoryId: String, userId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
+    func fetchOneMemoryFromSearch(byId memoryId: String, 
+                                  userId: String,
+                                  completion: @escaping (TravelPlan?, Error?) -> Void) {
         let database = Firestore.firestore()
-        let memoryRef = database.collection("UserInfo").document(userId).collection("Memory").document(memoryId)
-
+        let userRef = database.collection("UserInfo").document(userId)
+        let memoryRef = userRef.collection("Memory").document(memoryId)
         memoryRef.addSnapshotListener { document, error in
             if let error = error {
                 print("Error getting document: \(error)")
@@ -348,22 +331,17 @@ class FirestoreManagerFetchMemory {
                         completion(nil, nil)
                         return
                     }
-
                     let data = document.data()
                     let startDate = (data?["startDate"] as? Timestamp)?.dateValue() ?? Date()
                     let endDate = (data?["endDate"] as? Timestamp)?.dateValue() ?? Date()
-
                     guard let daysArray = data?["days"] as? [[String: Any]] else {
                         return
                     }
-
                     var travelDays: [TravelDay] = []
                     for dayData in daysArray {
-                    
                         guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
                             return
                         }
-
                         var locations: [Location] = []
                         for locationData in locationsArray {
                             let location = Location(
@@ -375,11 +353,9 @@ class FirestoreManagerFetchMemory {
                             )
                             locations.append(location)
                         }
-
                         let travelDay = TravelDay(locations: locations)
                         travelDays.append(travelDay)
                     }
-                    
                     let travelPlan = TravelPlan(
                         id: document.documentID,
                         planName: data?["planName"] as? String ?? "",
@@ -392,7 +368,5 @@ class FirestoreManagerFetchMemory {
                         userPhoto: data?["userPhoto"] as? String ?? "",
                         userId: data?["userId"] as? String ?? ""
                     )
-                    completion(travelPlan, nil)
-                } } }
-    }
+                    completion(travelPlan, nil)} } }}
 }

@@ -81,7 +81,9 @@ class MapInfoViewController: UIViewController {
                         address: self.places.address)
                     print("qqqqq\(self.selectedDay)")
                     firestoreManagerPostLocation.addLocationToTravelPlan(
-                        userId: Auth.auth().currentUser?.uid ?? "", planId: self.travelPlanId, location: theLocation, day: self.selectedDay) { error in
+                        userId: Auth.auth().currentUser?.uid ?? "",
+                        planId: self.travelPlanId,
+                        location: theLocation, day: self.selectedDay) { error in
                         if let error = error {
                             print("Error posting travel plan: \(error)")
                         } else {

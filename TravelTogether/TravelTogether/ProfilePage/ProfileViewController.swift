@@ -170,7 +170,9 @@ class ProfileViewController: UIViewController {
                 self.userInfo = userInfo ?? UserInfo(email: "", name: "", id: "")
                 self.userNameLabel.text = self.userInfo.name
                 if let photoURLString = self.userInfo.photo, let photoURL = URL(string: photoURLString) {
-                    self.userImageView.kf.setImage(with: photoURL, placeholder: UIImage(systemName: "person.circle.fill"))
+                    self.userImageView.kf.setImage(
+                        with: photoURL,
+                        placeholder: UIImage(systemName: "person.circle.fill"))
                 } else {
                     self.userImageView.image = UIImage(systemName: "person.circle.fill")
                 }

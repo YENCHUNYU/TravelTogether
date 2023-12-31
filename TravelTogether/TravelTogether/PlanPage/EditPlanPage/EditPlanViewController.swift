@@ -21,25 +21,23 @@ class EditPlanViewController: UIViewController {
         id: "", planName: "",
         destination: "",
         startDate: Date(), endDate: Date(), days: [])
-//    var travelPlanId = "6PGNVZ0ZNZwgyBi9EcPW"
     var dayCounts = 1
     var selectedSectionForAddLocation = 0 // 新增景點
     var days: [String] = ["第1天", "＋"]
     let headerView = EditPlanHeaderView(reuseIdentifier: "EditPlanHeaderView")
     let activityIndicatorView = NVActivityIndicatorView(
-        frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
+        frame: CGRect(
+            x: UIScreen.main.bounds.width / 2 - 25,
+            y: UIScreen.main.bounds.height / 2 - 25,
+            width: 50, height: 50),
         type: .ballBeat,
         color: UIColor(named: "darkGreen") ?? .white,
         padding: 0
     )
     var blurEffectView: UIVisualEffectView!
-//    var togetherDocref: Any?
-//    var userId = "5ZpUJ6ySMnTNY48ChD6YGXEF89j2"
     var userId: String = ""
     var travelPlanId: String = ""
     var url = ""
-
-        // ... other properties and methods ...
 
         func setProperties(userId: String, planId: String, completion: @escaping () -> Void) {
             self.userId = userId
@@ -64,31 +62,22 @@ class EditPlanViewController: UIViewController {
         
         let title = "傳送連結邀請"
         let message = "用戶點擊連結並登入即可共同編輯此行程"
-//        let urlScheme = "https://traveltogether.page.link/test1"
-                
-//        let dynamicLinkURL = "https://traveltogether.page.link/test1?userId=\(String(describing: self.onePlan.userId ?? ""))&planId=\(self.travelPlanId)"
-        let urlScheme = "traveltogether://userId/\(String(describing: Auth.auth().currentUser?.uid ?? ""))/planId/\(self.travelPlanId)"
+        let userIdS = "\(String(describing: Auth.auth().currentUser?.uid ?? ""))"
+        let urlScheme = "traveltogether://userId/\(userIdS)/planId/\(self.travelPlanId)"
 
         showAlert(title: title, message: message, completion: {
             let activityVC = UIActivityViewController(activityItems: [urlScheme], applicationActivities: nil)
-//                self.present(activityVC, animated: true, completion: nil)
-            activityVC.completionWithItemsHandler = {(activityType: UIActivity.ActivityType?, completed: Bool, returnedItems: [Any]?, error: Error?) in
-                    // 如果錯誤存在，跳出錯誤視窗並顯示給使用者。
+            activityVC.completionWithItemsHandler = { (_, completed: Bool, _, error: Error?) in
                     if error != nil {
                         self.showAlert(title: "錯誤", message: "無法傳送連結")
                         return
                     }
-                                                         
-                    // 如果發送成功，跳出提示視窗顯示成功。
                     if completed {
                         self.showAlert(title: "成功", message: "已傳送連結！")
                     }
                 }
-
                 self.present(activityVC, animated: true, completion: nil)
-
         })
-        
     }
     
     override func viewDidLoad() {
@@ -117,16 +106,45 @@ class EditPlanViewController: UIViewController {
         tableView.dragInteractionEnabled = true
         tableView.dragDelegate = self
         tableView.dropDelegate = self
+        fetchTravelPlan()
         
+        if url != "" {
+            let userRef = Firestore.firestore().collection("UserInfo").document(self.userId)
+            let planRef = userRef.collection("TravelPlan").document(self.travelPlanId)
+            let firestoreRef = FirestoreTogether()
+            firestoreRef.postFullPlan(planRef: planRef) { error  in
+                if error != nil {
+                    print("Failed to post planRef")
+                } else {
+                   print("Post planRef successfully!")
+                }
+            }
+        }
+    }
+    
+    func addLoadingView() {
+        view.addSubview(blurEffectView)
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
+    }
+    
+    func stopLoading() {
+        self.activityIndicatorView.stopAnimating()
+        self.blurEffectView.removeFromSuperview()
+        self.activityIndicatorView.removeFromSuperview()
+    }
+    
+    func fetchTravelPlan() {
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(
+            dbCollection: "TravelPlan", userId: userId,
+            byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
                 print("Fetched one travel plan: \(travelPlan)")
                 self.onePlan = travelPlan
-//                self.togetherDocref = ref
                 let counts = self.onePlan.days.count
                 let originalCount = self.days.count
                 if counts >= originalCount {
@@ -142,18 +160,6 @@ class EditPlanViewController: UIViewController {
                 print("One travel plan not found.")
             }
         }
-        if url != "" {
-            let planRef = Firestore.firestore().collection("UserInfo").document(self.userId).collection("TravelPlan").document(self.travelPlanId)
-            let firestoreRef = FirestoreTogether()
-            firestoreRef.postFullPlan(planRef: planRef) { error  in
-                if error != nil {
-                    print("Failed to post planRef")
-                } else {
-                   print("Post planRef successfully!")
-                }
-                
-            }
-        }
     }
     func setUpButton() {
         inviteUserButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
@@ -166,7 +172,7 @@ class EditPlanViewController: UIViewController {
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
         
-        let okAction = UIAlertAction(title: "確定", style: .default) { [weak self] action in
+        let okAction = UIAlertAction(title: "確定", style: .default) { _ in
             completion?()
         }
         alert.addAction(okAction)
@@ -175,39 +181,22 @@ class EditPlanViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        view.addSubview(blurEffectView)
-        view.addSubview(activityIndicatorView)
-        activityIndicatorView.startAnimating()
-
-        
-        
-//        let firestoreClearUser = FirestoreManagerForPostLocation()
-//        firestoreClearUser.delegate = self
-//        firestoreClearUser.clearLocationsUser(travelPlanId: travelPlanId) { error in
-//            if error != nil {
-//                print("Fail to clear users")
-//            } else {
-//                print("Clear users successfully!")
-//            }
-//        }
+        addLoadingView()
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(
+            dbCollection: "TravelPlan", userId: userId,
+            byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
                 self.onePlan = travelPlan
-//                self.togetherDocref = ref
                 self.tableView.reloadData()
                 let allDaysHaveNoLocations = self.onePlan.days.allSatisfy { $0.locations.isEmpty }
 
                     if allDaysHaveNoLocations {
-                        self.activityIndicatorView.stopAnimating()
-                        self.blurEffectView.removeFromSuperview()
-                        self.activityIndicatorView.removeFromSuperview()
+                        self.stopLoading()
                     }
-//               self.headerView.collectionView.reloadData()
             } else {
                 print("One travel plan not found.")
             }
@@ -235,8 +224,7 @@ extension EditPlanViewController: UITableViewDataSource {
             withIdentifier: "EditPlanCell",
             for: indexPath) as? EditPlanCell
         else { 
-//            fatalError("Could not create EditPlanCell")
-            return UITableViewCell()
+            fatalError("Could not create EditPlanCell")
         }
         cell.locationImageView.image = nil
         
@@ -246,14 +234,10 @@ extension EditPlanViewController: UITableViewDataSource {
         cell.placeAddressLabel.text = location.address
         let firestorage = FirebaseStorageManagerDownloadPhotos()
         let urlString = location.photo
-        
-        // Record the URL being processed by this cell
         cell.currentImageURL = urlString
-        
         if !urlString.isEmpty, let url = URL(string: urlString) {
             firestorage.downloadPhotoFromFirebaseStorage(url: url) { image in
                 DispatchQueue.main.async {
-                    // Check if the URL still matches the current cell's URL
                     if cell.currentImageURL == urlString {
                         if let image = image {
                             cell.locationImageView.image = image
@@ -262,26 +246,17 @@ extension EditPlanViewController: UITableViewDataSource {
                         }
                     }
                 }
-                self.activityIndicatorView.stopAnimating()
-                self.blurEffectView.removeFromSuperview()
-                self.activityIndicatorView.removeFromSuperview()
+                self.stopLoading()
             }
-        } else {
-            self.activityIndicatorView.stopAnimating()
-            self.blurEffectView.removeFromSuperview()
-            self.activityIndicatorView.removeFromSuperview()
-        }
-        
-        return cell
-    }
+        } else { stopLoading() }
+        return cell }
 
 // FOOTER
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         guard let view = tableView.dequeueReusableHeaderFooterView(
             withIdentifier: "EditPlanFooterView") as? EditPlanFooterView
         else { 
-//            fatalError("Could not create EditPlanFooterView")
-            return view
+            fatalError("Could not create EditPlanFooterView")
         }
         view.addNewLocationButton.addTarget(
             self,
@@ -310,7 +285,7 @@ extension EditPlanViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         40
     }
-
+    
     func tableView(
         _ tableView: UITableView,
         editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -318,7 +293,6 @@ extension EditPlanViewController: UITableViewDataSource {
     }
     
 // HEADER FOR SECTIONS
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         50
     }
@@ -336,15 +310,11 @@ extension EditPlanViewController: UITableViewDataSource {
        }
 
        func deleteSection(at index: Int) {
-           view.addSubview(blurEffectView)
-           view.addSubview(activityIndicatorView)
-           activityIndicatorView.startAnimating()
+           addLoadingView()
            let allDaysHaveNoLocations = onePlan.days.allSatisfy { $0.locations.isEmpty }
 
                if allDaysHaveNoLocations {
-                   self.activityIndicatorView.stopAnimating()
-                   self.blurEffectView.removeFromSuperview()
-                   self.activityIndicatorView.removeFromSuperview()
+                   stopLoading()
                }
            onePlan.days.remove(at: index)
            days.remove(at: days.count - 2)
@@ -357,7 +327,6 @@ extension EditPlanViewController: UITableViewDataSource {
                    print("Error deleting section from Firestore: \(error)")
                } else {
                    print("Section deleted successfully from Firestore.")
-//                   self.tableView.deleteSections(IndexSet(integer: index), with: .fade)
                    self.tableView.reloadData()
                    self.headerView.days = self.days
                    self.headerView.collectionView.reloadData()
@@ -377,15 +346,11 @@ extension EditPlanViewController: UITableViewDelegate {
                    commit editingStyle: UITableViewCell.EditingStyle,
                    forRowAt indexPath: IndexPath) {
             if editingStyle == .delete {
-                view.addSubview(blurEffectView)
-                view.addSubview(activityIndicatorView)
-                activityIndicatorView.startAnimating()
+                addLoadingView()
                 let allDaysHaveNoLocations = onePlan.days.allSatisfy { $0.locations.isEmpty }
 
                     if allDaysHaveNoLocations {
-                        self.activityIndicatorView.stopAnimating()
-                        self.blurEffectView.removeFromSuperview()
-                        self.activityIndicatorView.removeFromSuperview()
+                        stopLoading()
                     }
                 let deletedLocation = onePlan.days[indexPath.section].locations.remove(at: indexPath.row)
                
@@ -415,13 +380,14 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
     func reloadNewData() {
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId)  { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(
+            dbCollection: "TravelPlan", userId: userId,
+            byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
                 print("Fetched one travel plan: \(travelPlan)")
                 self.onePlan = travelPlan
-//                self.togetherDocref = ref
                 let counts = self.onePlan.days.count
                 self.days = ["+"]
                 for count in 1...counts {
@@ -440,24 +406,21 @@ extension EditPlanViewController: EditPlanHeaderViewDelegate {
     }
     
     func reloadData() {
-        view.addSubview(blurEffectView)
-        view.addSubview(activityIndicatorView)
-        activityIndicatorView.startAnimating()
+        addLoadingView()
         let allDaysHaveNoLocations = onePlan.days.allSatisfy { $0.locations.isEmpty }
 
             if allDaysHaveNoLocations {
-                self.activityIndicatorView.stopAnimating()
-                self.blurEffectView.removeFromSuperview()
-                self.activityIndicatorView.removeFromSuperview()
+                stopLoading()
             }
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(
+            dbCollection: "TravelPlan", userId: userId,
+            byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
                 self.onePlan = travelPlan
-//                self.togetherDocref = ref
                 self.tableView.reloadData()
                 self.headerView.collectionView.reloadData()
             } else {
@@ -486,51 +449,24 @@ extension EditPlanViewController: UITableViewDropDelegate {
     func tableView(
         _ tableView: UITableView,
         performDropWith coordinator: UITableViewDropCoordinator) {
-            view.addSubview(blurEffectView)
-            view.addSubview(activityIndicatorView)
-            activityIndicatorView.startAnimating()
+            addLoadingView()
         coordinator.session.loadObjects(ofClass: NSString.self) { _ in
             var updatedIndexPaths = [IndexPath]()
-            
             if let sourceIndexPath = coordinator.items.first?.sourceIndexPath,
                let destinationIndexPath = coordinator.destinationIndexPath {
-                
                 if sourceIndexPath.section == destinationIndexPath.section {
                     if sourceIndexPath.row != destinationIndexPath.row {
-                        var locations = self.onePlan.days[sourceIndexPath.section].locations
-                        
+                        let locations = self.onePlan.days[sourceIndexPath.section].locations
                         self.onePlan.days[sourceIndexPath.section].locations.remove(at: sourceIndexPath.row)
                         self.onePlan.days[sourceIndexPath.section].locations.insert(
                             locations[sourceIndexPath.row], at: destinationIndexPath.row)
                         updatedIndexPaths.append(destinationIndexPath)
-                        
-                        let firestoreUserManger = FirestoreManagerFetchUser()
-                        firestoreUserManger.delegate = self
-                        firestoreUserManger.fetchUserInfo { userData, error in
-                            if error != nil {
-                                print("Failed to fetch userInfo")
-                            } else {
-                                let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
-                                firestoreMangerPostLocation.updateLocationsOrder(
-                                    travelPlanId: self.travelPlanId,
-                                    dayIndex: sourceIndexPath.section,
-                                    newLocationsOrder: self.onePlan.days[sourceIndexPath.section].locations
-                                ) { error in
-                                    if error != nil {
-                                        print("Failed to reorder the locations")
-                                    } else {
-                                        print("Reorder the locations successfully!")
-                                    }}}}}
+                        self.updateLocationOrder(dayIndex: sourceIndexPath.section)
+                    }
                 } else {
                     let locations = self.onePlan.days[sourceIndexPath.section].locations
                     self.onePlan.days[sourceIndexPath.section].locations.remove(at: sourceIndexPath.row)
                     tableView.reloadData()
-                    let firestoreUserManger = FirestoreManagerFetchUser()
-                    firestoreUserManger.delegate = self
-                    firestoreUserManger.fetchUserInfo { userData, error  in
-                        if error != nil {
-                        } else {
-//                            locations[destinationIndexPath.row].user = " \(String(describing: userData?.name ?? ""))已編輯 "
                             let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
                             firestoreMangerPostLocation.updateLocationsOrder(
                                 travelPlanId: self.travelPlanId,
@@ -543,16 +479,31 @@ extension EditPlanViewController: UITableViewDropDelegate {
                                         self.onePlan.days[destinationIndexPath.section].locations.insert(
                                             locations[sourceIndexPath.row], at: destinationIndexPath.row)
                                         updatedIndexPaths.append(destinationIndexPath)
-                                        
+                                        let desSection = destinationIndexPath.section
                                         firestoreMangerPostLocation.updateLocationsOrder(
                                             travelPlanId: self.travelPlanId,
                                             dayIndex: destinationIndexPath.section,
-                                            newLocationsOrder: self.onePlan.days[destinationIndexPath.section].locations) { error in
+                                            newLocationsOrder: self.onePlan.days[desSection].locations) { error in
                                                 if error != nil {
                                                     print("Failed to reorder the locations")
                                                 } else {
                                                     print("Reorder the locations successfully!")
-                                                } }}}}}}}
+                                                }}}}}}
+        }
+    }
+    
+    func updateLocationOrder(dayIndex: Int) {
+        let firestoreMangerPostLocation = FirestoreManagerForPostLocation()
+        firestoreMangerPostLocation.updateLocationsOrder(
+            travelPlanId: self.travelPlanId,
+            dayIndex: dayIndex,
+            newLocationsOrder: self.onePlan.days[dayIndex].locations
+        ) { error in
+            if error != nil {
+                print("Failed to reorder the locations")
+            } else {
+                print("Reorder the locations successfully!")
+            }
         }
     }
         func tableView(
@@ -561,14 +512,4 @@ extension EditPlanViewController: UITableViewDropDelegate {
             withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
                 return UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
             }
-}
-
-extension EditPlanViewController: FirestoreManagerFetchUserDelegate {
-    func manager(_ manager: FirestoreManager, didGet firestoreData: UserInfo) {
-    }
-}
-
-extension EditPlanViewController: FirestoreManagerForPostLocationDelegate {
-    func manager(_ manager: FirestoreManagerForPostLocation, didPost firestoreData: Location) {
-    }
 }

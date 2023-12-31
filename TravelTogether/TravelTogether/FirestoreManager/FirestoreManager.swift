@@ -179,7 +179,8 @@ extension FirestoreManager {
 
     func deleteTravelPlan(withID planID: String, completion: @escaping (Error?) -> Void) {
            let database = Firestore.firestore()
-           let travelPlanRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("TravelPlan").document(planID)
+           let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+           let travelPlanRef = userRef.collection("TravelPlan").document(planID)
 
            travelPlanRef.delete { error in
                if let error = error {

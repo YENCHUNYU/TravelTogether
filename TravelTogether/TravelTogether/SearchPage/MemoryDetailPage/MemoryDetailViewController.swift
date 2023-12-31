@@ -35,7 +35,10 @@ class MemoryDetailViewController: UIViewController {
     private var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     
     let activityIndicatorView = NVActivityIndicatorView(
-        frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
+        frame: CGRect(
+            x: UIScreen.main.bounds.width / 2 - 25,
+            y: UIScreen.main.bounds.height / 2 - 25,
+            width: 50, height: 50),
         type: .ballBeat, color: UIColor(named: "darkGreen") ?? .white, padding: 0
           )
     var blurEffectView: UIVisualEffectView!
@@ -56,15 +59,16 @@ class MemoryDetailViewController: UIViewController {
     
     @objc func copyPlan() {
         if !LoginViewController.loginStatus {
-            if let loginVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController {
+            if let loginVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") 
+                as? LoginViewController {
                 let loginNavController = UINavigationController(rootViewController: loginVC)
                 present(loginNavController, animated: true, completion: nil)
             }
         } else {
             let firestore = FirestoreManagerFetchUser()
-            firestore.fetchUserInfo{ userData, error  in
+            firestore.fetchUserInfo { userData, error  in
                 if error != nil {
-                    print("Error fetching one plan: \(error)")
+                    print("Error fetching one plan")
                 } else {
                     self.onePlan.user = userData?.name
                     self.onePlan.userPhoto = userData?.photo
@@ -72,9 +76,6 @@ class MemoryDetailViewController: UIViewController {
                 }
             }
             let firestorePost = FirestoreManagerForPost()
-//            self.onePlan.user = Auth.auth().currentUser?.displayName
-//            self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-//            self.onePlan.userId = Auth.auth().currentUser?.uid
             firestorePost.postFullPlan(plan: self.onePlan) { error in
                 if let error = error {
                     print("Error fetching one plan: \(error)")
@@ -109,7 +110,8 @@ class MemoryDetailViewController: UIViewController {
     @objc func likeMemory() {
         
         if !LoginViewController.loginStatus {
-            if let loginVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController {
+            if let loginVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") 
+                as? LoginViewController {
                 let loginNavController = UINavigationController(rootViewController: loginVC)
                 present(loginNavController, animated: true, completion: nil)
             }
@@ -152,34 +154,15 @@ class MemoryDetailViewController: UIViewController {
         tableView.dragInteractionEnabled = true
         
         if isFromFavorite == false && isFromProfile == false {
-            let firestoreManagerForOne = FirestoreManagerFetchMemory()
-            firestoreManagerForOne.fetchOneMemoryFromSearch(byId: memoryId, userId: userId) { (memory, error) in
-                if let error = error {
-                    print("Error fetching one travel plan: \(error)")
-                } else if let memory = memory {
-                    print("Fetched one travel plan: \(memory)")
-                    self.onePlan = memory
-                    let counts = self.onePlan.days.count
-                    let originalCount = self.days.count
-                    if counts > originalCount {
-                        for _ in originalCount...counts - 1 {
-                            let number = self.days.count
-                            self.days.insert("第\(number + 1)天", at: number)
-                        }
-                    }
-                    self.headerView.days = self.days
-                    self.headerView.onePlan = self.onePlan
-                    self.headerView.collectionView.reloadData()
-                    self.tableView.reloadData()
-                } else {
-                    print("One travel plan not found.")
-                }
-            }} else {
+            fetchMemoryFromSearch()
+            } else {
                 // from favorite or profile
                 dbCollection = isFromFavorite ? "FavoriteMemory" : "Memory"
                 dbCollection = isFromProfile ? "Memory" : "FavoriteMemory"
                 let firestoreManagerForOne = FirestoreManagerFetchMemory()
-                firestoreManagerForOne.fetchOneMemory(dbcollection: dbCollection, byId: memoryId) { (travelPlan, error) in
+                firestoreManagerForOne.fetchOneMemory(
+                    dbcollection: dbCollection,
+                    byId: memoryId) { (travelPlan, error) in
                     if let error = error {
                         print("Error fetching one travel plan: \(error)")
                     } else if let travelPlan = travelPlan {
@@ -203,6 +186,34 @@ class MemoryDetailViewController: UIViewController {
                 }
             }
     }
+    
+    func fetchMemoryFromSearch() {
+        let firestoreManagerForOne = FirestoreManagerFetchMemory()
+        firestoreManagerForOne.fetchOneMemoryFromSearch(byId: memoryId, userId: userId) { (memory, error) in
+            if let error = error {
+                print("Error fetching one travel plan: \(error)")
+            } else if let memory = memory {
+                print("Fetched one travel plan: \(memory)")
+                self.onePlan = memory
+                let counts = self.onePlan.days.count
+                let originalCount = self.days.count
+                if counts > originalCount {
+                    for _ in originalCount...counts - 1 {
+                        let number = self.days.count
+                        self.days.insert("第\(number + 1)天", at: number)
+                    }
+                }
+                self.headerView.days = self.days
+                self.headerView.onePlan = self.onePlan
+                self.headerView.collectionView.reloadData()
+                self.tableView.reloadData()
+            } else {
+                print("One travel plan not found.")
+            }
+        }
+    }
+    
+    
     
     func swiftEntryKit(titleText: String, descriptText: String, imageString: String) {
         var attributes = EKAttributes.topFloat
@@ -249,37 +260,14 @@ class MemoryDetailViewController: UIViewController {
         
         if isFromFavorite == false && isFromProfile == false {
             // from search
-            let firestoreManagerForOne = FirestoreManagerFetchMemory()
-            firestoreManagerForOne.fetchOneMemoryFromSearch(byId: memoryId, userId: userId) { (memory, error) in
-                if let error = error {
-                    print("Error fetching one travel plan: \(error)")
-                } else if let memory = memory {
-                    print("Fetched one travel plan: \(memory)")
-                    self.onePlan = memory
-                    let counts = self.onePlan.days.count
-                    let originalCount = self.days.count
-                    if counts > originalCount {
-                        for _ in originalCount...counts - 1 {
-                            let number = self.days.count
-                            self.days.insert("第\(number + 1)天", at: number)
-                        }
-                    }
-                    self.headerView.days = self.days
-                    self.headerView.onePlan = self.onePlan
-                    self.headerView.collectionView.reloadData()
-                    self.tableView.reloadData()
-                    
-                } else {
-                    print("One travel plan not found.")
-                }
-                let allLocationsHaveNoMemeoryPhotos = self.onePlan.days.allSatisfy { $0.locations.allSatisfy { $0.memoryPhotos?.isEmpty == true } }
+            fetchMemoryFromSearch()
+            let allLocationsHaveNoMemeoryPhotos = self.onePlan.days.allSatisfy { $0.locations.allSatisfy { $0.memoryPhotos?.isEmpty == true } }
 
-                    if allLocationsHaveNoMemeoryPhotos {
-                        self.activityIndicatorView.stopAnimating()
-                        self.blurEffectView.removeFromSuperview()
-                        self.activityIndicatorView.removeFromSuperview()
-                    }
-            }
+                if allLocationsHaveNoMemeoryPhotos {
+                    self.activityIndicatorView.stopAnimating()
+                    self.blurEffectView.removeFromSuperview()
+                    self.activityIndicatorView.removeFromSuperview()
+                }
         } else {
                 // from favorite or profile
                 dbCollection = isFromFavorite ? "FavoriteMemory" : "Memory"

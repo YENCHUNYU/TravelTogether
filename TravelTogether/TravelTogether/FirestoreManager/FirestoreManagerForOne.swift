@@ -16,10 +16,11 @@ class FirestoreManagerForOne {
     
     var delegate: FirestoreManagerForOneDelegate?
     
-    func fetchOneTravelPlan(dbCollection: String, userId: String, byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
+    func fetchOneTravelPlan(
+        dbCollection: String, userId: String,
+        byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
         let database = Firestore.firestore()
         let travelPlanRef = database.collection("UserInfo").document(userId).collection(dbCollection).document(planId)
-
         travelPlanRef.addSnapshotListener { document, error in
             if let error = error {
                 print("Error getting document: \(error)")
@@ -30,22 +31,17 @@ class FirestoreManagerForOne {
                         completion(nil, nil)
                         return
                     }
-
                     let data = document.data()
                     let startDate = (data?["startDate"] as? Timestamp)?.dateValue() ?? Date()
                     let endDate = (data?["endDate"] as? Timestamp)?.dateValue() ?? Date()
-
                     guard let daysArray = data?["days"] as? [[String: Any]] else {
                         return
                     }
-
                     var travelDays: [TravelDay] = []
                     for dayData in daysArray {
-                    
                         guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
                             return
                         }
-
                         var locations: [Location] = []
                         for locationData in locationsArray {
                             let location = Location(
@@ -55,7 +51,6 @@ class FirestoreManagerForOne {
                             )
                             locations.append(location)
                         }
-
                         let travelDay = TravelDay(locations: locations)
                         travelDays.append(travelDay)
                     }
@@ -73,15 +68,13 @@ class FirestoreManagerForOne {
                     )
                     completion(travelPlan, nil)
                     self.delegate?.manager(self, didGet: travelPlan)
-                }
-            }
-        }
+                }} }
     }
     
-    func fetchOneTravelPlanFromFavorite(dbcollection: String, userId: String, byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
+    func fetchOneTravelPlanFromFavorite(dbcollection: String, userId: String, 
+                                        byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
         let database = Firestore.firestore()
         let travelPlanRef = database.collection("UserInfo").document(userId).collection(dbcollection).document(planId)
-
         travelPlanRef.addSnapshotListener { document, error in
             if let error = error {
                 print("Error getting document: \(error)")
@@ -90,24 +83,16 @@ class FirestoreManagerForOne {
                 do {
                     guard let document = document, document.exists else {
                         completion(nil, nil)
-                        return
-                    }
-
+                        return }
                     let data = document.data()
                     let startDate = (data?["startDate"] as? Timestamp)?.dateValue() ?? Date()
                     let endDate = (data?["endDate"] as? Timestamp)?.dateValue() ?? Date()
-
                     guard let daysArray = data?["days"] as? [[String: Any]] else {
-                        return
-                    }
-
+                        return  }
                     var travelDays: [TravelDay] = []
                     for dayData in daysArray {
-                    
                         guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
-                            return
-                        }
-
+                            return   }
                         var locations: [Location] = []
                         for locationData in locationsArray {
                             let location = Location(
@@ -147,8 +132,8 @@ extension FirestoreManagerForOne {
         travelPlanId: String, dayIndex: Int, location: Location,
         userId: String, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let travelPlanRef = database.collection("UserInfo").document(userId).collection("TravelPlan").document(travelPlanId)
-
+        let userRef = database.collection("UserInfo").document(userId)
+        let travelPlanRef = userRef.collection("TravelPlan").document(travelPlanId)
         travelPlanRef.getDocument { document, error in
             if let error = error {
                 print("Error getting document for deletion: \(error)")
@@ -159,37 +144,27 @@ extension FirestoreManagerForOne {
                         completion(nil)
                         return
                     }
-                    
                     guard var daysArray = travelPlanData["days"] as? [[String: Any]] else {
                         completion(nil)
                         return
                     }
-                    
                     guard var locationsArray = daysArray[dayIndex]["locations"] as? [[String: Any]] else {
                         completion(nil)
                         return
                     }
-                    
-                    // Find and remove the location from the locations array
                     locationsArray.removeAll { (locationData) -> Bool in
                         let name = locationData["name"] as? String ?? ""
                         return name == location.name
                     }
-                    
-                    // Update the locations array in the days array
                     daysArray[dayIndex]["locations"] = locationsArray
                     travelPlanData["days"] = daysArray
-                 
-                        // Update the document in Firestore
                         travelPlanRef.setData(travelPlanData, merge: true) { error in
-//                            DispatchQueue.main.async {
                                 if let error = error {
                                     print("Error updating document after deletion: \(error)")
                                     completion(error)
                                 } else {
                                     print("Document updated successfully after deletion.")
                                     completion(nil)
-//                                }
                             }}
                     }
             }
@@ -198,10 +173,11 @@ extension FirestoreManagerForOne {
 }
 
 extension FirestoreManagerForOne {
-    func deleteDayFromTravelPlan(userId: String, travelPlanId: String, dayIndex: Int, completion: @escaping (Error?) -> Void) {
+    func deleteDayFromTravelPlan(userId: String, travelPlanId: String, 
+                                 dayIndex: Int, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let travelPlanRef = database.collection("UserInfo").document(userId).collection("TravelPlan").document(travelPlanId)
-
+        let userRef = database.collection("UserInfo").document(userId)
+        let travelPlanRef = userRef.collection("TravelPlan").document(travelPlanId)
         travelPlanRef.getDocument { document, error in
             if let error = error {
                 print("Error getting document for deletion: \(error)")
@@ -212,24 +188,19 @@ extension FirestoreManagerForOne {
                         completion(nil)
                         return
                     }
-
                     guard var daysArray = travelPlanData["days"] as? [[String: Any]] else {
                         completion(nil)
                         return
                     }
-
                     daysArray.remove(at: dayIndex)
                     travelPlanData["days"] = daysArray
-
                     travelPlanRef.setData(travelPlanData, merge: true) { error in
-//                        DispatchQueue.main.async {
                             if let error = error {
                                 print("Error updating document after deletion: \(error)")
                                 completion(error)
                             } else {
                                 print("Document updated successfully after deletion.")
                                 completion(nil)
-//                            }
                         }}
                 }
             }

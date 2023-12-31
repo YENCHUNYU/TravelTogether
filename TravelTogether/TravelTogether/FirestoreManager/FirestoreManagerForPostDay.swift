@@ -19,7 +19,8 @@ class FirestoreManagerForPostDay {
     
     func addDayToTravelPlan(planId: String, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let travelPlanRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("TravelPlan").document(planId)
+        let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+        let travelPlanRef = userRef.collection("TravelPlan").document(planId)
         
         travelPlanRef.getDocument { (document, error) in
             if let error = error {
@@ -50,7 +51,8 @@ class FirestoreManagerForPostDay {
     
     func postNewDaysArray(planId: String, newDaysArray: [TravelDay], completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let travelPlanRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("TravelPlan").document(planId)
+        let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+        let travelPlanRef = userRef.collection("TravelPlan").document(planId)
         
         travelPlanRef.getDocument { document, error in
             if let error = error {
@@ -63,7 +65,7 @@ class FirestoreManagerForPostDay {
                         return
                     }
 
-                    guard var daysArray = travelPlanData["days"] as? [[String: Any]] else {
+                    guard travelPlanData["days"] is [[String: Any]] else {
                         completion(nil)
                         return
                     }

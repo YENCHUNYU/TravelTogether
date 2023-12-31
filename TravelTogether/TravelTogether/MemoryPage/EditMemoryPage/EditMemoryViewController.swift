@@ -1,17 +1,16 @@
 //
-//  SelectedMemoryEditVC.swift
+//  EditMemoryViewController.swift
 //  TravelTogether
 //
-//  Created by User on 2023/12/6.
+//  Created by User on 2023/11/30.
 //
 
 import UIKit
 import FirebaseFirestore
 import Photos
 import FirebaseAuth
-import NVActivityIndicatorView
 
-class SelectedMemoryEditViewController: UIViewController {
+class EditMemoryViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
 
@@ -25,24 +24,12 @@ class SelectedMemoryEditViewController: UIViewController {
     let headerView = EditMemoryHeaderView(reuseIdentifier: "EditMemoryHeaderView")
     var memoryPhotos: [String] = []
     var currentIndexPath: IndexPath?
-    var memoryId = ""
-    var dbCollection = ""
 
     private var itemsPerRow: CGFloat = 2
     private var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-    let activityIndicatorView = NVActivityIndicatorView(
-            frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
-                  type: .ballBeat,
-                  color: UIColor(named: "darkGreen") ?? .white,
-                  padding: 0
-              )
-    var blurEffectView: UIVisualEffectView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let blurEffect = UIBlurEffect(style: .light)
-        blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = view.bounds
         tableView.dataSource = self
         tableView.delegate = self
 
@@ -55,29 +42,44 @@ class SelectedMemoryEditViewController: UIViewController {
         
         tableView.dragInteractionEnabled = true
         
-        let firestoreManagerForOne = FirestoreManagerFetchMemory()
-        firestoreManagerForOne.fetchOneMemory(dbcollection: dbCollection, byId: memoryId) { (memory, error) in
-                        if let error = error {
-                            print("Error fetching one memory: \(error)")
-                        } else if let memory = memory {
-                            print("Fetched one memory: \(memory)")
-                            self.onePlan = memory
-                            self.tableView.reloadData()
-                        } else {
-                            print("One memory not found.")
+        let firestoreManagerForOne = FirestoreManagerForOne()
+        firestoreManagerForOne.delegate = self
+        firestoreManagerForOne.fetchOneTravelPlan(
+            dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "",
+            byId: travelPlanId) { (travelPlan, error) in
+            if let error = error {
+                print("Error fetching one travel plan: \(error)")
+            } else if let travelPlan = travelPlan {
+                print("Fetched one travel plan: \(travelPlan)")
+                self.onePlan = travelPlan
+                let counts = self.onePlan.days.count
+                let originalCount = self.days.count
+                    if counts > originalCount {
+                        for _ in originalCount...counts - 1 {
+                            let number = self.days.count
+                            self.days.insert("第\(number + 1)天", at: number)
                         }
                     }
-
-        let rightButton = UIBarButtonItem(title: "完成", style: .plain,
+                self.headerView.days = self.days
+                self.headerView.onePlan = self.onePlan
+                self.headerView.collectionView.reloadData()
+            } else {
+                print("One travel plan not found.")
+            }
+        }
+        
+        let rightButton = UIBarButtonItem(title: "下一步", style: .plain, 
                                           target: self, action: #selector(rightButtonTapped))
         navigationItem.rightBarButtonItem = rightButton
         rightButton.tintColor = UIColor(named: "yellowGreen")
+        
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(keyboardWillShow(_:)),
             name: UIResponder.keyboardWillShowNotification, object: nil)
        NotificationCenter.default.addObserver(
-        self, selector: #selector(keyboardWillHide(_:)),
+        self,
+        selector: #selector(keyboardWillHide(_:)),
         name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
@@ -99,109 +101,76 @@ class SelectedMemoryEditViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "goToEditTitle" || segue.identifier == "draftPost" {
+        if segue.identifier == "goToEditTitle" {
             if let destinationVC = segue.destination as? EditMemoryTitleViewController {
                 destinationVC.onePlan = self.onePlan
-            }
-        }
-        if segue.identifier == "draftPost" {
-            if let destinationVC = segue.destination as? EditMemoryTitleViewController {
-                destinationVC.isFromDraft = true
+                print("self.onePlan\(self.onePlan)")
+                destinationVC.onePlan = self.onePlan
             }
         }
     }
    
     @objc func rightButtonTapped() {
-        if dbCollection == "Memory" {
-            let firestoreManagerForPost = FirestoreManagerMemoryPost()
-            let firestore = FirestoreManagerFetchUser()
-            firestore.fetchUserInfo{ userData, error  in
-                if error != nil {
-                    print("Error fetching one plan: \(String(describing: error))")
-                } else {
-                    self.onePlan.user = userData?.name
-                    self.onePlan.userPhoto = userData?.photo
-                    self.onePlan.userId = userData?.id
-                }
+        if let draftorPostVC = storyboard?.instantiateViewController(
+            withIdentifier: "SaveAsDraftorPostViewController") as? SaveAsDraftorPostViewController {
+            draftorPostVC.toPostButtonTapped = {
+                self.performSegue(withIdentifier: "goToEditTitle", sender: self)
+                draftorPostVC.dismiss(animated: true)
             }
-//            self.onePlan.user = Auth.auth().currentUser?.displayName
-//            self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-//            self.onePlan.userId = Auth.auth().currentUser?.uid
-            firestoreManagerForPost.updateMemory(dbcollection: dbCollection, memory: self.onePlan, memoryId: memoryId) { error in
-                if error != nil {
-                    print("Failed to post Memory")
-                } else {
-                    print("Posted Memory successfully!")}
-            }
-            navigationController?.popViewController(animated: true)
-        } else {
-            // 草稿頁的話要先問用戶要更新草稿還是發布成回憶
-            if let updateorPostVC = storyboard?.instantiateViewController(withIdentifier: "UpdateDraftorPostViewController") as? UpdateDraftorPostViewController {
-                updateorPostVC.postButtonTapped = {
-                    self.performSegue(withIdentifier: "draftPost", sender: self)
-                    updateorPostVC.dismiss(animated: true)
+            
+            draftorPostVC.toSaveButtonTapped = {
+                let firestore = FirestoreManagerFetchUser()
+                firestore.fetchUserInfo { userData, error  in
+                    if error != nil {
+                        print("Error fetching one plan: \(String(describing: error))")
+                    } else {
+                        self.onePlan.user = userData?.name
+                        self.onePlan.userPhoto = userData?.photo
+                        self.onePlan.userId = userData?.id
+                    }
                 }
-                updateorPostVC.updateButtonTapped = {
-                    let firestoreManagerForPost = FirestoreManagerMemoryPost()
-                    let firestore = FirestoreManagerFetchUser()
-                    firestore.fetchUserInfo{ userData, error  in
-                        if error != nil {
-                            print("Error fetching one plan: \(String(describing: error))")
-                        } else {
-                            self.onePlan.user = userData?.name
-                            self.onePlan.userPhoto = userData?.photo
-                            self.onePlan.userId = userData?.id
+                let firestoreManagerForPost = FirestoreManagerMemoryPost()
+                        firestoreManagerForPost.postMemoryDraft(memory: self.onePlan) { error in
+                                if error != nil {
+                                    print("Failed to post MemoryDraft")
+                                } else {
+                                    print("Posted MemoryDraft successfully!")}
+                        }
+                draftorPostVC.dismiss(animated: true)
+                if let navigationController = self.navigationController {
+                    let viewControllers = navigationController.viewControllers
+                    if viewControllers.count >= 3 {
+                        if let targetViewController = viewControllers[viewControllers.count - 3] 
+                            as? MemoryViewController {
+                            navigationController.popToViewController(targetViewController, animated: true)
                         }
                     }
-//                    self.onePlan.user = Auth.auth().currentUser?.displayName
-//                    self.onePlan.userPhoto = Auth.auth().currentUser?.photoURL?.absoluteString
-//                    self.onePlan.userId = Auth.auth().currentUser?.uid
-                    firestoreManagerForPost.updateMemory(dbcollection: self.dbCollection, memory: self.onePlan, memoryId: self.memoryId) { error in
-                        if error != nil {
-                            print("Failed to post Memory")
-                        } else {
-                            print("Posted Memory successfully!")}
-                    }
-                    updateorPostVC.dismiss(animated: true)
-                    self.navigationController?.popViewController(animated: true)
-                }
-                
-                present(updateorPostVC, animated: true, completion: nil)
+                } 
             }
+            present(draftorPostVC, animated: true, completion: nil)
         }
        }
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        view.addSubview(blurEffectView)
-        view.addSubview(activityIndicatorView)
-        activityIndicatorView.startAnimating()
-        
-        let allLocationsHaveNoMemeoryPhotos = onePlan.days.allSatisfy { $0.locations.allSatisfy { $0.memoryPhotos?.isEmpty == true } }
-
-            if allLocationsHaveNoMemeoryPhotos {
-                self.activityIndicatorView.stopAnimating()
-                self.blurEffectView.removeFromSuperview()
-                self.activityIndicatorView.removeFromSuperview()
+        let firestoreManagerForOne = FirestoreManagerForOne()
+        firestoreManagerForOne.delegate = self
+        firestoreManagerForOne.fetchOneTravelPlan(
+            dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "",
+            byId: travelPlanId) { (travelPlan, error) in
+            if let error = error {
+                print("Error fetching one travel plan: \(error)")
+            } else if let travelPlan = travelPlan {
+                self.onePlan = travelPlan
+                self.tableView.reloadData()
+            } else {
+                print("One travel plan not found.")
             }
-        
-        let firestoreManagerForOne = FirestoreManagerFetchMemory()
-        firestoreManagerForOne.fetchOneMemory(dbcollection: dbCollection, byId: memoryId) { (memory, error) in
-                        if let error = error {
-                            print("Error fetching one memory: \(error)")
-                        } else if let memory = memory {
-                            print("Fetched one memory: \(memory)")
-                            self.onePlan = memory
-                            self.tableView.reloadData()
-                        } else {
-                            print("One memory not found.")
-                        }
-                    }
+        }
     }
 }
 
-extension SelectedMemoryEditViewController: UITableViewDataSource, UITextViewDelegate {
-    
+extension EditMemoryViewController: UITableViewDataSource, UITextViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         onePlan.days.count
     }
@@ -221,12 +190,11 @@ extension SelectedMemoryEditViewController: UITableViewDataSource, UITextViewDel
             withIdentifier: "EditMemoryCell",
             for: indexPath) as? EditMemoryCell
         else { fatalError("Could not create EditMemoryCell") }
-        currentIndexPath = indexPath
+currentIndexPath = indexPath
         let location = onePlan.days[indexPath.section].locations[indexPath.row]
 
         cell.placeNameLabel.text = location.name
         cell.addressLabel.text = location.address
-        cell.articleTextView.text = location.article
         
         cell.imageCollectionView.dataSource = self
         cell.imageCollectionView.delegate = self
@@ -241,8 +209,8 @@ extension SelectedMemoryEditViewController: UITableViewDataSource, UITextViewDel
         cell.imageCollectionView.tag = indexPath.section * 1000 + indexPath.row
         cell.imageCollectionView.reloadData()
         cell.articleTextView.tag = indexPath.section * 1000 + indexPath.row
+        cell.articleTextView.textColor = .lightGray
         cell.articleTextView.delegate = self
-        
         return cell
     }
     
@@ -251,9 +219,24 @@ extension SelectedMemoryEditViewController: UITableViewDataSource, UITextViewDel
             let locationIndex = textView.tag % 1000
             onePlan.days[dayIndex].locations[locationIndex].article = textView.text
         }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "輸入旅程中的美好回憶..."
+            textView.textColor = UIColor.lightGray
+        }
+    }
+
 }
 
-extension SelectedMemoryEditViewController: UITableViewDelegate {
+extension EditMemoryViewController: UITableViewDelegate {
     func tableView(
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -261,13 +244,13 @@ extension SelectedMemoryEditViewController: UITableViewDelegate {
     }
 }
 
-extension SelectedMemoryEditViewController: FirestoreManagerForOneDelegate {
+extension EditMemoryViewController: FirestoreManagerForOneDelegate {
     func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan) {
         onePlan = firestoreData
     }
 }
 
-extension SelectedMemoryEditViewController: EditMemoryHeaderViewDelegate {
+extension EditMemoryViewController: EditMemoryHeaderViewDelegate {
     
     func passDays(daysData: [String]) {
         self.days = daysData
@@ -276,7 +259,9 @@ extension SelectedMemoryEditViewController: EditMemoryHeaderViewDelegate {
     func reloadData() {
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "", byId: travelPlanId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(
+            dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "",
+            byId: travelPlanId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -290,7 +275,7 @@ extension SelectedMemoryEditViewController: EditMemoryHeaderViewDelegate {
     }
 }
 
-extension SelectedMemoryEditViewController: UICollectionViewDataSource,
+extension EditMemoryViewController: UICollectionViewDataSource, 
                                         UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -324,17 +309,21 @@ extension SelectedMemoryEditViewController: UICollectionViewDataSource,
            
            let firestorageDownload = FirebaseStorageManagerDownloadPhotos()
            firestorageDownload.delegate = self
-           guard let section = currentIndexPath?.section,
-               let row = currentIndexPath?.row,
-               section < onePlan.days.count,
-               row < onePlan.days[section].locations.count,
-            let memoryPhotos = onePlan.days[section].locations[row].memoryPhotos else {
-               return cell
-           }
+
+           // cell 在image download前被reuse 而產生相同照片的cell
+           guard let currentSection = currentIndexPath?.section,
+             let currentRow = currentIndexPath?.row,
+             currentSection < onePlan.days.count,
+             currentRow < onePlan.days[currentSection].locations.count,
+             let memoryPhotos = onePlan.days[currentSection].locations[currentRow].memoryPhotos else {
+           return cell
+       }
            let imageIndex = indexPath.item - 1 // Subtract 1 because the first item is the "AddPhotoCell"
             let imageURLString = memoryPhotos[imageIndex]
-           cell.memoryImageView.image = nil
+
                if let url = URL(string: imageURLString) {
+//           for image in memoryPhotos {
+//               if let url = URL(string: image) {
                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
                        DispatchQueue.main.async {
@@ -343,25 +332,26 @@ extension SelectedMemoryEditViewController: UICollectionViewDataSource,
                            } else {
                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                            }
-                           self.activityIndicatorView.stopAnimating()
-                           self.blurEffectView.removeFromSuperview()
-                           self.activityIndicatorView.removeFromSuperview()
                        }
+//                   }
            }}
            return cell
        }
    }
     
     @objc func imageButtonTapped(_ sender: UIButton) {
+        // Get the indexPath from the button's position
+        
         let point = sender.convert(CGPoint.zero, to: tableView)
         if let indexPath = tableView.indexPathForRow(at: point) {
             showImagePicker(forIndexPath: indexPath)
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, 
-                        layout collectionViewLayout: UICollectionViewLayout, 
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath) -> CGSize {
         var widthperItem: CGFloat = 0
         let paddingSpace = sectionInsets.left * (itemsPerRow + 1)
         let availableWidth = view.frame.width - paddingSpace
@@ -375,7 +365,7 @@ extension SelectedMemoryEditViewController: UICollectionViewDataSource,
     }
 }
 
-extension SelectedMemoryEditViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension EditMemoryViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
    @objc func showImagePicker(forIndexPath indexPath: IndexPath) {
        currentIndexPath = indexPath
 
@@ -437,12 +427,12 @@ extension SelectedMemoryEditViewController: UIImagePickerControllerDelegate, UIN
     
 }
 
-extension SelectedMemoryEditViewController: FirebaseStorageManagerUploadDelegate {
+extension EditMemoryViewController: FirebaseStorageManagerUploadDelegate {
     func manager(_ manager: FirebaseStorageManagerUploadPhotos) {
     }
 }
 
-extension SelectedMemoryEditViewController: FirebaseStorageManagerDownloadDelegate {
+extension EditMemoryViewController: FirebaseStorageManagerDownloadDelegate {
     func manager(_ manager: FirebaseStorageManagerDownloadPhotos) {
     }
 }

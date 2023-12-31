@@ -70,7 +70,6 @@ class PlanDetailViewController: UIViewController {
                 }
             }
             let firestorePost = FirestoreManagerForPost()
-
             firestorePost.postFullPlan(plan: self.onePlan) { error in
                 if let error = error {
                     print("Error fetching one plan: \(error)")

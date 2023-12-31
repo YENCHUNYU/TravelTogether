@@ -19,7 +19,9 @@ class PlanViewController: UIViewController {
     var togetherPlans: [TravelPlan] = []
     var spotsData: [[String: Any]] = []
     let activityIndicatorView = NVActivityIndicatorView(
-            frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
+            frame: CGRect(
+                x: UIScreen.main.bounds.width / 2 - 25,
+                y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
             type: .ballBeat,
             color: UIColor(named: "darkGreen") ?? .white,
             padding: 0
@@ -60,9 +62,7 @@ class PlanViewController: UIViewController {
         tableView.tableHeaderView = headerView
         view.addSubview(addButton)
         setUpButton()
-        Task {
-            await fetchMyPlans()
-        }
+        fetchMyPlan()
     }
     
     func setUpHeaderView() {
@@ -83,6 +83,19 @@ class PlanViewController: UIViewController {
                 }
             }
         }
+    
+    func fetchMyPlan() {
+        let firestoreManager = FirestoreManager()
+        firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
+            if let error = error {
+                print("Error fetching travel plans: \(error)")
+            } else {
+                print("Fetched travel plan: \(travelPlans ?? [])")
+                self.plans = travelPlans ?? []
+                self.tableView.reloadData()
+            }
+        }
+    }
 
     func setUpButton() {
         addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
@@ -103,11 +116,9 @@ class PlanViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         addLoadingView()
-        Task {
-            await fetchMyPlans()
-            if self.plans.isEmpty && self.planIndex == 0 {
-                removeLoadingView()
-            }
+        fetchMyPlan()
+        if self.plans.isEmpty && self.planIndex == 0 {
+            removeLoadingView()
         }
         if togetherPlans.isEmpty && planIndex == 1 {
             removeLoadingView()
@@ -125,62 +136,62 @@ extension PlanViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if planIndex == 0 {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlanCell", for: indexPath) as? MyPlanCell
-            else { fatalError("Could not create PlanCell") }
-            return setUpCell(indexPath: indexPath, cell: cell, plans: plans)
-        } else {
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "TogetherPlanCell",
-                for: indexPath) as? TogetherPlanCell
-            else { fatalError("Could not create TogetherPlanCell") }
-            return cell
-        }
-    }
-    
-    func setUpCell(indexPath: IndexPath, cell: MyPlanCell, plans: [TravelPlan]) -> UITableViewCell {
-        cell.planImageView.image = nil
-        cell.planNameLabel.text = plans[indexPath.row].planName
-        let start = changeDateFormat(date: "\(plans[indexPath.row].startDate)")
-        let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
-        cell.planDateLabel.text = "\(start)-\(end)"
-        let daysData = plans[indexPath.row].days
-        guard daysData.isEmpty == false else {
-            removeLoadingView()
-            return cell
-        }
-        let locationData = daysData[0]
-        let theLocation = locationData.locations
-        guard theLocation.isEmpty == false else {
-            cell.planImageView.image = UIImage(named: "Image_Placeholder")
-            removeLoadingView()
-            return cell
-        }
-        let urlString = theLocation[0].photo
-        guard let url = URL(string: urlString) else {
-            cell.planImageView.image = UIImage(named: "Image_Placeholder")
-            removeLoadingView()
-            return cell
-        }
-        downloadPhoto(url: url, cell: cell, indexPath: indexPath)
-        return cell
-    }
-    
-    func downloadPhoto(url: URL, cell: MyPlanCell, indexPath: IndexPath) {
-        let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-        firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-            DispatchQueue.main.async {
-                guard let image = image else {
-                    cell.planImageView.image = UIImage(named: "Image_Placeholder")
-                    self.removeLoadingView()
-                    return
-                }
-                    cell.planImageView.image = image
-                    cell.planNameLabel.text = self.plans[indexPath.row].planName
-                self.removeLoadingView()
-           }
-        }
-    }
+          if planIndex == 0 {
+              guard let cell = tableView.dequeueReusableCell(withIdentifier: "PlanCell", for: indexPath) as? MyPlanCell
+              else { fatalError("Could not create PlanCell") }
+              return setUpCell(indexPath: indexPath, cell: cell, plans: plans)
+          } else {
+              guard let cell = tableView.dequeueReusableCell(
+                  withIdentifier: "TogetherPlanCell",
+                  for: indexPath) as? TogetherPlanCell
+              else { fatalError("Could not create TogetherPlanCell") }
+              return cell
+          }
+      }
+      
+      func setUpCell(indexPath: IndexPath, cell: MyPlanCell, plans: [TravelPlan]) -> UITableViewCell {
+          cell.planImageView.image = nil
+          cell.planNameLabel.text = plans[indexPath.row].planName
+          let start = changeDateFormat(date: "\(plans[indexPath.row].startDate)")
+          let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
+          cell.planDateLabel.text = "\(start)-\(end)"
+          let daysData = plans[indexPath.row].days
+          guard daysData.isEmpty == false else {
+              removeLoadingView()
+              return cell
+          }
+          let locationData = daysData[0]
+          let theLocation = locationData.locations
+          guard theLocation.isEmpty == false else {
+              cell.planImageView.image = UIImage(named: "Image_Placeholder")
+              removeLoadingView()
+              return cell
+          }
+          let urlString = theLocation[0].photo
+          guard let url = URL(string: urlString) else {
+              cell.planImageView.image = UIImage(named: "Image_Placeholder")
+              removeLoadingView()
+              return cell
+          }
+          downloadPhoto(url: url, cell: cell, indexPath: indexPath)
+          return cell
+      }
+      
+      func downloadPhoto(url: URL, cell: MyPlanCell, indexPath: IndexPath) {
+          let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
+          firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
+              DispatchQueue.main.async {
+                  guard let image = image else {
+                      cell.planImageView.image = UIImage(named: "Image_Placeholder")
+                      self.removeLoadingView()
+                      return
+                  }
+                      cell.planImageView.image = image
+                      cell.planNameLabel.text = self.plans[indexPath.row].planName
+                  self.removeLoadingView()
+             }
+          }
+      }
     
     func changeDateFormat(date: String) -> String {
         let dateFormatter = DateFormatter()

@@ -28,7 +28,9 @@ class SelectDateViewController: UIViewController {
             tableView.register(SelectDateFooterView.self, forHeaderFooterViewReuseIdentifier: "SelectDateFooterView")
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "", byId: planId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(
+            dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "",
+            byId: planId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -44,7 +46,9 @@ class SelectDateViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "", byId: planId) { (travelPlan, error) in
+        firestoreManagerForOne.fetchOneTravelPlan(
+            dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "",
+            byId: planId) { (travelPlan, error) in
             if let error = error {
                 print("Error fetching one travel plan: \(error)")
             } else if let travelPlan = travelPlan {
@@ -75,7 +79,9 @@ extension SelectDateViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let firestorePostLocation = FirestoreManagerForPostLocation()
         firestorePostLocation.delegate = self
-        firestorePostLocation.addLocationToTravelPlan(userId: Auth.auth().currentUser?.uid ?? "", planId: planId, location: location, day: indexPath.row) { error in
+        firestorePostLocation.addLocationToTravelPlan(
+            userId: Auth.auth().currentUser?.uid ?? "",
+            planId: planId, location: location, day: indexPath.row) { error in
             if let error = error {
                 print("Error posting location: \(error)")
             } else {
@@ -102,7 +108,10 @@ extension SelectDateViewController: UITableViewDataSource {
                 print("New Day posted successfully!")
                 let firestoreManagerForOne = FirestoreManagerForOne()
                 firestoreManagerForOne.delegate = self
-                firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "", byId: self.planId) { (travelPlan, error) in
+                firestoreManagerForOne.fetchOneTravelPlan(
+                    dbCollection: "TravelPlan",
+                    userId: Auth.auth().currentUser?.uid ?? "",
+                    byId: self.planId) { (travelPlan, error) in
                     if let error = error {
                         print("Error fetching one travel plan: \(error)")
                     } else if let travelPlan = travelPlan {

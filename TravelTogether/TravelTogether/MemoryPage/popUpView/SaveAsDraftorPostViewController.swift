@@ -9,7 +9,7 @@ import FirebaseAuth
 
 class SaveAsDraftorPostViewController: UIViewController {
     var toPostButtonTapped: (() -> Void)?
-    var toSaveButtonTapped:  (() -> Void)?
+    var toSaveButtonTapped: (() -> Void)?
     var onePlan: TravelPlan = TravelPlan(
         id: "", planName: "",
         destination: "",

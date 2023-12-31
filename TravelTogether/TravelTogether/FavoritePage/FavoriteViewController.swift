@@ -22,10 +22,12 @@ class FavoriteViewController: UIViewController {
     var dbCollection = "FavoriteMemory"
     
     let activityIndicatorView = NVActivityIndicatorView(
-            frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
-                  type: .ballBeat,
-                  color: UIColor(named: "darkGreen") ?? .white,
-                  padding: 0
+        frame: CGRect(
+            x: UIScreen.main.bounds.width / 2 - 25,
+            y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
+        type: .ballBeat,
+        color: UIColor(named: "darkGreen") ?? .white,
+        padding: 0
               )
         var blurEffectView: UIVisualEffectView!
     
@@ -68,9 +70,7 @@ class FavoriteViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         view.addSubview(blurEffectView)
          view.addSubview(activityIndicatorView)
-         activityIndicatorView.startAnimating()
-        
-       
+         activityIndicatorView.startAnimating()      
         let firestoreFetch = FirestoreManagerFavorite()
         firestoreFetch.fetchAllMemories { (travelPlans, error) in
             if let error = error {
@@ -80,9 +80,7 @@ class FavoriteViewController: UIViewController {
                 self.memories = travelPlans ?? []
                 self.tableView.reloadData()
                 if self.memories.isEmpty && self.favoriteIndex == 0 {
-                    self.activityIndicatorView.stopAnimating()
-                    self.blurEffectView.removeFromSuperview()
-                    self.activityIndicatorView.removeFromSuperview()
+                    self.stopLoading()
                 }
             }
         }
@@ -95,12 +93,16 @@ class FavoriteViewController: UIViewController {
                 self.plans = travelPlans ?? []
                 self.tableView.reloadData()
                 if self.plans.isEmpty && self.favoriteIndex == 1 {
-                    self.activityIndicatorView.stopAnimating()
-                    self.blurEffectView.removeFromSuperview()
-                    self.activityIndicatorView.removeFromSuperview()
+                    self.stopLoading()
                 }
             }
         }
+    }
+    
+    func stopLoading() {
+        self.activityIndicatorView.stopAnimating()
+        self.blurEffectView.removeFromSuperview()
+        self.activityIndicatorView.removeFromSuperview()
     }
 }
 
@@ -119,9 +121,10 @@ extension FavoriteViewController: UITableViewDataSource {
             for: indexPath) as? FavoriteMemoryCell
         else { fatalError("Could not create SearchMemoriesCell") }
         if favoriteIndex == 0 {
-           
             cell.userNameLabel.text = memories[indexPath.row].user
-            cell.userImageView.kf.setImage(with: URL(string: memories[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
+            cell.userImageView.kf.setImage(
+                with: URL(string: memories[indexPath.row].userPhoto ?? ""),
+                placeholder: UIImage(systemName: "person.circle.fill"))
             cell.memoryNameLabel.text = self.memories[indexPath.row].planName
             let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
             let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
@@ -145,9 +148,10 @@ extension FavoriteViewController: UITableViewDataSource {
             return cell
         } else {
             cell.userNameLabel.text = plans[indexPath.row].user
-//            cell.memoryImageView.image = mockImage
             cell.memoryNameLabel.text = plans[indexPath.row].planName
-            cell.userImageView.kf.setImage(with: URL(string: plans[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
+            cell.userImageView.kf.setImage(
+                with: URL(string: plans[indexPath.row].userPhoto ?? ""),
+                placeholder: UIImage(systemName: "person.circle.fill"))
             let start = self.changeDateFormat(date: "\(self.plans[indexPath.row].startDate)")
             let end = self.changeDateFormat(date: "\(self.plans[indexPath.row].endDate)")
             cell.dateLabel.text = "\(start)-\(end)"
@@ -162,9 +166,7 @@ extension FavoriteViewController: UITableViewDataSource {
                     }
                 }
             }
-            self.activityIndicatorView.stopAnimating()
-            self.blurEffectView.removeFromSuperview()
-            self.activityIndicatorView.removeFromSuperview()
+            stopLoading()
             return cell}
     }
     
@@ -183,9 +185,7 @@ extension FavoriteViewController: UITableViewDataSource {
                 } else {
                     cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                 }
-                self.activityIndicatorView.stopAnimating()
-                self.blurEffectView.removeFromSuperview()
-                self.activityIndicatorView.removeFromSuperview()
+                self.stopLoading()
             }
         }
     }
@@ -252,9 +252,10 @@ extension FavoriteViewController: UITableViewDelegate {
             if editingStyle == .delete {
                 if favoriteIndex == 1 {
                     if indexPath.row < plans.count {
-                        
                         let firestoreManager = FirestoreManagerFavorite()
-                        firestoreManager.deleteFavorite(dbcollection: dbCollection, withID: plans[indexPath.row].id) { error in
+                        firestoreManager.deleteFavorite(
+                            dbcollection: dbCollection,
+                            withID: plans[indexPath.row].id) { error in
                             if let error = error {
                                 print("Failed to delete favorite: \(error)")
                             } else {
@@ -268,9 +269,10 @@ extension FavoriteViewController: UITableViewDelegate {
                     }
                 } else {
                     if indexPath.row < memories.count {
-                        
                         let firestoreManager = FirestoreManagerFavorite()
-                        firestoreManager.deleteFavorite(dbcollection: dbCollection, withID: memories[indexPath.row].id) { error in
+                        firestoreManager.deleteFavorite(
+                            dbcollection: dbCollection,
+                            withID: memories[indexPath.row].id) { error in
                             if let error = error {
                                 print("Failed to delete favorite: \(error)")
                             } else {
@@ -301,14 +303,10 @@ extension FavoriteViewController: FavoriteHeaderViewDelegate {
         }
         tableView.reloadData()
         if plans.isEmpty && favoriteIndex == 1 {
-            self.activityIndicatorView.stopAnimating()
-            self.blurEffectView.removeFromSuperview()
-            self.activityIndicatorView.removeFromSuperview()
+            stopLoading()
         }
         if memories.isEmpty && favoriteIndex == 0 {
-            self.activityIndicatorView.stopAnimating()
-            self.blurEffectView.removeFromSuperview()
-            self.activityIndicatorView.removeFromSuperview()
+            stopLoading()
         }
     }
 }

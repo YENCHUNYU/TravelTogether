@@ -82,7 +82,7 @@ class LoginViewController: UIViewController {
         }
     }
         
-        @IBOutlet weak var appleSigninButton: ASAuthorizationAppleIDButton!  {
+        @IBOutlet weak var appleSigninButton: ASAuthorizationAppleIDButton! {
             didSet {
                 appleSigninButton.layer.cornerRadius = 8
                 
@@ -204,7 +204,10 @@ class LoginViewController: UIViewController {
             if let user = authResult?.user {
                 self.retrieveExistingUserProfile { existingGoogleUserProfile in
                     let usersRef = self.database.collection("UserInfo").document(user.uid)
-                    let userInfo = UserInfo(email: user.email ?? "", name: user.displayName ?? "User", id: user.uid, photo: user.photoURL?.absoluteString)
+                    let userInfo = UserInfo(
+                        email: user.email ?? "",
+                        name: user.displayName ?? "User",
+                        id: user.uid, photo: user.photoURL?.absoluteString)
                     let usersData = existingGoogleUserProfile?.toDictionary()
                     usersRef.setData(usersData ?? userInfo.toDictionary(), merge: true)
                 }}
@@ -218,19 +221,18 @@ class LoginViewController: UIViewController {
         
         // select log-in
         if segmentedControl.selectedSegmentIndex == 1 {
-            Auth.auth().signIn(withEmail: emailText, password: passwordText) { result, error in
+            Auth.auth().signIn(withEmail: emailText, password: passwordText) { _, error in
                 guard error == nil else {
                     self.showAlert(title: "Error", message: "登入失敗")
                       return
                    }
                 self.showAlert(title: "Success", message: "登入成功!")
                 LoginViewController.loginStatus = true
-//                self.dismiss(animated: true)
         }
             
             // select sign-up
         } else {
-            Auth.auth().createUser(withEmail: emailText, password: passwordText) { authResult, error in
+            Auth.auth().createUser(withEmail: emailText, password: passwordText) { _, error in
                 if error != nil {
                     print("Failed to resgister")
                     self.showAlert(title: "Error", message: "Email格式錯誤 或 密碼不足6位")
@@ -250,14 +252,13 @@ class LoginViewController: UIViewController {
                     } else {
 //                        self.showAlert(title: "Success", message: "註冊成功！請前往登入畫面並輸入登入資訊。")
                         self.addData()
-                        Auth.auth().signIn(withEmail: emailText, password: passwordText) { result, error in
+                        Auth.auth().signIn(withEmail: emailText, password: passwordText) { _, error in
                             guard error == nil else {
                                 self.showAlert(title: "Error", message: "登入失敗")
                                   return
                                }
                             self.showAlert(title: "Success", message: "註冊並登入成功!")
                             LoginViewController.loginStatus = true
-            //                self.dismiss(animated: true)
                     }
                     }
                 }}}
@@ -267,7 +268,6 @@ class LoginViewController: UIViewController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default) { [weak self] action in
             if title == "Success" {
-//                LoginViewController.loginStatus = true
                 self?.dismiss(animated: true)
             }
         }
@@ -348,9 +348,6 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                     
                     if let user = authResult?.user {
                         self.retrieveExistingUserProfile { existingGoogleUserProfile in
-                            // Merge the profiles
-//                            self.handleMergeUserProfiles(existingUserProfile: existingGoogleUserProfile)
-//                            
                             let usersRef = self.database.collection("UserInfo").document(user.uid)
                             let userInfo = UserInfo(
                                 email: user.email ?? "",

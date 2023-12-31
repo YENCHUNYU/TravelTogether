@@ -17,20 +17,18 @@ class FirestoreManagerForPost {
     var delegate: FirestoreManagerForPostDelegate?
 // 空的plan
     func postTravelPlan(travelPlan: TravelPlan, completion: @escaping (Error?) -> Void) {
-        let database = Firestore.firestore()
-        
-       var ref: DocumentReference?
-               
-               var travelPlanData = travelPlan.dictionary
+        let database = Firestore.firestore()  
+       let ref = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+        var travelPlanData = travelPlan.dictionary
         travelPlanData["days"] = [["locations": []]]
         print("travelPlanData\(travelPlanData)")
         
-        ref = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("TravelPlan").addDocument(data: travelPlanData) { error in
+        ref.collection("TravelPlan").addDocument(data: travelPlanData) { error in
             if let error = error {
                 print("Error adding document: \(error)")
                 completion(error)
             } else {
-                print("Document added with ID: \(ref!.documentID)")
+                print("Document added with ID")
                 self.delegate?.manager(self, didPost: travelPlan)
                 completion(nil)
             }
@@ -39,7 +37,8 @@ class FirestoreManagerForPost {
  // 滿的plan
     func postFullPlan(plan: TravelPlan, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let planRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("TravelPlan")
+        let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+        let planRef = userRef.collection("TravelPlan")
         let planDay = plan.days
         var dayDictionary: [[String: Any]] = []
         

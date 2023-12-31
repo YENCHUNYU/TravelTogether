@@ -46,7 +46,10 @@ class SearchViewController: UIViewController {
         performSegue(withIdentifier: "goToMapFromSearch", sender: self)
     }
     let activityIndicatorView = NVActivityIndicatorView(
-        frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
+        frame: CGRect(
+            x: UIScreen.main.bounds.width / 2 - 25,
+            y: UIScreen.main.bounds.height / 2 - 25,
+            width: 50, height: 50),
               type: .ballBeat,
               color: UIColor(named: "darkGreen") ?? .white,
               padding: 0
@@ -191,7 +194,9 @@ extension SearchViewController: UITableViewDataSource {
         let taskIdentifier = UUID().uuidString
         cell.taskIdentifier = taskIdentifier
         cell.userNameLabel.text = memories[indexPath.row].user
-        cell.userImageView.kf.setImage(with: URL(string: memories[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
+        cell.userImageView.kf.setImage(
+            with: URL(string: memories[indexPath.row].userPhoto ?? ""),
+            placeholder: UIImage(systemName: "person.circle.fill"))
         cell.memoryNameLabel.text = memories[indexPath.row].planName
         cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
         let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
@@ -218,7 +223,9 @@ extension SearchViewController: UITableViewDataSource {
     func setUpCellForPlans(indexPath: IndexPath, cell: SearchMemoriesCell, plans: [TravelPlan]) -> UITableViewCell {
         cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
         cell.userNameLabel.text = plans[indexPath.row].user
-        cell.userImageView.kf.setImage(with: URL(string: plans[indexPath.row].userPhoto ?? ""), placeholder: UIImage(systemName: "person.circle.fill"))
+        cell.userImageView.kf.setImage(
+            with: URL(string: plans[indexPath.row].userPhoto ?? ""),
+            placeholder: UIImage(systemName: "person.circle.fill"))
         cell.memoryNameLabel.text = plans[indexPath.row].planName
         let start = self.changeDateFormat(date: "\(self.plans[indexPath.row].startDate)")
         let end = self.changeDateFormat(date: "\(self.plans[indexPath.row].endDate)")
@@ -347,7 +354,8 @@ extension SearchViewController: UITabBarControllerDelegate {
         guard viewController.tabBarItem.tag > 0 else { // 未登入 且點擊tag>0
             return false
         }
-        guard let loginVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController else {
+        guard let loginVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") 
+                as? LoginViewController else {
             return false
         }
         let loginNavController = UINavigationController(rootViewController: loginVC)

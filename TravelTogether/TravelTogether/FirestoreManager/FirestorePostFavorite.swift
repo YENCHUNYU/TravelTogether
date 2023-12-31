@@ -13,7 +13,8 @@ class FirestoreManagerFavorite {
     
     func postMemoryToFavorite(memory: TravelPlan, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let memoryRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("FavoriteMemory")
+        let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+        let memoryRef = userRef.collection("FavoriteMemory")
         let memoryDay = memory.days
         var dayDictionary: [[String: Any]] = []
         
@@ -44,32 +45,25 @@ class FirestoreManagerFavorite {
     
     func fetchAllMemories(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
         let database = Firestore.firestore()
-        
-        let memoriesRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("FavoriteMemory")
-//        let orderedQuery = memoriesRef.order(by: "startDate", descending: false)
+        let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+        let memoriesRef = userRef.collection("FavoriteMemory")
         memoriesRef.getDocuments { (querySnapshot, error) in
-            
             if let error = error {
                 print("Error getting documents: \(error)")
                 completion(nil, error)
             } else {
                 var memories: [TravelPlan] = []
-                
                 for document in querySnapshot!.documents {
                     let data = document.data()
                     let startDate = (data["startDate"] as? Timestamp)?.dateValue() ?? Date()
                     let endDate = (data["endDate"] as? Timestamp)?.dateValue() ?? Date()
-                    
                     guard let daysArray = data["days"] as? [[String: Any]] else {
-                        continue
-                    }
-                   
+                        continue   }
                     var travelDays: [TravelDay] = []
                     for dayData in daysArray {
                         guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
                             continue
                         }
-                
                         var locations: [Location] = []
                         for locationData in locationsArray {
                             let location = Location(
@@ -81,11 +75,8 @@ class FirestoreManagerFavorite {
                             )
                             locations.append(location)
                         }
-                        
                         let travelDay = TravelDay(locations: locations)
-                        travelDays.append(travelDay)
-                    }
-                    
+                        travelDays.append(travelDay) }
                     let travelPlan = TravelPlan(
                         id: document.documentID,
                         planName: data["planName"] as? String ?? "",
@@ -98,9 +89,7 @@ class FirestoreManagerFavorite {
                         userPhoto: data["userPhoto"] as? String ?? "",
                         userId: data["userId"] as? String ?? ""
                     )
-                    memories.append(travelPlan)
-                }
-                
+                    memories.append(travelPlan)  }
                 completion(memories, nil)
             }
         }
@@ -139,17 +128,15 @@ class FirestoreManagerFavorite {
     
     func fetchAllPlans(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
         let database = Firestore.firestore()
-        
-        let memoriesRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("FavoritePlan")
-//        let orderedQuery = memoriesRef.order(by: "startDate", descending: false)
+        let userCo = database.collection("UserInfo")
+        let userRef = userCo.document(Auth.auth().currentUser?.uid ?? "")
+        let memoriesRef = userRef.collection("FavoritePlan")
         memoriesRef.getDocuments { (querySnapshot, error) in
-            
             if let error = error {
                 print("Error getting documents: \(error)")
                 completion(nil, error)
             } else {
                 var memories: [TravelPlan] = []
-                
                 for document in querySnapshot!.documents {
                     let data = document.data()
                     let startDate = (data["startDate"] as? Timestamp)?.dateValue() ?? Date()
@@ -158,13 +145,11 @@ class FirestoreManagerFavorite {
                     guard let daysArray = data["days"] as? [[String: Any]] else {
                         continue
                     }
-                   
                     var travelDays: [TravelDay] = []
                     for dayData in daysArray {
                         guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
                             continue
                         }
-                
                         var locations: [Location] = []
                         for locationData in locationsArray {
                             let location = Location(
@@ -176,11 +161,9 @@ class FirestoreManagerFavorite {
                             )
                             locations.append(location)
                         }
-                        
                         let travelDay = TravelDay(locations: locations)
                         travelDays.append(travelDay)
                     }
-                    
                     let travelPlan = TravelPlan(
                         id: document.documentID,
                         planName: data["planName"] as? String ?? "",
@@ -195,7 +178,6 @@ class FirestoreManagerFavorite {
                     )
                     memories.append(travelPlan)
                 }
-                
                 completion(memories, nil)
             }
         }
@@ -203,7 +185,8 @@ class FirestoreManagerFavorite {
     
     func deleteFavorite(dbcollection: String, withID memoryID: String, completion: @escaping (Error?) -> Void) {
            let database = Firestore.firestore()
-           let favoriteRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection(dbcollection).document(memoryID)
+           let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+           let favoriteRef = userRef.collection(dbcollection).document(memoryID)
 
         favoriteRef.delete { error in
                if let error = error {

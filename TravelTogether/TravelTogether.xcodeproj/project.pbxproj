@@ -307,16 +307,13 @@
 			path = TravelTogetherTests;
 			sourceTree = "<group>";
 		};
-		5245BA742B0E135A006594CC /* Manager */ = {
+		5245BA742B0E135A006594CC /* FirestoreManager */ = {
 			isa = PBXGroup;
 			children = (
-				52783CF22B0603BD0067A334 /* GooglePlacesManager.swift */,
 				5245BA752B0E136E006594CC /* FirestoreManager.swift */,
 				5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */,
 				52CD521F2B0E406100CA7352 /* FirestoreForPost.swift */,
 				52E0F9592B0EE64A00D23AFE /* FirestoreForPostLocation.swift */,
-				52E0F95B2B0F2F3B00D23AFE /* FirebaseStorageUploadPhotos.swift */,
-				52E0F95D2B0F31FD00D23AFE /* FirebaseStorageManagerDownloadPhotos.swift */,
 				5255286B2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift */,
 				524C30F02B1832FD00C5CEDC /* FirestoreUserInfo.swift */,
 				525E7CBA2B19F0AD0057C5EE /* FirestoreForPostMemory.swift */,
@@ -324,7 +321,58 @@
 				529781BE2B25A0C100F53476 /* FirestorePostFavorite.swift */,
 				52D7D16A2B300CC000DBEC7A /* FirestoreManagerTogether.swift */,
 			);
-			path = Manager;
+			path = FirestoreManager;
+			sourceTree = "<group>";
+		};
+		524A2DEE2B4048C6001E766C /* GoogleMapManager */ = {
+			isa = PBXGroup;
+			children = (
+				52783CF22B0603BD0067A334 /* GooglePlacesManager.swift */,
+			);
+			path = GoogleMapManager;
+			sourceTree = "<group>";
+		};
+		524A2DEF2B404907001E766C /* FirebaseStorageManager */ = {
+			isa = PBXGroup;
+			children = (
+				52E0F95B2B0F2F3B00D23AFE /* FirebaseStorageUploadPhotos.swift */,
+				52E0F95D2B0F31FD00D23AFE /* FirebaseStorageManagerDownloadPhotos.swift */,
+			);
+			path = FirebaseStorageManager;
+			sourceTree = "<group>";
+		};
+		524A2DF02B4049AB001E766C /* MemoryViewController */ = {
+			isa = PBXGroup;
+			children = (
+				52783CD02B034F6A0067A334 /* MemoryViewController.swift */,
+				52783CD22B0350AC0067A334 /* MemoryCell.swift */,
+				52783CD42B0354820067A334 /* MemoryHeaderView.swift */,
+				524C30F42B1891D700C5CEDC /* SelectPlanPage.swift */,
+				524C30F62B189F6200C5CEDC /* SelectPlanCell.swift */,
+			);
+			path = MemoryViewController;
+			sourceTree = "<group>";
+		};
+		524A2DF12B4049C0001E766C /* EditMemoryPage */ = {
+			isa = PBXGroup;
+			children = (
+				524C30F82B18A55600C5CEDC /* EditMemoryViewController.swift */,
+				523846EC2B18DC21006D58B0 /* EditMemoryCell.swift */,
+				523846EE2B18E418006D58B0 /* EditMemoryHeaderView.swift */,
+				525E7CB42B1987780057C5EE /* ImageCollectionViewCell.swift */,
+				526005212B1AE14100F37E84 /* EditMemoryTitleViewController.swift */,
+				527F3BA72B2056EA008CB8E2 /* SelectedMemoryEditViewController.swift */,
+			);
+			path = EditMemoryPage;
+			sourceTree = "<group>";
+		};
+		524A2DF22B404B41001E766C /* popUpView */ = {
+			isa = PBXGroup;
+			children = (
+				5248E5D82B27F5850052DD20 /* SaveAsDraftorPostViewController.swift */,
+				5248E5DA2B28227F0052DD20 /* UpdateDraftorPostViewController.swift */,
+			);
+			path = popUpView;
 			sourceTree = "<group>";
 		};
 		52783CC62B033B060067A334 /* PlanPage */ = {
@@ -340,19 +388,9 @@
 		52783CCF2B034F4E0067A334 /* MemoryPage */ = {
 			isa = PBXGroup;
 			children = (
-				52783CD02B034F6A0067A334 /* MemoryViewController.swift */,
-				52783CD22B0350AC0067A334 /* MemoryCell.swift */,
-				52783CD42B0354820067A334 /* MemoryHeaderView.swift */,
-				524C30F42B1891D700C5CEDC /* SelectPlanPage.swift */,
-				524C30F62B189F6200C5CEDC /* SelectPlanCell.swift */,
-				524C30F82B18A55600C5CEDC /* EditMemoryViewController.swift */,
-				523846EC2B18DC21006D58B0 /* EditMemoryCell.swift */,
-				523846EE2B18E418006D58B0 /* EditMemoryHeaderView.swift */,
-				525E7CB42B1987780057C5EE /* ImageCollectionViewCell.swift */,
-				526005212B1AE14100F37E84 /* EditMemoryTitleViewController.swift */,
-				527F3BA72B2056EA008CB8E2 /* SelectedMemoryEditViewController.swift */,
-				5248E5D82B27F5850052DD20 /* SaveAsDraftorPostViewController.swift */,
-				5248E5DA2B28227F0052DD20 /* UpdateDraftorPostViewController.swift */,
+				524A2DF02B4049AB001E766C /* MemoryViewController */,
+				524A2DF12B4049C0001E766C /* EditMemoryPage */,
+				524A2DF22B404B41001E766C /* popUpView */,
 			);
 			path = MemoryPage;
 			sourceTree = "<group>";
@@ -492,7 +530,9 @@
 			isa = PBXGroup;
 			children = (
 				527941C42B26A49400EE9A9B /* TravelTogether.entitlements */,
-				5245BA742B0E135A006594CC /* Manager */,
+				524A2DEE2B4048C6001E766C /* GoogleMapManager */,
+				5245BA742B0E135A006594CC /* FirestoreManager */,
+				524A2DEF2B404907001E766C /* FirebaseStorageManager */,
 				52783CED2B05DB6F0067A334 /* Model */,
 				52292EFE2B01F3750083399E /* SearchPage */,
 				52292F032B0212CC0083399E /* FavoritePage */,
@@ -1066,7 +1106,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1098,7 +1138,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

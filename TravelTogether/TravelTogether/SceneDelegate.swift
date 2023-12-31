@@ -11,7 +11,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
-    func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+    func scene(_ scene: UIScene, 
+               willConnectTo session: UISceneSession,
+               options connectionOptions: UIScene.ConnectionOptions) {
 
         guard let url = connectionOptions.urlContexts.first?.url else {
                return
@@ -51,9 +53,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             if let tabBarController = window?.rootViewController as? UITabBarController {
                 tabBarController.selectedIndex = 2
                 if tabBarController.selectedIndex < tabBarController.viewControllers?.count ?? 0 {
-                    if let selectedViewController = tabBarController.viewControllers?[tabBarController.selectedIndex] as? UINavigationController {
+                    if let selectedViewController = tabBarController.viewControllers?[tabBarController.selectedIndex] 
+                        as? UINavigationController {
                         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                        if let editVC = storyboard.instantiateViewController(withIdentifier: "EditPlanViewController") as? EditPlanViewController {
+                        if let editVC = storyboard.instantiateViewController(withIdentifier: "EditPlanViewController") 
+                            as? EditPlanViewController {
                             editVC.userId = userId
                             editVC.travelPlanId = planId
                             editVC.url = url.absoluteString

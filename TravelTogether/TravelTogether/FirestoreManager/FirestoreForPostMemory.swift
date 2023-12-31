@@ -13,7 +13,8 @@ class FirestoreManagerMemoryPost {
     
     func postMemory(memory: TravelPlan, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let memoryRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("Memory")
+        let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+        let memoryRef = userRef.collection("Memory")
         let memoryDay = memory.days
         var dayDictionary: [[String: Any]] = []
         
@@ -44,7 +45,8 @@ class FirestoreManagerMemoryPost {
     
     func postMemoryDraft(memory: TravelPlan, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let memoryRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection("MemoryDraft")
+        let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+        let memoryRef = userRef.collection("MemoryDraft")
         let memoryDay = memory.days
         var dayDictionary: [[String: Any]] = []
         
@@ -73,9 +75,11 @@ class FirestoreManagerMemoryPost {
         }
     }
     
-    func updateMemory(dbcollection: String, memory: TravelPlan, memoryId: String, completion: @escaping (Error?) -> Void) {
+    func updateMemory(dbcollection: String, memory: TravelPlan,
+                      memoryId: String, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
-        let memoryRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "").collection(dbcollection).document(memoryId)
+        let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+        let memoryRef = userRef.collection(dbcollection).document(memoryId)
         let memoryDay = memory.days
         var dayDictionary: [[String: Any]] = []
         
