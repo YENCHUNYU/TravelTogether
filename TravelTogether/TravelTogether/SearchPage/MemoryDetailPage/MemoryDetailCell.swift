@@ -20,7 +20,7 @@ class MemoryDetailCell: UITableViewCell {
             articleTextView.font = UIFont.systemFont(ofSize: 16, weight: .light)
             articleTextView.sizeToFit()
             articleTextView.isScrollEnabled = false
-            
+            articleTextView.isEditable = false
         }
     }
     @IBOutlet weak var articleConstraint: NSLayoutConstraint!
