@@ -9,16 +9,12 @@ import UIKit
 import NVActivityIndicatorView
 
 class FavoriteViewController: UIViewController {
-
-    var favoriteIndex = 0
-    
+ 
     @IBOutlet weak var tableView: UITableView!
     var memories: [TravelPlan] = []
     var memoryId = ""
     var userId = ""
-    var plans: [TravelPlan] = []
     var mockImage = UIImage(named: "Image_Placeholder")
-    var planId = ""
     var dbCollection = "FavoriteMemory"
     
     let activityIndicatorView = NVActivityIndicatorView(
@@ -39,12 +35,7 @@ class FavoriteViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(FavoriteHeaderView.self, forHeaderFooterViewReuseIdentifier: "FavoriteHeaderView")
-        let headerView = FavoriteHeaderView(reuseIdentifier: "FavoriteHeaderView")
-        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
-//        tableView.tableHeaderView = headerView
-        headerView.delegate = self
-        headerView.backgroundColor = UIColor(named: "yellowGreen")
+
         let firestoreFetch = FirestoreManagerFavorite()
         firestoreFetch.fetchAllMemories { (travelPlans, error) in
             if let error = error {
@@ -52,16 +43,6 @@ class FavoriteViewController: UIViewController {
             } else {
                 print("Fetched memories: \(travelPlans ?? [])")
                 self.memories = travelPlans ?? []
-                self.tableView.reloadData()
-            }
-        }
-        
-        firestoreFetch.fetchAllPlans { (travelPlans, error) in
-            if let error = error {
-                print("Error fetching memories: \(error)")
-            } else {
-                print("Fetched memories: \(travelPlans ?? [])")
-                self.plans = travelPlans ?? []
                 self.tableView.reloadData()
             }
         }
@@ -79,20 +60,7 @@ class FavoriteViewController: UIViewController {
                 print("Fetched memories: \(travelPlans ?? [])")
                 self.memories = travelPlans ?? []
                 self.tableView.reloadData()
-                if self.memories.isEmpty && self.favoriteIndex == 0 {
-                    self.stopLoading()
-                }
-            }
-        }
-        
-        firestoreFetch.fetchAllPlans { (travelPlans, error) in
-            if let error = error {
-                print("Error fetching memories: \(error)")
-            } else {
-                print("Fetched memories: \(travelPlans ?? [])")
-                self.plans = travelPlans ?? []
-                self.tableView.reloadData()
-                if self.plans.isEmpty && self.favoriteIndex == 1 {
+                if self.memories.isEmpty {
                     self.stopLoading()
                 }
             }
@@ -108,11 +76,7 @@ class FavoriteViewController: UIViewController {
 
 extension FavoriteViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if favoriteIndex == 0 {
-            return memories.count
-        } else {
-            return plans.count
-        }
+        memories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -120,14 +84,13 @@ extension FavoriteViewController: UITableViewDataSource {
             withIdentifier: "FavoriteMemoryCell",
             for: indexPath) as? FavoriteMemoryCell
         else { fatalError("Could not create SearchMemoriesCell") }
-        if favoriteIndex == 0 {
             cell.userNameLabel.text = memories[indexPath.row].user
             cell.userImageView.kf.setImage(
                 with: URL(string: memories[indexPath.row].userPhoto ?? ""),
                 placeholder: UIImage(systemName: "person.circle.fill"))
             cell.memoryNameLabel.text = self.memories[indexPath.row].planName
-            let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
-            let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
+            let start = DateUtils.changeDateFormat("\(self.memories[indexPath.row].startDate)")
+            let end = DateUtils.changeDateFormat("\(self.memories[indexPath.row].endDate)")
             cell.dateLabel.text = "\(start)-\(end)"
             if memories.isEmpty == false {
                 let urlString = memories[indexPath.row].coverPhoto ?? ""
@@ -139,35 +102,13 @@ extension FavoriteViewController: UITableViewDataSource {
                     cell.taskIdentifier = taskIdentifier
                     cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                     cell.memoryNameLabel.text = self.memories[indexPath.row].planName
-                    let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
-                    let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
+                    let start = DateUtils.changeDateFormat("\(self.memories[indexPath.row].startDate)")
+                    let end = DateUtils.changeDateFormat("\(self.memories[indexPath.row].endDate)")
                     cell.dateLabel.text = "\(start)-\(end)"
                     
                 }
             }
             return cell
-        } else {
-            cell.userNameLabel.text = plans[indexPath.row].user
-            cell.memoryNameLabel.text = plans[indexPath.row].planName
-            cell.userImageView.kf.setImage(
-                with: URL(string: plans[indexPath.row].userPhoto ?? ""),
-                placeholder: UIImage(systemName: "person.circle.fill"))
-            let start = self.changeDateFormat(date: "\(self.plans[indexPath.row].startDate)")
-            let end = self.changeDateFormat(date: "\(self.plans[indexPath.row].endDate)")
-            cell.dateLabel.text = "\(start)-\(end)"
-            let daysData = plans[indexPath.row].days
-            if daysData.isEmpty == false {
-                let locationData = daysData[0]
-                let theLocation = locationData.locations
-                if theLocation.isEmpty == false {
-                    let urlString = theLocation[0].photo
-                    if let url = URL(string: urlString) {
-                        downloadImages(cell: cell, indexPath: indexPath, url: url )
-                    }
-                }
-            }
-            stopLoading()
-            return cell}
     }
     
     func downloadImages(cell: FavoriteMemoryCell, indexPath: IndexPath, url: URL ) {
@@ -190,32 +131,9 @@ extension FavoriteViewController: UITableViewDataSource {
         }
     }
     
-    func changeDateFormat(date: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // Set the locale to handle the date format
-
-        if let date = dateFormatter.date(from: date) {
-            let outputFormatter = DateFormatter()
-            outputFormatter.dateFormat = "yyyy年MM月dd日"
-            let formattedString = outputFormatter.string(from: date)
-            return formattedString
-        } else {
-            print("Failed to convert the date string.")
-            return ""
-        }
-
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if favoriteIndex == 0 {
             memoryId = memories[indexPath.row].id
             performSegue(withIdentifier: "FavoriteMemory", sender: self)
-        } else {
-            planId = plans[indexPath.row].id
-            performSegue(withIdentifier: "FavoritePlan", sender: self)
-        }
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -223,12 +141,6 @@ extension FavoriteViewController: UITableViewDataSource {
         if segue.identifier == "FavoriteMemory" {
             if let destinationVC = segue.destination as? MemoryDetailViewController {
                 destinationVC.memoryId = self.memoryId
-                destinationVC.isFromFavorite = true
-            }
-        }
-        if segue.identifier == "FavoritePlan" {
-            if let destinationVC = segue.destination as? PlanDetailViewController {
-                destinationVC.travelPlanId = self.planId
                 destinationVC.isFromFavorite = true
             }
         }
@@ -250,24 +162,6 @@ extension FavoriteViewController: UITableViewDelegate {
         commit editingStyle: UITableViewCell.EditingStyle,
         forRowAt indexPath: IndexPath) {
             if editingStyle == .delete {
-                if favoriteIndex == 1 {
-                    if indexPath.row < plans.count {
-                        let firestoreManager = FirestoreManagerFavorite()
-                        firestoreManager.deleteFavorite(
-                            dbcollection: dbCollection,
-                            withID: plans[indexPath.row].id) { error in
-                            if let error = error {
-                                print("Failed to delete favorite: \(error)")
-                            } else {
-                                print("favorite deleted successfully.")
-                                self.plans.remove(at: indexPath.row)
-                                tableView.deleteRows(at: [indexPath], with: .fade)
-                            }
-                        }
-                    } else {
-                        print("Index out of range. indexPath.row: \(indexPath.row), plans count: \(plans.count)")
-                    }
-                } else {
                     if indexPath.row < memories.count {
                         let firestoreManager = FirestoreManagerFavorite()
                         firestoreManager.deleteFavorite(
@@ -284,29 +178,6 @@ extension FavoriteViewController: UITableViewDelegate {
                     } else {
                         print("Index out of range. indexPath.row: \(indexPath.row), plans count: \(memories.count)")
                     }
-                }
             }
         }
-}
-
-extension FavoriteViewController: FavoriteHeaderViewDelegate {
-    func change(to index: Int) {
-        view.addSubview(blurEffectView)
-       view.addSubview(activityIndicatorView)
-       activityIndicatorView.startAnimating()
-       
-        favoriteIndex = index
-        if favoriteIndex == 0 {
-            dbCollection = "FavoriteMemory"
-        } else {
-            dbCollection = "FavoritePlan"
-        }
-        tableView.reloadData()
-        if plans.isEmpty && favoriteIndex == 1 {
-            stopLoading()
-        }
-        if memories.isEmpty && favoriteIndex == 0 {
-            stopLoading()
-        }
-    }
 }

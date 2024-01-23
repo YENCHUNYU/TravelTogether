@@ -22,30 +22,20 @@ class SelectDateViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
-            super.viewDidLoad()
-            tableView.dataSource = self
-            tableView.delegate = self
-            tableView.register(SelectDateFooterView.self, forHeaderFooterViewReuseIdentifier: "SelectDateFooterView")
-        let firestoreManagerForOne = FirestoreManagerForOne()
-        firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(
-            dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "",
-            byId: planId) { (travelPlan, error) in
-            if let error = error {
-                print("Error fetching one travel plan: \(error)")
-            } else if let travelPlan = travelPlan {
-                print("Fetched one travel plan: \(travelPlan)")
-                self.onePlan = travelPlan
-                self.tableView.reloadData()
-            } else {
-                print("One travel plan not found.")
-            }
-        }
-        }
+        super.viewDidLoad()
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(SelectDateFooterView.self, forHeaderFooterViewReuseIdentifier: "SelectDateFooterView")
+        fetchTheTravelPlan()
+    }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchTheTravelPlan()
+    }
+    
+    func fetchTheTravelPlan() {
         let firestoreManagerForOne = FirestoreManagerForOne()
-        firestoreManagerForOne.delegate = self
         firestoreManagerForOne.fetchOneTravelPlan(
             dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "",
             byId: planId) { (travelPlan, error) in
@@ -60,7 +50,7 @@ class SelectDateViewController: UIViewController {
             }
         }
     }
-    }
+}
 
 extension SelectDateViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -68,27 +58,29 @@ extension SelectDateViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "SelectDateCell", for: indexPath) as? SelectDateCell
-            else { fatalError("Could not create SelectDateCell") }
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "SelectDateCell", for: indexPath) as? SelectDateCell
+        else { fatalError("Could not create SelectDateCell") }
         cell.dateLabel.text = "第\(indexPath.row + 1)天"
-            return cell
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        postLocationToDB(selectedDay: indexPath.row)
+        self.dismiss(animated: true)
+    }
+    
+    func postLocationToDB(selectedDay: Int) {
         let firestorePostLocation = FirestoreManagerForPostLocation()
-        firestorePostLocation.delegate = self
         firestorePostLocation.addLocationToTravelPlan(
             userId: Auth.auth().currentUser?.uid ?? "",
-            planId: planId, location: location, day: indexPath.row) { error in
+            planId: planId, location: location, day: selectedDay) { error in
             if let error = error {
                 print("Error posting location: \(error)")
             } else {
                 print("Location posted successfully! \(self.location)")
             }
         }
-        self.dismiss(animated: true)
     }
 // FOOTER
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -100,31 +92,20 @@ extension SelectDateViewController: UITableViewDataSource {
     }
     
     @objc func createButtonTapped() {
-   let firestoreManagerPostDay = FirestoreManagerForPostDay()
+        postANewDayToDB()
+    }
+    
+    func postANewDayToDB() {
+        let firestoreManagerPostDay = FirestoreManagerForPostDay()
         firestoreManagerPostDay.addDayToTravelPlan(planId: planId) { error in
-            if let error = error {
-                print("Error posting day: \(error)")
-            } else {
-                print("New Day posted successfully!")
-                let firestoreManagerForOne = FirestoreManagerForOne()
-                firestoreManagerForOne.delegate = self
-                firestoreManagerForOne.fetchOneTravelPlan(
-                    dbCollection: "TravelPlan",
-                    userId: Auth.auth().currentUser?.uid ?? "",
-                    byId: self.planId) { (travelPlan, error) in
-                    if let error = error {
-                        print("Error fetching one travel plan: \(error)")
-                    } else if let travelPlan = travelPlan {
-                        print("Fetched one travel plan: \(travelPlan)")
-                        self.onePlan = travelPlan
-                        self.tableView.reloadData()
-                    } else {
-                        print("One travel plan not found.")
-                    }
-                }
-            }
-        }
-        }
+             if let error = error {
+                 print("Error posting day: \(error)")
+             } else {
+                 print("New Day posted successfully!")
+                 self.fetchTheTravelPlan()
+             }
+         }
+    }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         40
@@ -133,17 +114,6 @@ extension SelectDateViewController: UITableViewDataSource {
 
 extension SelectDateViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-           return 50
-    }
-}
-
-extension SelectDateViewController: FirestoreManagerForOneDelegate {
-    func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan) {
-    }
-}
-
-extension SelectDateViewController: FirestoreManagerForPostLocationDelegate {
-    func manager(_ manager: FirestoreManagerForPostLocation, didPost firestoreData: Location) {
-        location = firestoreData
+        50
     }
 }

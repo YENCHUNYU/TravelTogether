@@ -10,6 +10,7 @@ import FirebaseFirestore
 import FirebaseStorage
 import FirebaseAuth
 import NVActivityIndicatorView
+import Kingfisher
 
 class PlanViewController: UIViewController {
     
@@ -80,6 +81,12 @@ class PlanViewController: UIViewController {
                 print("Fetched travel plan: \(travelPlans ?? [])")
                 self.plans = travelPlans ?? []
                 self.tableView.reloadData()
+                if self.plans.isEmpty && self.planIndex == 0 {
+                    self.removeLoadingView()
+                }
+                if self.togetherPlans.isEmpty && self.planIndex == 1 {
+                    self.removeLoadingView()
+                }
             }
         }
     }
@@ -104,12 +111,7 @@ class PlanViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         addLoadingView()
         fetchMyPlan()
-        if self.plans.isEmpty && self.planIndex == 0 {
-            removeLoadingView()
-        }
-        if togetherPlans.isEmpty && planIndex == 1 {
-            removeLoadingView()
-        }
+        
     }
 }
 
@@ -139,8 +141,8 @@ extension PlanViewController: UITableViewDataSource {
       func setUpCell(indexPath: IndexPath, cell: MyPlanCell, plans: [TravelPlan]) -> UITableViewCell {
           cell.planImageView.image = nil
           cell.planNameLabel.text = plans[indexPath.row].planName
-          let start = changeDateFormat(date: "\(plans[indexPath.row].startDate)")
-          let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
+          let start = DateUtils.changeDateFormat("\(plans[indexPath.row].startDate)")
+          let end = DateUtils.changeDateFormat("\(plans[indexPath.row].endDate)")
           cell.planDateLabel.text = "\(start)-\(end)"
           let daysData = plans[indexPath.row].days
           guard daysData.isEmpty == false else {
@@ -160,42 +162,23 @@ extension PlanViewController: UITableViewDataSource {
               removeLoadingView()
               return cell
           }
-          downloadPhoto(url: url, cell: cell, indexPath: indexPath)
+          downloadPhoto(url: url, cell: cell)
           return cell
       }
       
-      func downloadPhoto(url: URL, cell: MyPlanCell, indexPath: IndexPath) {
-          let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-          firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-              DispatchQueue.main.async {
-                  guard let image = image else {
-                      cell.planImageView.image = UIImage(named: "Image_Placeholder")
-                      self.removeLoadingView()
-                      return
-                  }
-                      cell.planImageView.image = image
-                      cell.planNameLabel.text = self.plans[indexPath.row].planName
+      func downloadPhoto(url: URL, cell: MyPlanCell) {
+          cell.planImageView.kf.setImage(
+              with: url,
+              placeholder: UIImage(named: "Image_Placeholder"),
+              options: [
+                  .transition(.fade(0.2)), // Add a fade transition
+                  .cacheOriginalImage
+              ],
+              completionHandler: { _ in
                   self.removeLoadingView()
-             }
-          }
+              }
+          )
       }
-    
-    func changeDateFormat(date: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // Set the locale to handle the date format
-
-        if let date = dateFormatter.date(from: date) {
-            let outputFormatter = DateFormatter()
-            outputFormatter.dateFormat = "yyyy年MM月dd日"
-            let formattedString = outputFormatter.string(from: date)
-            return formattedString
-        } else {
-            print("Failed to convert the date string.")
-            return ""
-        }
-
-    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if planIndex == 0 {

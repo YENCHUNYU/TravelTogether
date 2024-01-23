@@ -18,13 +18,6 @@ class EditPlanCell: UITableViewCell {
     }
     @IBOutlet weak var placeNameLabel: UILabel!
     @IBOutlet weak var placeAddressLabel: UILabel!
-    
-//    @IBOutlet weak var userLabel: UILabel! {
-//        didSet {
-//            userLabel.layer.cornerRadius = 10
-//        }
-//    }
-    
     @IBOutlet weak var locationImageView: UIImageView! {
         didSet {
             locationImageView.layer.cornerRadius = 15

@@ -136,8 +136,8 @@ extension MemoryViewController: UITableViewDataSource {
         if memoryIndex == 0 {
             
             cell.memoryNameLabel.text = self.memories[indexPath.row].planName
-            let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
-            let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
+            let start = DateUtils.changeDateFormat("\(self.memories[indexPath.row].startDate)")
+            let end = DateUtils.changeDateFormat("\(self.memories[indexPath.row].endDate)")
             cell.memoryDateLabel.text = "\(start)-\(end)"
             cell.memoryImageView.image = nil
                 let urlString = memories[indexPath.row].coverPhoto ?? ""
@@ -154,8 +154,8 @@ extension MemoryViewController: UITableViewDataSource {
             return cell
         } else {
             cell.memoryNameLabel.text = memoryDrafts[indexPath.row].planName
-            let start = self.changeDateFormat(date: "\(self.memoryDrafts[indexPath.row].startDate)")
-            let end = self.changeDateFormat(date: "\(self.memoryDrafts[indexPath.row].endDate)")
+            let start = DateUtils.changeDateFormat("\(self.memoryDrafts[indexPath.row].startDate)")
+            let end = DateUtils.changeDateFormat("\(self.memoryDrafts[indexPath.row].endDate)")
             cell.memoryDateLabel.text = "\(start)-\(end)"
             let daysData = memoryDrafts[indexPath.row].days
             if daysData.isEmpty == false {
@@ -189,24 +189,7 @@ extension MemoryViewController: UITableViewDataSource {
                 self.blurEffectView.removeFromSuperview()
                 self.activityIndicatorView.removeFromSuperview()
             }}}
-    
-    func changeDateFormat(date: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // Set the locale to handle the date format
-
-        if let date = dateFormatter.date(from: date) {
-            let outputFormatter = DateFormatter()
-            outputFormatter.dateFormat = "yyyy年MM月dd日"
-            let formattedString = outputFormatter.string(from: date)
-            return formattedString
-        } else {
-            print("Failed to convert the date string.")
-            return ""
-        }
-
-    }
-    
+   
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "editMemory" {
             if let destinationVC = segue.destination as? SelectedMemoryEditViewController {

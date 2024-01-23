@@ -451,7 +451,6 @@
                         <outlet property="tableView" destination="90f-qU-w3K" id="WN6-P5-IJZ"/>
                         <segue destination="reE-pd-wnM" kind="show" identifier="goToMapFromSearch" id="YPG-wh-Qv6"/>
                         <segue destination="QZi-MT-SaE" kind="show" identifier="MemoryDetail" id="VQK-Ip-Ga7"/>
-                        <segue destination="Rfc-QS-3Zr" kind="show" identifier="PlanDetail" id="uKr-hy-xv3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s4O-a4-Rwa" sceneMemberID="firstResponder"/>
@@ -1079,7 +1078,6 @@
                     <connections>
                         <outlet property="tableView" destination="aFs-Gh-Pcp" id="SM7-Y7-2wt"/>
                         <segue destination="QZi-MT-SaE" kind="show" identifier="FavoriteMemory" id="Kbo-8L-0cW"/>
-                        <segue destination="Rfc-QS-3Zr" kind="show" identifier="FavoritePlan" id="hTW-xY-giV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ut5-Sa-9zE" sceneMemberID="firstResponder"/>
@@ -2363,7 +2361,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="erd-b4-MYr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3026" y="1953"/>
+            <point key="canvasLocation" x="2081" y="1953"/>
         </scene>
         <!--Update Draftor Post View Controller-->
         <scene sceneID="tqp-D6-RUq">
@@ -2441,7 +2439,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="uKr-hy-xv3"/>
         <segue reference="VQK-Ip-Ga7"/>
         <segue reference="aTg-C3-CtN"/>
         <segue reference="HNF-ZE-dku"/>

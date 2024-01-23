@@ -69,23 +69,24 @@ class MapViewController: UIViewController {
 // MARK: - Lifecycle
 extension MapViewController {
     
-  override func viewDidLoad() {
-    super.viewDidLoad()
+    override func viewDidLoad() {
+        super.viewDidLoad()
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
-
-      searchVC.searchResultsUpdater = self
-      navigationItem.searchController = searchVC
-      
-      mapView.addSubview(mapInfoView)
-      mapInfoView.addSubview(placeImageView)
-      mapInfoView.addSubview(addToPlanButton)
-      mapInfoView.addSubview(placeNameLabel)
-      mapInfoView.addSubview(addressLabel)
-      setUpUI()
-      mapInfoView.isHidden = true
+        searchVC.searchResultsUpdater = self
+        navigationItem.searchController = searchVC
+        configureViews()
+    }
     
-  }
+    func configureViews() {
+        mapView.addSubview(mapInfoView)
+        mapInfoView.addSubview(placeImageView)
+        mapInfoView.addSubview(addToPlanButton)
+        mapInfoView.addSubview(placeNameLabel)
+        mapInfoView.addSubview(addressLabel)
+        setUpUI()
+        mapInfoView.isHidden = true
+    }
     
     func setUpUI() {
         mapInfoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
@@ -113,49 +114,45 @@ extension MapViewController {
         addressLabel.trailingAnchor.constraint(
             lessThanOrEqualTo: mapInfoView.trailingAnchor, constant: -15).isActive = true
         addressLabel.topAnchor.constraint(equalTo: placeNameLabel.bottomAnchor, constant: 10).isActive = true
-        
     }
 }
 
 // MARK: - CLLocationManagerDelegate
 extension MapViewController: CLLocationManagerDelegate {
 
-  func locationManager(
-    _ manager: CLLocationManager,
-    didChangeAuthorization status: CLAuthorizationStatus
-  ) {
+    func locationManager(
+        _ manager: CLLocationManager,
+        didChangeAuthorization status: CLAuthorizationStatus
+    ) {
+        guard status == .authorizedWhenInUse else {
+            return
+        }
+        locationManager.requestLocation()
+        mapView.isMyLocationEnabled = true
+        mapView.settings.myLocationButton = true
+  }
 
-    guard status == .authorizedWhenInUse else {
-      return
+    func locationManager(
+        _ manager: CLLocationManager,
+        didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.first else {
+            return
+        }
+
+        mapView.camera = GMSCameraPosition(
+          target: location.coordinate,
+          zoom: 15,
+          bearing: 0,
+          viewingAngle: 0)
+        mapView.isUserInteractionEnabled = true
+  }
+
+    func locationManager(
+        _ manager: CLLocationManager,
+        didFailWithError error: Error
+    ) {
+        print(error)
     }
-
-    locationManager.requestLocation()
-    mapView.isMyLocationEnabled = true
-    mapView.settings.myLocationButton = true
-  }
-
-  func locationManager(
-    _ manager: CLLocationManager,
-    didUpdateLocations locations: [CLLocation]) {
-    guard let location = locations.first else {
-      return
-    }
-
-    mapView.camera = GMSCameraPosition(
-      target: location.coordinate,
-      zoom: 15,
-      bearing: 0,
-      viewingAngle: 0)
-    mapView.isUserInteractionEnabled = true
-
-  }
-
-  func locationManager(
-    _ manager: CLLocationManager,
-    didFailWithError error: Error
-  ) {
-    print(error)
-  }
 }
 
 extension MapViewController: UISearchResultsUpdating {
@@ -165,7 +162,6 @@ extension MapViewController: UISearchResultsUpdating {
               let resultsVC = searchController.searchResultsController as? MapsListViewController else {
             return
         }
-        
         resultsVC.delegate = self
         
         GooglePlacesManager.shared.findPlaces(query: query) { result in
@@ -179,7 +175,6 @@ extension MapViewController: UISearchResultsUpdating {
             case .failure(let error):
                 print(error)
             }
-            
         }
     }
 }
@@ -188,22 +183,36 @@ extension MapViewController: MapListViewControllerDelegate {
     func didTapPlace(with coordinates: CLLocationCoordinate2D, indexPath: IndexPath) {
         mapInfoView.isHidden = false
         searchVC.searchBar.resignFirstResponder()
-        mapView.clear()
-        let searchText = searchVC.searchBar.text
-        searchVC.isActive = false
+        addMarkerToMapAndLocate(at: coordinates)
+        restoreSearchBarText()
+        updatePlaceInfoLabels(for: indexPath)
+        fetchAndDisplayMapPhoto(for: placesData[indexPath.row].identifier)
+    }
+
+    private func addMarkerToMapAndLocate(at coordinates: CLLocationCoordinate2D) {
         let marker = GMSMarker()
         marker.position = coordinates
         marker.map = mapView
-        
         let camera = GMSCameraPosition.camera(withTarget: coordinates, zoom: 15.0)
         mapView.animate(to: camera)
+    }
+
+    private func restoreSearchBarText() {
+        let searchText = searchVC.searchBar.text
+        searchVC.isActive = false
         searchVC.searchBar.text = searchText
+    }
+
+    private func updatePlaceInfoLabels(for indexPath: IndexPath) {
         placeNameLabel.text = placesData[indexPath.row].name
         addressLabel.text = placesData[indexPath.row].address
-        GooglePlacesManager.shared.fetchMapPhoto(for: placesData[indexPath.row].identifier) { result in
+    }
+
+    private func fetchAndDisplayMapPhoto(for identifier: String) {
+        GooglePlacesManager.shared.fetchMapPhoto(for: identifier) { result in
             switch result {
             case .success(let photo):
-                print("fetching photo")
+                print("Fetching photo")
                 self.placeImageView.image = photo
             case .failure(let error):
                 print(error)
@@ -215,27 +224,11 @@ extension MapViewController: MapListViewControllerDelegate {
 extension MapViewController {
     @objc func addToPlanButtonTapped(sender: UIButton) {
         if isFromSearch {
-            let firebaseStorageManager = FirebaseStorageManagerUploadPhotos()
-            firebaseStorageManager.delegate = self
-            firebaseStorageManager.uploadPhotoToFirebaseStorage(
-                image: self.placeImageView.image ?? UIImage()) { uploadResult in
-                        switch uploadResult {
-                        case .success(let downloadURL):
-                            print("Upload to Firebase Storage successful. Download URL: \(downloadURL)")
-                            self.spotsPhotoUrl = downloadURL.absoluteString
-                            self.performSegue(withIdentifier: "goToPlanList", sender: sender)
-                        case .failure(let error):
-                            print("Error uploading to Firebase Storage: \(error.localizedDescription)")
-                        }
-                    }
-            
-        } else {
+            uploadPhoto(sender: sender)
+        } else { // fromEditPlan
             
             let firestoreManagerPostLocation = FirestoreManagerForPostLocation()
-            firestoreManagerPostLocation.delegate = self
-            
             let firebaseStorageManager = FirebaseStorageManagerUploadPhotos()
-            firebaseStorageManager.delegate = self
             firebaseStorageManager.uploadPhotoToFirebaseStorage(
                 image: self.placeImageView.image ?? UIImage()) { uploadResult in
                 switch uploadResult {
@@ -266,6 +259,21 @@ extension MapViewController {
             }
         }
     }
+    
+    func uploadPhoto(sender: UIButton) {
+        let firebaseStorageManager = FirebaseStorageManagerUploadPhotos()
+        firebaseStorageManager.uploadPhotoToFirebaseStorage(
+            image: self.placeImageView.image ?? UIImage()) { uploadResult in
+                switch uploadResult {
+                case .success(let downloadURL):
+                    print("Upload to Firebase Storage successful. Download URL: \(downloadURL)")
+                    self.spotsPhotoUrl = downloadURL.absoluteString
+                    self.performSegue(withIdentifier: "goToPlanList", sender: sender)
+                case .failure(let error):
+                    print("Error uploading to Firebase Storage: \(error.localizedDescription)")
+                }
+            }
+    }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToPlanList" {
@@ -279,15 +287,5 @@ extension MapViewController {
                 address: "\(String(describing: self.addressLabel.text ?? ""))")
             print("location!!!!\(destinationVC.location)")
             }
-    }
-}
-
-extension MapViewController: FirebaseStorageManagerUploadDelegate {
-    func manager(_ manager: FirebaseStorageManagerUploadPhotos) {
-    }
-}
-
-extension MapViewController: FirestoreManagerForPostLocationDelegate {
-    func manager(_ manager: FirestoreManagerForPostLocation, didPost firestoreData: Location) {
     }
 }

@@ -40,7 +40,6 @@ class EditMemoryViewController: UIViewController {
         tableView.tableHeaderView = headerView
         tableView.separatorStyle = .none
         
-        tableView.dragInteractionEnabled = true
         
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self

@@ -12,6 +12,7 @@ import UniformTypeIdentifiers
 import FirebaseAuth
 import NVActivityIndicatorView
 import SwiftEntryKit
+import Kingfisher
 
 class EditPlanViewController: UIViewController {
     
@@ -38,7 +39,7 @@ class EditPlanViewController: UIViewController {
     var userId: String = ""
     var travelPlanId: String = ""
     var url = ""
-
+    var fetchedImageCounts = 0
         func setProperties(userId: String, planId: String, completion: @escaping () -> Void) {
             self.userId = userId
             self.travelPlanId = planId
@@ -134,6 +135,23 @@ class EditPlanViewController: UIViewController {
         self.activityIndicatorView.removeFromSuperview()
     }
     
+    func checkAndRemoveLoading() {
+        guard onePlan.days.first?.locations.count ?? 0 > 0 else {
+            return
+        }
+        if onePlan.days.count > 1 {
+            if fetchedImageCounts >= onePlan.days.first?.locations.count ?? 0 + onePlan.days[1].locations.count {
+                stopLoading()
+                fetchedImageCounts = 0
+            }
+        } else {
+            if fetchedImageCounts >= onePlan.days.first?.locations.count ?? 0 {
+                stopLoading()
+                fetchedImageCounts = 0
+            }
+        }
+    }
+    
     func fetchTravelPlan() {
         let firestoreManagerForOne = FirestoreManagerForOne()
         firestoreManagerForOne.delegate = self
@@ -193,7 +211,6 @@ class EditPlanViewController: UIViewController {
                 self.onePlan = travelPlan
                 self.tableView.reloadData()
                 let allDaysHaveNoLocations = self.onePlan.days.allSatisfy { $0.locations.isEmpty }
-
                     if allDaysHaveNoLocations {
                         self.stopLoading()
                     }
@@ -236,20 +253,26 @@ extension EditPlanViewController: UITableViewDataSource {
         let urlString = location.photo
         cell.currentImageURL = urlString
         if !urlString.isEmpty, let url = URL(string: urlString) {
-            firestorage.downloadPhotoFromFirebaseStorage(url: url) { image in
-                DispatchQueue.main.async {
-                    if cell.currentImageURL == urlString {
-                        if let image = image {
-                            cell.locationImageView.image = image
-                        } else {
-                            cell.locationImageView.image = UIImage(named: "Image_Placeholder")
-                        }
-                    }
-                }
-                self.stopLoading()
-            }
-        } else { stopLoading() }
+            downloadImages(url: url, cell: cell)
+        } else { 
+            stopLoading()
+        }
         return cell }
+    
+    func downloadImages(url: URL, cell: EditPlanCell) {
+        cell.locationImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "Image_Placeholder"),
+            options: [
+                .transition(.fade(0.2)), 
+                .cacheOriginalImage
+            ],
+            completionHandler: { _ in
+                self.fetchedImageCounts += 1
+                self.checkAndRemoveLoading()
+            }
+        )
+    }
 
 // FOOTER
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {

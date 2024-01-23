@@ -10,35 +10,28 @@ import FirebaseFirestore
 import FirebaseAuth
 
 class AddToPlanListViewController: UIViewController {
-
+    
     var plans: [TravelPlan] = []
     var location = Location(name: "", photo: "", address: "")
     var planId = ""
-
+    
     @IBOutlet weak var tableView: UITableView!
-        
-        override func viewDidLoad() {
-            super.viewDidLoad()
-            tableView.dataSource = self
-            tableView.delegate = self
-            tableView.register(AddToListFooterView.self, forHeaderFooterViewReuseIdentifier: "AddToListFooterView")
-           
-            let firestoreManager = FirestoreManager()
-            firestoreManager.delegate = self
-            firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
-                if let error = error {
-                    print("Error fetching travel plans: \(error)")
-                } else {
-                    print("Fetched travel plans: \(travelPlans ?? [])")
-                    self.plans = travelPlans ?? []
-                    self.tableView.reloadData()
-                }
-            }          
-        }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(AddToListFooterView.self, forHeaderFooterViewReuseIdentifier: "AddToListFooterView")
+        fetchTravelPlans()
+    }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchTravelPlans()
+    }
+    
+    func fetchTravelPlans() {
         let firestoreManager = FirestoreManager()
-        firestoreManager.delegate = self
         firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
             if let error = error {
                 print("Error fetching travel plans: \(error)")
@@ -49,7 +42,7 @@ class AddToPlanListViewController: UIViewController {
             }
         }
     }
-    }
+}
 
 extension AddToPlanListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -57,31 +50,14 @@ extension AddToPlanListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "AddToListCell", for: indexPath) as? AddToListCell
-            else { fatalError("Could not create AddToListCell") }
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "AddToListCell", for: indexPath) as? AddToListCell
+        else { fatalError("Could not create AddToListCell") }
         cell.planTitleLabel.text = plans[indexPath.row].planName
-        let start = changeDateFormat(date: "\(plans[indexPath.row].startDate)")
-        let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
+        let start = DateUtils.changeDateFormat("\(plans[indexPath.row].startDate)")
+        let end = DateUtils.changeDateFormat("\(plans[indexPath.row].endDate)")
         cell.dateLabel.text = "\(start)-\(end)"
-            return cell
-    }
-    
-    func changeDateFormat(date: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        if let date = dateFormatter.date(from: date) {
-            let outputFormatter = DateFormatter()
-            outputFormatter.dateFormat = "yyyy年MM月dd日"
-            let formattedString = outputFormatter.string(from: date)
-            return formattedString
-        } else {
-            print("Failed to convert the date string.")
-            return ""
-        }
-
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -108,8 +84,8 @@ extension AddToPlanListViewController: UITableViewDataSource {
     }
     
     @objc func createButtonTapped() {
-    performSegue(withIdentifier: "goToCreate", sender: self)
-        }
+        performSegue(withIdentifier: "goToCreate", sender: self)
+    }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         40
@@ -118,18 +94,6 @@ extension AddToPlanListViewController: UITableViewDataSource {
 
 extension AddToPlanListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-           return 60
-    }
-}
-
-extension AddToPlanListViewController: FirestoreManagerDelegate {
-    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan]) {
-        plans = firestoreData
-    }
-}
-
-extension AddToPlanListViewController: FirestoreManagerForPostLocationDelegate {
-    func manager(_ manager: FirestoreManagerForPostLocation, didPost firestoreData: Location) {
-        location = firestoreData
+        60
     }
 }

@@ -54,8 +54,7 @@ class SelectedMemoryEditViewController: UIViewController {
         
         tableView.tableHeaderView = headerView
         tableView.separatorStyle = .none
-        
-        tableView.dragInteractionEnabled = true
+      
         
         let firestoreManagerForOne = FirestoreManagerFetchMemory()
         firestoreManagerForOne.fetchOneMemory(dbcollection: dbCollection, byId: memoryId) { (memory, error) in
@@ -169,18 +168,26 @@ class SelectedMemoryEditViewController: UIViewController {
             }
         }
        }
-        
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    
+    func addLoadingView() {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
+    }
+    
+    func removeLoadingView() {
+        self.activityIndicatorView.stopAnimating()
+        self.blurEffectView.removeFromSuperview()
+        self.activityIndicatorView.removeFromSuperview()
+    }
+        
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addLoadingView()
         let allLocationsHaveNoMemeoryPhotos = onePlan.days.allSatisfy { $0.locations.allSatisfy { $0.memoryPhotos?.isEmpty == true } }
 
             if allLocationsHaveNoMemeoryPhotos {
-                self.activityIndicatorView.stopAnimating()
-                self.blurEffectView.removeFromSuperview()
-                self.activityIndicatorView.removeFromSuperview()
+                removeLoadingView()
             }
         
         let firestoreManagerForOne = FirestoreManagerFetchMemory()
@@ -343,9 +350,7 @@ extension SelectedMemoryEditViewController: UICollectionViewDataSource,
                            } else {
                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
                            }
-                           self.activityIndicatorView.stopAnimating()
-                           self.blurEffectView.removeFromSuperview()
-                           self.activityIndicatorView.removeFromSuperview()
+                           self.removeLoadingView()
                        }
            }}
            return cell

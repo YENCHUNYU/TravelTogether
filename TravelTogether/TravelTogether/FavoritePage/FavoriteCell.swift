@@ -13,6 +13,7 @@ class FavoriteMemoryCell: UITableViewCell {
         didSet {
             userImageView.backgroundColor = .lightGray.withAlphaComponent(0.1)
             userImageView.layer.cornerRadius = 25
+            userImageView.contentMode = .scaleToFill
         }
     }
     @IBOutlet weak var userNameLabel: UILabel!

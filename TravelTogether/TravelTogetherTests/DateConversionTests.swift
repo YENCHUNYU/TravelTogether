@@ -17,8 +17,7 @@ class DateConversionTests: XCTestCase {
         let expectedOutput = "2023年01月01日"
 
         // Act
-        let planViewController = PlanViewController()
-        let result = planViewController.changeDateFormat(date: inputDate)
+        let result = DateUtils.changeDateFormat(inputDate)
 
         // Assert
         XCTAssertEqual(result, expectedOutput, "Date conversion should be correct")
@@ -29,8 +28,7 @@ class DateConversionTests: XCTestCase {
         let invalidDate = "InvalidDate"
 
         // Act
-        let planViewController = PlanViewController()
-        let result = planViewController.changeDateFormat(date: invalidDate)
+        let result = DateUtils.changeDateFormat(invalidDate)
 
         // Assert
         XCTAssertEqual(result, "", "Invalid date should result in an empty string")

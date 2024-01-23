@@ -18,15 +18,14 @@ class SearchViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
-    var searchIndex = 0
     var plans: [TravelPlan] = []
     var mockImage = UIImage(named: "Image_Placeholder")
     var spotsData: [[String: Any]] = []
     var memories: [TravelPlan] = []
     var memoryId = ""
     var userId = ""
-    var planId = ""
-    var loadingCounter = 0
+    var completedImageFetches: Int = 0
+    
     lazy var searchButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -38,13 +37,13 @@ class SearchViewController: UIViewController {
         button.widthAnchor.constraint(equalToConstant: 50).isActive = true
         button.addTarget(self, action: #selector(searchLocation), for: .touchUpInside)
         button.imageView?.contentMode = .scaleAspectFill
-       
         return button
     }()
     
     @objc func searchLocation() {
         performSegue(withIdentifier: "goToMapFromSearch", sender: self)
     }
+    
     let activityIndicatorView = NVActivityIndicatorView(
         frame: CGRect(
             x: UIScreen.main.bounds.width / 2 - 25,
@@ -55,24 +54,14 @@ class SearchViewController: UIViewController {
               padding: 0
           )
     var blurEffectView: UIVisualEffectView!
-    let headerView = SearchHeaderView(reuseIdentifier: "SearchHeaderView")
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let blurEffect = UIBlurEffect(style: .light)
-        blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = view.bounds
-        tableView.separatorStyle = .none
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: "SearchHeaderView")
-        
-        setUpHeaderView()
-//        tableView.tableHeaderView = headerView
+        configureBlurEffectView()
+        configureTableView()
         view.addSubview(searchButton)
-        setUpButton()
+        configureButton()
         self.tabBarController?.delegate = self
-        fetchPlans()
         fetchMemories()
         LoginViewController.loginStatus = setUpLoginStatus()
     }
@@ -85,23 +74,16 @@ class SearchViewController: UIViewController {
         }
     }
     
-    func setUpHeaderView() {
-        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
-        headerView.delegate = self
-        headerView.backgroundColor = UIColor(named: "yellowGreen")
+    func configureBlurEffectView() {
+        let blurEffect = UIBlurEffect(style: .light)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
     }
-    
-    func fetchPlans() {
-        let firestoreManager = FirestoreManager()
-        firestoreManager.fetchTravelPlans(userId: nil) { (travelPlans, error) in
-            if let error = error {
-                print("Error fetching travel plans: \(error)")
-            } else {
-                print("Fetched travel plans: \(travelPlans ?? [])")
-                self.plans = travelPlans ?? []
-                self.tableView.reloadData()
-            }
-        }
+
+    func configureTableView() {
+        tableView.separatorStyle = .none
+        tableView.dataSource = self
+        tableView.delegate = self
     }
     
     func fetchMemories() {
@@ -113,11 +95,14 @@ class SearchViewController: UIViewController {
                 print("Fetched memories: \(travelPlans ?? [])")
                 self.memories = travelPlans ?? []
                 self.tableView.reloadData()
+                if self.memories.isEmpty {
+                    self.removeLoadingView()
+                }
             }
         }
     }
  
-    func setUpButton() {
+    func configureButton() {
         searchButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
         searchButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30).isActive = true
     }
@@ -139,16 +124,11 @@ class SearchViewController: UIViewController {
                 destinationVC.userId = self.userId
                 print("userid@\(destinationVC.userId)")
             }
-        case "PlanDetail":
-            if let destinationVC = segue.destination as? PlanDetailViewController {
-                destinationVC.travelPlanId = self.planId
-                destinationVC.userId = self.userId
-                print("self.planid userid\(self.planId)&\(self.userId)")
-            }
         default:
             break
         }
     }
+    
     func addLoadingView() {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
@@ -162,21 +142,15 @@ class SearchViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         addLoadingView()
-        fetchPlans()
-        if self.plans.isEmpty && self.searchIndex == 1 {
-            removeLoadingView()
-        }
         fetchMemories()
-        if self.memories.isEmpty && self.searchIndex == 0 {
-            removeLoadingView()
-        }
     }
 }
 
 extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchIndex == 0 ? memories.count: plans.count
+        memories.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -184,11 +158,8 @@ extension SearchViewController: UITableViewDataSource {
             withIdentifier: "SearchMemoriesCell",
             for: indexPath) as? SearchMemoriesCell
         else { fatalError("Could not create SearchMemoriesCell") }
-        if searchIndex == 0 {
-            return setUpCellForMemories(indexPath: indexPath, cell: cell, plans: memories)
-        } else {
-            return setUpCellForPlans(indexPath: indexPath, cell: cell, plans: plans)
-        }
+            return setUpCellForMemories(
+                indexPath: indexPath, cell: cell, plans: memories)
     }
     
     func setUpCellForMemories(indexPath: IndexPath, cell: SearchMemoriesCell, plans: [TravelPlan]) -> UITableViewCell {
@@ -200,150 +171,49 @@ extension SearchViewController: UITableViewDataSource {
             placeholder: UIImage(systemName: "person.circle.fill"))
         cell.memoryNameLabel.text = memories[indexPath.row].planName
         cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-        let start = self.changeDateFormat(date: "\(self.memories[indexPath.row].startDate)")
-        let end = self.changeDateFormat(date: "\(self.memories[indexPath.row].endDate)")
+        let start = DateUtils.changeDateFormat("\(self.memories[indexPath.row].startDate)")
+        let end = DateUtils.changeDateFormat("\(self.memories[indexPath.row].endDate)")
         cell.dateLabel.text = "\(start)-\(end)"
-        setUpImagesForMemories(indexPath: indexPath, cell: cell)
+        loadMemoryImage(indexPath: indexPath, cell: cell)
         return cell
     }
-    func setUpImagesForMemories(indexPath: IndexPath, cell: SearchMemoriesCell) {
-        guard memories.isEmpty == false else {
-            cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+
+    func loadMemoryImage(indexPath: IndexPath, cell: SearchMemoriesCell) {
+        guard !memories.isEmpty else {
             removeLoadingView()
             return
         }
+
         let urlString = memories[indexPath.row].coverPhoto ?? ""
+
         guard !urlString.isEmpty, let url = URL(string: urlString) else {
-            cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
             removeLoadingView()
             return
         }
-        downloadImageFromFirestorage(url: url, cell: cell, indexPath: indexPath)
-    }
-    
-    func setUpCellForPlans(indexPath: IndexPath, cell: SearchMemoriesCell, plans: [TravelPlan]) -> UITableViewCell {
-        cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-        cell.userNameLabel.text = plans[indexPath.row].user
-        cell.userImageView.kf.setImage(
-            with: URL(string: plans[indexPath.row].userPhoto ?? ""),
-            placeholder: UIImage(systemName: "person.circle.fill"))
-        cell.memoryNameLabel.text = plans[indexPath.row].planName
-        let start = self.changeDateFormat(date: "\(self.plans[indexPath.row].startDate)")
-        let end = self.changeDateFormat(date: "\(self.plans[indexPath.row].endDate)")
-        cell.dateLabel.text = "\(start)-\(end)"
-        setUpImageForPlans(indexPath: indexPath, cell: cell)
-        return cell
-    }
-    
-    func setUpImageForPlans(indexPath: IndexPath, cell: SearchMemoriesCell) {
-        let daysData = plans[indexPath.row].days
-        guard daysData.isEmpty == false else {
-            cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-            removeLoadingView()
-            return
-        }
-        let locationData = daysData[0]
-        let theLocation = locationData.locations
-        guard theLocation.isEmpty == false else {
-            cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-            removeLoadingView()
-            return
-        }
-        let urlString = theLocation[0].photo
-        guard let url = URL(string: urlString) else {
-            cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-            removeLoadingView()
-            return
-        }
-        downloadImageFromFirestorage(url: url, cell: cell, indexPath: indexPath)
-        removeLoadingView()
-    }
-    
-    func downloadImageFromFirestorage(url: URL, cell: SearchMemoriesCell, indexPath: IndexPath) {
-        cell.memoryImageView.image = nil
-        let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-        let taskIdentifier = UUID().uuidString
-        cell.taskIdentifier = taskIdentifier
-        firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-            DispatchQueue.main.async {
-                guard cell.taskIdentifier == taskIdentifier else {
-                    return
-                }
-                if let image = image {
-                    cell.memoryImageView.image = image
-                } else {
-                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                }
+
+        cell.memoryImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "Image_Placeholder"),
+            options: [
+                .transition(.fade(0.2)), // Add a fade transition
+                .cacheOriginalImage
+            ],
+            completionHandler: { _ in
                 self.removeLoadingView()
             }
-        }
+        )
     }
     
-    func changeDateFormat(date: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-
-        if let date = dateFormatter.date(from: date) {
-            let outputFormatter = DateFormatter()
-            outputFormatter.dateFormat = "yyyy年MM月dd日"
-            let formattedString = outputFormatter.string(from: date)
-            return formattedString
-        } else {
-            print("Failed to convert the date string.")
-            return ""
-        }
-
-    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if searchIndex == 0 {
             memoryId = memories[indexPath.row].id
             userId = memories[indexPath.row].userId ?? ""
             performSegue(withIdentifier: "MemoryDetail", sender: self)
-        } else {
-            planId = plans[indexPath.row].id
-            print("planId\(planId)")
-            userId = plans[indexPath.row].userId ?? ""
-            performSegue(withIdentifier: "PlanDetail", sender: self)
-        }
     }
 }
 
 extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
           330
-    }
-}
-
-extension SearchViewController: SearchHeaderViewDelegate {
-    func change(to index: Int) {
-        searchIndex = index
-        addLoadingView()
-        tableView.reloadData()
-        if plans.isEmpty && searchIndex == 1 {
-            removeLoadingView()
-        } else if memories.isEmpty && searchIndex == 0 {
-            removeLoadingView()
-        }
-    }
-}
-
-extension SearchViewController {
-   
-    func downloadPhotoFromFirebaseStorage(url: URL, completion: @escaping (UIImage?) -> Void) {
-        let storageReference = Storage.storage().reference(forURL: url.absoluteString)
-
-        storageReference.getData(maxSize: 1 * 1024 * 1024) { data, error in
-            if let error = error {
-                print("Error downloading photo from Firebase Storage: \(error.localizedDescription)")
-                completion(nil)
-            } else if let data = data, let image = UIImage(data: data) {
-                completion(image)
-            } else {
-                print("Failed to create UIImage from data.")
-                completion(nil)
-            }
-        }
     }
 }
 

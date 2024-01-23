@@ -10,6 +10,7 @@ import FirebaseFirestore
 import FirebaseAuth
 import SwiftEntryKit
 import NVActivityIndicatorView
+import Kingfisher
 
 class MemoryDetailViewController: UIViewController {
 
@@ -30,7 +31,6 @@ class MemoryDetailViewController: UIViewController {
     var isFromFavorite = false
     var isFromProfile = false
     var dbCollection = ""
-
     private var itemsPerRow: CGFloat = 2
     private var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     
@@ -145,13 +145,10 @@ class MemoryDetailViewController: UIViewController {
         tableView.delegate = self
 
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 50)
-//        headerView.delegate = self
         headerView.travelPlanId = travelPlanId
         
         tableView.tableHeaderView = headerView
         tableView.separatorStyle = .none
-        
-        tableView.dragInteractionEnabled = true
         
         if isFromFavorite == false && isFromProfile == false {
             fetchMemoryFromSearch()
@@ -207,13 +204,19 @@ class MemoryDetailViewController: UIViewController {
                 self.headerView.onePlan = self.onePlan
                 self.headerView.collectionView.reloadData()
                 self.tableView.reloadData()
+                let allLocationsHaveNoMemeoryPhotos = self.onePlan.days.allSatisfy {
+                    $0.locations.allSatisfy { $0.memoryPhotos?.isEmpty == true
+                    }
+                }
+                    if allLocationsHaveNoMemeoryPhotos {
+                        self.removeLoadingView()
+                    }
+                
             } else {
                 print("One travel plan not found.")
             }
         }
     }
-    
-    
     
     func swiftEntryKit(titleText: String, descriptText: String, imageString: String) {
         var attributes = EKAttributes.topFloat
@@ -251,23 +254,27 @@ class MemoryDetailViewController: UIViewController {
         likeButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
         likeButton.trailingAnchor.constraint(equalTo: copyButton.leadingAnchor, constant: -10).isActive = true
     }
- 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    
+    func addLoadingView() {
         view.addSubview(blurEffectView)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
+    }
+    
+    func removeLoadingView() {
+        self.activityIndicatorView.stopAnimating()
+        self.blurEffectView.removeFromSuperview()
+        self.activityIndicatorView.removeFromSuperview()
+    }
+ 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        addLoadingView()
         
         if isFromFavorite == false && isFromProfile == false {
             // from search
             fetchMemoryFromSearch()
-            let allLocationsHaveNoMemeoryPhotos = self.onePlan.days.allSatisfy { $0.locations.allSatisfy { $0.memoryPhotos?.isEmpty == true } }
-
-                if allLocationsHaveNoMemeoryPhotos {
-                    self.activityIndicatorView.stopAnimating()
-                    self.blurEffectView.removeFromSuperview()
-                    self.activityIndicatorView.removeFromSuperview()
-                }
+           
         } else {
                 // from favorite or profile
                 dbCollection = isFromFavorite ? "FavoriteMemory" : "Memory"
@@ -292,16 +299,17 @@ class MemoryDetailViewController: UIViewController {
                         self.headerView.onePlan = self.onePlan
                         self.headerView.collectionView.reloadData()
                         self.tableView.reloadData()
+                        let allLocationsHaveNoMemeoryPhotos = self.onePlan.days.allSatisfy {
+                            $0.locations.allSatisfy {
+                                $0.memoryPhotos?.isEmpty == true
+                            }
+                        }
+                        if allLocationsHaveNoMemeoryPhotos {
+                            self.removeLoadingView()
+                        }
                     } else {
                         print("One travel plan not found.")
                     }
-                    let allLocationsHaveNoMemeoryPhotos = self.onePlan.days.allSatisfy { $0.locations.allSatisfy { $0.memoryPhotos?.isEmpty == true } }
-
-                        if allLocationsHaveNoMemeoryPhotos {
-                            self.activityIndicatorView.stopAnimating()
-                            self.blurEffectView.removeFromSuperview()
-                            self.activityIndicatorView.removeFromSuperview()
-                        }
                 }
             }
     }
@@ -414,26 +422,24 @@ extension MemoryDetailViewController: UICollectionViewDataSource,
        }
            let imageIndex = indexPath.item
             let imageURLString = memoryPhotos[imageIndex]
-
-               if let url = URL(string: imageURLString) {
-                   let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-                   firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-                       DispatchQueue.main.async {
-                           if let image = image {
-                               cell.memoryImageView.image = image
-                           } else {
-                               cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                           }
-                           self.activityIndicatorView.stopAnimating()
-                           self.blurEffectView.removeFromSuperview()
-                           self.activityIndicatorView.removeFromSuperview()
-                       }
-
-           }}
+            downloadImages(urlString: imageURLString, cell: cell)
            return cell
-       
    }
-
+    func downloadImages(urlString: String, cell: MemoryCollectionViewCell) {
+        if let url = URL(string: urlString) {
+            cell.memoryImageView.kf.setImage(
+                with: url,
+                placeholder: UIImage(named: "Image_Placeholder"),
+                options: [
+                    .transition(.fade(0.2)),
+                    .cacheOriginalImage
+                ],
+                completionHandler: { _ in
+                    self.removeLoadingView()
+                }
+            )
+        }
+    }
     func collectionView(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,

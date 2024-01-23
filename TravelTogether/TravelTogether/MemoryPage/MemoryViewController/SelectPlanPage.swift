@@ -61,28 +61,12 @@ extension SelectPlanViewController: UITableViewDataSource {
                 withIdentifier: "SelectPlanCell", for: indexPath) as? SelectPlanCell
             else { fatalError("Could not create SelectPlanCell") }
         cell.planNameLabel.text = plans[indexPath.row].planName
-        let start = changeDateFormat(date: "\(plans[indexPath.row].startDate)")
-        let end = changeDateFormat(date: "\(plans[indexPath.row].endDate)")
+        let start = DateUtils.changeDateFormat("\(plans[indexPath.row].startDate)")
+        let end = DateUtils.changeDateFormat("\(plans[indexPath.row].endDate)")
         cell.dateLabel.text = "\(start)-\(end)"
             return cell
     }
-    
-    func changeDateFormat(date: String) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        if let date = dateFormatter.date(from: date) {
-            let outputFormatter = DateFormatter()
-            outputFormatter.dateFormat = "yyyy年MM月dd日"
-            let formattedString = outputFormatter.string(from: date)
-            return formattedString
-        } else {
-            print("Failed to convert the date string.")
-            return ""
-        }
-
-    }
-    
+   
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         planId = plans[indexPath.row].id
         performSegue(withIdentifier: "goToEditMemory", sender: self)
