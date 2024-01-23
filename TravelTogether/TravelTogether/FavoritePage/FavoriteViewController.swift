@@ -42,7 +42,7 @@ class FavoriteViewController: UIViewController {
         tableView.register(FavoriteHeaderView.self, forHeaderFooterViewReuseIdentifier: "FavoriteHeaderView")
         let headerView = FavoriteHeaderView(reuseIdentifier: "FavoriteHeaderView")
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
-        tableView.tableHeaderView = headerView
+//        tableView.tableHeaderView = headerView
         headerView.delegate = self
         headerView.backgroundColor = UIColor(named: "yellowGreen")
         let firestoreFetch = FirestoreManagerFavorite()

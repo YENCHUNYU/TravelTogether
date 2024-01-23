@@ -71,19 +71,6 @@ class PlanViewController: UIViewController {
         headerView.backgroundColor = UIColor(named: "yellowGreen")
     }
     
-    func fetchMyPlans() async {
-            let firestoreManager = FirestoreManager()
-            await firestoreManager.fetchMyTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
-                if let error = error {
-                    print("Error fetching travel plans: \(error)")
-                } else {
-                    print("Fetched travel plan: \(travelPlans ?? [])")
-                    self.plans = travelPlans ?? []
-                    self.tableView.reloadData()
-                }
-            }
-        }
-    
     func fetchMyPlan() {
         let firestoreManager = FirestoreManager()
         firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in

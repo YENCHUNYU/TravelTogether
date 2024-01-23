@@ -33,8 +33,9 @@ class FavoriteHeaderView: UITableViewHeaderFooterView {
             
             let codeSegmented = CustomSegmentedControl(
                 frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50),
-                buttonTitle: ["旅遊回憶", "行程"])
+                buttonTitle: ["旅遊回憶"])
             codeSegmented.backgroundColor = .clear
+            
             codeSegmented.delegate = self
             contentView.addSubview(codeSegmented)
         }

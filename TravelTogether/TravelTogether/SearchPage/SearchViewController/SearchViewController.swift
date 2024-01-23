@@ -68,7 +68,7 @@ class SearchViewController: UIViewController {
         tableView.register(SearchHeaderView.self, forHeaderFooterViewReuseIdentifier: "SearchHeaderView")
         
         setUpHeaderView()
-        tableView.tableHeaderView = headerView
+//        tableView.tableHeaderView = headerView
         view.addSubview(searchButton)
         setUpButton()
         self.tabBarController?.delegate = self
@@ -93,7 +93,7 @@ class SearchViewController: UIViewController {
     
     func fetchPlans() {
         let firestoreManager = FirestoreManager()
-        firestoreManager.fetchAllTravelPlans { (travelPlans, error) in
+        firestoreManager.fetchTravelPlans(userId: nil) { (travelPlans, error) in
             if let error = error {
                 print("Error fetching travel plans: \(error)")
             } else {
@@ -143,6 +143,7 @@ class SearchViewController: UIViewController {
             if let destinationVC = segue.destination as? PlanDetailViewController {
                 destinationVC.travelPlanId = self.planId
                 destinationVC.userId = self.userId
+                print("self.planid userid\(self.planId)&\(self.userId)")
             }
         default:
             break

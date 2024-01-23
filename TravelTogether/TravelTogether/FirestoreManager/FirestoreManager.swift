@@ -16,98 +16,56 @@ protocol FirestoreManagerDelegate: AnyObject {
 class FirestoreManager {
     
     var delegate: FirestoreManagerDelegate?
-    
-    func fetchTravelPlans(userId: String, completion: @escaping ([TravelPlan]?, Error?) -> Void) {
+    // planvc
+    func fetchTravelPlans(userId: String?, completion: @escaping ([TravelPlan]?, Error?) -> Void) {
         let database = Firestore.firestore()
+        var travelPlansRef: Query
         
-        let travelPlansRef = database.collection("UserInfo").document(userId).collection("TravelPlan")
-        let orderedQuery = travelPlansRef.order(by: "startDate", descending: false)
-        orderedQuery.getDocuments { (querySnapshot, error) in
-            
+        if let userId = userId {
+            travelPlansRef = database.collection("UserInfo").document(userId).collection("TravelPlan")
+        } else {
+            travelPlansRef = database.collectionGroup("TravelPlan")
+        }
+        
+//        let orderedQuery = travelPlansRef.order(by: "startDate", descending: false)
+        
+        travelPlansRef.getDocuments { (querySnapshot, error) in
             if let error = error {
                 print("Error getting documents: \(error)")
                 completion(nil, error)
-            } else {
-                var travelPlans: [TravelPlan] = []
-                
-                for document in querySnapshot!.documents {
-                    let data = document.data()
-                    let startDate = (data["startDate"] as? Timestamp)?.dateValue() ?? Date()
-                    let endDate = (data["endDate"] as? Timestamp)?.dateValue() ?? Date()
-                    
-                    guard let daysArray = data["days"] as? [[String: Any]] else {
-                        continue
-                    }
-                   
-                    var travelDays: [TravelDay] = []
-                    for dayData in daysArray {
-                        guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
-                            continue
-                        }
-                
-                        var locations: [Location] = []
-                        for locationData in locationsArray {
-                            let location = Location(
-                                name: locationData["name"] as? String ?? "",
-                                photo: locationData["photo"] as? String ?? "",
-                                address: locationData["address"] as? String ?? ""
-                            )
-                            locations.append(location)
-                        }
-                        
-                        let travelDay = TravelDay(locations: locations)
-                        travelDays.append(travelDay)
-                    }
-                    
-                    let travelPlan = TravelPlan(
-                        id: document.documentID,
-                        planName: data["planName"] as? String ?? "",
-                        destination: data["destination"] as? String ?? "",
-                        startDate: startDate,
-                        endDate: endDate,
-                        days: travelDays
-                    )
-                    
-                    travelPlans.append(travelPlan)
-                    self.delegate?.manager(self, didGet: travelPlans)
-                    
-                }
-                
-                completion(travelPlans, nil)
+                return
             }
-        }
-    }
-    // PlanViewController
-    func fetchMyTravelPlans(userId: String, completion: @escaping ([TravelPlan]?, Error?) -> Void) async {
-        let database = Firestore.firestore()
-        let travelPlansRef = database.collection("UserInfo").document(userId).collection("TravelPlan")
-        let orderedQuery = travelPlansRef.order(by: "startDate", descending: false)
-        do {
-            let querySnapshot = try await orderedQuery.getDocuments()
-            var travelPlans: [TravelPlan] = []
-            for _ in querySnapshot.documents {
-                let travelPlanDocuments = try await travelPlansRef.getDocuments()
-                for planDocument in travelPlanDocuments.documents {
-                    do {
-                        var plan = try await planDocument.reference.getDocument(as: TravelPlan.self)
-                        plan.id = planDocument.documentID
-                        print("plan: \(plan)")
-                        travelPlans.append(plan)
-                    } catch {
-                        print("Error decoding city: \(error)")
+            
+            guard let documents = querySnapshot?.documents else {
+                completion(nil, nil)
+                return
+            }
+            
+            let travelPlans: [TravelPlan] = documents.compactMap { document in
+                let data = document.data()
+                do {
+                    var updatedData = data
+                    if let startDateTimestamp = data["startDate"] as? Timestamp {
+                        updatedData["startDate"] = startDateTimestamp.dateValue().timeIntervalSinceReferenceDate
                     }
+                    if let endDateTimestamp = data["endDate"] as? Timestamp {
+                        updatedData["endDate"] = endDateTimestamp.dateValue().timeIntervalSinceReferenceDate
+                    }
+                    
+                    let jsonData = try JSONSerialization.data(withJSONObject: updatedData)
+                    var travelPlan = try JSONDecoder().decode(TravelPlan.self, from: jsonData)
+                    
+                    travelPlan.id = document.documentID
+                    return travelPlan
+                } catch {
+                    print("Error decoding document: \(error)")
+                    return nil
                 }
             }
-            DispatchQueue.main.async { [travelPlans] in
-                completion(travelPlans, nil)
-            }
-        } catch {
-            print("Error getting documents: \(error)")
-            DispatchQueue.main.async {
-                completion(nil, error)
-            }
+            completion(travelPlans, nil)
         }
     }
+
 
     // searchPage
     func fetchAllTravelPlans(completion: @escaping ([TravelPlan]?, Error?) -> Void) {
@@ -173,6 +131,34 @@ class FirestoreManager {
             }
         }
     }
+//        let database = Firestore.firestore()
+//       let travelPlansRef = database.collectionGroup("TravelPlan")
+//
+//       travelPlansRef.getDocuments { (querySnapshot, error) in
+//           if let error = error {
+//               print("Error getting documents: \(error)")
+//               completion(nil, error)
+//               return
+//           }
+//
+//           guard let documents = querySnapshot?.documents else {
+//               completion(nil, nil)
+//               return
+//           }
+//
+//           let travelPlans: [TravelPlan] = documents.compactMap { document in
+//               do {
+//                   var travelPlan = try document.data(as: TravelPlan.self)
+//                   travelPlan.id = document.documentID
+//                   return travelPlan
+//               } catch {
+//                   print("Error decoding document: \(error)")
+//                   return nil
+//               }
+//           }
+//           completion(travelPlans, nil)
+//       }
+//   }
 }
 
 extension FirestoreManager {

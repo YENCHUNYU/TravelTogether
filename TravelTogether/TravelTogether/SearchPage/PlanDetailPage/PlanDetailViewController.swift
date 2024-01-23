@@ -142,7 +142,7 @@ class PlanDetailViewController: UIViewController {
         if isFromFavorite == false && isFromProfile == false {
             // isFromSearch
             let firestoreManagerForOne = FirestoreManagerForOne()
-            userId = Auth.auth().currentUser?.uid ?? ""
+//            userId = Auth.auth().currentUser?.uid ?? ""
             firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, error) in
                 if let error = error {
                     print("Error fetching one travel plan: \(error)")
@@ -162,7 +162,7 @@ class PlanDetailViewController: UIViewController {
                     self.headerView.collectionView.reloadData()
                     self.tableView.reloadData()
                 } else {
-                    print("One travel plan not found.")
+                    print("One travel plan not found. userid\(self.userId) & travelPlanid\(self.travelPlanId)")
                 }
             }} else {
                 if isFromFavorite == true {
@@ -233,7 +233,7 @@ class PlanDetailViewController: UIViewController {
         activityIndicatorView.startAnimating()
         if isFromFavorite == false && isFromProfile == false {
             let firestoreManagerForOne = FirestoreManagerForOne()
-            userId = Auth.auth().currentUser?.uid ?? ""
+//            userId = Auth.auth().currentUser?.uid ?? ""
             //        firestoreManagerForOne.delegate = self
             firestoreManagerForOne.fetchOneTravelPlan(dbCollection: "TravelPlan", userId: userId, byId: travelPlanId) { (travelPlan, error) in
                 if let error = error {
@@ -295,7 +295,7 @@ class PlanDetailViewController: UIViewController {
                                 self.activityIndicatorView.removeFromSuperview()
                             }
                     } else {
-                        print("One travel plan not found.")
+                        print("One travel plan not found. userid\(self.userId) & travelPlanid\(self.travelPlanId)")
                     }
                 }
             }
