@@ -23,35 +23,25 @@ class FavoriteViewController: UIViewController {
             y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
         type: .ballBeat,
         color: UIColor(named: "darkGreen") ?? .white,
-        padding: 0
-              )
-        var blurEffectView: UIVisualEffectView!
+        padding: 0)
+    var blurEffectView: UIVisualEffectView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let blurEffect = UIBlurEffect(style: .light)
-               blurEffectView = UIVisualEffectView(effect: blurEffect)
-               blurEffectView.frame = view.bounds
         tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.delegate = self
-
-        let firestoreFetch = FirestoreManagerFavorite()
-        firestoreFetch.fetchAllMemories { (travelPlans, error) in
-            if let error = error {
-                print("Error fetching memories: \(error)")
-            } else {
-                print("Fetched memories: \(travelPlans ?? [])")
-                self.memories = travelPlans ?? []
-                self.tableView.reloadData()
-            }
-        }
+        configureLoadingView()
+        fetchMemories()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        view.addSubview(blurEffectView)
-         view.addSubview(activityIndicatorView)
-         activityIndicatorView.startAnimating()      
+    func configureLoadingView() {
+        let blurEffect = UIBlurEffect(style: .light)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+    }
+    
+    func fetchMemories() {
         let firestoreFetch = FirestoreManagerFavorite()
         firestoreFetch.fetchAllMemories { (travelPlans, error) in
             if let error = error {
@@ -65,6 +55,18 @@ class FavoriteViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        startLoading()
+        fetchMemories()
+    }
+    
+    func startLoading() {
+         view.addSubview(blurEffectView)
+         view.addSubview(activityIndicatorView)
+         activityIndicatorView.startAnimating()
     }
     
     func stopLoading() {
@@ -84,51 +86,48 @@ extension FavoriteViewController: UITableViewDataSource {
             withIdentifier: "FavoriteMemoryCell",
             for: indexPath) as? FavoriteMemoryCell
         else { fatalError("Could not create SearchMemoriesCell") }
-            cell.userNameLabel.text = memories[indexPath.row].user
-            cell.userImageView.kf.setImage(
-                with: URL(string: memories[indexPath.row].userPhoto ?? ""),
-                placeholder: UIImage(systemName: "person.circle.fill"))
-            cell.memoryNameLabel.text = self.memories[indexPath.row].planName
-            let start = DateUtils.changeDateFormat("\(self.memories[indexPath.row].startDate)")
-            let end = DateUtils.changeDateFormat("\(self.memories[indexPath.row].endDate)")
-            cell.dateLabel.text = "\(start)-\(end)"
-            if memories.isEmpty == false {
-                let urlString = memories[indexPath.row].coverPhoto ?? ""
-                if !urlString.isEmpty, let url = URL(string: urlString) {
-                    downloadImages(cell: cell, indexPath: indexPath, url: url )
-                } else {
-                    // Handle the case where the URL is empty
-                    let taskIdentifier = UUID().uuidString
-                    cell.taskIdentifier = taskIdentifier
-                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                    cell.memoryNameLabel.text = self.memories[indexPath.row].planName
-                    let start = DateUtils.changeDateFormat("\(self.memories[indexPath.row].startDate)")
-                    let end = DateUtils.changeDateFormat("\(self.memories[indexPath.row].endDate)")
-                    cell.dateLabel.text = "\(start)-\(end)"
-                    
-                }
-            }
-            return cell
+        return configureCell(indexPath: indexPath, cell: cell, memories: memories)
     }
     
-    func downloadImages(cell: FavoriteMemoryCell, indexPath: IndexPath, url: URL ) {
-        cell.memoryImageView.image = nil
-        let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
+    func configureCell(indexPath: IndexPath, cell: FavoriteMemoryCell, memories: [TravelPlan]) -> UITableViewCell {
         let taskIdentifier = UUID().uuidString
         cell.taskIdentifier = taskIdentifier
-        firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-            DispatchQueue.main.async {
-                guard cell.taskIdentifier == taskIdentifier else {
-                               return
-                           }
-                if let image = image {
-                    cell.memoryImageView.image = image
-                } else {
-                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                }
+        cell.userNameLabel.text = memories[indexPath.row].user
+        cell.userImageView.kf.setImage(
+            with: URL(string: memories[indexPath.row].userPhoto ?? ""),
+            placeholder: UIImage(systemName: "person.circle.fill"))
+        cell.memoryNameLabel.text = self.memories[indexPath.row].planName
+        let start = DateUtils.changeDateFormat("\(self.memories[indexPath.row].startDate)")
+        let end = DateUtils.changeDateFormat("\(self.memories[indexPath.row].endDate)")
+        cell.dateLabel.text = "\(start)-\(end)"
+        downloadImages(cell: cell, indexPath: indexPath)
+        return cell
+    }
+    
+    func downloadImages(cell: FavoriteMemoryCell, indexPath: IndexPath) {
+        cell.memoryImageView.image = nil
+        guard !memories.isEmpty else {
+            stopLoading()
+            return
+        }
+        let urlString = memories[indexPath.row].coverPhoto ?? ""
+        guard !urlString.isEmpty, let url = URL(string: urlString) else {
+            cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+            stopLoading()
+            return
+        }
+
+        cell.memoryImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "Image_Placeholder"),
+            options: [
+                .transition(.fade(0.2)), // Add a fade transition
+                .cacheOriginalImage
+            ],
+            completionHandler: { _ in
                 self.stopLoading()
             }
-        }
+        )
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -137,7 +136,6 @@ extension FavoriteViewController: UITableViewDataSource {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-      
         if segue.identifier == "FavoriteMemory" {
             if let destinationVC = segue.destination as? MemoryDetailViewController {
                 destinationVC.memoryId = self.memoryId
@@ -162,22 +160,22 @@ extension FavoriteViewController: UITableViewDelegate {
         commit editingStyle: UITableViewCell.EditingStyle,
         forRowAt indexPath: IndexPath) {
             if editingStyle == .delete {
-                    if indexPath.row < memories.count {
-                        let firestoreManager = FirestoreManagerFavorite()
-                        firestoreManager.deleteFavorite(
-                            dbcollection: dbCollection,
-                            withID: memories[indexPath.row].id) { error in
-                            if let error = error {
-                                print("Failed to delete favorite: \(error)")
-                            } else {
-                                print("favorite deleted successfully.")
-                                self.memories.remove(at: indexPath.row)
-                                tableView.deleteRows(at: [indexPath], with: .fade)
-                            }
-                        }
-                    } else {
-                        print("Index out of range. indexPath.row: \(indexPath.row), plans count: \(memories.count)")
-                    }
+                deleteFavoriteMemory(indexPath: indexPath)
             }
         }
+    
+    func deleteFavoriteMemory(indexPath: IndexPath) {
+        let firestoreManager = FirestoreManagerFavorite()
+        firestoreManager.deleteFavorite(
+            dbcollection: dbCollection,
+            withID: memories[indexPath.row].id) { error in
+            if let error = error {
+                print("Failed to delete favorite: \(error)")
+            } else {
+                print("favorite deleted successfully.")
+                self.memories.remove(at: indexPath.row)
+                self.tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        }
+    }
 }

@@ -158,7 +158,7 @@ extension SearchViewController: UITableViewDataSource {
             withIdentifier: "SearchMemoriesCell",
             for: indexPath) as? SearchMemoriesCell
         else { fatalError("Could not create SearchMemoriesCell") }
-            return setUpCellForMemories(
+        return setUpCellForMemories(
                 indexPath: indexPath, cell: cell, plans: memories)
     }
     

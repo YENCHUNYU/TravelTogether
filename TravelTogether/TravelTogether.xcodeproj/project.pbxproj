@@ -22,7 +22,6 @@
 		523243A22B0871710078200C /* EditPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A12B0871710078200C /* EditPlanCell.swift */; };
 		523243A42B0879F30078200C /* EditPlanHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A32B0879F30078200C /* EditPlanHeaderView.swift */; };
 		523243A62B0892930078200C /* EditPlanFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A52B0892930078200C /* EditPlanFooterView.swift */; };
-		523243A82B0A27B90078200C /* SelectDate SwiftUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523243A72B0A27B90078200C /* SelectDate SwiftUI.swift */; };
 		5233DE002B6005D700BCCDEE /* DateUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5233DDFF2B6005D700BCCDEE /* DateUtils.swift */; };
 		523846ED2B18DC21006D58B0 /* EditMemoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523846EC2B18DC21006D58B0 /* EditMemoryCell.swift */; };
 		523846EF2B18E418006D58B0 /* EditMemoryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523846EE2B18E418006D58B0 /* EditMemoryHeaderView.swift */; };
@@ -146,7 +145,6 @@
 		523243A12B0871710078200C /* EditPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanCell.swift; sourceTree = "<group>"; };
 		523243A32B0879F30078200C /* EditPlanHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanHeaderView.swift; sourceTree = "<group>"; };
 		523243A52B0892930078200C /* EditPlanFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanFooterView.swift; sourceTree = "<group>"; };
-		523243A72B0A27B90078200C /* SelectDate SwiftUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SelectDate SwiftUI.swift"; sourceTree = "<group>"; };
 		5233DDFF2B6005D700BCCDEE /* DateUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateUtils.swift; sourceTree = "<group>"; };
 		523846EC2B18DC21006D58B0 /* EditMemoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoryCell.swift; sourceTree = "<group>"; };
 		523846EE2B18E418006D58B0 /* EditMemoryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoryHeaderView.swift; sourceTree = "<group>"; };
@@ -465,7 +463,6 @@
 			isa = PBXGroup;
 			children = (
 				5288CB112B076F7A00E089F9 /* CreatePlanViewController.swift */,
-				523243A72B0A27B90078200C /* SelectDate SwiftUI.swift */,
 			);
 			path = CreatePlanPage;
 			sourceTree = "<group>";
@@ -826,7 +823,6 @@
 				5288CB252B07B74100E089F9 /* TravelPlan.swift in Sources */,
 				524C30F32B18336D00C5CEDC /* UserInfo.swift in Sources */,
 				52E0F95A2B0EE64A00D23AFE /* FirestoreForPostLocation.swift in Sources */,
-				523243A82B0A27B90078200C /* SelectDate SwiftUI.swift in Sources */,
 				5221A56A2B1452E30084F7C0 /* SelectDateViewController.swift in Sources */,
 				52783CC82B033B260067A334 /* PlanViewController.swift in Sources */,
 				529781C12B25A41800F53476 /* FavoriteCell.swift in Sources */,
