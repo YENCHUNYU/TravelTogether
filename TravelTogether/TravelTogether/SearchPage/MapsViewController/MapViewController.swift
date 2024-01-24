@@ -235,7 +235,7 @@ extension MapViewController {
             }
         }
     }
-    
+
     func uploadPhoto(sender: UIButton, completion: @escaping (URL) -> Void) {
         let firebaseStorageManager = FirebaseStorageManagerUploadPhotos()
         firebaseStorageManager.uploadPhotoToFirebaseStorage(
@@ -257,16 +257,16 @@ extension MapViewController {
             address: "\(String(describing: self.addressLabel.text ?? ""))")
         let firestoreManagerPostLocation = FirestoreManagerForPostLocation()
         firestoreManagerPostLocation.addLocationToTravelPlan(
-            userId: Auth.auth().currentUser?.uid ?? "", 
-            planId: self.travelPlanId, location: theLocation,
-            day: self.selectedSection) { error in
-            if let error = error {
-                print("Error posting travel plan: \(error)")
-            } else {
-                print("Travel plan posted for day successfully!")
-                self.popToPreviousViewController()
+            userId: Auth.auth().currentUser?.uid ?? "",
+            planId: self.travelPlanId,
+            location: theLocation, day: self.selectedSection) { error in
+                if let error = error {
+                    print("Error posting travel plan: \(error)")
+                } else {
+                    self.popToPreviousViewController()
+                    print("Travel plan posted for day successfully!")
+                }
             }
-        }
     }
     
     func popToPreviousViewController() {
@@ -289,7 +289,7 @@ extension MapViewController {
             destinationVC.location = Location(
                 name: "\(String(describing: self.placeNameLabel.text ?? "") )", photo: self.spotsPhotoUrl,
                 address: "\(String(describing: self.addressLabel.text ?? ""))")
-            print("location!!!!\(destinationVC.location)")
+            print("location!\(destinationVC.location)")
             }
     }
 }
