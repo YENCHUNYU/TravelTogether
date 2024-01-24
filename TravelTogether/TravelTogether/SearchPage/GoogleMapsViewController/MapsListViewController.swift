@@ -43,8 +43,8 @@ class MapsListViewController: UIViewController {
         self.places = places
         tableView.reloadData()
     }
-   
 }
+
 extension MapsListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         places.count
@@ -62,9 +62,7 @@ extension MapsListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       
         tableView.deselectRow(at: indexPath, animated: true)
-        
         tableView.isHidden = true
         
         let place = places[indexPath.row]
@@ -77,9 +75,8 @@ extension MapsListViewController: UITableViewDataSource {
             case .failure(let error):
                 print(error)
             }
-            
         }
-        }
+    }
 }
 
 extension MapsListViewController: UITableViewDelegate {

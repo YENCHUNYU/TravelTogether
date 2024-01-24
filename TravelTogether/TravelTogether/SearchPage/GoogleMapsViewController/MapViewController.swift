@@ -17,7 +17,6 @@ class MapViewController: UIViewController {
     let locationManager = CLLocationManager()
     let searchVC = UISearchController(searchResultsController: MapsListViewController())
     var placesData: [Place] = []
-    var mapInfoViewController: MapInfoViewController?
     var isFromSearch = true
     var travelPlanId = ""
     var selectedSection = 0

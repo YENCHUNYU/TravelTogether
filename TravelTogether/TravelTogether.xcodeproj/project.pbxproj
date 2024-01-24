@@ -54,14 +54,11 @@
 		52783CE12B03C76A0067A334 /* MemoryDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CE02B03C76A0067A334 /* MemoryDetailCell.swift */; };
 		52783CE52B05B8E50067A334 /* MapListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CE42B05B8E50067A334 /* MapListCell.swift */; };
 		52783CE82B05C4DA0067A334 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CE72B05C4DA0067A334 /* MapViewController.swift */; };
-		52783CEA2B05DA6F0067A334 /* PlaceMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CE92B05DA6F0067A334 /* PlaceMarker.swift */; };
 		52783CEC2B05DB620067A334 /* GooglePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CEB2B05DB620067A334 /* GooglePlace.swift */; };
-		52783CEF2B05DBEE0067A334 /* GoogleDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CEE2B05DBEE0067A334 /* GoogleDataProvider.swift */; };
 		52783CF12B05EB380067A334 /* MapsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CF02B05EB380067A334 /* MapsListViewController.swift */; };
 		52783CF32B0603BD0067A334 /* GooglePlacesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52783CF22B0603BD0067A334 /* GooglePlacesManager.swift */; };
 		527941C62B27004800EE9A9B /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527941C52B27004800EE9A9B /* SettingViewController.swift */; };
 		527F3BA82B2056EA008CB8E2 /* SelectedMemoryEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527F3BA72B2056EA008CB8E2 /* SelectedMemoryEditViewController.swift */; };
-		5288CB0E2B0710EA00E089F9 /* MapInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB0D2B0710EA00E089F9 /* MapInfoViewController.swift */; };
 		5288CB102B07615400E089F9 /* AddToPlanListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB0F2B07615400E089F9 /* AddToPlanListViewController.swift */; };
 		5288CB122B076F7A00E089F9 /* CreatePlanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB112B076F7A00E089F9 /* CreatePlanViewController.swift */; };
 		5288CB1C2B07B36500E089F9 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 5288CB1B2B07B36500E089F9 /* FirebaseAnalytics */; };
@@ -181,15 +178,12 @@
 		52783CE02B03C76A0067A334 /* MemoryDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryDetailCell.swift; sourceTree = "<group>"; };
 		52783CE42B05B8E50067A334 /* MapListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapListCell.swift; sourceTree = "<group>"; };
 		52783CE72B05C4DA0067A334 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
-		52783CE92B05DA6F0067A334 /* PlaceMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceMarker.swift; sourceTree = "<group>"; };
 		52783CEB2B05DB620067A334 /* GooglePlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlace.swift; sourceTree = "<group>"; };
-		52783CEE2B05DBEE0067A334 /* GoogleDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleDataProvider.swift; sourceTree = "<group>"; };
 		52783CF02B05EB380067A334 /* MapsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapsListViewController.swift; sourceTree = "<group>"; };
 		52783CF22B0603BD0067A334 /* GooglePlacesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GooglePlacesManager.swift; sourceTree = "<group>"; };
 		527941C42B26A49400EE9A9B /* TravelTogether.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TravelTogether.entitlements; sourceTree = "<group>"; };
 		527941C52B27004800EE9A9B /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		527F3BA72B2056EA008CB8E2 /* SelectedMemoryEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedMemoryEditViewController.swift; sourceTree = "<group>"; };
-		5288CB0D2B0710EA00E089F9 /* MapInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapInfoViewController.swift; sourceTree = "<group>"; };
 		5288CB0F2B07615400E089F9 /* AddToPlanListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToPlanListViewController.swift; sourceTree = "<group>"; };
 		5288CB112B076F7A00E089F9 /* CreatePlanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePlanViewController.swift; sourceTree = "<group>"; };
 		5288CB242B07B74100E089F9 /* TravelPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelPlan.swift; sourceTree = "<group>"; };
@@ -417,12 +411,9 @@
 		52783CE62B05C4AE0067A334 /* GoogleMapsViewController */ = {
 			isa = PBXGroup;
 			children = (
-				52783CEE2B05DBEE0067A334 /* GoogleDataProvider.swift */,
-				52783CE92B05DA6F0067A334 /* PlaceMarker.swift */,
 				52783CE72B05C4DA0067A334 /* MapViewController.swift */,
 				52783CF02B05EB380067A334 /* MapsListViewController.swift */,
 				52783CE42B05B8E50067A334 /* MapListCell.swift */,
-				5288CB0D2B0710EA00E089F9 /* MapInfoViewController.swift */,
 			);
 			path = GoogleMapsViewController;
 			sourceTree = "<group>";
@@ -830,7 +821,6 @@
 				523846EF2B18E418006D58B0 /* EditMemoryHeaderView.swift in Sources */,
 				524C30F72B189F6200C5CEDC /* SelectPlanCell.swift in Sources */,
 				52ABB13E2B1E1737005D690E /* FirestoreFetchMemory.swift in Sources */,
-				52783CEF2B05DBEE0067A334 /* GoogleDataProvider.swift in Sources */,
 				52E0F95C2B0F2F3B00D23AFE /* FirebaseStorageUploadPhotos.swift in Sources */,
 				52E51A132B24DCFC00D88E30 /* MemoryCollectionViewCell.swift in Sources */,
 				5288CB252B07B74100E089F9 /* TravelPlan.swift in Sources */,
@@ -838,7 +828,6 @@
 				52E0F95A2B0EE64A00D23AFE /* FirestoreForPostLocation.swift in Sources */,
 				523243A82B0A27B90078200C /* SelectDate SwiftUI.swift in Sources */,
 				5221A56A2B1452E30084F7C0 /* SelectDateViewController.swift in Sources */,
-				52783CEA2B05DA6F0067A334 /* PlaceMarker.swift in Sources */,
 				52783CC82B033B260067A334 /* PlanViewController.swift in Sources */,
 				529781C12B25A41800F53476 /* FavoriteCell.swift in Sources */,
 				5221A5682B141FF60084F7C0 /* EditPlanHeaderForSections.swift in Sources */,
@@ -848,7 +837,6 @@
 				52783CD32B0350AC0067A334 /* MemoryCell.swift in Sources */,
 				52E0F95E2B0F31FD00D23AFE /* FirebaseStorageManagerDownloadPhotos.swift in Sources */,
 				523243A02B0871020078200C /* EditPlanViewController.swift in Sources */,
-				5288CB0E2B0710EA00E089F9 /* MapInfoViewController.swift in Sources */,
 				5288CB102B07615400E089F9 /* AddToPlanListViewController.swift in Sources */,
 				52783CEC2B05DB620067A334 /* GooglePlace.swift in Sources */,
 				5248E5DB2B28227F0052DD20 /* UpdateDraftorPostViewController.swift in Sources */,
