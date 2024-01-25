@@ -6,15 +6,9 @@
 //
 import UIKit
 
-protocol EditMemoryHeaderViewDelegate: AnyObject {
-    func reloadData()
-    func passDays(daysData: [String])
-    }
-
 class EditMemoryHeaderView:
     UITableViewHeaderFooterView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    weak var delegate: EditMemoryHeaderViewDelegate?
     var days: [String] = ["第1天"]
     var travelPlanId = ""
     var onePlan: TravelPlan = TravelPlan(
@@ -34,7 +28,6 @@ class EditMemoryHeaderView:
         collectionView.delegate = self
         collectionView.showsHorizontalScrollIndicator = true
         collectionView.register(ButtonCell.self, forCellWithReuseIdentifier: ButtonCell.reuseIdentifier)
-        
         collectionView.backgroundColor = UIColor(named: "yellowGreen")
         return collectionView
     }()
@@ -72,14 +65,5 @@ class EditMemoryHeaderView:
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 60, height: 50)
-    }
-    
-    // Handle button tap to add a new day
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    }
-}
-
-extension EditMemoryHeaderView: FirestoreManagerForOneDelegate {
-    func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan) {
     }
 }

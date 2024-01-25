@@ -49,7 +49,7 @@ class SelectedMemoryEditViewController: UIViewController {
         tableView.delegate = self
 
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 50)
-        headerView.delegate = self
+//        headerView.delegate = self
         headerView.travelPlanId = travelPlanId
         
         tableView.tableHeaderView = headerView
@@ -184,11 +184,7 @@ class SelectedMemoryEditViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         addLoadingView()
-        let allLocationsHaveNoMemeoryPhotos = onePlan.days.allSatisfy { $0.locations.allSatisfy { $0.memoryPhotos?.isEmpty == true } }
-
-            if allLocationsHaveNoMemeoryPhotos {
-                removeLoadingView()
-            }
+        
         
         let firestoreManagerForOne = FirestoreManagerFetchMemory()
         firestoreManagerForOne.fetchOneMemory(dbcollection: dbCollection, byId: memoryId) { (memory, error) in
@@ -198,6 +194,11 @@ class SelectedMemoryEditViewController: UIViewController {
                             print("Fetched one memory: \(memory)")
                             self.onePlan = memory
                             self.tableView.reloadData()
+                            let allLocationsHaveNoMemeoryPhotos = self.onePlan.days.allSatisfy { $0.locations.allSatisfy { $0.memoryPhotos?.isEmpty == true } }
+
+                                if allLocationsHaveNoMemeoryPhotos {
+                                    self.removeLoadingView()
+                                }
                         } else {
                             print("One memory not found.")
                         }
@@ -272,30 +273,30 @@ extension SelectedMemoryEditViewController: FirestoreManagerForOneDelegate {
     }
 }
 
-extension SelectedMemoryEditViewController: EditMemoryHeaderViewDelegate {
-    
-    func passDays(daysData: [String]) {
-        self.days = daysData
-    }
-    
-    func reloadData() {
-        let firestoreManagerForOne = FirestoreManagerForOne()
-        firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(
-            dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "",
-            byId: travelPlanId) { (travelPlan, error) in
-            if let error = error {
-                print("Error fetching one travel plan: \(error)")
-            } else if let travelPlan = travelPlan {
-                self.onePlan = travelPlan
-                self.tableView.reloadData()
-                self.headerView.collectionView.reloadData()
-            } else {
-                print("One travel plan not found.")
-            }
-        }
-    }
-}
+//extension SelectedMemoryEditViewController: EditMemoryHeaderViewDelegate {
+//    
+//    func passDays(daysData: [String]) {
+//        self.days = daysData
+//    }
+//    
+//    func reloadData() {
+//        let firestoreManagerForOne = FirestoreManagerForOne()
+//        firestoreManagerForOne.delegate = self
+//        firestoreManagerForOne.fetchOneTravelPlan(
+//            dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "",
+//            byId: travelPlanId) { (travelPlan, error) in
+//            if let error = error {
+//                print("Error fetching one travel plan: \(error)")
+//            } else if let travelPlan = travelPlan {
+//                self.onePlan = travelPlan
+//                self.tableView.reloadData()
+//                self.headerView.collectionView.reloadData()
+//            } else {
+//                print("One travel plan not found.")
+//            }
+//        }
+//    }
+//}
 
 extension SelectedMemoryEditViewController: UICollectionViewDataSource,
                                         UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {

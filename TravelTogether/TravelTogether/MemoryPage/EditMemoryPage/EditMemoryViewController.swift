@@ -9,6 +9,7 @@ import UIKit
 import FirebaseFirestore
 import Photos
 import FirebaseAuth
+import NVActivityIndicatorView
 
 class EditMemoryViewController: UIViewController {
 
@@ -26,16 +27,39 @@ class EditMemoryViewController: UIViewController {
     var currentIndexPath: IndexPath?
     private var itemsPerRow: CGFloat = 2
     private var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+    let activityIndicatorView = NVActivityIndicatorView(
+        frame: CGRect(
+            x: UIScreen.main.bounds.width / 2 - 25,
+            y: UIScreen.main.bounds.height / 2 - 25,
+            width: 50, height: 50),
+              type: .ballBeat,
+              color: UIColor(named: "darkGreen") ?? .white,
+              padding: 0
+          )
+    var blurEffectView: UIVisualEffectView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureTableView()
+        configureHeaderView()
+        fetchATravelPlan()
+        configureRightButton()
+        configureBlurEffectView()
+    }
     
     func configureTableView() {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
     }
+    func configureBlurEffectView() {
+        let blurEffect = UIBlurEffect(style: .light)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+    }
     
     func configureHeaderView() {
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 50)
-//        headerView.delegate = self
         headerView.travelPlanId = travelPlanId
         tableView.tableHeaderView = headerView
     }
@@ -57,7 +81,7 @@ class EditMemoryViewController: UIViewController {
             }
         }
     }
-    
+
     func configureDays() {
         let counts = self.onePlan.days.count
         let originalCount = self.days.count
@@ -72,12 +96,16 @@ class EditMemoryViewController: UIViewController {
         self.headerView.collectionView.reloadData()
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        configureTableView()
-        configureHeaderView()
-        fetchATravelPlan()
-        configureRightButton()
+    func addLoadingView() {
+        view.addSubview(blurEffectView)
+        view.addSubview(activityIndicatorView)
+        activityIndicatorView.startAnimating()
+    }
+    
+    func removeLoadingView() {
+        self.activityIndicatorView.stopAnimating()
+        self.blurEffectView.removeFromSuperview()
+        self.activityIndicatorView.removeFromSuperview()
     }
     
     func configureNotification() {
@@ -263,8 +291,8 @@ extension EditMemoryViewController: UITableViewDelegate {
     }
 }
 
-extension EditMemoryViewController: UICollectionViewDataSource, 
-                                        UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension EditMemoryViewController: UICollectionViewDataSource,
+                                    UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let dayIndex = collectionView.tag / 1000
@@ -279,7 +307,6 @@ extension EditMemoryViewController: UICollectionViewDataSource,
 
    func collectionView(_ collectionView: UICollectionView,
                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-      
        if indexPath.item == 0 {
            guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "AddPhotoCell",
@@ -294,42 +321,39 @@ extension EditMemoryViewController: UICollectionViewDataSource,
             for: indexPath) as? ImageCollectionViewCell else {
                fatalError("Failed to dequeue ImageCollectionViewCell")
            }
-           
-           let firestorageDownload = FirebaseStorageManagerDownloadPhotos()
-           firestorageDownload.delegate = self
 
            // cell 在image download前被reuse 而產生相同照片的cell
            guard let currentSection = currentIndexPath?.section,
              let currentRow = currentIndexPath?.row,
              currentSection < onePlan.days.count,
              currentRow < onePlan.days[currentSection].locations.count,
-             let memoryPhotos = onePlan.days[currentSection].locations[currentRow].memoryPhotos else {
-           return cell
-       }
-           let imageIndex = indexPath.item - 1 // Subtract 1 because the first item is the "AddPhotoCell"
-            let imageURLString = memoryPhotos[imageIndex]
-
-               if let url = URL(string: imageURLString) {
-//           for image in memoryPhotos {
-//               if let url = URL(string: image) {
-                   let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-                   firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-                       DispatchQueue.main.async {
-                           if let image = image {
-                               cell.memoryImageView.image = image
-                           } else {
-                               cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                           }
-                       }
-//                   }
-           }}
+                 let memoryPhotos = onePlan.days[currentSection].locations[currentRow].memoryPhotos else {
+               return cell
+           }
+           let imageIndex = indexPath.item - 1
+           let imageURLString = memoryPhotos[imageIndex]
+           loadImageFromStorage(in: indexPath, for: cell, imageURLString: imageURLString)
            return cell
        }
    }
     
+    func loadImageFromStorage(in indexPath: IndexPath, for cell: ImageCollectionViewCell, imageURLString: String) {
+        if let url = URL(string: imageURLString) {
+            cell.memoryImageView.kf.setImage(
+                with: url,
+                placeholder: UIImage(named: "Image_Placeholder"),
+                options: [
+                    .transition(.fade(0.2)),
+                    .cacheOriginalImage
+                ],
+                completionHandler: { _ in
+                    self.removeLoadingView()
+                }
+            )
+        }
+    }
+    
     @objc func imageButtonTapped(_ sender: UIButton) {
-        // Get the indexPath from the button's position
-        
         let point = sender.convert(CGPoint.zero, to: tableView)
         if let indexPath = tableView.indexPathForRow(at: point) {
             showImagePicker(forIndexPath: indexPath)
@@ -346,7 +370,8 @@ extension EditMemoryViewController: UICollectionViewDataSource,
         widthperItem = availableWidth / 3
         return CGSize(width: widthperItem, height: 88)
     }
-    func collectionView(_ collectionView: UICollectionView, 
+    
+    func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         return sectionInsets
@@ -356,71 +381,50 @@ extension EditMemoryViewController: UICollectionViewDataSource,
 extension EditMemoryViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
    @objc func showImagePicker(forIndexPath indexPath: IndexPath) {
        currentIndexPath = indexPath
-
-           let imagePicker = UIImagePickerController()
-           imagePicker.delegate = self
-           imagePicker.sourceType = .photoLibrary
-           present(imagePicker, animated: true, completion: nil)
-       }
+       let imagePicker = UIImagePickerController()
+       imagePicker.delegate = self
+       imagePicker.sourceType = .photoLibrary
+       present(imagePicker, animated: true, completion: nil)
+   }
     
     func imagePickerController(
         _ picker: UIImagePickerController,
         didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]
     ) {
         if let selectedImage = info[.originalImage] as? UIImage {
-            // Get the current indexPath based on your logic
             guard let indexPath = currentIndexPath else {
                 picker.dismiss(animated: true, completion: nil)
                 return
             }
-
-            // Update the corresponding location's image array
-            var location = onePlan.days[indexPath.section].locations[indexPath.row]
-            let firebaseStorageManager = FirebaseStorageManagerUploadPhotos()
-            firebaseStorageManager.delegate = self
-
-            firebaseStorageManager.uploadPhotoToFirebaseStorage(image: selectedImage) { uploadResult in
-                switch uploadResult {
-                case .success(let downloadURL):
-                    print("Upload to Firebase Storage successful. Download URL: \(downloadURL)")
-
-                    // Update UI on the main thread
-                    DispatchQueue.main.async {
-                        // Check if memoryPhotos is nil and initialize it
-                        if location.memoryPhotos == nil {
-                            location.memoryPhotos = []
-                        }
-
-                        // Append the download URL to the memoryPhotos array
-                        location.memoryPhotos?.append(downloadURL.absoluteString)
-
-                        // Update the corresponding location in onePlan
-                        self.onePlan.days[indexPath.section].locations[indexPath.row] = location
-
-                        // Reload the specific cell to reflect the changes
-                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                    }
-                case .failure(let error):
-                    print("Error uploading to Firebase Storage: \(error.localizedDescription)")
-                }
-            }
+            uploadImageToDB(in: indexPath, with: selectedImage)
         }
 
         picker.dismiss(animated: true, completion: nil)
+        addLoadingView()
     }
-
-       func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-           picker.dismiss(animated: true, completion: nil)
-       }
     
-}
-
-extension EditMemoryViewController: FirebaseStorageManagerUploadDelegate {
-    func manager(_ manager: FirebaseStorageManagerUploadPhotos) {
+    func uploadImageToDB(in indexPath: IndexPath, with selectedImage: UIImage) {
+        var location = onePlan.days[indexPath.section].locations[indexPath.row]
+        let firebaseStorageManager = FirebaseStorageManagerUploadPhotos()
+        firebaseStorageManager.uploadPhotoToFirebaseStorage(image: selectedImage) { uploadResult in
+            switch uploadResult {
+            case .success(let downloadURL):
+                print("Upload to Firebase Storage successful. Download URL: \(downloadURL)")
+                DispatchQueue.main.async {
+                    if location.memoryPhotos == nil {
+                        location.memoryPhotos = []
+                    }
+                    location.memoryPhotos?.append(downloadURL.absoluteString)
+                    self.onePlan.days[indexPath.section].locations[indexPath.row] = location
+                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                }
+            case .failure(let error):
+                print("Error uploading to Firebase Storage: \(error.localizedDescription)")
+            }
+        }
     }
-}
 
-extension EditMemoryViewController: FirebaseStorageManagerDownloadDelegate {
-    func manager(_ manager: FirebaseStorageManagerDownloadPhotos) {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+       picker.dismiss(animated: true, completion: nil)
     }
 }

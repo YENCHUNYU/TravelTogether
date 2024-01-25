@@ -14,7 +14,6 @@ class ImageCollectionViewCell: UICollectionViewCell {
             memoryImageView.contentMode = .scaleAspectFill
         }
     }
-
 }
 
 class AddPhotoCell: UICollectionViewCell {
