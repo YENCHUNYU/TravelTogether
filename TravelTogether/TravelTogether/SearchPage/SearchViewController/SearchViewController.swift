@@ -218,7 +218,9 @@ extension SearchViewController: UITableViewDelegate {
 }
 
 extension SearchViewController: UITabBarControllerDelegate {
-    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+    func tabBarController(
+        _ tabBarController: UITabBarController,
+        shouldSelect viewController: UIViewController) -> Bool {
         guard !LoginViewController.loginStatus else { // 登入中 return true
             return true
         }

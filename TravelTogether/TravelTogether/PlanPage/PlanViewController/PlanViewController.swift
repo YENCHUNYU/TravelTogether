@@ -53,17 +53,25 @@ class PlanViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let blurEffect = UIBlurEffect(style: .light)
-        blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = view.bounds
-        tableView.separatorStyle = .none
-        tableView.dataSource = self
-        tableView.delegate = self
+        configureBlurEffectView()
+        configureTableView()
         setUpHeaderView()
         tableView.tableHeaderView = headerView
         view.addSubview(addButton)
         setUpButton()
         fetchMyPlan()
+    }
+    
+    func configureBlurEffectView() {
+        let blurEffect = UIBlurEffect(style: .light)
+        blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+    }
+    
+    func configureTableView() {
+        tableView.separatorStyle = .none
+        tableView.dataSource = self
+        tableView.delegate = self
     }
     
     func setUpHeaderView() {
@@ -206,11 +214,7 @@ extension PlanViewController: UITableViewDataSource {
 
 extension PlanViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if planIndex == 0 {
-           return 300
-        } else {
-            return 300
-        }
+        300
     }
     
     func tableView(

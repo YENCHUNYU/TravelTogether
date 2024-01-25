@@ -103,6 +103,7 @@ class EditMemoryTitleViewController: UIViewController, UIImagePickerControllerDe
                 let viewControllers = navigationController.viewControllers
                 if viewControllers.count == 4 {
                     let targetViewController = viewControllers[viewControllers.count - 4]
+//                    targetViewController.viewWillAppear(true)
                     navigationController.popToViewController(targetViewController, animated: true)
                 }
             }

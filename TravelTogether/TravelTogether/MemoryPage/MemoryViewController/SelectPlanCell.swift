@@ -9,7 +9,6 @@ import UIKit
 
 class SelectPlanCell: UITableViewCell {
     
-    @IBOutlet weak var planNameLabel: UILabel!
-    
+    @IBOutlet weak var planNameLabel: UILabel!    
     @IBOutlet weak var dateLabel: UILabel!
 }

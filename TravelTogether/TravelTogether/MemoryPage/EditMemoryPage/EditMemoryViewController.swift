@@ -24,25 +24,24 @@ class EditMemoryViewController: UIViewController {
     let headerView = EditMemoryHeaderView(reuseIdentifier: "EditMemoryHeaderView")
     var memoryPhotos: [String] = []
     var currentIndexPath: IndexPath?
-
     private var itemsPerRow: CGFloat = 2
     private var sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    func configureTableView() {
         tableView.dataSource = self
         tableView.delegate = self
-
-        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 50)
-        headerView.delegate = self
-        headerView.travelPlanId = travelPlanId
-        
-        tableView.tableHeaderView = headerView
         tableView.separatorStyle = .none
-        
-        
+    }
+    
+    func configureHeaderView() {
+        headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 50)
+//        headerView.delegate = self
+        headerView.travelPlanId = travelPlanId
+        tableView.tableHeaderView = headerView
+    }
+    
+    func fetchATravelPlan() {
         let firestoreManagerForOne = FirestoreManagerForOne()
-        firestoreManagerForOne.delegate = self
         firestoreManagerForOne.fetchOneTravelPlan(
             dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "",
             byId: travelPlanId) { (travelPlan, error) in
@@ -51,47 +50,65 @@ class EditMemoryViewController: UIViewController {
             } else if let travelPlan = travelPlan {
                 print("Fetched one travel plan: \(travelPlan)")
                 self.onePlan = travelPlan
-                let counts = self.onePlan.days.count
-                let originalCount = self.days.count
-                    if counts > originalCount {
-                        for _ in originalCount...counts - 1 {
-                            let number = self.days.count
-                            self.days.insert("第\(number + 1)天", at: number)
-                        }
-                    }
-                self.headerView.days = self.days
-                self.headerView.onePlan = self.onePlan
-                self.headerView.collectionView.reloadData()
+                self.tableView.reloadData()
+                self.configureDays()
             } else {
                 print("One travel plan not found.")
             }
         }
-        
-        let rightButton = UIBarButtonItem(title: "下一步", style: .plain, 
-                                          target: self, action: #selector(rightButtonTapped))
-        navigationItem.rightBarButtonItem = rightButton
-        rightButton.tintColor = UIColor(named: "yellowGreen")
-        
+    }
+    
+    func configureDays() {
+        let counts = self.onePlan.days.count
+        let originalCount = self.days.count
+            if counts > originalCount {
+                for _ in originalCount...counts - 1 {
+                    let number = self.days.count
+                    self.days.insert("第\(number + 1)天", at: number)
+                }
+            }
+        self.headerView.days = self.days
+        self.headerView.onePlan = self.onePlan
+        self.headerView.collectionView.reloadData()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureTableView()
+        configureHeaderView()
+        fetchATravelPlan()
+        configureRightButton()
+    }
+    
+    func configureNotification() {
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(keyboardWillShow(_:)),
             name: UIResponder.keyboardWillShowNotification, object: nil)
-       NotificationCenter.default.addObserver(
+        NotificationCenter.default.addObserver(
         self,
         selector: #selector(keyboardWillHide(_:)),
         name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
+    func configureRightButton() {
+        let rightButton = UIBarButtonItem(
+            title: "下一步", style: .plain,
+            target: self, action: #selector(rightButtonTapped))
+        navigationItem.rightBarButtonItem = rightButton
+        rightButton.tintColor = UIColor(named: "yellowGreen")
+    }
+    
     @objc func keyboardWillShow(_ notification: Notification) {
-            guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] 
-                                      as? NSValue)?.cgRectValue.size else {
-                return
-            }
-
-            let contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
-            tableView.contentInset = contentInset
-        tableView.scrollIndicatorInsets = contentInset
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey]
+                                  as? NSValue)?.cgRectValue.size else {
+            return
         }
+        
+        let contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardSize.height, right: 0)
+        tableView.contentInset = contentInset
+        tableView.scrollIndicatorInsets = contentInset
+    }
 
     @objc func keyboardWillHide(_ notification: Notification) {
         let contentInset = UIEdgeInsets.zero
@@ -109,6 +126,30 @@ class EditMemoryViewController: UIViewController {
         }
     }
    
+    func fetchUserInfo() {
+        let firestore = FirestoreManagerFetchUser()
+        firestore.fetchUserInfo { userData, error  in
+            if error != nil {
+                print("Error fetching one plan: \(String(describing: error))")
+            } else {
+                self.onePlan.user = userData?.name
+                self.onePlan.userPhoto = userData?.photo
+                self.onePlan.userId = userData?.id
+            }
+        }
+    }
+    
+    func postADraft() {
+        let firestoreManagerForPost = FirestoreManagerMemoryPost()
+        firestoreManagerForPost.postMemoryDraft(memory: self.onePlan) { error in
+            if error != nil {
+                print("Failed to post MemoryDraft")
+            } else {
+                print("Posted MemoryDraft successfully!")
+            }
+        }
+    }
+    
     @objc func rightButtonTapped() {
         if let draftorPostVC = storyboard?.instantiateViewController(
             withIdentifier: "SaveAsDraftorPostViewController") as? SaveAsDraftorPostViewController {
@@ -118,54 +159,30 @@ class EditMemoryViewController: UIViewController {
             }
             
             draftorPostVC.toSaveButtonTapped = {
-                let firestore = FirestoreManagerFetchUser()
-                firestore.fetchUserInfo { userData, error  in
-                    if error != nil {
-                        print("Error fetching one plan: \(String(describing: error))")
-                    } else {
-                        self.onePlan.user = userData?.name
-                        self.onePlan.userPhoto = userData?.photo
-                        self.onePlan.userId = userData?.id
-                    }
-                }
-                let firestoreManagerForPost = FirestoreManagerMemoryPost()
-                        firestoreManagerForPost.postMemoryDraft(memory: self.onePlan) { error in
-                                if error != nil {
-                                    print("Failed to post MemoryDraft")
-                                } else {
-                                    print("Posted MemoryDraft successfully!")}
-                        }
+                self.fetchUserInfo()
+                self.postADraft()
                 draftorPostVC.dismiss(animated: true)
-                if let navigationController = self.navigationController {
-                    let viewControllers = navigationController.viewControllers
-                    if viewControllers.count >= 3 {
-                        if let targetViewController = viewControllers[viewControllers.count - 3] 
-                            as? MemoryViewController {
-                            navigationController.popToViewController(targetViewController, animated: true)
-                        }
-                    }
-                } 
+                self.popToTargetVC()
             }
             present(draftorPostVC, animated: true, completion: nil)
         }
-       }
+    }
+    
+    func popToTargetVC() {
+        if let navigationController = self.navigationController {
+            let viewControllers = navigationController.viewControllers
+            if viewControllers.count >= 3 {
+                if let targetViewController = viewControllers[viewControllers.count - 3]
+                    as? MemoryViewController {
+                    navigationController.popToViewController(targetViewController, animated: true)
+                }
+            }
+        }
+    }
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let firestoreManagerForOne = FirestoreManagerForOne()
-        firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(
-            dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "",
-            byId: travelPlanId) { (travelPlan, error) in
-            if let error = error {
-                print("Error fetching one travel plan: \(error)")
-            } else if let travelPlan = travelPlan {
-                self.onePlan = travelPlan
-                self.tableView.reloadData()
-            } else {
-                print("One travel plan not found.")
-            }
-        }
+        fetchATravelPlan()
     }
 }
 
@@ -173,6 +190,7 @@ extension EditMemoryViewController: UITableViewDataSource, UITextViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         onePlan.days.count
     }
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
        return "第\(section + 1)天"
     }
@@ -181,7 +199,7 @@ extension EditMemoryViewController: UITableViewDataSource, UITextViewDelegate {
         guard !onePlan.days.isEmpty, section < onePlan.days.count else {
                return 0
            }
-           return onePlan.days[section].locations.count
+        return onePlan.days[section].locations.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -189,28 +207,30 @@ extension EditMemoryViewController: UITableViewDataSource, UITextViewDelegate {
             withIdentifier: "EditMemoryCell",
             for: indexPath) as? EditMemoryCell
         else { fatalError("Could not create EditMemoryCell") }
-currentIndexPath = indexPath
+        currentIndexPath = indexPath
         let location = onePlan.days[indexPath.section].locations[indexPath.row]
-
         cell.placeNameLabel.text = location.name
         cell.addressLabel.text = location.address
-        
+        cell.articleTextView.tag = indexPath.section * 1000 + indexPath.row
+        cell.articleTextView.textColor = .lightGray
+        cell.articleTextView.delegate = self
+        configureImageCollectionView(for: cell, in: indexPath)
+        return cell
+    }
+    
+    func configureImageCollectionView(for cell: EditMemoryCell, in indexPath: IndexPath) {
         cell.imageCollectionView.dataSource = self
         cell.imageCollectionView.delegate = self
         cell.imageCollectionData = onePlan.days[indexPath.section].locations[indexPath.row].memoryPhotos ?? []
         
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal // Set scroll direction to horizontal
+        layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 10
         
         cell.imageCollectionView.collectionViewLayout = layout
         cell.imageCollectionView.showsHorizontalScrollIndicator = false
         cell.imageCollectionView.tag = indexPath.section * 1000 + indexPath.row
         cell.imageCollectionView.reloadData()
-        cell.articleTextView.tag = indexPath.section * 1000 + indexPath.row
-        cell.articleTextView.textColor = .lightGray
-        cell.articleTextView.delegate = self
-        return cell
     }
     
     func textViewDidChange(_ textView: UITextView) {
@@ -240,37 +260,6 @@ extension EditMemoryViewController: UITableViewDelegate {
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath) -> CGFloat {
             330
-    }
-}
-
-extension EditMemoryViewController: FirestoreManagerForOneDelegate {
-    func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan) {
-        onePlan = firestoreData
-    }
-}
-
-extension EditMemoryViewController: EditMemoryHeaderViewDelegate {
-    
-    func passDays(daysData: [String]) {
-        self.days = daysData
-    }
-    
-    func reloadData() {
-        let firestoreManagerForOne = FirestoreManagerForOne()
-        firestoreManagerForOne.delegate = self
-        firestoreManagerForOne.fetchOneTravelPlan(
-            dbCollection: "TravelPlan", userId: Auth.auth().currentUser?.uid ?? "",
-            byId: travelPlanId) { (travelPlan, error) in
-            if let error = error {
-                print("Error fetching one travel plan: \(error)")
-            } else if let travelPlan = travelPlan {
-                self.onePlan = travelPlan
-                self.tableView.reloadData()
-                self.headerView.collectionView.reloadData()
-            } else {
-                print("One travel plan not found.")
-            }
-        }
     }
 }
 

@@ -21,23 +21,11 @@ class SelectPlanViewController: UIViewController {
             super.viewDidLoad()
             tableView.dataSource = self
             tableView.delegate = self
-           
-            let firestoreManager = FirestoreManager()
-            firestoreManager.delegate = self
-            firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
-                if let error = error {
-                    print("Error fetching travel plans: \(error)")
-                } else {
-                    print("Fetched travel plans: \(travelPlans ?? [])")
-                    self.plans = travelPlans ?? []
-                    self.tableView.reloadData()
-                }
-            }
+            fetchTravelPlans()
         }
     
-    override func viewWillAppear(_ animated: Bool) {
+    func fetchTravelPlans() {
         let firestoreManager = FirestoreManager()
-        firestoreManager.delegate = self
         firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
             if let error = error {
                 print("Error fetching travel plans: \(error)")
@@ -48,7 +36,12 @@ class SelectPlanViewController: UIViewController {
             }
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchTravelPlans()
     }
+}
 
 extension SelectPlanViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -56,15 +49,14 @@ extension SelectPlanViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: "SelectPlanCell", for: indexPath) as? SelectPlanCell
-            else { fatalError("Could not create SelectPlanCell") }
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "SelectPlanCell", for: indexPath) as? SelectPlanCell
+        else { fatalError("Could not create SelectPlanCell") }
         cell.planNameLabel.text = plans[indexPath.row].planName
         let start = DateUtils.changeDateFormat("\(plans[indexPath.row].startDate)")
         let end = DateUtils.changeDateFormat("\(plans[indexPath.row].endDate)")
         cell.dateLabel.text = "\(start)-\(end)"
-            return cell
+        return cell
     }
    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -87,18 +79,6 @@ extension SelectPlanViewController: UITableViewDataSource {
 
 extension SelectPlanViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-           return 67
-    }
-}
-
-extension SelectPlanViewController: FirestoreManagerDelegate {
-    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan]) {
-        plans = firestoreData
-    }
-}
-
-extension SelectPlanViewController: FirestoreManagerForPostLocationDelegate {
-    func manager(_ manager: FirestoreManagerForPostLocation, didPost firestoreData: Location) {
-        location = firestoreData
+        67
     }
 }
