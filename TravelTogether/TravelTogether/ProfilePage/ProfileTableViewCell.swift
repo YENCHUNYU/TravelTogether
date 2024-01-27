@@ -23,6 +23,8 @@ class ProfileCell: UITableViewCell {
         }
     }
     
+    var taskIdentifier = ""
+    
     func addRoundedBottomCorners(to view: UIView, cornerRadius: CGFloat) {
             let maskPath = UIBezierPath(
                 roundedRect: view.bounds,

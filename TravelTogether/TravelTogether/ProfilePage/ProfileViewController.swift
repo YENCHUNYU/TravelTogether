@@ -41,13 +41,17 @@ class ProfileViewController: UIViewController {
     var memories: [TravelPlan] = []
     var userInfo = UserInfo(email: "", name: "", id: "")
     let activityIndicatorView = NVActivityIndicatorView(
-        frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: (UIScreen.main.bounds.height - 173) / 2 - 50, width: 50, height: 50),
+        frame: CGRect(
+            x: UIScreen.main.bounds.width / 2 - 25,
+            y: (UIScreen.main.bounds.height - 173) / 2 - 50, width: 50, height: 50),
         type: .ballBeat,
         color: UIColor(named: "darkGreen") ?? .white,
         padding: 0
     )
     let activityIndicatorViewFull = NVActivityIndicatorView(
-        frame: CGRect(x: UIScreen.main.bounds.width / 2 - 25, y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
+        frame: CGRect(
+            x: UIScreen.main.bounds.width / 2 - 25,
+            y: UIScreen.main.bounds.height / 2 - 25, width: 50, height: 50),
         type: .ballBeat, color: UIColor(named: "darkGreen") ?? .white, padding: 0
     )
     var blurEffectView: UIVisualEffectView!
@@ -57,35 +61,55 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        configureBlurEffectView()
+        configureTableView()
+        configureHeaderView()
+        userNameLabel.text = ""
+        fetchTravelPlans()
+        fetchMemories()
+        fetchUserInfo()
+        configureRightButton()
+    }
+    
+    func configureBlurEffectView() {
         let blurEffect = UIBlurEffect(style: .light)
         blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = view.bounds
         blurEffectViewFull = UIVisualEffectView(effect: blurEffect)
         blurEffectViewFull.frame = view.bounds
-        
+    }
+
+    func configureTableView() {
+        tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.delegate = self
+    }
+    
+    func configureHeaderView() {
         let headerView = ProfileHeaderView(reuseIdentifier: "ProfileHeaderView")
         headerView.frame = CGRect(x: 0, y: 0, width: Int(UIScreen.main.bounds.width), height: 60)
         headerView.delegate = self
         headerView.backgroundColor = UIColor(named: "yellowGreen")
         tableView.tableHeaderView = headerView
-        tableView.separatorStyle = .none
-        
-        userNameLabel.text = ""
+    }
+    
+    func fetchTravelPlans() {
         let firestoreManager = FirestoreManager()
-        firestoreManager.delegate = self
         firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
             if let error = error {
                 print("Error fetching travel plans: \(error)")
             } else {
-                // Handle the retrieved travel plans
                 print("Fetched travel plans: \(travelPlans ?? [])")
                 self.plans = travelPlans ?? []
+                self.tableView.reloadData()
+                if self.plans.isEmpty && self.profileIndex == 1 {
+                    self.removeLoadingView(with: self.blurEffectView, by: self.activityIndicatorView)
+                }
             }
         }
-        
+    }
+    
+    func fetchMemories() {
         let firestoreFetchMemory = FirestoreManagerFetchMemory()
         firestoreFetchMemory.fetchMemories { (travelPlans, error) in
             if let error = error {
@@ -94,31 +118,49 @@ class ProfileViewController: UIViewController {
                 print("Fetched memories: \(travelPlans ?? [])")
                 self.memories = travelPlans ?? []
                 self.tableView.reloadData()
+                if self.memories.isEmpty && self.profileIndex == 0 {
+                    self.removeLoadingView(with: self.blurEffectView, by: self.activityIndicatorView)
+                }
             }
         }
-        
+    }
+    
+    func fetchUserInfo() {
         let firestoreUser = FirestoreManagerFetchUser()
         firestoreUser.fetchUserInfo { (userInfo, error) in
             if let error = error {
                 print("Error fetching UserInfo: \(error)")
             } else {
                 print("Fetched UserInfo: \(String(describing: userInfo))")
-                self.userInfo = userInfo ?? UserInfo(email: "", name: "", id: "")
-                self.userNameLabel.text = self.userInfo.name
-                if let photoURLString = self.userInfo.photo, let photoURL = URL(string: photoURLString) {
-                    self.userImageView.kf.setImage(with: photoURL, placeholder: UIImage(systemName: "person.circle.fill"))
-                } else {
-                    self.userImageView.image = UIImage(systemName: "person.circle.fill")
-                }
+                self.updateUserData(
+                    with: userInfo ?? UserInfo(email: "", name: "", id: ""))
+                
             }
         }
-        
-        let rightButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(rightButtonTapped))
+    }
+    
+    func updateUserData(with userInfo: UserInfo) {
+        self.userInfo = userInfo
+        self.userNameLabel.text = self.userInfo.name
+        if let photoURLString = self.userInfo.photo, let photoURL = URL(string: photoURLString) {
+            self.userImageView.kf.setImage(with: photoURL, placeholder: UIImage(systemName: "person.circle.fill"))
+        } else {
+            self.userImageView.image = UIImage(systemName: "person.circle.fill")
+        }
+        self.removeLoadingView(with: self.blurEffectViewFull, by: self.activityIndicatorViewFull)
+    }
+    
+    func configureRightButton() {
+        let rightButton = UIBarButtonItem(
+            image: UIImage(systemName: "gearshape"),
+            style: .plain, target: self, 
+            action: #selector(rightButtonTapped))
         navigationItem.rightBarButtonItem = rightButton
     }
     
     @objc func rightButtonTapped() {
-        if let settingVC = storyboard?.instantiateViewController(withIdentifier: "SettingViewController") as? SettingViewController {
+        if let settingVC = storyboard?.instantiateViewController(
+            withIdentifier: "SettingViewController") as? SettingViewController {
             let settingNavController = UINavigationController(rootViewController: settingVC)
             present(settingNavController, animated: true, completion: nil)
             
@@ -131,102 +173,48 @@ class ProfileViewController: UIViewController {
         }
     }
     
-//    func showAlert(title: String, message: String) {
-//        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-//        let action = UIAlertAction(title: "OK", style: .default) { [weak self] action in
-//            
-//        }
-//        alert.addAction(action)
-//        present(alert, animated: true)
-//        
-//    }
     func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
         
-        let okAction = UIAlertAction(title: "確定", style: .default) { [weak self] action in
+        let okAction = UIAlertAction(title: "確定", style: .default) { _ in
             completion?()
         }
         alert.addAction(okAction)
-        
         present(alert, animated: true)
     }
     
+    func addLoadingView(
+        with loadingView: UIVisualEffectView,
+        by indicator: NVActivityIndicatorView,
+        on theView: UIView) {
+        theView.addSubview(loadingView)
+        theView.addSubview(indicator)
+        indicator.startAnimating()
+    }
+    
+    func removeLoadingView(
+        with loadingView: UIVisualEffectView,
+        by indicator: NVActivityIndicatorView) {
+        indicator.stopAnimating()
+        loadingView.removeFromSuperview()
+        indicator.removeFromSuperview()
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
-        view.addSubview(blurEffectViewFull)
-        view.addSubview(activityIndicatorViewFull)
-        activityIndicatorViewFull.startAnimating()
-        tableView.addSubview(blurEffectView)
-        tableView.addSubview(activityIndicatorView)
-        activityIndicatorView.startAnimating()
-        let firestoreUser = FirestoreManagerFetchUser()
-        firestoreUser.fetchUserInfo { (userInfo, error) in
-            if let error = error {
-                print("Error fetching UserInfo: \(error)")
-            } else {
-                print("Fetched UserInfo: \(String(describing: userInfo))")
-                self.userInfo = userInfo ?? UserInfo(email: "", name: "", id: "")
-                self.userNameLabel.text = self.userInfo.name
-                if let photoURLString = self.userInfo.photo, let photoURL = URL(string: photoURLString) {
-                    self.userImageView.kf.setImage(
-                        with: photoURL,
-                        placeholder: UIImage(systemName: "person.circle.fill"))
-                } else {
-                    self.userImageView.image = UIImage(systemName: "person.circle.fill")
-                }
-                self.activityIndicatorViewFull.stopAnimating()
-                self.blurEffectViewFull.removeFromSuperview()
-                self.activityIndicatorViewFull.removeFromSuperview()
-            }
-        }
-//        if profileIndex == 1 {
-            let firestoreManager = FirestoreManager()
-            firestoreManager.delegate = self
-            firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
-                if let error = error {
-                    print("Error fetching travel plans: \(error)")
-                } else {
-                    // Handle the retrieved travel plans
-                    print("Fetched travel plans: \(travelPlans ?? [])")
-                    self.plans = travelPlans ?? []
-                    self.tableView.reloadData()
-                }
-                if self.plans.isEmpty && self.profileIndex == 1 {
-                    self.activityIndicatorView.stopAnimating()
-                    self.blurEffectView.removeFromSuperview()
-                    self.activityIndicatorView.removeFromSuperview()
-                }
-            }
-//        } else if profileIndex == 0 {
-            let firestoreFetchMemory = FirestoreManagerFetchMemory()
-            firestoreFetchMemory.fetchMemories { (travelPlans, error) in
-                if let error = error {
-                    print("Error fetching memories: \(error)")
-                } else {
-                    print("Fetched memories: \(travelPlans ?? [])")
-                    self.memories = travelPlans ?? []
-                    self.tableView.reloadData()
-                }
-                if self.memories.isEmpty && self.profileIndex == 0 {
-                    self.activityIndicatorView.stopAnimating()
-                    self.blurEffectView.removeFromSuperview()
-                    self.activityIndicatorView.removeFromSuperview()
-                }
-            }
-//        }
-       
+        addLoadingView(with: blurEffectViewFull, by: activityIndicatorViewFull, on: view)
+        addLoadingView(with: blurEffectView, by: activityIndicatorView, on: tableView)
+        fetchUserInfo()
+        fetchTravelPlans()
+        fetchMemories()
     }
 }
 
 extension ProfileViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if profileIndex == 0 {
-            return memories.count
-        } else {
-            return plans.count
-        }
+        return profileIndex == 0 ? memories.count : plans.count
     }
     
     func tableView(
@@ -235,68 +223,74 @@ extension ProfileViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell
             else { fatalError("Could not create ProfileCell") }
-            if memories.isEmpty == false {
-                cell.memoryImageView.image = nil
-                cell.memoryNameLabel.text = self.memories[indexPath.row].planName
-                let urlString = memories[indexPath.row].coverPhoto ?? ""
-                if !urlString.isEmpty, let url = URL(string: urlString) {
-                    let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-                    firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-                        DispatchQueue.main.async {
-                            if let image = image {
-                                cell.memoryImageView.image = image
-                            } else {
-                                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                            }
-                            self.activityIndicatorView.stopAnimating()
-                            self.blurEffectView.removeFromSuperview()
-                            self.activityIndicatorView.removeFromSuperview()
-                        }
-                    }
-                } else {
-                    // Handle the case where the URL is empty
-                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                    self.activityIndicatorView.stopAnimating()
-                    self.blurEffectView.removeFromSuperview()
-                    self.activityIndicatorView.removeFromSuperview()
-                }
-            }
+            configureMemoryCell(for: cell, in: indexPath)
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell
             else { fatalError("Could not create ProfileCell") }
-            cell.memoryImageView.image = nil
-            cell.memoryNameLabel.text = self.plans[indexPath.row].planName
-            let daysData = plans[indexPath.row].days
-            if daysData.isEmpty == false {
-                let locationData = daysData[0]
-                let theLocation = locationData.locations
-                guard theLocation.isEmpty == false else {
-                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                    self.stopLoading()
-                    return cell
-                }
-                    let urlString = theLocation[0].photo
-                guard let url = URL(string: urlString) else {
-                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                    self.stopLoading()
-                    return cell
-                }
-                        let firebaseStorageManager = FirebaseStorageManagerDownloadPhotos()
-                        firebaseStorageManager.downloadPhotoFromFirebaseStorage(url: url) { image in
-                            DispatchQueue.main.async {
-                                if let image = image {
-                                    cell.memoryImageView.image = image
-                                } else {
-                                    cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
-                                }
-                                self.stopLoading()
-                            }
-                        }
-            }
+            configurePlanCell(for: cell, in: indexPath)
             return cell
         }
+    }
+    
+    func configureMemoryCell(for cell: ProfileCell, in indexPath: IndexPath) {
+        let taskIdentifier = UUID().uuidString
+        cell.taskIdentifier = taskIdentifier
+            cell.memoryNameLabel.text = self.memories[indexPath.row].planName
+        cell.memoryImageView.image = nil
+        guard !memories.isEmpty else {
+            removeLoadingView(with: blurEffectView, by: activityIndicatorView)
+            return
+        }
+
+        let urlString = memories[indexPath.row].coverPhoto ?? ""
+
+        loadMemoryImage(cell: cell, urlString: urlString)
+    }
+    
+    func configurePlanCell(for cell: ProfileCell, in indexPath: IndexPath) {
+        let taskIdentifier = UUID().uuidString
+        cell.taskIdentifier = taskIdentifier
+        cell.memoryImageView.image = nil
+        cell.memoryNameLabel.text = self.plans[indexPath.row].planName
+        let daysData = plans[indexPath.row].days
+        if daysData.isEmpty == false {
+            let locationData = daysData[0]
+            let theLocation = locationData.locations
+            guard theLocation.isEmpty == false else {
+                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                self.removeLoadingView(with: blurEffectView, by: activityIndicatorView)
+                return
+            }
+            let urlString = theLocation[0].photo
+            guard let url = URL(string: urlString) else {
+                cell.memoryImageView.image = UIImage(named: "Image_Placeholder")
+                self.removeLoadingView(with: blurEffectView, by: activityIndicatorView)
+                return
+            }
+            loadMemoryImage(cell: cell, urlString: urlString)
+        }
+    }
+       
+    func loadMemoryImage(cell: ProfileCell, urlString: String) {
+        guard !urlString.isEmpty, let url = URL(string: urlString) else {
+            cell.memoryImageView.image =  UIImage(named: "Image_Placeholder")
+            removeLoadingView(with: blurEffectView, by: activityIndicatorView)
+            return
+        }
+
+        cell.memoryImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(named: "Image_Placeholder"),
+            options: [
+                .transition(.fade(0.2)), // Add a fade transition
+                .cacheOriginalImage
+            ],
+            completionHandler: { _ in
+                self.removeLoadingView(with: self.blurEffectView, by: self.activityIndicatorView)
+            }
+        )
     }
     func stopLoading() {
         self.activityIndicatorView.stopAnimating()
@@ -332,58 +326,20 @@ extension ProfileViewController: UITableViewDataSource {
 
 extension ProfileViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if profileIndex == 0 {
-           return 230
-        } else {
-            return 230
-        }
+        230
     }
 }
 
 extension ProfileViewController: ProfileHeaderViewDelegate {
     func change(to index: Int) {
-        tableView.addSubview(blurEffectView)
-        tableView.addSubview(activityIndicatorView)
-        activityIndicatorView.startAnimating()
+        addLoadingView(with: blurEffectView, by: activityIndicatorView, on: tableView)
         profileIndex = index
         tableView.reloadData()
         if plans.isEmpty && profileIndex == 1 {
-            self.activityIndicatorView.stopAnimating()
-            self.blurEffectView.removeFromSuperview()
-            self.activityIndicatorView.removeFromSuperview()
+            removeLoadingView(with: blurEffectView, by: activityIndicatorView)
         }
         if memories.isEmpty && profileIndex == 0 {
-            self.activityIndicatorView.stopAnimating()
-            self.blurEffectView.removeFromSuperview()
-            self.activityIndicatorView.removeFromSuperview()
+            removeLoadingView(with: blurEffectView, by: activityIndicatorView)
         }
-    }
-}
-
-extension ProfileViewController {
-    
-    func downloadPhotoFromFirebaseStorage(url: URL, completion: @escaping (UIImage?) -> Void) {
-        let storageReference = Storage.storage().reference(forURL: url.absoluteString)
-
-        // Download in memory with a maximum allowed size of 1MB (1 * 1024 * 1024 bytes)
-        storageReference.getData(maxSize: 1 * 1024 * 1024) { data, error in
-            if let error = error {
-                print("Error downloading photo from Firebase Storage: \(error.localizedDescription)")
-                completion(nil)
-            } else if let data = data, let image = UIImage(data: data) {
-              //  self.tableView.reloadData()
-                completion(image)
-                
-            } else {
-                print("Failed to create UIImage from data.")
-                completion(nil)
-            }
-        }
-    }
-}
-
-extension ProfileViewController: FirestoreManagerDelegate {
-    func manager(_ manager: FirestoreManager, didGet firestoreData: [TravelPlan]) {
-        plans = firestoreData
     }
 }

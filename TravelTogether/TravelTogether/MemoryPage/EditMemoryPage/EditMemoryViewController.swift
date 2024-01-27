@@ -45,6 +45,7 @@ class EditMemoryViewController: UIViewController {
         fetchATravelPlan()
         configureRightButton()
         configureBlurEffectView()
+        configureNotification()
     }
     
     func configureTableView() {
