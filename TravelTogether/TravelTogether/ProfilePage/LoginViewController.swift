@@ -18,7 +18,7 @@ class LoginViewController: UIViewController {
     static var loginStatus = false
     var database = Firestore.firestore()
     let user = Auth.auth().currentUser
-    // Unhashed nonce.
+
     fileprivate var currentNonce: String?
     var newProfile: UserInfo?
     
@@ -67,11 +67,9 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var googleSigninButton: GIDSignInButton! {
         didSet {
             googleSigninButton.layer.cornerRadius = 8
-            
             let googleIconImageView = UIImageView(image: UIImage(named: "google"))
             googleIconImageView.contentMode = .scaleAspectFill
             googleSigninButton.addSubview(googleIconImageView)
-            
             googleIconImageView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 googleIconImageView.centerYAnchor.constraint(equalTo: googleSigninButton.centerYAnchor),
@@ -82,43 +80,32 @@ class LoginViewController: UIViewController {
         }
     }
         
-        @IBOutlet weak var appleSigninButton: ASAuthorizationAppleIDButton! {
-            didSet {
-                appleSigninButton.layer.cornerRadius = 8
-                
-                let appleIconImageView = UIImageView(image: UIImage(named: "apple"))
-                appleIconImageView.contentMode = .scaleAspectFill
-                appleSigninButton.addSubview(appleIconImageView)
-                
-                appleIconImageView.translatesAutoresizingMaskIntoConstraints = false
-                NSLayoutConstraint.activate([
-                    appleIconImageView.centerYAnchor.constraint(equalTo: appleSigninButton.centerYAnchor),
-                    appleIconImageView.leadingAnchor.constraint(equalTo: appleSigninButton.leadingAnchor, constant: 35),
-                    appleIconImageView.widthAnchor.constraint(equalToConstant: 28),
-                    appleIconImageView.heightAnchor.constraint(equalToConstant: 28)
-                ])
-            }
+    @IBOutlet weak var appleSigninButton: ASAuthorizationAppleIDButton! {
+        didSet {
+            appleSigninButton.layer.cornerRadius = 8
+            let appleIconImageView = UIImageView(image: UIImage(named: "apple"))
+            appleIconImageView.contentMode = .scaleAspectFill
+            appleSigninButton.addSubview(appleIconImageView)
+            appleIconImageView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                appleIconImageView.centerYAnchor.constraint(equalTo: appleSigninButton.centerYAnchor),
+                appleIconImageView.leadingAnchor.constraint(equalTo: appleSigninButton.leadingAnchor, constant: 35),
+                appleIconImageView.widthAnchor.constraint(equalToConstant: 28),
+                appleIconImageView.heightAnchor.constraint(equalToConstant: 28)
+            ])
         }
-    
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // 將使用者進入畫面預設成select log-in
         segmentedControl.selectedSegmentIndex = 0
         stackView.isHidden = true
         doneButton.isHidden = true
-        
-//        nameLabel.isEnabled = false
-//        nameTextField.isEnabled = false
-//        nameLabel.textColor = UIColor.lightGray
-//        nameTextField.backgroundColor = UIColor(named: "lightGreen")
-
         let font = UIFont.systemFont(ofSize: 16, weight: .light)
         segmentedControl.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)
-        
        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
        let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
-        
     }
     
     override func viewDidLayoutSubviews() {
@@ -165,23 +152,22 @@ class LoginViewController: UIViewController {
     
     @IBAction func googleSigninButtonTapped(_ sender: Any) {
         GIDSignIn.sharedInstance.signIn(withPresenting: self) { [unowned self] result, error in
-        guard error == nil else {
-            self.showAlert(title: "Error", message: "登入失敗。")
-            return
+            guard error == nil else {
+                self.showAlert(title: "Error", message: "登入失敗。")
+                return
+            }
+            
+            guard let user = result?.user,
+                  let idToken = user.idToken?.tokenString
+            else {
+                self.showAlert(title: "Error", message: "登入失敗，請改由其他方式登入。")
+                return
+            }
+            
+            let credential = GoogleAuthProvider.credential(
+                withIDToken: idToken, accessToken: user.accessToken.tokenString)
+            self.signInWithFirebase(credential)
         }
-
-        guard let user = result?.user,
-            let idToken = user.idToken?.tokenString
-        else {
-            self.showAlert(title: "Error", message: "登入失敗，請改由其他方式登入。")
-            return
-        }
-
-        let credential = GoogleAuthProvider.credential(withIDToken: idToken,
-                                                       accessToken: user.accessToken.tokenString)
-
-        self.signInWithFirebase(credential)
-                }
     }
     
     @IBAction func appleSigninButtonTapped(_ sender: Any) {
@@ -210,7 +196,8 @@ class LoginViewController: UIViewController {
                         id: user.uid, photo: user.photoURL?.absoluteString)
                     let usersData = existingGoogleUserProfile?.toDictionary()
                     usersRef.setData(usersData ?? userInfo.toDictionary(), merge: true)
-                }}
+                }
+            }
         }
     }
     @IBAction func doneButtonTapped(_ sender: Any) {
@@ -224,12 +211,11 @@ class LoginViewController: UIViewController {
             Auth.auth().signIn(withEmail: emailText, password: passwordText) { _, error in
                 guard error == nil else {
                     self.showAlert(title: "Error", message: "登入失敗")
-                      return
-                   }
+                    return
+                }
                 self.showAlert(title: "Success", message: "登入成功!")
                 LoginViewController.loginStatus = true
-        }
-            
+            }
             // select sign-up
         } else {
             Auth.auth().createUser(withEmail: emailText, password: passwordText) { _, error in
@@ -237,31 +223,27 @@ class LoginViewController: UIViewController {
                     print("Failed to resgister")
                     self.showAlert(title: "Error", message: "Email格式錯誤 或 密碼不足6位")
                 } else {
-                    // select sign-up: email未輸入
                     if emailText.isEmpty {
                         self.showAlert(title: "Error", message: "Email不可為空")
-                        
-                        // select sign-up: password未輸入
                     } else if passwordText.isEmpty {
                         self.showAlert(title: "Error", message: "密碼不可為空")
-                        
-                        // select sign-up: name未輸入
                     } else if nameText.isEmpty {
                         self.showAlert(title: "Error", message: "請輸入暱稱")
                         
                     } else {
-//                        self.showAlert(title: "Success", message: "註冊成功！請前往登入畫面並輸入登入資訊。")
                         self.addData()
                         Auth.auth().signIn(withEmail: emailText, password: passwordText) { _, error in
                             guard error == nil else {
                                 self.showAlert(title: "Error", message: "登入失敗")
-                                  return
-                               }
+                                return
+                            }
                             self.showAlert(title: "Success", message: "註冊並登入成功!")
                             LoginViewController.loginStatus = true
+                        }
                     }
-                    }
-                }}}
+                }
+            }
+        }
     }
 
     func showAlert(title: String, message: String) {
@@ -288,11 +270,8 @@ class LoginViewController: UIViewController {
         }
         
         let usersRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
-        
         let users = UserInfo(email: emailText, name: nameText, id: Auth.auth().currentUser?.uid ?? "")
-       
         let usersData = users.toDictionary()
-        
         usersRef.setData(usersData)
        }
 }
@@ -308,7 +287,9 @@ extension LoginViewController: ASAuthorizationControllerPresentationContextProvi
 @available(iOS 13.0, *)
 extension LoginViewController: ASAuthorizationControllerDelegate {
     
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+    func authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithAuthorization authorization: ASAuthorization) {
         retrieveExistingUserProfile { existingUserProfile in
             if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
                 guard let nonce = self.currentNonce else {
@@ -369,7 +350,6 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
             return
         }
 
-        // Retrieve the user profile information from your database (Firestore, Realtime Database, etc.)
         let usersRef = Firestore.firestore().collection("UserInfo").document(currentUser.uid)
         
         usersRef.getDocument { document, error in
@@ -388,8 +368,6 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
     }
     
     func handleMergeUserProfiles(existingUserProfile: UserInfo?) {
-        // Merge relevant information from existingUserProfile to newProfile
-        // For example, preserve display name and photo URL if they are empty in newProfile
         
         if newProfile?.name != existingUserProfile?.name {
             newProfile?.name = existingUserProfile?.name ?? ""
@@ -399,8 +377,6 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
             newProfile?.photo = existingUserProfile?.photo
            }
 
-
-        // Update the user profile in your database with the merged information
         updateProfileInDatabase((newProfile ?? UserInfo(email: "", name: "", id: "")))
     }
 
@@ -431,22 +407,6 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                 break
             }
         }
-
-//    func reauth(id appleIdToken: String, raw rawNonce: String) {
-//        // Initialize a fresh Apple credential with Firebase.
-//        let credential = OAuthProvider.credential(
-//          withProviderID: "apple.com",
-//          idToken: appleIdToken,
-//          rawNonce: rawNonce
-//        )
-//        // Reauthenticate current Apple user with fresh Apple credential.
-//        Auth.auth().currentUser?.reauthenticate(with: credential) { (authResult, error) in
-//          guard error != nil else { return }
-//          // Apple user successfully re-authenticated.
-//          // ...
-//        }
-//    }
-    
 }
 extension LoginViewController {
     private func randomNonceString(length: Int = 32) -> String {
@@ -463,7 +423,6 @@ extension LoginViewController {
         Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
 
       let nonce = randomBytes.map { byte in
-        // Pick a random character from the set, wrapping around if needed.
         charset[Int(byte) % charset.count]
       }
 

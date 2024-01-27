@@ -161,8 +161,7 @@ class ProfileViewController: UIViewController {
     @objc func rightButtonTapped() {
         if let settingVC = storyboard?.instantiateViewController(
             withIdentifier: "SettingViewController") as? SettingViewController {
-            let settingNavController = UINavigationController(rootViewController: settingVC)
-            present(settingNavController, animated: true, completion: nil)
+            present(settingVC, animated: true, completion: nil)
             
             settingVC.signOutButtonTap = { [weak self] in
                 if let tabBarController = self?.tabBarController {
@@ -204,6 +203,7 @@ class ProfileViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         addLoadingView(with: blurEffectViewFull, by: activityIndicatorViewFull, on: view)
         addLoadingView(with: blurEffectView, by: activityIndicatorView, on: tableView)
         fetchUserInfo()

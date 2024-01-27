@@ -69,7 +69,10 @@ class SelectedMemoryEditViewController: UIViewController {
     
     func fetchAMemory() {
         let firestoreManagerForOne = FirestoreManagerFetchMemory()
-        firestoreManagerForOne.fetchOneMemory(dbcollection: dbCollection, byId: memoryId) { (memory, error) in
+        firestoreManagerForOne.fetchOneMemory(
+            dbcollection: dbCollection, 
+            userId: Auth.auth().currentUser?.uid ?? "",
+            byId: memoryId) { (memory, error) in
             if let error = error {
                 print("Error fetching one memory: \(error)")
             } else if let memory = memory {

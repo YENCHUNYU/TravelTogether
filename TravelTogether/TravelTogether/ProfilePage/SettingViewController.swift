@@ -11,7 +11,7 @@ import AuthenticationServices
 import CryptoKit
 
 class SettingViewController: UIViewController, ASAuthorizationControllerDelegate {
-//    fileprivate var currentNonce: String?
+    
     var signOutButtonTap: (() -> Void)?
     @IBOutlet weak var closeButton: UIButton! {
         didSet {
@@ -83,17 +83,13 @@ class SettingViewController: UIViewController, ASAuthorizationControllerDelegate
         dismiss(animated: true, completion: nil)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-    }
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 25
         view.layer.masksToBounds = true
-        view.frame = CGRect(x: 0, y: (UIScreen.main.bounds.height) - 500,
-                            width: UIScreen.main.bounds.width, height: 500 )
+        view.frame = CGRect(x: 0, y: (UIScreen.main.bounds.height) - 400,
+                            width: UIScreen.main.bounds.width, height: 400 )
     }
     func showAlert(title: String, message: String, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -107,15 +103,5 @@ class SettingViewController: UIViewController, ASAuthorizationControllerDelegate
         alert.addAction(okAction)
         
         present(alert, animated: true)
-    }
-
-    func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default) { [weak self] action in
-            
-        }
-        alert.addAction(action)
-        present(alert, animated: true)
-        
     }
 }

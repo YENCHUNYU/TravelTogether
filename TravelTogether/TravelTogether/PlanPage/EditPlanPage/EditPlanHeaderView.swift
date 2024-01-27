@@ -63,7 +63,6 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
     
     func addNewDayButtonTapped() {
         let firestoreManager = FirestoreManagerForPostDay()
-        firestoreManager.delegate = self
         firestoreManager.addDayToTravelPlan(planId: travelPlanId) { error in
             if let error = error {
                 print("Error posting day: \(error)")
@@ -104,20 +103,6 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 60, height: 50)
     }
-    
-    // Handle button tap to add a new day
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    }
-}
-
-extension EditPlanHeaderView: FirestoreManagerForPostDayDelegate {
-    func manager(_ manager: FirestoreManagerForPostDay) {
-    }
-}
-
-extension EditPlanHeaderView: FirestoreManagerForOneDelegate {
-    func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan) {
-    }
 }
 
 extension EditPlanHeaderView: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
@@ -146,17 +131,14 @@ extension EditPlanHeaderView: UICollectionViewDragDelegate, UICollectionViewDrop
     
     func collectionView(_ collectionView: UICollectionView, 
                         performDropWith coordinator: UICollectionViewDropCoordinator) {
-        // 實際處理拖放操作
         if let destinationIndexPath = coordinator.destinationIndexPath {
- 
             var updatedIndexPaths = [IndexPath]()
             collectionView.performBatchUpdates({
                 let item = coordinator.items[0]
                 if let sourceIndexPath = item.sourceIndexPath {
                     guard sourceIndexPath.row < self.days.count - 1,
                           destinationIndexPath.row < self.days.count - 1 else {
-                            // sourceIndexPath.row 超出範圍，不執行相應的代碼
-                            return
+                            return  // sourceIndexPath.row 超出範圍，不執行相應的代碼
                         }
                     if sourceIndexPath.row != destinationIndexPath.row {
                         
@@ -169,30 +151,29 @@ extension EditPlanHeaderView: UICollectionViewDragDelegate, UICollectionViewDrop
                             self.onePlan.days.insert(
                                 dayData, at: destinationIndexPath.row)
                             updatedIndexPaths.append(destinationIndexPath)
-                           
-                            let firestoreMangerPostDay = FirestoreManagerForPostDay()
-                            firestoreMangerPostDay.postNewDaysArray(
-                                planId: travelPlanId,
-                                newDaysArray: self.onePlan.days) { error in
-                                if error != nil {
-                                    print("Failed to reorder the days")
-                                } else {
-                                    print("Reorder the days successfully!")
-                                    self.delegate?.reloadNewData()
-                                }
-                                
-                            }
+                            postNewDay()
                         }
                     }
                 }
-            }, completion: { _ in
-                // 拖放操作動畫完成後，重新載入數據
+            }, completion: { _ in // 拖放操作動畫完成後，重新載入數據
                 DispatchQueue.main.async {
-                   
                    self.collectionView.reloadData()
                }
-//                collectionView.reloadData()
             })
+        }
+    }
+    
+    func postNewDay() {
+        let firestoreMangerPostDay = FirestoreManagerForPostDay()
+        firestoreMangerPostDay.postNewDaysArray(
+            planId: travelPlanId,
+            newDaysArray: self.onePlan.days) { error in
+            if error != nil {
+                print("Failed to reorder the days")
+            } else {
+                print("Reorder the days successfully!")
+                self.delegate?.reloadNewData()
+            }
         }
     }
 }

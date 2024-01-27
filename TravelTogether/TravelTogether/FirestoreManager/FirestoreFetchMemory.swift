@@ -202,11 +202,12 @@ class FirestoreManagerFetchMemory {
            }
        }
    // 用戶個人
-    func fetchOneMemory(dbcollection: String, 
+    func fetchOneMemory(dbcollection: String,
+                        userId: String,
                         byId memoryId: String,
                         completion: @escaping (TravelPlan?, Error?) -> Void) {
         let database = Firestore.firestore()
-        let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
+        let userRef = database.collection("UserInfo").document(userId)
         let memoryRef = userRef.collection(dbcollection).document(memoryId)
 
         memoryRef.addSnapshotListener { document, error in
