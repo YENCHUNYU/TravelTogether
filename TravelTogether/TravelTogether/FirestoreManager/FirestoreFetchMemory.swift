@@ -220,22 +220,18 @@ class FirestoreManagerFetchMemory {
                         completion(nil, nil)
                         return
                     }
-
                     let data = document.data()
                     let startDate = (data?["startDate"] as? Timestamp)?.dateValue() ?? Date()
                     let endDate = (data?["endDate"] as? Timestamp)?.dateValue() ?? Date()
-
                     guard let daysArray = data?["days"] as? [[String: Any]] else {
                         return
                     }
-
                     var travelDays: [TravelDay] = []
                     for dayData in daysArray {
                     
                         guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
                             return
                         }
-
                         var locations: [Location] = []
                         for locationData in locationsArray {
                             let location = Location(
@@ -247,11 +243,9 @@ class FirestoreManagerFetchMemory {
                             )
                             locations.append(location)
                         }
-
                         let travelDay = TravelDay(locations: locations)
                         travelDays.append(travelDay)
                     }
-                    
                     let travelPlan = TravelPlan(
                         id: document.documentID,
                         planName: data?["planName"] as? String ?? "",

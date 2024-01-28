@@ -81,7 +81,7 @@ class PlanViewController: UIViewController {
     }
     
     func fetchMyPlan() {
-        let firestoreManager = FirestoreManager()
+        let firestoreManager = FirestoreManagerForPlans()
         firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
             if let error = error {
                 print("Error fetching travel plans: \(error)")
@@ -222,7 +222,7 @@ extension PlanViewController: UITableViewDelegate {
         commit editingStyle: UITableViewCell.EditingStyle,
         forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let firestoreManager = FirestoreManager()
+            let firestoreManager = FirestoreManagerForPlans()
             firestoreManager.deleteTravelPlan(withID: plans[indexPath.row].id) { error in
                 if let error = error {
                     print("Failed to delete travel plan: \(error)")

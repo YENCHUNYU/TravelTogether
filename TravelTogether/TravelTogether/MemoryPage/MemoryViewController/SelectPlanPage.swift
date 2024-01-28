@@ -25,7 +25,7 @@ class SelectPlanViewController: UIViewController {
         }
     
     func fetchTravelPlans() {
-        let firestoreManager = FirestoreManager()
+        let firestoreManager = FirestoreManagerForPlans()
         firestoreManager.fetchTravelPlans(userId: Auth.auth().currentUser?.uid ?? "") { (travelPlans, error) in
             if let error = error {
                 print("Error fetching travel plans: \(error)")

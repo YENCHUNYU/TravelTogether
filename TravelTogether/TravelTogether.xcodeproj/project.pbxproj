@@ -26,11 +26,11 @@
 		523846ED2B18DC21006D58B0 /* EditMemoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523846EC2B18DC21006D58B0 /* EditMemoryCell.swift */; };
 		523846EF2B18E418006D58B0 /* EditMemoryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523846EE2B18E418006D58B0 /* EditMemoryHeaderView.swift */; };
 		524157002B149230005D41F6 /* EditPlanCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524156FF2B149230005D41F6 /* EditPlanCollectionCell.swift */; };
-		5245BA762B0E136E006594CC /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA752B0E136E006594CC /* FirestoreManager.swift */; };
-		5245BA782B0E17FA006594CC /* FirestoreManagerForOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */; };
+		5245BA762B0E136E006594CC /* FirestorePlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA752B0E136E006594CC /* FirestorePlan.swift */; };
+		5245BA782B0E17FA006594CC /* FirestorePlanForOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5245BA772B0E17FA006594CC /* FirestorePlanForOne.swift */; };
 		5248E5D92B27F5850052DD20 /* SaveAsDraftorPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5248E5D82B27F5850052DD20 /* SaveAsDraftorPostViewController.swift */; };
 		5248E5DB2B28227F0052DD20 /* UpdateDraftorPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5248E5DA2B28227F0052DD20 /* UpdateDraftorPostViewController.swift */; };
-		524C30F12B1832FD00C5CEDC /* FirestoreUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F02B1832FD00C5CEDC /* FirestoreUserInfo.swift */; };
+		524C30F12B1832FD00C5CEDC /* FirestoreFetchUserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F02B1832FD00C5CEDC /* FirestoreFetchUserInfo.swift */; };
 		524C30F32B18336D00C5CEDC /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F22B18336D00C5CEDC /* UserInfo.swift */; };
 		524C30F52B1891D700C5CEDC /* SelectPlanPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F42B1891D700C5CEDC /* SelectPlanPage.swift */; };
 		524C30F72B189F6200C5CEDC /* SelectPlanCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 524C30F62B189F6200C5CEDC /* SelectPlanCell.swift */; };
@@ -69,14 +69,14 @@
 		5288CB292B07B98A00E089F9 /* AddToListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5288CB282B07B98A00E089F9 /* AddToListCell.swift */; };
 		529781BB2B2564D600F53476 /* PlanDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529781BA2B2564D600F53476 /* PlanDetailViewController.swift */; };
 		529781BD2B25650300F53476 /* PlanDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529781BC2B25650300F53476 /* PlanDetailCell.swift */; };
-		529781BF2B25A0C100F53476 /* FirestorePostFavorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529781BE2B25A0C100F53476 /* FirestorePostFavorite.swift */; };
+		529781BF2B25A0C100F53476 /* FirestoreFavorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529781BE2B25A0C100F53476 /* FirestoreFavorite.swift */; };
 		529781C12B25A41800F53476 /* FavoriteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529781C02B25A41800F53476 /* FavoriteCell.swift */; };
 		52ABB13E2B1E1737005D690E /* FirestoreFetchMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52ABB13D2B1E1737005D690E /* FirestoreFetchMemory.swift */; };
 		52B41BB12B22DEB500B28225 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 52B41BB02B22DEB500B28225 /* GoogleSignIn */; };
 		52B41BB32B22DEB500B28225 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 52B41BB22B22DEB500B28225 /* GoogleSignInSwift */; };
 		52B41BB52B22DF4400B28225 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 52B41BB42B22DF4400B28225 /* GoogleService-Info.plist */; };
 		52B41BB82B232D4200B28225 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 52B41BB72B232D4200B28225 /* Kingfisher */; };
-		52CD52202B0E406100CA7352 /* FirestoreForPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CD521F2B0E406100CA7352 /* FirestoreForPost.swift */; };
+		52CD52202B0E406100CA7352 /* FirestoreForPostPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52CD521F2B0E406100CA7352 /* FirestoreForPostPlan.swift */; };
 		52D7D16B2B300CC000DBEC7A /* FirestoreManagerTogether.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52D7D16A2B300CC000DBEC7A /* FirestoreManagerTogether.swift */; };
 		52DF40EE2B218FBC005F60FD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DF40ED2B218FBC005F60FD /* LoginViewController.swift */; };
 		52E0F95A2B0EE64A00D23AFE /* FirestoreForPostLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E0F9592B0EE64A00D23AFE /* FirestoreForPostLocation.swift */; };
@@ -148,11 +148,11 @@
 		523846EC2B18DC21006D58B0 /* EditMemoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoryCell.swift; sourceTree = "<group>"; };
 		523846EE2B18E418006D58B0 /* EditMemoryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoryHeaderView.swift; sourceTree = "<group>"; };
 		524156FF2B149230005D41F6 /* EditPlanCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPlanCollectionCell.swift; sourceTree = "<group>"; };
-		5245BA752B0E136E006594CC /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
-		5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManagerForOne.swift; sourceTree = "<group>"; };
+		5245BA752B0E136E006594CC /* FirestorePlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestorePlan.swift; sourceTree = "<group>"; };
+		5245BA772B0E17FA006594CC /* FirestorePlanForOne.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestorePlanForOne.swift; sourceTree = "<group>"; };
 		5248E5D82B27F5850052DD20 /* SaveAsDraftorPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveAsDraftorPostViewController.swift; sourceTree = "<group>"; };
 		5248E5DA2B28227F0052DD20 /* UpdateDraftorPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateDraftorPostViewController.swift; sourceTree = "<group>"; };
-		524C30F02B1832FD00C5CEDC /* FirestoreUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreUserInfo.swift; sourceTree = "<group>"; };
+		524C30F02B1832FD00C5CEDC /* FirestoreFetchUserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreFetchUserInfo.swift; sourceTree = "<group>"; };
 		524C30F22B18336D00C5CEDC /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		524C30F42B1891D700C5CEDC /* SelectPlanPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPlanPage.swift; sourceTree = "<group>"; };
 		524C30F62B189F6200C5CEDC /* SelectPlanCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectPlanCell.swift; sourceTree = "<group>"; };
@@ -188,11 +188,11 @@
 		5288CB282B07B98A00E089F9 /* AddToListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToListCell.swift; sourceTree = "<group>"; };
 		529781BA2B2564D600F53476 /* PlanDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDetailViewController.swift; sourceTree = "<group>"; };
 		529781BC2B25650300F53476 /* PlanDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanDetailCell.swift; sourceTree = "<group>"; };
-		529781BE2B25A0C100F53476 /* FirestorePostFavorite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestorePostFavorite.swift; sourceTree = "<group>"; };
+		529781BE2B25A0C100F53476 /* FirestoreFavorite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreFavorite.swift; sourceTree = "<group>"; };
 		529781C02B25A41800F53476 /* FavoriteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCell.swift; sourceTree = "<group>"; };
 		52ABB13D2B1E1737005D690E /* FirestoreFetchMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreFetchMemory.swift; sourceTree = "<group>"; };
 		52B41BB42B22DF4400B28225 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		52CD521F2B0E406100CA7352 /* FirestoreForPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreForPost.swift; sourceTree = "<group>"; };
+		52CD521F2B0E406100CA7352 /* FirestoreForPostPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreForPostPlan.swift; sourceTree = "<group>"; };
 		52D7D16A2B300CC000DBEC7A /* FirestoreManagerTogether.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManagerTogether.swift; sourceTree = "<group>"; };
 		52DF40ED2B218FBC005F60FD /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		52E0F9592B0EE64A00D23AFE /* FirestoreForPostLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreForPostLocation.swift; sourceTree = "<group>"; };
@@ -296,15 +296,15 @@
 		5245BA742B0E135A006594CC /* FirestoreManager */ = {
 			isa = PBXGroup;
 			children = (
-				5245BA752B0E136E006594CC /* FirestoreManager.swift */,
-				5245BA772B0E17FA006594CC /* FirestoreManagerForOne.swift */,
-				52CD521F2B0E406100CA7352 /* FirestoreForPost.swift */,
+				5245BA752B0E136E006594CC /* FirestorePlan.swift */,
+				5245BA772B0E17FA006594CC /* FirestorePlanForOne.swift */,
+				52CD521F2B0E406100CA7352 /* FirestoreForPostPlan.swift */,
 				52E0F9592B0EE64A00D23AFE /* FirestoreForPostLocation.swift */,
 				5255286B2B11D3E600D4B6F6 /* FirestoreManagerForPostDay.swift */,
-				524C30F02B1832FD00C5CEDC /* FirestoreUserInfo.swift */,
+				524C30F02B1832FD00C5CEDC /* FirestoreFetchUserInfo.swift */,
 				525E7CBA2B19F0AD0057C5EE /* FirestoreForPostMemory.swift */,
 				52ABB13D2B1E1737005D690E /* FirestoreFetchMemory.swift */,
-				529781BE2B25A0C100F53476 /* FirestorePostFavorite.swift */,
+				529781BE2B25A0C100F53476 /* FirestoreFavorite.swift */,
 				52D7D16A2B300CC000DBEC7A /* FirestoreManagerTogether.swift */,
 			);
 			path = FirestoreManager;
@@ -836,7 +836,7 @@
 				52783CE82B05C4DA0067A334 /* MapViewController.swift in Sources */,
 				52783CD82B0359110067A334 /* ProfileViewController.swift in Sources */,
 				523846ED2B18DC21006D58B0 /* EditMemoryCell.swift in Sources */,
-				5245BA782B0E17FA006594CC /* FirestoreManagerForOne.swift in Sources */,
+				5245BA782B0E17FA006594CC /* FirestorePlanForOne.swift in Sources */,
 				5288CB292B07B98A00E089F9 /* AddToListCell.swift in Sources */,
 				5288CB122B076F7A00E089F9 /* CreatePlanViewController.swift in Sources */,
 				5233DE002B6005D700BCCDEE /* DateUtils.swift in Sources */,
@@ -844,11 +844,11 @@
 				5248E5D92B27F5850052DD20 /* SaveAsDraftorPostViewController.swift in Sources */,
 				52292F022B01F8E30083399E /* SearchMemoriesTableVIewCell.swift in Sources */,
 				5221A56E2B14567B0084F7C0 /* SelectDateCell.swift in Sources */,
-				524C30F12B1832FD00C5CEDC /* FirestoreUserInfo.swift in Sources */,
+				524C30F12B1832FD00C5CEDC /* FirestoreFetchUserInfo.swift in Sources */,
 				5221A56C2B14540F0084F7C0 /* SelectDateFooterView.swift in Sources */,
 				52783CDC2B036D480067A334 /* ProfileHeaderView.swift in Sources */,
 				52DF40EE2B218FBC005F60FD /* LoginViewController.swift in Sources */,
-				52CD52202B0E406100CA7352 /* FirestoreForPost.swift in Sources */,
+				52CD52202B0E406100CA7352 /* FirestoreForPostPlan.swift in Sources */,
 				52783CCA2B033EE20067A334 /* MyPlanCell.swift in Sources */,
 				52D7D16B2B300CC000DBEC7A /* FirestoreManagerTogether.swift in Sources */,
 				525E7CBB2B19F0AD0057C5EE /* FirestoreForPostMemory.swift in Sources */,
@@ -859,9 +859,9 @@
 				52E70D872B0107F100440D4C /* SceneDelegate.swift in Sources */,
 				523243A62B0892930078200C /* EditPlanFooterView.swift in Sources */,
 				52783CF12B05EB380067A334 /* MapsListViewController.swift in Sources */,
-				529781BF2B25A0C100F53476 /* FirestorePostFavorite.swift in Sources */,
+				529781BF2B25A0C100F53476 /* FirestoreFavorite.swift in Sources */,
 				527F3BA82B2056EA008CB8E2 /* SelectedMemoryEditViewController.swift in Sources */,
-				5245BA762B0E136E006594CC /* FirestoreManager.swift in Sources */,
+				5245BA762B0E136E006594CC /* FirestorePlan.swift in Sources */,
 				52783CCE2B0345AC0067A334 /* TogetherPlanCell.swift in Sources */,
 				52783CD52B0354820067A334 /* MemoryHeaderView.swift in Sources */,
 				52783CF32B0603BD0067A334 /* GooglePlacesManager.swift in Sources */,

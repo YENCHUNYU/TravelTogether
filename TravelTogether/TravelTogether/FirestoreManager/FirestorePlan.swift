@@ -9,7 +9,7 @@ import UIKit
 import FirebaseFirestore
 import FirebaseAuth
 
-class FirestoreManager {
+class FirestoreManagerForPlans {
 
     func fetchTravelPlans(userId: String?, completion: @escaping ([TravelPlan]?, Error?) -> Void) {
         let database = Firestore.firestore()
@@ -52,7 +52,7 @@ class FirestoreManager {
     }
 }
 
-extension FirestoreManager {
+extension FirestoreManagerForPlans {
 
     func deleteTravelPlan(withID planID: String, completion: @escaping (Error?) -> Void) {
            let database = Firestore.firestore()
