@@ -8,10 +8,9 @@
 import UIKit
 
 protocol EditPlanHeaderViewDelegate: AnyObject {
-    func reloadData()
     func passDays(daysData: [String])
     func reloadNewData()
-    }
+}
 
 class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -25,17 +24,16 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal // Set scroll direction to horizontal
-        layout.minimumLineSpacing = 10 // Adjust spacing between items if needed
+        layout.scrollDirection = .horizontal
+        layout.minimumLineSpacing = 10
 
         let collectionView = UICollectionView(
             frame: CGRect(x: 10, y: 0, width: UIScreen.main.bounds.width - 20, height: 50),
             collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.showsHorizontalScrollIndicator = false // Optionally, hide horizontal scroll indicator
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView.register(ButtonCell.self, forCellWithReuseIdentifier: ButtonCell.reuseIdentifier)
-        
         collectionView.dragInteractionEnabled = true
         collectionView.dragDelegate = self
         collectionView.dropDelegate = self
@@ -46,7 +44,6 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         addSubview(collectionView)
-        
     }
     
     required init?(coder: NSCoder) {
@@ -68,7 +65,7 @@ class EditPlanHeaderView: UITableViewHeaderFooterView, UICollectionViewDataSourc
                 print("Error posting day: \(error)")
             } else {
                 print("Day posted successfully!\(self.days.count - 1)")
-                self.delegate?.reloadData()
+                self.delegate?.reloadNewData()
             }
         }
     }
@@ -110,7 +107,6 @@ extension EditPlanHeaderView: UICollectionViewDragDelegate, UICollectionViewDrop
     func collectionView(_ collectionView: UICollectionView, 
                         itemsForBeginning session: UIDragSession,
                         at indexPath: IndexPath) -> [UIDragItem] {
-        // 在開始拖動時提供拖動的項目
         let item = self.days[indexPath.item]
         let itemProvider = NSItemProvider(object: item as NSItemProviderWriting)
         let dragItem = UIDragItem(itemProvider: itemProvider)
@@ -125,7 +121,6 @@ extension EditPlanHeaderView: UICollectionViewDragDelegate, UICollectionViewDrop
     func collectionView(_ collectionView: UICollectionView, 
                         dropSessionDidUpdate session: UIDropSession,
                         withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-        // 在拖放過程中更新，可以返回不同的操作（例如.move）
         return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
     }
     
@@ -140,8 +135,7 @@ extension EditPlanHeaderView: UICollectionViewDragDelegate, UICollectionViewDrop
                           destinationIndexPath.row < self.days.count - 1 else {
                             return  // sourceIndexPath.row 超出範圍，不執行相應的代碼
                         }
-                    if sourceIndexPath.row != destinationIndexPath.row {
-                        
+                    if sourceIndexPath.row != destinationIndexPath.row {  
                         let movedDay = self.days.remove(at: sourceIndexPath.item)
                         self.days.insert(movedDay, at: destinationIndexPath.item)
                         collectionView.moveItem(at: sourceIndexPath, to: destinationIndexPath)
