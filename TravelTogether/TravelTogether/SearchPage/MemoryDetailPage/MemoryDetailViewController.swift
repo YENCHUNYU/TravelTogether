@@ -72,7 +72,7 @@ class MemoryDetailViewController: UIViewController {
     }
     
     func postAPlan() {
-        let firestorePost = FirestoreManagerForPost()
+        let firestorePost = FirestoreManagerForPostPlan()
         firestorePost.postFullPlan(plan: self.onePlan) { error in
             if let error = error {
                 print("Error fetching one plan: \(error)")
@@ -389,8 +389,6 @@ extension MemoryDetailViewController: UICollectionViewDataSource,
             for: indexPath) as? MemoryCollectionViewCell else {
                fatalError("Failed to dequeue ImageCollectionViewCell")
            }
-           
-           let firestorageDownload = FirebaseStorageManagerDownloadPhotos()
            // cell 在image download前被reuse 而產生相同照片的cell
            guard let currentSection = currentIndexPath?.section,
              let currentRow = currentIndexPath?.row,

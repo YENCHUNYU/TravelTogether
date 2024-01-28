@@ -9,12 +9,7 @@ import UIKit
 import FirebaseFirestore
 import FirebaseAuth
 
-protocol FirestoreManagerForPostDelegate: AnyObject {
-    func manager(_ manager: FirestoreManagerForPost, didPost firestoreData: TravelPlan)
-}
-
-class FirestoreManagerForPost {
-    var delegate: FirestoreManagerForPostDelegate?
+class FirestoreManagerForPostPlan {
 // 空的plan
     func postTravelPlan(travelPlan: TravelPlan, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()  
@@ -29,7 +24,6 @@ class FirestoreManagerForPost {
                 completion(error)
             } else {
                 print("Document added with ID")
-                self.delegate?.manager(self, didPost: travelPlan)
                 completion(nil)
             }
         }

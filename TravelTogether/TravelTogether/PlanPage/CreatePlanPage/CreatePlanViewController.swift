@@ -95,7 +95,7 @@ class CreatePlanViewController: UIViewController {
     }
     
     func postNewPlanToDB() {
-        let firestoreManagerForPost = FirestoreManagerForPost()
+        let firestoreManagerForPost = FirestoreManagerForPostPlan()
         firestoreManagerForPost.postTravelPlan(travelPlan: self.newTravelPlan) { error in
             if let error = error {
                 print("Error posting travel plan: \(error)")

@@ -9,14 +9,8 @@ import UIKit
 import FirebaseFirestore
 import FirebaseAuth
 
-protocol FirestoreManagerForPostLocationDelegate: AnyObject {
-    func manager(_ manager: FirestoreManagerForPostLocation, didPost firestoreData: Location)
-}
-
 class FirestoreManagerForPostLocation {
-    
-    var delegate: FirestoreManagerForPostLocationDelegate?
-    
+  
     func addLocationToTravelPlan(userId: String, planId: String,
                                  location: Location, day: Int, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
@@ -61,7 +55,6 @@ class FirestoreManagerForPostLocation {
                         print("Error setting document: \(error)")
                         completion(error)
                     } else {
-                        self.delegate?.manager(self, didPost: location)
                         completion(nil)
                     }
                 }

@@ -9,14 +9,8 @@ import UIKit
 import FirebaseFirestore
 import FirebaseAuth
 
-protocol FirestoreManagerFetchUserDelegate: AnyObject {
-    func manager(_ manager: FirestoreManager, didGet firestoreData: UserInfo)
-}
-
 class FirestoreManagerFetchUser {
-
-    weak var delegate: FirestoreManagerFetchUserDelegate?
-
+    
     func fetchUserInfo(completion: @escaping (UserInfo?, Error?) -> Void) {
         let database = Firestore.firestore()
 

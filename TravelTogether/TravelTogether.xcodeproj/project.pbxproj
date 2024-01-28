@@ -81,7 +81,6 @@
 		52DF40EE2B218FBC005F60FD /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52DF40ED2B218FBC005F60FD /* LoginViewController.swift */; };
 		52E0F95A2B0EE64A00D23AFE /* FirestoreForPostLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E0F9592B0EE64A00D23AFE /* FirestoreForPostLocation.swift */; };
 		52E0F95C2B0F2F3B00D23AFE /* FirebaseStorageUploadPhotos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E0F95B2B0F2F3B00D23AFE /* FirebaseStorageUploadPhotos.swift */; };
-		52E0F95E2B0F31FD00D23AFE /* FirebaseStorageManagerDownloadPhotos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52E0F95D2B0F31FD00D23AFE /* FirebaseStorageManagerDownloadPhotos.swift */; };
 		52E519DC2B23748800D88E30 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 52E519DB2B23748800D88E30 /* FirebaseAnalytics */; };
 		52E519DE2B23748800D88E30 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 52E519DD2B23748800D88E30 /* FirebaseAnalyticsOnDeviceConversion */; };
 		52E519E02B23748800D88E30 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 52E519DF2B23748800D88E30 /* FirebaseAnalyticsSwift */; };
@@ -198,7 +197,6 @@
 		52DF40ED2B218FBC005F60FD /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		52E0F9592B0EE64A00D23AFE /* FirestoreForPostLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreForPostLocation.swift; sourceTree = "<group>"; };
 		52E0F95B2B0F2F3B00D23AFE /* FirebaseStorageUploadPhotos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageUploadPhotos.swift; sourceTree = "<group>"; };
-		52E0F95D2B0F31FD00D23AFE /* FirebaseStorageManagerDownloadPhotos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseStorageManagerDownloadPhotos.swift; sourceTree = "<group>"; };
 		52E51A122B24DCFC00D88E30 /* MemoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		52E70D812B0107F100440D4C /* TravelTogether.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelTogether.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52E70D842B0107F100440D4C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -324,7 +322,6 @@
 			isa = PBXGroup;
 			children = (
 				52E0F95B2B0F2F3B00D23AFE /* FirebaseStorageUploadPhotos.swift */,
-				52E0F95D2B0F31FD00D23AFE /* FirebaseStorageManagerDownloadPhotos.swift */,
 			);
 			path = FirebaseStorageManager;
 			sourceTree = "<group>";
@@ -831,7 +828,6 @@
 				52783CDA2B03612B0067A334 /* ProfileTableViewCell.swift in Sources */,
 				52783CCC2B03409E0067A334 /* PlanHeaderView.swift in Sources */,
 				52783CD32B0350AC0067A334 /* MemoryCell.swift in Sources */,
-				52E0F95E2B0F31FD00D23AFE /* FirebaseStorageManagerDownloadPhotos.swift in Sources */,
 				523243A02B0871020078200C /* EditPlanViewController.swift in Sources */,
 				5288CB102B07615400E089F9 /* AddToPlanListViewController.swift in Sources */,
 				52783CEC2B05DB620067A334 /* GooglePlace.swift in Sources */,

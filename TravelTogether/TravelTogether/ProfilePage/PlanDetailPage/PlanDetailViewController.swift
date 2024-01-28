@@ -79,7 +79,7 @@ class PlanDetailViewController: UIViewController {
     }
     
     func postAPlanToDB() {
-        let firestorePost = FirestoreManagerForPost()
+        let firestorePost = FirestoreManagerForPostPlan()
         firestorePost.postFullPlan(plan: self.onePlan) { error in
             if let error = error {
                 print("Error fetching one plan: \(error)")

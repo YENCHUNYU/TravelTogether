@@ -8,19 +8,17 @@
 import UIKit
 import FirebaseFirestore
 
-protocol FirestoreManagerForOneDelegate: AnyObject {
-    func manager(_ manager: FirestoreManagerForOne, didGet firestoreData: TravelPlan)
-}
-
 class FirestoreManagerForOne {
     
-    var delegate: FirestoreManagerForOneDelegate?
-    
     func fetchOneTravelPlan(
-        dbCollection: String, userId: String,
-        byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
+        dbCollection: String,
+        userId: String,
+        byId planId: String,
+        completion: @escaping (TravelPlan?, Error?) -> Void
+    ) {
         let database = Firestore.firestore()
         let travelPlanRef = database.collection("UserInfo").document(userId).collection(dbCollection).document(planId)
+        
         travelPlanRef.addSnapshotListener { document, error in
             if let error = error {
                 print("Error getting document: \(error)")
@@ -32,94 +30,19 @@ class FirestoreManagerForOne {
                         return
                     }
                     let data = document.data()
-                    let startDate = (data?["startDate"] as? Timestamp)?.dateValue() ?? Date()
-                    let endDate = (data?["endDate"] as? Timestamp)?.dateValue() ?? Date()
-                    guard let daysArray = data?["days"] as? [[String: Any]] else {
-                        return
-                    }
-                    var travelDays: [TravelDay] = []
-                    for dayData in daysArray {
-                        guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
-                            return
-                        }
-                        var locations: [Location] = []
-                        for locationData in locationsArray {
-                            let location = Location(
-                                name: locationData["name"] as? String ?? "",
-                                photo: locationData["photo"] as? String ?? "",
-                                address: locationData["address"] as? String ?? ""
-                            )
-                            locations.append(location)
-                        }
-                        let travelDay = TravelDay(locations: locations)
-                        travelDays.append(travelDay)
-                    }
-                    
-                    let travelPlan = TravelPlan(
-                        id: document.documentID,
-                        planName: data?["planName"] as? String ?? "",
-                        destination: data?["destination"] as? String ?? "",
-                        startDate: startDate,
-                        endDate: endDate,
-                        days: travelDays,
-                        user: data?["user"] as? String ?? "",
-                        userPhoto: data?["userPhoto"] as? String ?? "",
-                        userId: data?["userId"] as? String ?? ""
-                    )
-                    completion(travelPlan, nil)
-                    self.delegate?.manager(self, didGet: travelPlan)
-                }} }
-    }
-    
-    func fetchOneTravelPlanFromFavorite(dbcollection: String, userId: String, 
-                                        byId planId: String, completion: @escaping (TravelPlan?, Error?) -> Void) {
-        let database = Firestore.firestore()
-        let travelPlanRef = database.collection("UserInfo").document(userId).collection(dbcollection).document(planId)
-        travelPlanRef.addSnapshotListener { document, error in
-            if let error = error {
-                print("Error getting document: \(error)")
-                completion(nil, error)
-            } else {
-                do {
-                    guard let document = document, document.exists else {
-                        completion(nil, nil)
-                        return }
-                    let data = document.data()
-                    let startDate = (data?["startDate"] as? Timestamp)?.dateValue() ?? Date()
-                    let endDate = (data?["endDate"] as? Timestamp)?.dateValue() ?? Date()
-                    guard let daysArray = data?["days"] as? [[String: Any]] else {
-                        return  }
-                    var travelDays: [TravelDay] = []
-                    for dayData in daysArray {
-                        guard let locationsArray = dayData["locations"] as? [[String: Any]] else {
-                            return   }
-                        var locations: [Location] = []
-                        for locationData in locationsArray {
-                            let location = Location(
-                                name: locationData["name"] as? String ?? "",
-                                photo: locationData["photo"] as? String ?? "",
-                                address: locationData["address"] as? String ?? ""
-                            )
-                            locations.append(location)
-                        }
+                    let updatedData = DateUtils.convertTimestampToDate(original: data ?? [:])
 
-                        let travelDay = TravelDay(locations: locations)
-                        travelDays.append(travelDay)
+                    guard let data = try? JSONSerialization.data(withJSONObject: updatedData) else {
+                        completion(nil, nil)
+                        return
                     }
-                    
-                    let travelPlan = TravelPlan(
-                        id: document.documentID,
-                        planName: data?["planName"] as? String ?? "",
-                        destination: data?["destination"] as? String ?? "",
-                        startDate: startDate,
-                        endDate: endDate,
-                        days: travelDays,
-                        user: data?["user"] as? String ?? "",
-                        userPhoto: data?["userPhoto"] as? String ?? "",
-                        userId: data?["userId"] as? String ?? ""
-                    )
+
+                    var travelPlan = try JSONDecoder().decode(TravelPlan.self, from: data)
+                    travelPlan.id = document.documentID
                     completion(travelPlan, nil)
-                    self.delegate?.manager(self, didGet: travelPlan)
+                } catch {
+                    print("Error decoding JSON: \(error)")
+                    completion(nil, error)
                 }
             }
         }
@@ -158,15 +81,16 @@ extension FirestoreManagerForOne {
                     }
                     daysArray[dayIndex]["locations"] = locationsArray
                     travelPlanData["days"] = daysArray
-                        travelPlanRef.setData(travelPlanData, merge: true) { error in
-                                if let error = error {
-                                    print("Error updating document after deletion: \(error)")
-                                    completion(error)
-                                } else {
-                                    print("Document updated successfully after deletion.")
-                                    completion(nil)
-                            }}
+                    travelPlanRef.setData(travelPlanData, merge: true) { error in
+                        if let error = error {
+                            print("Error updating document after deletion: \(error)")
+                            completion(error)
+                        } else {
+                            print("Document updated successfully after deletion.")
+                            completion(nil)
+                        }
                     }
+                }
             }
         }
     }
@@ -195,13 +119,14 @@ extension FirestoreManagerForOne {
                     daysArray.remove(at: dayIndex)
                     travelPlanData["days"] = daysArray
                     travelPlanRef.setData(travelPlanData, merge: true) { error in
-                            if let error = error {
-                                print("Error updating document after deletion: \(error)")
-                                completion(error)
-                            } else {
-                                print("Document updated successfully after deletion.")
-                                completion(nil)
-                        }}
+                        if let error = error {
+                            print("Error updating document after deletion: \(error)")
+                            completion(error)
+                        } else {
+                            print("Document updated successfully after deletion.")
+                            completion(nil)
+                        }
+                    }
                 }
             }
         }

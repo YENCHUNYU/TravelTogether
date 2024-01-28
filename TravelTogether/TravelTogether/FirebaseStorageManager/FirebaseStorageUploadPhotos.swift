@@ -8,14 +8,8 @@
 import UIKit
 import FirebaseStorage
 
-protocol FirebaseStorageManagerUploadDelegate: AnyObject {
-    func manager(_ manager: FirebaseStorageManagerUploadPhotos)
-}
-
 class FirebaseStorageManagerUploadPhotos {
-    
-    var delegate: FirebaseStorageManagerUploadDelegate?
-    
+  
     func uploadPhotoToFirebaseStorage(image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
         let filename = "\(UUID().uuidString).jpg"
         let storageRef = Storage.storage().reference().child("photos").child(filename)

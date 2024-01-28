@@ -9,14 +9,8 @@ import UIKit
 import FirebaseFirestore
 import FirebaseAuth
 
-protocol FirestoreManagerForPostDayDelegate: AnyObject {
-    func manager(_ manager: FirestoreManagerForPostDay)
-}
-
 class FirestoreManagerForPostDay {
-    
-    var delegate: FirestoreManagerForPostDayDelegate?
-    
+   
     func addDayToTravelPlan(planId: String, completion: @escaping (Error?) -> Void) {
         let database = Firestore.firestore()
         let userRef = database.collection("UserInfo").document(Auth.auth().currentUser?.uid ?? "")
@@ -40,7 +34,6 @@ class FirestoreManagerForPostDay {
                             print("Error setting document: \(error)")
                             completion(error)
                         } else {
-                            self.delegate?.manager(self)
                             completion(nil)
                         }
                     }

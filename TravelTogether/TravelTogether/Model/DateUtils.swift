@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class DateUtils {
     static func changeDateFormat(_ date: String) -> String {
@@ -23,5 +24,16 @@ class DateUtils {
             return ""
         }
     }
+    
+    static func convertTimestampToDate(original dbData: [String: Any]) -> [String: Any] {
+        var updatedData = dbData
+    
+        if let startDateTimestamp = dbData["startDate"] as? Timestamp {
+            updatedData["startDate"] = startDateTimestamp.dateValue().timeIntervalSinceReferenceDate
+        }
+        if let endDateTimestamp = dbData["endDate"] as? Timestamp {
+            updatedData["endDate"] = endDateTimestamp.dateValue().timeIntervalSinceReferenceDate
+        }
+            return updatedData
+        }
 }
-
