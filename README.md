@@ -5,12 +5,6 @@ TravelTogether is a platform designed for travel enthusiasts and aims to provide
 ## Requirements
 Minimun iOS version: 15
 
-## Installation
-Please go to App Store to download:
-https://apps.apple.com/tw/app/traveltogether/id6474057254
-
-or search "TravelTogether" in App Store.
-
 ## Technique Detail
 - Implemented the MVC architecture for constructing maintainable code.
 - Stored users’ travel itineraries and memories securely by using Firebase Firestore[Firebase Firestore](https://firebase.google.com/docs/firestore).
